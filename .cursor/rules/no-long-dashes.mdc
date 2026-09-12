@@ -1,0 +1,31 @@
+---
+description: Never use em dashes or en dashes in copy, UI, or comments
+alwaysApply: true
+---
+
+# No long dashes
+
+Do not use em dashes (`—`) or en dashes (`–`) anywhere in user-facing copy, metadata, comments, or UI strings.
+
+## Prefer instead
+
+- Short hyphen: `-` (ranges, compound words, empty placeholders)
+- Comma, colon, full stop, or a new sentence for pauses
+
+## Examples
+
+```text
+❌ Using example assumptions — adjust them to match your car.
+✅ Using example assumptions. Adjust them to match your car.
+
+❌ Estimates only — not live market data.
+✅ Estimates only: not live market data.
+
+❌ 12–36 months
+✅ 12-36 months
+
+❌ return "—"
+✅ return "-"
+```
+
+Apply this in every project unless the user explicitly asks for typographic dashes.

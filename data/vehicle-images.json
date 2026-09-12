@@ -1,0 +1,3027 @@
+{
+  "library": "AutoViewer vehicle image library v2",
+  "count": 300,
+  "format": "webp",
+  "selectionBasis": "Prioritised for UK used-car and car-parc relevance. Positions 1-100 are the initial shipped library; positions 101-300 expand coverage across common UK hatchbacks, SUVs, estates, MPVs, premium cars and EVs. This is a practical image-bucket catalogue, not an exact sales ranking.",
+  "imageStandard": {
+    "format": "webp",
+    "size": "1000x750",
+    "background": "#FFFFFF",
+    "aspectRatio": "4:3",
+    "view": "front three-quarter",
+    "direction": "vehicle faces left",
+    "crop": "tight; full vehicle and all wheels visible",
+    "shadow": "soft natural grounding shadow",
+    "plate": "AV12 CAR",
+    "colour": "use varied realistic factory colours that genuinely existed for the model/generation",
+    "style": "realistic UK automotive catalogue image; no people, no scenery, no dealer branding, no extra text"
+  },
+  "resolverOrder": [
+    "exact make + model + year/generation",
+    "same make + same model + nearest generation",
+    "generic vehicle placeholder"
+  ],
+  "neverFallbackTo": "different model merely because it is the same brand",
+  "vehicles": [
+    {
+      "priority": 1,
+      "make": "Ford",
+      "model": "Fiesta",
+      "generation": "Mk8",
+      "yearFrom": 2017,
+      "yearTo": 2023,
+      "bodyType": "hatchback",
+      "filename": "ford-fiesta-mk8-2017-2023.webp"
+    },
+    {
+      "priority": 2,
+      "make": "Ford",
+      "model": "Fiesta",
+      "generation": "Mk7",
+      "yearFrom": 2008,
+      "yearTo": 2012,
+      "bodyType": "hatchback",
+      "filename": "ford-fiesta-mk7-2008-2012.webp"
+    },
+    {
+      "priority": 3,
+      "make": "Ford",
+      "model": "Fiesta",
+      "generation": "Mk6",
+      "yearFrom": 2005,
+      "yearTo": 2008,
+      "bodyType": "hatchback",
+      "filename": "ford-fiesta-mk6-2005-2008.webp"
+    },
+    {
+      "priority": 4,
+      "make": "Ford",
+      "model": "Focus",
+      "generation": "Mk4",
+      "yearFrom": 2018,
+      "yearTo": 2025,
+      "bodyType": "hatchback",
+      "filename": "ford-focus-mk4-2018-2025.webp"
+    },
+    {
+      "priority": 5,
+      "make": "Ford",
+      "model": "Focus",
+      "generation": "Mk3.5",
+      "yearFrom": 2015,
+      "yearTo": 2018,
+      "bodyType": "hatchback",
+      "filename": "ford-focus-mk3-5-2015-2018.webp"
+    },
+    {
+      "priority": 6,
+      "make": "Ford",
+      "model": "Focus",
+      "generation": "Mk3",
+      "yearFrom": 2011,
+      "yearTo": 2014,
+      "bodyType": "hatchback",
+      "filename": "ford-focus-mk3-2011-2014.webp"
+    },
+    {
+      "priority": 7,
+      "make": "Ford",
+      "model": "Focus",
+      "generation": "Mk2.5",
+      "yearFrom": 2008,
+      "yearTo": 2011,
+      "bodyType": "hatchback",
+      "filename": "ford-focus-mk2-5-2008-2011.webp"
+    },
+    {
+      "priority": 8,
+      "make": "Ford",
+      "model": "Focus",
+      "generation": "Mk2",
+      "yearFrom": 2005,
+      "yearTo": 2008,
+      "bodyType": "hatchback",
+      "filename": "ford-focus-mk2-2005-2008.webp"
+    },
+    {
+      "priority": 9,
+      "make": "Ford",
+      "model": "Mondeo",
+      "generation": "Mk5",
+      "yearFrom": 2014,
+      "yearTo": 2020,
+      "bodyType": "saloon-estate",
+      "filename": "ford-mondeo-mk5-2014-2020.webp"
+    },
+    {
+      "priority": 10,
+      "make": "Ford",
+      "model": "Puma",
+      "generation": "Mk2",
+      "yearFrom": 2019,
+      "yearTo": 2024,
+      "bodyType": "crossover",
+      "filename": "ford-puma-mk2-2019-2024.webp"
+    },
+    {
+      "priority": 11,
+      "make": "Vauxhall",
+      "model": "Corsa",
+      "generation": "F",
+      "yearFrom": 2019,
+      "yearTo": 2026,
+      "bodyType": "hatchback",
+      "filename": "vauxhall-corsa-f-2019-2026.webp"
+    },
+    {
+      "priority": 12,
+      "make": "Vauxhall",
+      "model": "Corsa",
+      "generation": "E",
+      "yearFrom": 2014,
+      "yearTo": 2019,
+      "bodyType": "hatchback",
+      "filename": "vauxhall-corsa-e-2014-2019.webp"
+    },
+    {
+      "priority": 13,
+      "make": "Vauxhall",
+      "model": "Corsa",
+      "generation": "D",
+      "yearFrom": 2006,
+      "yearTo": 2014,
+      "bodyType": "hatchback",
+      "filename": "vauxhall-corsa-d-2006-2014.webp"
+    },
+    {
+      "priority": 14,
+      "make": "Vauxhall",
+      "model": "Astra",
+      "generation": "L",
+      "yearFrom": 2021,
+      "yearTo": 2026,
+      "bodyType": "hatchback",
+      "filename": "vauxhall-astra-l-2021-2026.webp"
+    },
+    {
+      "priority": 15,
+      "make": "Vauxhall",
+      "model": "Astra",
+      "generation": "K",
+      "yearFrom": 2015,
+      "yearTo": 2021,
+      "bodyType": "hatchback",
+      "filename": "vauxhall-astra-k-2015-2021.webp"
+    },
+    {
+      "priority": 16,
+      "make": "Vauxhall",
+      "model": "Astra",
+      "generation": "J",
+      "yearFrom": 2009,
+      "yearTo": 2015,
+      "bodyType": "hatchback",
+      "filename": "vauxhall-astra-j-2009-2015.webp"
+    },
+    {
+      "priority": 17,
+      "make": "Vauxhall",
+      "model": "Mokka",
+      "generation": "B",
+      "yearFrom": 2021,
+      "yearTo": 2026,
+      "bodyType": "crossover",
+      "filename": "vauxhall-mokka-b-2021-2026.webp"
+    },
+    {
+      "priority": 18,
+      "make": "Vauxhall",
+      "model": "Mokka",
+      "generation": "A / Mokka X",
+      "yearFrom": 2013,
+      "yearTo": 2020,
+      "bodyType": "crossover",
+      "filename": "vauxhall-mokka-a-2013-2020.webp"
+    },
+    {
+      "priority": 19,
+      "make": "Volkswagen",
+      "model": "Golf",
+      "generation": "Mk8",
+      "yearFrom": 2020,
+      "yearTo": 2026,
+      "bodyType": "hatchback",
+      "filename": "volkswagen-golf-mk8-2020-2026.webp"
+    },
+    {
+      "priority": 20,
+      "make": "Volkswagen",
+      "model": "Golf",
+      "generation": "Mk7.5",
+      "yearFrom": 2017,
+      "yearTo": 2020,
+      "bodyType": "hatchback",
+      "filename": "volkswagen-golf-mk7-5-2017-2020.webp"
+    },
+    {
+      "priority": 21,
+      "make": "Volkswagen",
+      "model": "Golf",
+      "generation": "Mk7",
+      "yearFrom": 2013,
+      "yearTo": 2016,
+      "bodyType": "hatchback",
+      "filename": "volkswagen-golf-mk7-2013-2016.webp"
+    },
+    {
+      "priority": 22,
+      "make": "Volkswagen",
+      "model": "Golf",
+      "generation": "Mk6",
+      "yearFrom": 2009,
+      "yearTo": 2012,
+      "bodyType": "hatchback",
+      "filename": "volkswagen-golf-mk6-2009-2012.webp"
+    },
+    {
+      "priority": 23,
+      "make": "Volkswagen",
+      "model": "Golf",
+      "generation": "Mk5",
+      "yearFrom": 2004,
+      "yearTo": 2008,
+      "bodyType": "hatchback",
+      "filename": "volkswagen-golf-mk5-2004-2008.webp"
+    },
+    {
+      "priority": 24,
+      "make": "Volkswagen",
+      "model": "Polo",
+      "generation": "AW",
+      "yearFrom": 2017,
+      "yearTo": 2026,
+      "bodyType": "hatchback",
+      "filename": "volkswagen-polo-aw-2017-2026.webp"
+    },
+    {
+      "priority": 25,
+      "make": "Volkswagen",
+      "model": "Polo",
+      "generation": "6C",
+      "yearFrom": 2014,
+      "yearTo": 2017,
+      "bodyType": "hatchback",
+      "filename": "volkswagen-polo-6c-2014-2017.webp"
+    },
+    {
+      "priority": 26,
+      "make": "Volkswagen",
+      "model": "Polo",
+      "generation": "6R",
+      "yearFrom": 2009,
+      "yearTo": 2014,
+      "bodyType": "hatchback",
+      "filename": "volkswagen-polo-6r-2009-2014.webp"
+    },
+    {
+      "priority": 27,
+      "make": "Volkswagen",
+      "model": "Tiguan",
+      "generation": "Mk2",
+      "yearFrom": 2016,
+      "yearTo": 2024,
+      "bodyType": "suv",
+      "filename": "volkswagen-tiguan-mk2-2016-2024.webp"
+    },
+    {
+      "priority": 28,
+      "make": "Volkswagen",
+      "model": "Tiguan",
+      "generation": "Mk1 facelift",
+      "yearFrom": 2011,
+      "yearTo": 2016,
+      "bodyType": "suv",
+      "filename": "volkswagen-tiguan-mk1-facelift-2011-2016.webp"
+    },
+    {
+      "priority": 29,
+      "make": "Volkswagen",
+      "model": "Passat",
+      "generation": "B8",
+      "yearFrom": 2015,
+      "yearTo": 2023,
+      "bodyType": "saloon-estate",
+      "filename": "volkswagen-passat-b8-2015-2023.webp"
+    },
+    {
+      "priority": 30,
+      "make": "Volkswagen",
+      "model": "Passat",
+      "generation": "B7",
+      "yearFrom": 2011,
+      "yearTo": 2014,
+      "bodyType": "saloon-estate",
+      "filename": "volkswagen-passat-b7-2011-2014.webp"
+    },
+    {
+      "priority": 31,
+      "make": "Nissan",
+      "model": "Qashqai",
+      "generation": "J12",
+      "yearFrom": 2021,
+      "yearTo": 2026,
+      "bodyType": "suv",
+      "filename": "nissan-qashqai-j12-2021-2026.webp"
+    },
+    {
+      "priority": 32,
+      "make": "Nissan",
+      "model": "Qashqai",
+      "generation": "J11 facelift",
+      "yearFrom": 2017,
+      "yearTo": 2021,
+      "bodyType": "suv",
+      "filename": "nissan-qashqai-j11-2017-2021.webp"
+    },
+    {
+      "priority": 33,
+      "make": "Nissan",
+      "model": "Qashqai",
+      "generation": "J11",
+      "yearFrom": 2014,
+      "yearTo": 2017,
+      "bodyType": "suv",
+      "filename": "nissan-qashqai-j11-2014-2017.webp"
+    },
+    {
+      "priority": 34,
+      "make": "Nissan",
+      "model": "Qashqai",
+      "generation": "J10 facelift",
+      "yearFrom": 2010,
+      "yearTo": 2013,
+      "bodyType": "suv",
+      "filename": "nissan-qashqai-j10-facelift-2010-2013.webp"
+    },
+    {
+      "priority": 35,
+      "make": "Nissan",
+      "model": "Juke",
+      "generation": "F16",
+      "yearFrom": 2019,
+      "yearTo": 2026,
+      "bodyType": "crossover",
+      "filename": "nissan-juke-f16-2019-2026.webp"
+    },
+    {
+      "priority": 36,
+      "make": "Nissan",
+      "model": "Juke",
+      "generation": "F15",
+      "yearFrom": 2010,
+      "yearTo": 2019,
+      "bodyType": "crossover",
+      "filename": "nissan-juke-f15-2010-2019.webp"
+    },
+    {
+      "priority": 37,
+      "make": "Nissan",
+      "model": "Micra",
+      "generation": "K14",
+      "yearFrom": 2017,
+      "yearTo": 2023,
+      "bodyType": "hatchback",
+      "filename": "nissan-micra-k14-2017-2023.webp"
+    },
+    {
+      "priority": 38,
+      "make": "Nissan",
+      "model": "Micra",
+      "generation": "K13",
+      "yearFrom": 2010,
+      "yearTo": 2016,
+      "bodyType": "hatchback",
+      "filename": "nissan-micra-k13-2010-2016.webp"
+    },
+    {
+      "priority": 39,
+      "make": "Nissan",
+      "model": "Leaf",
+      "generation": "ZE1",
+      "yearFrom": 2018,
+      "yearTo": 2025,
+      "bodyType": "hatchback",
+      "filename": "nissan-leaf-ze1-2018-2025.webp"
+    },
+    {
+      "priority": 40,
+      "make": "Nissan",
+      "model": "Leaf",
+      "generation": "ZE0/AZE0",
+      "yearFrom": 2011,
+      "yearTo": 2017,
+      "bodyType": "hatchback",
+      "filename": "nissan-leaf-ze0-2011-2017.webp"
+    },
+    {
+      "priority": 41,
+      "make": "MINI",
+      "model": "Hatch",
+      "generation": "F56",
+      "yearFrom": 2014,
+      "yearTo": 2024,
+      "bodyType": "hatchback",
+      "filename": "mini-hatch-f56-2014-2024.webp"
+    },
+    {
+      "priority": 42,
+      "make": "MINI",
+      "model": "Hatch",
+      "generation": "R56",
+      "yearFrom": 2006,
+      "yearTo": 2013,
+      "bodyType": "hatchback",
+      "filename": "mini-hatch-r56-2006-2013.webp"
+    },
+    {
+      "priority": 43,
+      "make": "Toyota",
+      "model": "Yaris",
+      "generation": "XP210",
+      "yearFrom": 2020,
+      "yearTo": 2026,
+      "bodyType": "hatchback",
+      "filename": "toyota-yaris-xp210-2020-2026.webp"
+    },
+    {
+      "priority": 44,
+      "make": "Toyota",
+      "model": "Yaris",
+      "generation": "XP130 facelift",
+      "yearFrom": 2014,
+      "yearTo": 2020,
+      "bodyType": "hatchback",
+      "filename": "toyota-yaris-xp130-facelift-2014-2020.webp"
+    },
+    {
+      "priority": 45,
+      "make": "Toyota",
+      "model": "Yaris",
+      "generation": "XP130",
+      "yearFrom": 2011,
+      "yearTo": 2014,
+      "bodyType": "hatchback",
+      "filename": "toyota-yaris-xp130-2011-2014.webp"
+    },
+    {
+      "priority": 46,
+      "make": "Toyota",
+      "model": "Aygo",
+      "generation": "AB40",
+      "yearFrom": 2014,
+      "yearTo": 2021,
+      "bodyType": "hatchback",
+      "filename": "toyota-aygo-ab40-2014-2021.webp"
+    },
+    {
+      "priority": 47,
+      "make": "Toyota",
+      "model": "Aygo",
+      "generation": "AB10",
+      "yearFrom": 2005,
+      "yearTo": 2014,
+      "bodyType": "hatchback",
+      "filename": "toyota-aygo-ab10-2005-2014.webp"
+    },
+    {
+      "priority": 48,
+      "make": "Toyota",
+      "model": "Corolla",
+      "generation": "E210",
+      "yearFrom": 2019,
+      "yearTo": 2026,
+      "bodyType": "hatchback",
+      "filename": "toyota-corolla-e210-2019-2026.webp"
+    },
+    {
+      "priority": 49,
+      "make": "Toyota",
+      "model": "C-HR",
+      "generation": "AX10",
+      "yearFrom": 2017,
+      "yearTo": 2023,
+      "bodyType": "crossover",
+      "filename": "toyota-c-hr-ax10-2017-2023.webp"
+    },
+    {
+      "priority": 50,
+      "make": "Audi",
+      "model": "A3",
+      "generation": "8Y",
+      "yearFrom": 2020,
+      "yearTo": 2026,
+      "bodyType": "hatchback-saloon",
+      "filename": "audi-a3-8y-2020-2026.webp"
+    },
+    {
+      "priority": 51,
+      "make": "Audi",
+      "model": "A3",
+      "generation": "8V",
+      "yearFrom": 2013,
+      "yearTo": 2020,
+      "bodyType": "hatchback-saloon",
+      "filename": "audi-a3-8v-2013-2020.webp"
+    },
+    {
+      "priority": 52,
+      "make": "Audi",
+      "model": "A3",
+      "generation": "8P facelift",
+      "yearFrom": 2008,
+      "yearTo": 2012,
+      "bodyType": "hatchback",
+      "filename": "audi-a3-8p-facelift-2008-2012.webp"
+    },
+    {
+      "priority": 53,
+      "make": "Audi",
+      "model": "A4",
+      "generation": "B9",
+      "yearFrom": 2016,
+      "yearTo": 2024,
+      "bodyType": "saloon-estate",
+      "filename": "audi-a4-b9-2016-2024.webp"
+    },
+    {
+      "priority": 54,
+      "make": "Audi",
+      "model": "A4",
+      "generation": "B8 facelift",
+      "yearFrom": 2012,
+      "yearTo": 2015,
+      "bodyType": "saloon-estate",
+      "filename": "audi-a4-b8-facelift-2012-2015.webp"
+    },
+    {
+      "priority": 55,
+      "make": "BMW",
+      "model": "3 Series",
+      "generation": "G20",
+      "yearFrom": 2019,
+      "yearTo": 2026,
+      "bodyType": "saloon-estate",
+      "filename": "bmw-3-series-g20-2019-2026.webp"
+    },
+    {
+      "priority": 56,
+      "make": "BMW",
+      "model": "3 Series",
+      "generation": "F30 facelift",
+      "yearFrom": 2015,
+      "yearTo": 2019,
+      "bodyType": "saloon-estate",
+      "filename": "bmw-3-series-f30-facelift-2015-2019.webp"
+    },
+    {
+      "priority": 57,
+      "make": "BMW",
+      "model": "3 Series",
+      "generation": "F30",
+      "yearFrom": 2012,
+      "yearTo": 2015,
+      "bodyType": "saloon-estate",
+      "filename": "bmw-3-series-f30-2012-2015.webp"
+    },
+    {
+      "priority": 58,
+      "make": "BMW",
+      "model": "3 Series",
+      "generation": "E90 facelift",
+      "yearFrom": 2008,
+      "yearTo": 2011,
+      "bodyType": "saloon-estate",
+      "filename": "bmw-3-series-e90-facelift-2008-2011.webp"
+    },
+    {
+      "priority": 59,
+      "make": "BMW",
+      "model": "1 Series",
+      "generation": "F40",
+      "yearFrom": 2019,
+      "yearTo": 2024,
+      "bodyType": "hatchback",
+      "filename": "bmw-1-series-f40-2019-2024.webp"
+    },
+    {
+      "priority": 60,
+      "make": "BMW",
+      "model": "1 Series",
+      "generation": "F20 facelift",
+      "yearFrom": 2015,
+      "yearTo": 2019,
+      "bodyType": "hatchback",
+      "filename": "bmw-1-series-f20-facelift-2015-2019.webp"
+    },
+    {
+      "priority": 61,
+      "make": "BMW",
+      "model": "1 Series",
+      "generation": "F20",
+      "yearFrom": 2011,
+      "yearTo": 2015,
+      "bodyType": "hatchback",
+      "filename": "bmw-1-series-f20-2011-2015.webp"
+    },
+    {
+      "priority": 62,
+      "make": "BMW",
+      "model": "5 Series",
+      "generation": "G30",
+      "yearFrom": 2017,
+      "yearTo": 2023,
+      "bodyType": "saloon-estate",
+      "filename": "bmw-5-series-g30-2017-2023.webp"
+    },
+    {
+      "priority": 63,
+      "make": "BMW",
+      "model": "5 Series",
+      "generation": "F10 facelift",
+      "yearFrom": 2013,
+      "yearTo": 2017,
+      "bodyType": "saloon-estate",
+      "filename": "bmw-5-series-f10-facelift-2013-2017.webp"
+    },
+    {
+      "priority": 64,
+      "make": "Mercedes-Benz",
+      "model": "A-Class",
+      "generation": "W177",
+      "yearFrom": 2018,
+      "yearTo": 2026,
+      "bodyType": "hatchback",
+      "filename": "mercedes-a-class-w177-2018-2026.webp"
+    },
+    {
+      "priority": 65,
+      "make": "Mercedes-Benz",
+      "model": "A-Class",
+      "generation": "W176 facelift",
+      "yearFrom": 2015,
+      "yearTo": 2018,
+      "bodyType": "hatchback",
+      "filename": "mercedes-a-class-w176-facelift-2015-2018.webp"
+    },
+    {
+      "priority": 66,
+      "make": "Mercedes-Benz",
+      "model": "A-Class",
+      "generation": "W176",
+      "yearFrom": 2012,
+      "yearTo": 2015,
+      "bodyType": "hatchback",
+      "filename": "mercedes-a-class-w176-2012-2015.webp"
+    },
+    {
+      "priority": 67,
+      "make": "Mercedes-Benz",
+      "model": "C-Class",
+      "generation": "W206",
+      "yearFrom": 2021,
+      "yearTo": 2026,
+      "bodyType": "saloon-estate",
+      "filename": "mercedes-c-class-w206-2021-2026.webp"
+    },
+    {
+      "priority": 68,
+      "make": "Mercedes-Benz",
+      "model": "C-Class",
+      "generation": "W205",
+      "yearFrom": 2014,
+      "yearTo": 2021,
+      "bodyType": "saloon-estate",
+      "filename": "mercedes-c-class-w205-2014-2021.webp"
+    },
+    {
+      "priority": 69,
+      "make": "Mercedes-Benz",
+      "model": "C-Class",
+      "generation": "W204 facelift",
+      "yearFrom": 2011,
+      "yearTo": 2014,
+      "bodyType": "saloon-estate",
+      "filename": "mercedes-c-class-w204-facelift-2011-2014.webp"
+    },
+    {
+      "priority": 70,
+      "make": "Mercedes-Benz",
+      "model": "E-Class",
+      "generation": "W213",
+      "yearFrom": 2016,
+      "yearTo": 2023,
+      "bodyType": "saloon-estate",
+      "filename": "mercedes-e-class-w213-2016-2023.webp"
+    },
+    {
+      "priority": 71,
+      "make": "Mercedes-Benz",
+      "model": "E-Class",
+      "generation": "W212 facelift",
+      "yearFrom": 2013,
+      "yearTo": 2016,
+      "bodyType": "saloon-estate",
+      "filename": "mercedes-e-class-w212-facelift-2013-2016.webp"
+    },
+    {
+      "priority": 72,
+      "make": "Kia",
+      "model": "Sportage",
+      "generation": "NQ5",
+      "yearFrom": 2022,
+      "yearTo": 2026,
+      "bodyType": "suv",
+      "filename": "kia-sportage-nq5-2022-2026.webp"
+    },
+    {
+      "priority": 73,
+      "make": "Kia",
+      "model": "Sportage",
+      "generation": "QL",
+      "yearFrom": 2016,
+      "yearTo": 2021,
+      "bodyType": "suv",
+      "filename": "kia-sportage-ql-2016-2021.webp"
+    },
+    {
+      "priority": 74,
+      "make": "Kia",
+      "model": "Sportage",
+      "generation": "SL",
+      "yearFrom": 2010,
+      "yearTo": 2015,
+      "bodyType": "suv",
+      "filename": "kia-sportage-sl-2010-2015.webp"
+    },
+    {
+      "priority": 75,
+      "make": "Kia",
+      "model": "Picanto",
+      "generation": "JA",
+      "yearFrom": 2017,
+      "yearTo": 2026,
+      "bodyType": "hatchback",
+      "filename": "kia-picanto-ja-2017-2026.webp"
+    },
+    {
+      "priority": 76,
+      "make": "Kia",
+      "model": "Picanto",
+      "generation": "TA",
+      "yearFrom": 2011,
+      "yearTo": 2017,
+      "bodyType": "hatchback",
+      "filename": "kia-picanto-ta-2011-2017.webp"
+    },
+    {
+      "priority": 77,
+      "make": "Kia",
+      "model": "Niro",
+      "generation": "DE",
+      "yearFrom": 2016,
+      "yearTo": 2022,
+      "bodyType": "crossover",
+      "filename": "kia-niro-de-2016-2022.webp"
+    },
+    {
+      "priority": 78,
+      "make": "Hyundai",
+      "model": "Tucson",
+      "generation": "NX4",
+      "yearFrom": 2021,
+      "yearTo": 2026,
+      "bodyType": "suv",
+      "filename": "hyundai-tucson-nx4-2021-2026.webp"
+    },
+    {
+      "priority": 79,
+      "make": "Hyundai",
+      "model": "Tucson",
+      "generation": "TL facelift",
+      "yearFrom": 2018,
+      "yearTo": 2020,
+      "bodyType": "suv",
+      "filename": "hyundai-tucson-tl-facelift-2018-2020.webp"
+    },
+    {
+      "priority": 80,
+      "make": "Hyundai",
+      "model": "Tucson",
+      "generation": "TL",
+      "yearFrom": 2015,
+      "yearTo": 2018,
+      "bodyType": "suv",
+      "filename": "hyundai-tucson-tl-2015-2018.webp"
+    },
+    {
+      "priority": 81,
+      "make": "Hyundai",
+      "model": "i10",
+      "generation": "AC3",
+      "yearFrom": 2020,
+      "yearTo": 2026,
+      "bodyType": "hatchback",
+      "filename": "hyundai-i10-ac3-2020-2026.webp"
+    },
+    {
+      "priority": 82,
+      "make": "Hyundai",
+      "model": "i10",
+      "generation": "IA",
+      "yearFrom": 2014,
+      "yearTo": 2019,
+      "bodyType": "hatchback",
+      "filename": "hyundai-i10-ia-2014-2019.webp"
+    },
+    {
+      "priority": 83,
+      "make": "Peugeot",
+      "model": "208",
+      "generation": "P21",
+      "yearFrom": 2019,
+      "yearTo": 2026,
+      "bodyType": "hatchback",
+      "filename": "peugeot-208-p21-2019-2026.webp"
+    },
+    {
+      "priority": 84,
+      "make": "Peugeot",
+      "model": "208",
+      "generation": "A9",
+      "yearFrom": 2012,
+      "yearTo": 2019,
+      "bodyType": "hatchback",
+      "filename": "peugeot-208-a9-2012-2019.webp"
+    },
+    {
+      "priority": 85,
+      "make": "Peugeot",
+      "model": "2008",
+      "generation": "P24",
+      "yearFrom": 2020,
+      "yearTo": 2026,
+      "bodyType": "crossover",
+      "filename": "peugeot-2008-p24-2020-2026.webp"
+    },
+    {
+      "priority": 86,
+      "make": "Peugeot",
+      "model": "2008",
+      "generation": "A94",
+      "yearFrom": 2013,
+      "yearTo": 2019,
+      "bodyType": "crossover",
+      "filename": "peugeot-2008-a94-2013-2019.webp"
+    },
+    {
+      "priority": 87,
+      "make": "Renault",
+      "model": "Clio",
+      "generation": "V",
+      "yearFrom": 2019,
+      "yearTo": 2026,
+      "bodyType": "hatchback",
+      "filename": "renault-clio-v-2019-2026.webp"
+    },
+    {
+      "priority": 88,
+      "make": "Renault",
+      "model": "Clio",
+      "generation": "IV",
+      "yearFrom": 2013,
+      "yearTo": 2019,
+      "bodyType": "hatchback",
+      "filename": "renault-clio-iv-2013-2019.webp"
+    },
+    {
+      "priority": 89,
+      "make": "Renault",
+      "model": "Captur",
+      "generation": "II",
+      "yearFrom": 2020,
+      "yearTo": 2026,
+      "bodyType": "crossover",
+      "filename": "renault-captur-ii-2020-2026.webp"
+    },
+    {
+      "priority": 90,
+      "make": "Renault",
+      "model": "Captur",
+      "generation": "I",
+      "yearFrom": 2013,
+      "yearTo": 2019,
+      "bodyType": "crossover",
+      "filename": "renault-captur-i-2013-2019.webp"
+    },
+    {
+      "priority": 91,
+      "make": "Skoda",
+      "model": "Octavia",
+      "generation": "Mk4",
+      "yearFrom": 2020,
+      "yearTo": 2026,
+      "bodyType": "hatchback-estate",
+      "filename": "skoda-octavia-mk4-2020-2026.webp"
+    },
+    {
+      "priority": 92,
+      "make": "Skoda",
+      "model": "Octavia",
+      "generation": "Mk3",
+      "yearFrom": 2013,
+      "yearTo": 2020,
+      "bodyType": "hatchback-estate",
+      "filename": "skoda-octavia-mk3-2013-2020.webp"
+    },
+    {
+      "priority": 93,
+      "make": "Skoda",
+      "model": "Fabia",
+      "generation": "Mk3",
+      "yearFrom": 2015,
+      "yearTo": 2021,
+      "bodyType": "hatchback",
+      "filename": "skoda-fabia-mk3-2015-2021.webp"
+    },
+    {
+      "priority": 94,
+      "make": "SEAT",
+      "model": "Leon",
+      "generation": "Mk4",
+      "yearFrom": 2020,
+      "yearTo": 2026,
+      "bodyType": "hatchback-estate",
+      "filename": "seat-leon-mk4-2020-2026.webp"
+    },
+    {
+      "priority": 95,
+      "make": "SEAT",
+      "model": "Leon",
+      "generation": "Mk3",
+      "yearFrom": 2013,
+      "yearTo": 2020,
+      "bodyType": "hatchback-estate",
+      "filename": "seat-leon-mk3-2013-2020.webp"
+    },
+    {
+      "priority": 96,
+      "make": "SEAT",
+      "model": "Ibiza",
+      "generation": "Mk5",
+      "yearFrom": 2017,
+      "yearTo": 2026,
+      "bodyType": "hatchback",
+      "filename": "seat-ibiza-mk5-2017-2026.webp"
+    },
+    {
+      "priority": 97,
+      "make": "Honda",
+      "model": "Civic",
+      "generation": "Mk10",
+      "yearFrom": 2017,
+      "yearTo": 2021,
+      "bodyType": "hatchback",
+      "filename": "honda-civic-mk10-2017-2021.webp"
+    },
+    {
+      "priority": 98,
+      "make": "Fiat",
+      "model": "500",
+      "generation": "312 facelift",
+      "yearFrom": 2015,
+      "yearTo": 2024,
+      "bodyType": "hatchback",
+      "filename": "fiat-500-312-facelift-2015-2024.webp"
+    },
+    {
+      "priority": 99,
+      "make": "Land Rover",
+      "model": "Range Rover Evoque",
+      "generation": "L538",
+      "yearFrom": 2011,
+      "yearTo": 2018,
+      "bodyType": "suv",
+      "filename": "range-rover-evoque-l538-2011-2018.webp"
+    },
+    {
+      "priority": 100,
+      "make": "Tesla",
+      "model": "Model 3",
+      "generation": "pre-Highland",
+      "yearFrom": 2019,
+      "yearTo": 2023,
+      "bodyType": "saloon",
+      "filename": "tesla-model-3-2019-2023.webp"
+    },
+    {
+      "priority": 101,
+      "make": "Tesla",
+      "model": "Model Y",
+      "generation": "pre-Juniper",
+      "yearFrom": 2022,
+      "yearTo": 2024,
+      "bodyType": "crossover",
+      "filename": "tesla-model-y-2022-2024.webp"
+    },
+    {
+      "priority": 102,
+      "make": "Ford",
+      "model": "Kuga",
+      "generation": "Mk3",
+      "yearFrom": 2020,
+      "yearTo": 2026,
+      "bodyType": "suv",
+      "filename": "ford-kuga-mk3-2020-2026.webp"
+    },
+    {
+      "priority": 103,
+      "make": "Ford",
+      "model": "Kuga",
+      "generation": "Mk2 facelift",
+      "yearFrom": 2016,
+      "yearTo": 2019,
+      "bodyType": "suv",
+      "filename": "ford-kuga-mk2-facelift-2016-2019.webp"
+    },
+    {
+      "priority": 104,
+      "make": "Ford",
+      "model": "Kuga",
+      "generation": "Mk2",
+      "yearFrom": 2013,
+      "yearTo": 2016,
+      "bodyType": "suv",
+      "filename": "ford-kuga-mk2-2013-2016.webp"
+    },
+    {
+      "priority": 105,
+      "make": "Ford",
+      "model": "EcoSport",
+      "generation": "Mk2 facelift",
+      "yearFrom": 2018,
+      "yearTo": 2023,
+      "bodyType": "crossover",
+      "filename": "ford-ecosport-mk2-facelift-2018-2023.webp"
+    },
+    {
+      "priority": 106,
+      "make": "Ford",
+      "model": "Mondeo",
+      "generation": "Mk4 facelift",
+      "yearFrom": 2010,
+      "yearTo": 2014,
+      "bodyType": "saloon-estate",
+      "filename": "ford-mondeo-mk4-facelift-2010-2014.webp"
+    },
+    {
+      "priority": 107,
+      "make": "Ford",
+      "model": "S-Max",
+      "generation": "Mk2",
+      "yearFrom": 2015,
+      "yearTo": 2023,
+      "bodyType": "mpv",
+      "filename": "ford-s-max-mk2-2015-2023.webp"
+    },
+    {
+      "priority": 108,
+      "make": "Ford",
+      "model": "Galaxy",
+      "generation": "Mk3",
+      "yearFrom": 2015,
+      "yearTo": 2023,
+      "bodyType": "mpv",
+      "filename": "ford-galaxy-mk3-2015-2023.webp"
+    },
+    {
+      "priority": 109,
+      "make": "Ford",
+      "model": "Ka+",
+      "generation": "Mk1",
+      "yearFrom": 2016,
+      "yearTo": 2020,
+      "bodyType": "hatchback",
+      "filename": "ford-kaplus-mk1-2016-2020.webp"
+    },
+    {
+      "priority": 110,
+      "make": "Ford",
+      "model": "Mustang Mach-E",
+      "generation": "Mk1",
+      "yearFrom": 2021,
+      "yearTo": 2026,
+      "bodyType": "crossover",
+      "filename": "ford-mustang-mach-e-mk1-2021-2026.webp"
+    },
+    {
+      "priority": 111,
+      "make": "Vauxhall",
+      "model": "Insignia",
+      "generation": "B",
+      "yearFrom": 2017,
+      "yearTo": 2022,
+      "bodyType": "hatchback-estate",
+      "filename": "vauxhall-insignia-b-2017-2022.webp"
+    },
+    {
+      "priority": 112,
+      "make": "Vauxhall",
+      "model": "Insignia",
+      "generation": "A facelift",
+      "yearFrom": 2013,
+      "yearTo": 2017,
+      "bodyType": "hatchback-estate",
+      "filename": "vauxhall-insignia-a-facelift-2013-2017.webp"
+    },
+    {
+      "priority": 113,
+      "make": "Vauxhall",
+      "model": "Grandland X",
+      "generation": "A",
+      "yearFrom": 2018,
+      "yearTo": 2021,
+      "bodyType": "suv",
+      "filename": "vauxhall-grandland-x-a-2018-2021.webp"
+    },
+    {
+      "priority": 114,
+      "make": "Vauxhall",
+      "model": "Grandland",
+      "generation": "A facelift",
+      "yearFrom": 2021,
+      "yearTo": 2024,
+      "bodyType": "suv",
+      "filename": "vauxhall-grandland-a-facelift-2021-2024.webp"
+    },
+    {
+      "priority": 115,
+      "make": "Vauxhall",
+      "model": "Crossland X",
+      "generation": "A",
+      "yearFrom": 2017,
+      "yearTo": 2021,
+      "bodyType": "crossover",
+      "filename": "vauxhall-crossland-x-a-2017-2021.webp"
+    },
+    {
+      "priority": 116,
+      "make": "Vauxhall",
+      "model": "Zafira Tourer",
+      "generation": "C",
+      "yearFrom": 2012,
+      "yearTo": 2018,
+      "bodyType": "mpv",
+      "filename": "vauxhall-zafira-tourer-c-2012-2018.webp"
+    },
+    {
+      "priority": 117,
+      "make": "Vauxhall",
+      "model": "Meriva",
+      "generation": "B facelift",
+      "yearFrom": 2014,
+      "yearTo": 2017,
+      "bodyType": "mpv",
+      "filename": "vauxhall-meriva-b-facelift-2014-2017.webp"
+    },
+    {
+      "priority": 118,
+      "make": "Vauxhall",
+      "model": "Adam",
+      "generation": "A",
+      "yearFrom": 2013,
+      "yearTo": 2019,
+      "bodyType": "hatchback",
+      "filename": "vauxhall-adam-a-2013-2019.webp"
+    },
+    {
+      "priority": 119,
+      "make": "Volkswagen",
+      "model": "T-Roc",
+      "generation": "Mk1",
+      "yearFrom": 2018,
+      "yearTo": 2026,
+      "bodyType": "crossover",
+      "filename": "volkswagen-t-roc-mk1-2018-2026.webp"
+    },
+    {
+      "priority": 120,
+      "make": "Volkswagen",
+      "model": "T-Cross",
+      "generation": "Mk1",
+      "yearFrom": 2019,
+      "yearTo": 2026,
+      "bodyType": "crossover",
+      "filename": "volkswagen-t-cross-mk1-2019-2026.webp"
+    },
+    {
+      "priority": 121,
+      "make": "Volkswagen",
+      "model": "Up!",
+      "generation": "Mk1",
+      "yearFrom": 2012,
+      "yearTo": 2023,
+      "bodyType": "hatchback",
+      "filename": "volkswagen-up-mk1-2012-2023.webp"
+    },
+    {
+      "priority": 122,
+      "make": "Volkswagen",
+      "model": "Touran",
+      "generation": "Mk2",
+      "yearFrom": 2015,
+      "yearTo": 2026,
+      "bodyType": "mpv",
+      "filename": "volkswagen-touran-mk2-2015-2026.webp"
+    },
+    {
+      "priority": 123,
+      "make": "Volkswagen",
+      "model": "Arteon",
+      "generation": "Mk1",
+      "yearFrom": 2017,
+      "yearTo": 2024,
+      "bodyType": "fastback-estate",
+      "filename": "volkswagen-arteon-mk1-2017-2024.webp"
+    },
+    {
+      "priority": 124,
+      "make": "Volkswagen",
+      "model": "ID.3",
+      "generation": "Mk1",
+      "yearFrom": 2020,
+      "yearTo": 2026,
+      "bodyType": "hatchback",
+      "filename": "volkswagen-id-3-mk1-2020-2026.webp"
+    },
+    {
+      "priority": 125,
+      "make": "Volkswagen",
+      "model": "ID.4",
+      "generation": "Mk1",
+      "yearFrom": 2021,
+      "yearTo": 2026,
+      "bodyType": "suv",
+      "filename": "volkswagen-id-4-mk1-2021-2026.webp"
+    },
+    {
+      "priority": 126,
+      "make": "Volkswagen",
+      "model": "Passat",
+      "generation": "B6",
+      "yearFrom": 2005,
+      "yearTo": 2010,
+      "bodyType": "saloon-estate",
+      "filename": "volkswagen-passat-b6-2005-2010.webp"
+    },
+    {
+      "priority": 127,
+      "make": "Volkswagen",
+      "model": "Scirocco",
+      "generation": "Mk3 facelift",
+      "yearFrom": 2014,
+      "yearTo": 2017,
+      "bodyType": "coupe",
+      "filename": "volkswagen-scirocco-mk3-facelift-2014-2017.webp"
+    },
+    {
+      "priority": 128,
+      "make": "Skoda",
+      "model": "Kodiaq",
+      "generation": "Mk1",
+      "yearFrom": 2017,
+      "yearTo": 2024,
+      "bodyType": "suv",
+      "filename": "skoda-kodiaq-mk1-2017-2024.webp"
+    },
+    {
+      "priority": 129,
+      "make": "Skoda",
+      "model": "Karoq",
+      "generation": "Mk1",
+      "yearFrom": 2018,
+      "yearTo": 2026,
+      "bodyType": "suv",
+      "filename": "skoda-karoq-mk1-2018-2026.webp"
+    },
+    {
+      "priority": 130,
+      "make": "Skoda",
+      "model": "Superb",
+      "generation": "Mk3",
+      "yearFrom": 2015,
+      "yearTo": 2024,
+      "bodyType": "hatchback-estate",
+      "filename": "skoda-superb-mk3-2015-2024.webp"
+    },
+    {
+      "priority": 131,
+      "make": "Skoda",
+      "model": "Superb",
+      "generation": "Mk2 facelift",
+      "yearFrom": 2013,
+      "yearTo": 2015,
+      "bodyType": "hatchback-estate",
+      "filename": "skoda-superb-mk2-facelift-2013-2015.webp"
+    },
+    {
+      "priority": 132,
+      "make": "Skoda",
+      "model": "Fabia",
+      "generation": "Mk4",
+      "yearFrom": 2021,
+      "yearTo": 2026,
+      "bodyType": "hatchback",
+      "filename": "skoda-fabia-mk4-2021-2026.webp"
+    },
+    {
+      "priority": 133,
+      "make": "Skoda",
+      "model": "Fabia",
+      "generation": "Mk2 facelift",
+      "yearFrom": 2010,
+      "yearTo": 2014,
+      "bodyType": "hatchback-estate",
+      "filename": "skoda-fabia-mk2-facelift-2010-2014.webp"
+    },
+    {
+      "priority": 134,
+      "make": "Skoda",
+      "model": "Kamiq",
+      "generation": "Mk1",
+      "yearFrom": 2019,
+      "yearTo": 2026,
+      "bodyType": "crossover",
+      "filename": "skoda-kamiq-mk1-2019-2026.webp"
+    },
+    {
+      "priority": 135,
+      "make": "Skoda",
+      "model": "Scala",
+      "generation": "Mk1",
+      "yearFrom": 2019,
+      "yearTo": 2026,
+      "bodyType": "hatchback",
+      "filename": "skoda-scala-mk1-2019-2026.webp"
+    },
+    {
+      "priority": 136,
+      "make": "Skoda",
+      "model": "Yeti",
+      "generation": "facelift",
+      "yearFrom": 2013,
+      "yearTo": 2017,
+      "bodyType": "crossover",
+      "filename": "skoda-yeti-facelift-2013-2017.webp"
+    },
+    {
+      "priority": 137,
+      "make": "SEAT",
+      "model": "Ateca",
+      "generation": "Mk1",
+      "yearFrom": 2016,
+      "yearTo": 2026,
+      "bodyType": "suv",
+      "filename": "seat-ateca-mk1-2016-2026.webp"
+    },
+    {
+      "priority": 138,
+      "make": "SEAT",
+      "model": "Arona",
+      "generation": "Mk1",
+      "yearFrom": 2017,
+      "yearTo": 2026,
+      "bodyType": "crossover",
+      "filename": "seat-arona-mk1-2017-2026.webp"
+    },
+    {
+      "priority": 139,
+      "make": "SEAT",
+      "model": "Ibiza",
+      "generation": "Mk4 facelift",
+      "yearFrom": 2012,
+      "yearTo": 2017,
+      "bodyType": "hatchback",
+      "filename": "seat-ibiza-mk4-facelift-2012-2017.webp"
+    },
+    {
+      "priority": 140,
+      "make": "SEAT",
+      "model": "Leon",
+      "generation": "Mk2 facelift",
+      "yearFrom": 2009,
+      "yearTo": 2012,
+      "bodyType": "hatchback",
+      "filename": "seat-leon-mk2-facelift-2009-2012.webp"
+    },
+    {
+      "priority": 141,
+      "make": "SEAT",
+      "model": "Tarraco",
+      "generation": "Mk1",
+      "yearFrom": 2019,
+      "yearTo": 2024,
+      "bodyType": "suv",
+      "filename": "seat-tarraco-mk1-2019-2024.webp"
+    },
+    {
+      "priority": 142,
+      "make": "SEAT",
+      "model": "Mii",
+      "generation": "Mk1",
+      "yearFrom": 2012,
+      "yearTo": 2021,
+      "bodyType": "hatchback",
+      "filename": "seat-mii-mk1-2012-2021.webp"
+    },
+    {
+      "priority": 143,
+      "make": "CUPRA",
+      "model": "Formentor",
+      "generation": "Mk1",
+      "yearFrom": 2020,
+      "yearTo": 2026,
+      "bodyType": "crossover",
+      "filename": "cupra-formentor-mk1-2020-2026.webp"
+    },
+    {
+      "priority": 144,
+      "make": "CUPRA",
+      "model": "Born",
+      "generation": "Mk1",
+      "yearFrom": 2022,
+      "yearTo": 2026,
+      "bodyType": "hatchback",
+      "filename": "cupra-born-mk1-2022-2026.webp"
+    },
+    {
+      "priority": 145,
+      "make": "Nissan",
+      "model": "X-Trail",
+      "generation": "T33",
+      "yearFrom": 2022,
+      "yearTo": 2026,
+      "bodyType": "suv",
+      "filename": "nissan-x-trail-t33-2022-2026.webp"
+    },
+    {
+      "priority": 146,
+      "make": "Nissan",
+      "model": "X-Trail",
+      "generation": "T32",
+      "yearFrom": 2014,
+      "yearTo": 2022,
+      "bodyType": "suv",
+      "filename": "nissan-x-trail-t32-2014-2022.webp"
+    },
+    {
+      "priority": 147,
+      "make": "Nissan",
+      "model": "X-Trail",
+      "generation": "T31 facelift",
+      "yearFrom": 2010,
+      "yearTo": 2014,
+      "bodyType": "suv",
+      "filename": "nissan-x-trail-t31-facelift-2010-2014.webp"
+    },
+    {
+      "priority": 148,
+      "make": "Nissan",
+      "model": "Note",
+      "generation": "E12",
+      "yearFrom": 2013,
+      "yearTo": 2017,
+      "bodyType": "mpv-hatchback",
+      "filename": "nissan-note-e12-2013-2017.webp"
+    },
+    {
+      "priority": 149,
+      "make": "Nissan",
+      "model": "Pulsar",
+      "generation": "C13",
+      "yearFrom": 2014,
+      "yearTo": 2018,
+      "bodyType": "hatchback",
+      "filename": "nissan-pulsar-c13-2014-2018.webp"
+    },
+    {
+      "priority": 150,
+      "make": "Nissan",
+      "model": "Ariya",
+      "generation": "FE0",
+      "yearFrom": 2022,
+      "yearTo": 2026,
+      "bodyType": "crossover",
+      "filename": "nissan-ariya-fe0-2022-2026.webp"
+    },
+    {
+      "priority": 151,
+      "make": "Toyota",
+      "model": "RAV4",
+      "generation": "XA50",
+      "yearFrom": 2019,
+      "yearTo": 2026,
+      "bodyType": "suv",
+      "filename": "toyota-rav4-xa50-2019-2026.webp"
+    },
+    {
+      "priority": 152,
+      "make": "Toyota",
+      "model": "RAV4",
+      "generation": "XA40 facelift",
+      "yearFrom": 2016,
+      "yearTo": 2018,
+      "bodyType": "suv",
+      "filename": "toyota-rav4-xa40-facelift-2016-2018.webp"
+    },
+    {
+      "priority": 153,
+      "make": "Toyota",
+      "model": "Prius",
+      "generation": "XW50",
+      "yearFrom": 2016,
+      "yearTo": 2022,
+      "bodyType": "hatchback",
+      "filename": "toyota-prius-xw50-2016-2022.webp"
+    },
+    {
+      "priority": 154,
+      "make": "Toyota",
+      "model": "Prius",
+      "generation": "XW30",
+      "yearFrom": 2009,
+      "yearTo": 2015,
+      "bodyType": "hatchback",
+      "filename": "toyota-prius-xw30-2009-2015.webp"
+    },
+    {
+      "priority": 155,
+      "make": "Toyota",
+      "model": "Auris",
+      "generation": "E180",
+      "yearFrom": 2013,
+      "yearTo": 2018,
+      "bodyType": "hatchback-estate",
+      "filename": "toyota-auris-e180-2013-2018.webp"
+    },
+    {
+      "priority": 156,
+      "make": "Toyota",
+      "model": "Avensis",
+      "generation": "T27 facelift",
+      "yearFrom": 2015,
+      "yearTo": 2018,
+      "bodyType": "saloon-estate",
+      "filename": "toyota-avensis-t27-facelift-2015-2018.webp"
+    },
+    {
+      "priority": 157,
+      "make": "Toyota",
+      "model": "Aygo X",
+      "generation": "AB70",
+      "yearFrom": 2022,
+      "yearTo": 2026,
+      "bodyType": "crossover",
+      "filename": "toyota-aygo-x-ab70-2022-2026.webp"
+    },
+    {
+      "priority": 158,
+      "make": "Toyota",
+      "model": "Yaris Cross",
+      "generation": "XP210",
+      "yearFrom": 2021,
+      "yearTo": 2026,
+      "bodyType": "crossover",
+      "filename": "toyota-yaris-cross-xp210-2021-2026.webp"
+    },
+    {
+      "priority": 159,
+      "make": "Honda",
+      "model": "Civic",
+      "generation": "Mk11",
+      "yearFrom": 2022,
+      "yearTo": 2026,
+      "bodyType": "hatchback",
+      "filename": "honda-civic-mk11-2022-2026.webp"
+    },
+    {
+      "priority": 160,
+      "make": "Honda",
+      "model": "Civic",
+      "generation": "Mk9 facelift",
+      "yearFrom": 2015,
+      "yearTo": 2017,
+      "bodyType": "hatchback-estate",
+      "filename": "honda-civic-mk9-facelift-2015-2017.webp"
+    },
+    {
+      "priority": 161,
+      "make": "Honda",
+      "model": "Civic",
+      "generation": "Mk8",
+      "yearFrom": 2006,
+      "yearTo": 2011,
+      "bodyType": "hatchback",
+      "filename": "honda-civic-mk8-2006-2011.webp"
+    },
+    {
+      "priority": 162,
+      "make": "Honda",
+      "model": "Jazz",
+      "generation": "Mk4",
+      "yearFrom": 2020,
+      "yearTo": 2026,
+      "bodyType": "hatchback",
+      "filename": "honda-jazz-mk4-2020-2026.webp"
+    },
+    {
+      "priority": 163,
+      "make": "Honda",
+      "model": "Jazz",
+      "generation": "Mk3",
+      "yearFrom": 2015,
+      "yearTo": 2020,
+      "bodyType": "hatchback",
+      "filename": "honda-jazz-mk3-2015-2020.webp"
+    },
+    {
+      "priority": 164,
+      "make": "Honda",
+      "model": "CR-V",
+      "generation": "Mk5",
+      "yearFrom": 2018,
+      "yearTo": 2023,
+      "bodyType": "suv",
+      "filename": "honda-cr-v-mk5-2018-2023.webp"
+    },
+    {
+      "priority": 165,
+      "make": "Honda",
+      "model": "CR-V",
+      "generation": "Mk4 facelift",
+      "yearFrom": 2015,
+      "yearTo": 2018,
+      "bodyType": "suv",
+      "filename": "honda-cr-v-mk4-facelift-2015-2018.webp"
+    },
+    {
+      "priority": 166,
+      "make": "Honda",
+      "model": "HR-V",
+      "generation": "Mk2",
+      "yearFrom": 2015,
+      "yearTo": 2021,
+      "bodyType": "crossover",
+      "filename": "honda-hr-v-mk2-2015-2021.webp"
+    },
+    {
+      "priority": 167,
+      "make": "Mazda",
+      "model": "Mazda3",
+      "generation": "BP",
+      "yearFrom": 2019,
+      "yearTo": 2026,
+      "bodyType": "hatchback-saloon",
+      "filename": "mazda-mazda3-bp-2019-2026.webp"
+    },
+    {
+      "priority": 168,
+      "make": "Mazda",
+      "model": "Mazda3",
+      "generation": "BM/BN",
+      "yearFrom": 2014,
+      "yearTo": 2019,
+      "bodyType": "hatchback-saloon",
+      "filename": "mazda-mazda3-bm-bn-2014-2019.webp"
+    },
+    {
+      "priority": 169,
+      "make": "Mazda",
+      "model": "Mazda2",
+      "generation": "DJ",
+      "yearFrom": 2015,
+      "yearTo": 2026,
+      "bodyType": "hatchback",
+      "filename": "mazda-mazda2-dj-2015-2026.webp"
+    },
+    {
+      "priority": 170,
+      "make": "Mazda",
+      "model": "CX-5",
+      "generation": "KF",
+      "yearFrom": 2017,
+      "yearTo": 2026,
+      "bodyType": "suv",
+      "filename": "mazda-cx-5-kf-2017-2026.webp"
+    },
+    {
+      "priority": 171,
+      "make": "Mazda",
+      "model": "CX-5",
+      "generation": "KE facelift",
+      "yearFrom": 2015,
+      "yearTo": 2017,
+      "bodyType": "suv",
+      "filename": "mazda-cx-5-ke-facelift-2015-2017.webp"
+    },
+    {
+      "priority": 172,
+      "make": "Mazda",
+      "model": "CX-30",
+      "generation": "DM",
+      "yearFrom": 2019,
+      "yearTo": 2026,
+      "bodyType": "crossover",
+      "filename": "mazda-cx-30-dm-2019-2026.webp"
+    },
+    {
+      "priority": 173,
+      "make": "Mazda",
+      "model": "MX-5",
+      "generation": "ND",
+      "yearFrom": 2015,
+      "yearTo": 2026,
+      "bodyType": "roadster",
+      "filename": "mazda-mx-5-nd-2015-2026.webp"
+    },
+    {
+      "priority": 174,
+      "make": "Hyundai",
+      "model": "i20",
+      "generation": "BC3",
+      "yearFrom": 2021,
+      "yearTo": 2026,
+      "bodyType": "hatchback",
+      "filename": "hyundai-i20-bc3-2021-2026.webp"
+    },
+    {
+      "priority": 175,
+      "make": "Hyundai",
+      "model": "i20",
+      "generation": "GB facelift",
+      "yearFrom": 2018,
+      "yearTo": 2020,
+      "bodyType": "hatchback",
+      "filename": "hyundai-i20-gb-facelift-2018-2020.webp"
+    },
+    {
+      "priority": 176,
+      "make": "Hyundai",
+      "model": "i30",
+      "generation": "PD",
+      "yearFrom": 2017,
+      "yearTo": 2026,
+      "bodyType": "hatchback-estate",
+      "filename": "hyundai-i30-pd-2017-2026.webp"
+    },
+    {
+      "priority": 177,
+      "make": "Hyundai",
+      "model": "i30",
+      "generation": "GD facelift",
+      "yearFrom": 2015,
+      "yearTo": 2017,
+      "bodyType": "hatchback-estate",
+      "filename": "hyundai-i30-gd-facelift-2015-2017.webp"
+    },
+    {
+      "priority": 178,
+      "make": "Hyundai",
+      "model": "Kona",
+      "generation": "OS",
+      "yearFrom": 2017,
+      "yearTo": 2023,
+      "bodyType": "crossover",
+      "filename": "hyundai-kona-os-2017-2023.webp"
+    },
+    {
+      "priority": 179,
+      "make": "Hyundai",
+      "model": "Kona",
+      "generation": "SX2",
+      "yearFrom": 2023,
+      "yearTo": 2026,
+      "bodyType": "crossover",
+      "filename": "hyundai-kona-sx2-2023-2026.webp"
+    },
+    {
+      "priority": 180,
+      "make": "Hyundai",
+      "model": "Ioniq",
+      "generation": "AE",
+      "yearFrom": 2016,
+      "yearTo": 2022,
+      "bodyType": "hatchback",
+      "filename": "hyundai-ioniq-ae-2016-2022.webp"
+    },
+    {
+      "priority": 181,
+      "make": "Hyundai",
+      "model": "Ioniq 5",
+      "generation": "NE",
+      "yearFrom": 2021,
+      "yearTo": 2026,
+      "bodyType": "crossover",
+      "filename": "hyundai-ioniq-5-ne-2021-2026.webp"
+    },
+    {
+      "priority": 182,
+      "make": "Kia",
+      "model": "Ceed",
+      "generation": "CD",
+      "yearFrom": 2018,
+      "yearTo": 2026,
+      "bodyType": "hatchback-estate",
+      "filename": "kia-ceed-cd-2018-2026.webp"
+    },
+    {
+      "priority": 183,
+      "make": "Kia",
+      "model": "Ceed",
+      "generation": "JD facelift",
+      "yearFrom": 2015,
+      "yearTo": 2018,
+      "bodyType": "hatchback-estate",
+      "filename": "kia-ceed-jd-facelift-2015-2018.webp"
+    },
+    {
+      "priority": 184,
+      "make": "Kia",
+      "model": "Rio",
+      "generation": "YB",
+      "yearFrom": 2017,
+      "yearTo": 2023,
+      "bodyType": "hatchback",
+      "filename": "kia-rio-yb-2017-2023.webp"
+    },
+    {
+      "priority": 185,
+      "make": "Kia",
+      "model": "Niro",
+      "generation": "SG2",
+      "yearFrom": 2022,
+      "yearTo": 2026,
+      "bodyType": "crossover",
+      "filename": "kia-niro-sg2-2022-2026.webp"
+    },
+    {
+      "priority": 186,
+      "make": "Kia",
+      "model": "XCeed",
+      "generation": "CD",
+      "yearFrom": 2019,
+      "yearTo": 2026,
+      "bodyType": "crossover",
+      "filename": "kia-xceed-cd-2019-2026.webp"
+    },
+    {
+      "priority": 187,
+      "make": "Kia",
+      "model": "Stonic",
+      "generation": "YB",
+      "yearFrom": 2017,
+      "yearTo": 2026,
+      "bodyType": "crossover",
+      "filename": "kia-stonic-yb-2017-2026.webp"
+    },
+    {
+      "priority": 188,
+      "make": "Kia",
+      "model": "Sorento",
+      "generation": "UM facelift",
+      "yearFrom": 2018,
+      "yearTo": 2020,
+      "bodyType": "suv",
+      "filename": "kia-sorento-um-facelift-2018-2020.webp"
+    },
+    {
+      "priority": 189,
+      "make": "Kia",
+      "model": "EV6",
+      "generation": "CV",
+      "yearFrom": 2021,
+      "yearTo": 2026,
+      "bodyType": "crossover",
+      "filename": "kia-ev6-cv-2021-2026.webp"
+    },
+    {
+      "priority": 190,
+      "make": "Peugeot",
+      "model": "308",
+      "generation": "P5",
+      "yearFrom": 2022,
+      "yearTo": 2026,
+      "bodyType": "hatchback-estate",
+      "filename": "peugeot-308-p5-2022-2026.webp"
+    },
+    {
+      "priority": 191,
+      "make": "Peugeot",
+      "model": "308",
+      "generation": "T9 facelift",
+      "yearFrom": 2017,
+      "yearTo": 2021,
+      "bodyType": "hatchback-estate",
+      "filename": "peugeot-308-t9-facelift-2017-2021.webp"
+    },
+    {
+      "priority": 192,
+      "make": "Peugeot",
+      "model": "3008",
+      "generation": "P84 facelift",
+      "yearFrom": 2020,
+      "yearTo": 2024,
+      "bodyType": "suv",
+      "filename": "peugeot-3008-p84-facelift-2020-2024.webp"
+    },
+    {
+      "priority": 193,
+      "make": "Peugeot",
+      "model": "3008",
+      "generation": "P84",
+      "yearFrom": 2017,
+      "yearTo": 2020,
+      "bodyType": "suv",
+      "filename": "peugeot-3008-p84-2017-2020.webp"
+    },
+    {
+      "priority": 194,
+      "make": "Peugeot",
+      "model": "5008",
+      "generation": "P87",
+      "yearFrom": 2017,
+      "yearTo": 2024,
+      "bodyType": "suv",
+      "filename": "peugeot-5008-p87-2017-2024.webp"
+    },
+    {
+      "priority": 195,
+      "make": "Peugeot",
+      "model": "508",
+      "generation": "R8",
+      "yearFrom": 2019,
+      "yearTo": 2026,
+      "bodyType": "fastback-estate",
+      "filename": "peugeot-508-r8-2019-2026.webp"
+    },
+    {
+      "priority": 196,
+      "make": "Peugeot",
+      "model": "108",
+      "generation": "Mk1",
+      "yearFrom": 2014,
+      "yearTo": 2021,
+      "bodyType": "hatchback",
+      "filename": "peugeot-108-mk1-2014-2021.webp"
+    },
+    {
+      "priority": 197,
+      "make": "Peugeot",
+      "model": "107",
+      "generation": "facelift",
+      "yearFrom": 2009,
+      "yearTo": 2014,
+      "bodyType": "hatchback",
+      "filename": "peugeot-107-facelift-2009-2014.webp"
+    },
+    {
+      "priority": 198,
+      "make": "Citroen",
+      "model": "C3",
+      "generation": "Mk3 facelift",
+      "yearFrom": 2020,
+      "yearTo": 2024,
+      "bodyType": "hatchback",
+      "filename": "citroen-c3-mk3-facelift-2020-2024.webp"
+    },
+    {
+      "priority": 199,
+      "make": "Citroen",
+      "model": "C3",
+      "generation": "Mk3",
+      "yearFrom": 2017,
+      "yearTo": 2020,
+      "bodyType": "hatchback",
+      "filename": "citroen-c3-mk3-2017-2020.webp"
+    },
+    {
+      "priority": 200,
+      "make": "Citroen",
+      "model": "C4",
+      "generation": "Mk3",
+      "yearFrom": 2021,
+      "yearTo": 2026,
+      "bodyType": "hatchback-crossover",
+      "filename": "citroen-c4-mk3-2021-2026.webp"
+    },
+    {
+      "priority": 201,
+      "make": "Citroen",
+      "model": "C4 Cactus",
+      "generation": "facelift",
+      "yearFrom": 2018,
+      "yearTo": 2020,
+      "bodyType": "crossover",
+      "filename": "citroen-c4-cactus-facelift-2018-2020.webp"
+    },
+    {
+      "priority": 202,
+      "make": "Citroen",
+      "model": "C3 Aircross",
+      "generation": "Mk1",
+      "yearFrom": 2017,
+      "yearTo": 2024,
+      "bodyType": "crossover",
+      "filename": "citroen-c3-aircross-mk1-2017-2024.webp"
+    },
+    {
+      "priority": 203,
+      "make": "Citroen",
+      "model": "C5 Aircross",
+      "generation": "Mk1 facelift",
+      "yearFrom": 2022,
+      "yearTo": 2026,
+      "bodyType": "suv",
+      "filename": "citroen-c5-aircross-mk1-facelift-2022-2026.webp"
+    },
+    {
+      "priority": 204,
+      "make": "Citroen",
+      "model": "Berlingo",
+      "generation": "Mk3",
+      "yearFrom": 2018,
+      "yearTo": 2026,
+      "bodyType": "mpv",
+      "filename": "citroen-berlingo-mk3-2018-2026.webp"
+    },
+    {
+      "priority": 205,
+      "make": "Renault",
+      "model": "Megane",
+      "generation": "IV facelift",
+      "yearFrom": 2020,
+      "yearTo": 2022,
+      "bodyType": "hatchback-estate",
+      "filename": "renault-megane-iv-facelift-2020-2022.webp"
+    },
+    {
+      "priority": 206,
+      "make": "Renault",
+      "model": "Megane",
+      "generation": "IV",
+      "yearFrom": 2016,
+      "yearTo": 2020,
+      "bodyType": "hatchback-estate",
+      "filename": "renault-megane-iv-2016-2020.webp"
+    },
+    {
+      "priority": 207,
+      "make": "Renault",
+      "model": "Kadjar",
+      "generation": "facelift",
+      "yearFrom": 2019,
+      "yearTo": 2022,
+      "bodyType": "suv",
+      "filename": "renault-kadjar-facelift-2019-2022.webp"
+    },
+    {
+      "priority": 208,
+      "make": "Renault",
+      "model": "Scenic",
+      "generation": "IV",
+      "yearFrom": 2016,
+      "yearTo": 2022,
+      "bodyType": "mpv",
+      "filename": "renault-scenic-iv-2016-2022.webp"
+    },
+    {
+      "priority": 209,
+      "make": "Renault",
+      "model": "Zoe",
+      "generation": "ZE50",
+      "yearFrom": 2019,
+      "yearTo": 2024,
+      "bodyType": "hatchback",
+      "filename": "renault-zoe-ze50-2019-2024.webp"
+    },
+    {
+      "priority": 210,
+      "make": "Renault",
+      "model": "Twingo",
+      "generation": "III",
+      "yearFrom": 2014,
+      "yearTo": 2021,
+      "bodyType": "hatchback",
+      "filename": "renault-twingo-iii-2014-2021.webp"
+    },
+    {
+      "priority": 211,
+      "make": "Renault",
+      "model": "Arkana",
+      "generation": "I",
+      "yearFrom": 2021,
+      "yearTo": 2026,
+      "bodyType": "crossover",
+      "filename": "renault-arkana-i-2021-2026.webp"
+    },
+    {
+      "priority": 212,
+      "make": "Renault",
+      "model": "Austral",
+      "generation": "I",
+      "yearFrom": 2022,
+      "yearTo": 2026,
+      "bodyType": "suv",
+      "filename": "renault-austral-i-2022-2026.webp"
+    },
+    {
+      "priority": 213,
+      "make": "Dacia",
+      "model": "Sandero",
+      "generation": "III",
+      "yearFrom": 2021,
+      "yearTo": 2026,
+      "bodyType": "hatchback",
+      "filename": "dacia-sandero-iii-2021-2026.webp"
+    },
+    {
+      "priority": 214,
+      "make": "Dacia",
+      "model": "Sandero",
+      "generation": "II facelift",
+      "yearFrom": 2017,
+      "yearTo": 2020,
+      "bodyType": "hatchback",
+      "filename": "dacia-sandero-ii-facelift-2017-2020.webp"
+    },
+    {
+      "priority": 215,
+      "make": "Dacia",
+      "model": "Duster",
+      "generation": "II",
+      "yearFrom": 2018,
+      "yearTo": 2024,
+      "bodyType": "suv",
+      "filename": "dacia-duster-ii-2018-2024.webp"
+    },
+    {
+      "priority": 216,
+      "make": "Dacia",
+      "model": "Duster",
+      "generation": "I facelift",
+      "yearFrom": 2013,
+      "yearTo": 2018,
+      "bodyType": "suv",
+      "filename": "dacia-duster-i-facelift-2013-2018.webp"
+    },
+    {
+      "priority": 217,
+      "make": "Dacia",
+      "model": "Jogger",
+      "generation": "I",
+      "yearFrom": 2022,
+      "yearTo": 2026,
+      "bodyType": "mpv-estate",
+      "filename": "dacia-jogger-i-2022-2026.webp"
+    },
+    {
+      "priority": 218,
+      "make": "Fiat",
+      "model": "Panda",
+      "generation": "Mk3",
+      "yearFrom": 2012,
+      "yearTo": 2026,
+      "bodyType": "hatchback",
+      "filename": "fiat-panda-mk3-2012-2026.webp"
+    },
+    {
+      "priority": 219,
+      "make": "Fiat",
+      "model": "500X",
+      "generation": "facelift",
+      "yearFrom": 2018,
+      "yearTo": 2024,
+      "bodyType": "crossover",
+      "filename": "fiat-500x-facelift-2018-2024.webp"
+    },
+    {
+      "priority": 220,
+      "make": "Fiat",
+      "model": "Tipo",
+      "generation": "356",
+      "yearFrom": 2016,
+      "yearTo": 2025,
+      "bodyType": "hatchback-estate",
+      "filename": "fiat-tipo-356-2016-2025.webp"
+    },
+    {
+      "priority": 221,
+      "make": "Fiat",
+      "model": "500e",
+      "generation": "332",
+      "yearFrom": 2021,
+      "yearTo": 2026,
+      "bodyType": "hatchback",
+      "filename": "fiat-500e-332-2021-2026.webp"
+    },
+    {
+      "priority": 222,
+      "make": "Fiat",
+      "model": "Punto Evo",
+      "generation": "199",
+      "yearFrom": 2009,
+      "yearTo": 2012,
+      "bodyType": "hatchback",
+      "filename": "fiat-punto-evo-199-2009-2012.webp"
+    },
+    {
+      "priority": 223,
+      "make": "Fiat",
+      "model": "500L",
+      "generation": "330",
+      "yearFrom": 2013,
+      "yearTo": 2022,
+      "bodyType": "mpv",
+      "filename": "fiat-500l-330-2013-2022.webp"
+    },
+    {
+      "priority": 224,
+      "make": "BMW",
+      "model": "X1",
+      "generation": "F48",
+      "yearFrom": 2015,
+      "yearTo": 2022,
+      "bodyType": "suv",
+      "filename": "bmw-x1-f48-2015-2022.webp"
+    },
+    {
+      "priority": 225,
+      "make": "BMW",
+      "model": "X1",
+      "generation": "U11",
+      "yearFrom": 2022,
+      "yearTo": 2026,
+      "bodyType": "suv",
+      "filename": "bmw-x1-u11-2022-2026.webp"
+    },
+    {
+      "priority": 226,
+      "make": "BMW",
+      "model": "X3",
+      "generation": "G01",
+      "yearFrom": 2017,
+      "yearTo": 2024,
+      "bodyType": "suv",
+      "filename": "bmw-x3-g01-2017-2024.webp"
+    },
+    {
+      "priority": 227,
+      "make": "BMW",
+      "model": "X3",
+      "generation": "F25 facelift",
+      "yearFrom": 2014,
+      "yearTo": 2017,
+      "bodyType": "suv",
+      "filename": "bmw-x3-f25-facelift-2014-2017.webp"
+    },
+    {
+      "priority": 228,
+      "make": "BMW",
+      "model": "4 Series",
+      "generation": "F32 facelift",
+      "yearFrom": 2017,
+      "yearTo": 2020,
+      "bodyType": "coupe-gran-coupe",
+      "filename": "bmw-4-series-f32-facelift-2017-2020.webp"
+    },
+    {
+      "priority": 229,
+      "make": "BMW",
+      "model": "4 Series",
+      "generation": "G22",
+      "yearFrom": 2020,
+      "yearTo": 2026,
+      "bodyType": "coupe-gran-coupe",
+      "filename": "bmw-4-series-g22-2020-2026.webp"
+    },
+    {
+      "priority": 230,
+      "make": "BMW",
+      "model": "i3",
+      "generation": "I01",
+      "yearFrom": 2013,
+      "yearTo": 2022,
+      "bodyType": "hatchback",
+      "filename": "bmw-i3-i01-2013-2022.webp"
+    },
+    {
+      "priority": 231,
+      "make": "BMW",
+      "model": "X5",
+      "generation": "G05",
+      "yearFrom": 2018,
+      "yearTo": 2026,
+      "bodyType": "suv",
+      "filename": "bmw-x5-g05-2018-2026.webp"
+    },
+    {
+      "priority": 232,
+      "make": "Mercedes-Benz",
+      "model": "GLA",
+      "generation": "H247",
+      "yearFrom": 2020,
+      "yearTo": 2026,
+      "bodyType": "crossover",
+      "filename": "mercedes-benz-gla-h247-2020-2026.webp"
+    },
+    {
+      "priority": 233,
+      "make": "Mercedes-Benz",
+      "model": "GLA",
+      "generation": "X156 facelift",
+      "yearFrom": 2017,
+      "yearTo": 2020,
+      "bodyType": "crossover",
+      "filename": "mercedes-benz-gla-x156-facelift-2017-2020.webp"
+    },
+    {
+      "priority": 234,
+      "make": "Mercedes-Benz",
+      "model": "GLC",
+      "generation": "X253 facelift",
+      "yearFrom": 2019,
+      "yearTo": 2022,
+      "bodyType": "suv",
+      "filename": "mercedes-benz-glc-x253-facelift-2019-2022.webp"
+    },
+    {
+      "priority": 235,
+      "make": "Mercedes-Benz",
+      "model": "GLC",
+      "generation": "X254",
+      "yearFrom": 2022,
+      "yearTo": 2026,
+      "bodyType": "suv",
+      "filename": "mercedes-benz-glc-x254-2022-2026.webp"
+    },
+    {
+      "priority": 236,
+      "make": "Mercedes-Benz",
+      "model": "B-Class",
+      "generation": "W247",
+      "yearFrom": 2019,
+      "yearTo": 2026,
+      "bodyType": "mpv-hatchback",
+      "filename": "mercedes-benz-b-class-w247-2019-2026.webp"
+    },
+    {
+      "priority": 237,
+      "make": "Mercedes-Benz",
+      "model": "CLA",
+      "generation": "C118",
+      "yearFrom": 2019,
+      "yearTo": 2026,
+      "bodyType": "saloon-estate",
+      "filename": "mercedes-benz-cla-c118-2019-2026.webp"
+    },
+    {
+      "priority": 238,
+      "make": "Mercedes-Benz",
+      "model": "CLA",
+      "generation": "C117 facelift",
+      "yearFrom": 2016,
+      "yearTo": 2019,
+      "bodyType": "saloon-estate",
+      "filename": "mercedes-benz-cla-c117-facelift-2016-2019.webp"
+    },
+    {
+      "priority": 239,
+      "make": "Mercedes-Benz",
+      "model": "E-Class",
+      "generation": "W214",
+      "yearFrom": 2023,
+      "yearTo": 2026,
+      "bodyType": "saloon-estate",
+      "filename": "mercedes-benz-e-class-w214-2023-2026.webp"
+    },
+    {
+      "priority": 240,
+      "make": "Audi",
+      "model": "A1",
+      "generation": "GB",
+      "yearFrom": 2019,
+      "yearTo": 2026,
+      "bodyType": "hatchback",
+      "filename": "audi-a1-gb-2019-2026.webp"
+    },
+    {
+      "priority": 241,
+      "make": "Audi",
+      "model": "A1",
+      "generation": "8X facelift",
+      "yearFrom": 2015,
+      "yearTo": 2018,
+      "bodyType": "hatchback",
+      "filename": "audi-a1-8x-facelift-2015-2018.webp"
+    },
+    {
+      "priority": 242,
+      "make": "Audi",
+      "model": "A5",
+      "generation": "B9",
+      "yearFrom": 2016,
+      "yearTo": 2024,
+      "bodyType": "coupe-sportback",
+      "filename": "audi-a5-b9-2016-2024.webp"
+    },
+    {
+      "priority": 243,
+      "make": "Audi",
+      "model": "A6",
+      "generation": "C8",
+      "yearFrom": 2018,
+      "yearTo": 2026,
+      "bodyType": "saloon-estate",
+      "filename": "audi-a6-c8-2018-2026.webp"
+    },
+    {
+      "priority": 244,
+      "make": "Audi",
+      "model": "Q2",
+      "generation": "GA",
+      "yearFrom": 2016,
+      "yearTo": 2026,
+      "bodyType": "crossover",
+      "filename": "audi-q2-ga-2016-2026.webp"
+    },
+    {
+      "priority": 245,
+      "make": "Audi",
+      "model": "Q3",
+      "generation": "F3",
+      "yearFrom": 2018,
+      "yearTo": 2026,
+      "bodyType": "suv",
+      "filename": "audi-q3-f3-2018-2026.webp"
+    },
+    {
+      "priority": 246,
+      "make": "Audi",
+      "model": "Q5",
+      "generation": "FY",
+      "yearFrom": 2017,
+      "yearTo": 2024,
+      "bodyType": "suv",
+      "filename": "audi-q5-fy-2017-2024.webp"
+    },
+    {
+      "priority": 247,
+      "make": "Audi",
+      "model": "TT",
+      "generation": "8S",
+      "yearFrom": 2015,
+      "yearTo": 2023,
+      "bodyType": "coupe-roadster",
+      "filename": "audi-tt-8s-2015-2023.webp"
+    },
+    {
+      "priority": 248,
+      "make": "Volvo",
+      "model": "V40",
+      "generation": "facelift",
+      "yearFrom": 2016,
+      "yearTo": 2019,
+      "bodyType": "hatchback",
+      "filename": "volvo-v40-facelift-2016-2019.webp"
+    },
+    {
+      "priority": 249,
+      "make": "Volvo",
+      "model": "XC40",
+      "generation": "Mk1",
+      "yearFrom": 2018,
+      "yearTo": 2026,
+      "bodyType": "suv",
+      "filename": "volvo-xc40-mk1-2018-2026.webp"
+    },
+    {
+      "priority": 250,
+      "make": "Volvo",
+      "model": "XC60",
+      "generation": "Mk2",
+      "yearFrom": 2017,
+      "yearTo": 2026,
+      "bodyType": "suv",
+      "filename": "volvo-xc60-mk2-2017-2026.webp"
+    },
+    {
+      "priority": 251,
+      "make": "Volvo",
+      "model": "XC60",
+      "generation": "Mk1 facelift",
+      "yearFrom": 2013,
+      "yearTo": 2017,
+      "bodyType": "suv",
+      "filename": "volvo-xc60-mk1-facelift-2013-2017.webp"
+    },
+    {
+      "priority": 252,
+      "make": "Volvo",
+      "model": "XC90",
+      "generation": "Mk2",
+      "yearFrom": 2015,
+      "yearTo": 2026,
+      "bodyType": "suv",
+      "filename": "volvo-xc90-mk2-2015-2026.webp"
+    },
+    {
+      "priority": 253,
+      "make": "Volvo",
+      "model": "V60",
+      "generation": "Mk2",
+      "yearFrom": 2018,
+      "yearTo": 2026,
+      "bodyType": "estate",
+      "filename": "volvo-v60-mk2-2018-2026.webp"
+    },
+    {
+      "priority": 254,
+      "make": "Land Rover",
+      "model": "Range Rover Evoque",
+      "generation": "L551",
+      "yearFrom": 2019,
+      "yearTo": 2026,
+      "bodyType": "suv",
+      "filename": "land-rover-range-rover-evoque-l551-2019-2026.webp"
+    },
+    {
+      "priority": 255,
+      "make": "Land Rover",
+      "model": "Discovery Sport",
+      "generation": "L550 facelift",
+      "yearFrom": 2020,
+      "yearTo": 2026,
+      "bodyType": "suv",
+      "filename": "land-rover-discovery-sport-l550-facelift-2020-2026.webp"
+    },
+    {
+      "priority": 256,
+      "make": "Land Rover",
+      "model": "Discovery",
+      "generation": "L462",
+      "yearFrom": 2017,
+      "yearTo": 2026,
+      "bodyType": "suv",
+      "filename": "land-rover-discovery-l462-2017-2026.webp"
+    },
+    {
+      "priority": 257,
+      "make": "Land Rover",
+      "model": "Range Rover Sport",
+      "generation": "L494 facelift",
+      "yearFrom": 2018,
+      "yearTo": 2022,
+      "bodyType": "suv",
+      "filename": "land-rover-range-rover-sport-l494-facelift-2018-2022.webp"
+    },
+    {
+      "priority": 258,
+      "make": "Land Rover",
+      "model": "Defender",
+      "generation": "L663",
+      "yearFrom": 2020,
+      "yearTo": 2026,
+      "bodyType": "suv",
+      "filename": "land-rover-defender-l663-2020-2026.webp"
+    },
+    {
+      "priority": 259,
+      "make": "Jaguar",
+      "model": "XE",
+      "generation": "X760",
+      "yearFrom": 2015,
+      "yearTo": 2024,
+      "bodyType": "saloon",
+      "filename": "jaguar-xe-x760-2015-2024.webp"
+    },
+    {
+      "priority": 260,
+      "make": "Jaguar",
+      "model": "F-Pace",
+      "generation": "X761",
+      "yearFrom": 2016,
+      "yearTo": 2026,
+      "bodyType": "suv",
+      "filename": "jaguar-f-pace-x761-2016-2026.webp"
+    },
+    {
+      "priority": 261,
+      "make": "Lexus",
+      "model": "CT 200h",
+      "generation": "ZWA10 facelift",
+      "yearFrom": 2014,
+      "yearTo": 2020,
+      "bodyType": "hatchback",
+      "filename": "lexus-ct-200h-zwa10-facelift-2014-2020.webp"
+    },
+    {
+      "priority": 262,
+      "make": "Lexus",
+      "model": "NX",
+      "generation": "AZ10",
+      "yearFrom": 2014,
+      "yearTo": 2021,
+      "bodyType": "suv",
+      "filename": "lexus-nx-az10-2014-2021.webp"
+    },
+    {
+      "priority": 263,
+      "make": "Lexus",
+      "model": "NX",
+      "generation": "AZ20",
+      "yearFrom": 2021,
+      "yearTo": 2026,
+      "bodyType": "suv",
+      "filename": "lexus-nx-az20-2021-2026.webp"
+    },
+    {
+      "priority": 264,
+      "make": "Lexus",
+      "model": "UX",
+      "generation": "ZA10",
+      "yearFrom": 2019,
+      "yearTo": 2026,
+      "bodyType": "crossover",
+      "filename": "lexus-ux-za10-2019-2026.webp"
+    },
+    {
+      "priority": 265,
+      "make": "Lexus",
+      "model": "RX",
+      "generation": "AL20",
+      "yearFrom": 2016,
+      "yearTo": 2022,
+      "bodyType": "suv",
+      "filename": "lexus-rx-al20-2016-2022.webp"
+    },
+    {
+      "priority": 266,
+      "make": "Lexus",
+      "model": "IS",
+      "generation": "XE30 facelift",
+      "yearFrom": 2017,
+      "yearTo": 2020,
+      "bodyType": "saloon",
+      "filename": "lexus-is-xe30-facelift-2017-2020.webp"
+    },
+    {
+      "priority": 267,
+      "make": "Suzuki",
+      "model": "Swift",
+      "generation": "A2L",
+      "yearFrom": 2017,
+      "yearTo": 2023,
+      "bodyType": "hatchback",
+      "filename": "suzuki-swift-a2l-2017-2023.webp"
+    },
+    {
+      "priority": 268,
+      "make": "Suzuki",
+      "model": "Swift",
+      "generation": "AZ",
+      "yearFrom": 2024,
+      "yearTo": 2026,
+      "bodyType": "hatchback",
+      "filename": "suzuki-swift-az-2024-2026.webp"
+    },
+    {
+      "priority": 269,
+      "make": "Suzuki",
+      "model": "Vitara",
+      "generation": "LY",
+      "yearFrom": 2015,
+      "yearTo": 2026,
+      "bodyType": "suv",
+      "filename": "suzuki-vitara-ly-2015-2026.webp"
+    },
+    {
+      "priority": 270,
+      "make": "Suzuki",
+      "model": "S-Cross",
+      "generation": "JY facelift",
+      "yearFrom": 2016,
+      "yearTo": 2021,
+      "bodyType": "crossover",
+      "filename": "suzuki-s-cross-jy-facelift-2016-2021.webp"
+    },
+    {
+      "priority": 271,
+      "make": "Suzuki",
+      "model": "Ignis",
+      "generation": "MF",
+      "yearFrom": 2017,
+      "yearTo": 2025,
+      "bodyType": "hatchback-crossover",
+      "filename": "suzuki-ignis-mf-2017-2025.webp"
+    },
+    {
+      "priority": 272,
+      "make": "Suzuki",
+      "model": "Jimny",
+      "generation": "GJ",
+      "yearFrom": 2018,
+      "yearTo": 2021,
+      "bodyType": "suv",
+      "filename": "suzuki-jimny-gj-2018-2021.webp"
+    },
+    {
+      "priority": 273,
+      "make": "MG",
+      "model": "MG3",
+      "generation": "Mk2 facelift",
+      "yearFrom": 2018,
+      "yearTo": 2024,
+      "bodyType": "hatchback",
+      "filename": "mg-mg3-mk2-facelift-2018-2024.webp"
+    },
+    {
+      "priority": 274,
+      "make": "MG",
+      "model": "ZS",
+      "generation": "Mk1 facelift",
+      "yearFrom": 2020,
+      "yearTo": 2024,
+      "bodyType": "crossover",
+      "filename": "mg-zs-mk1-facelift-2020-2024.webp"
+    },
+    {
+      "priority": 275,
+      "make": "MG",
+      "model": "HS",
+      "generation": "Mk1",
+      "yearFrom": 2019,
+      "yearTo": 2024,
+      "bodyType": "suv",
+      "filename": "mg-hs-mk1-2019-2024.webp"
+    },
+    {
+      "priority": 276,
+      "make": "MG",
+      "model": "MG4 EV",
+      "generation": "Mk1",
+      "yearFrom": 2022,
+      "yearTo": 2026,
+      "bodyType": "hatchback",
+      "filename": "mg-mg4-ev-mk1-2022-2026.webp"
+    },
+    {
+      "priority": 277,
+      "make": "MG",
+      "model": "MG5 EV",
+      "generation": "facelift",
+      "yearFrom": 2022,
+      "yearTo": 2025,
+      "bodyType": "estate",
+      "filename": "mg-mg5-ev-facelift-2022-2025.webp"
+    },
+    {
+      "priority": 278,
+      "make": "Mitsubishi",
+      "model": "Outlander",
+      "generation": "GF facelift",
+      "yearFrom": 2015,
+      "yearTo": 2021,
+      "bodyType": "suv",
+      "filename": "mitsubishi-outlander-gf-facelift-2015-2021.webp"
+    },
+    {
+      "priority": 279,
+      "make": "Mitsubishi",
+      "model": "ASX",
+      "generation": "GA facelift",
+      "yearFrom": 2017,
+      "yearTo": 2021,
+      "bodyType": "crossover",
+      "filename": "mitsubishi-asx-ga-facelift-2017-2021.webp"
+    },
+    {
+      "priority": 280,
+      "make": "Mitsubishi",
+      "model": "Eclipse Cross",
+      "generation": "GK",
+      "yearFrom": 2018,
+      "yearTo": 2026,
+      "bodyType": "suv",
+      "filename": "mitsubishi-eclipse-cross-gk-2018-2026.webp"
+    },
+    {
+      "priority": 281,
+      "make": "Mitsubishi",
+      "model": "Mirage",
+      "generation": "A00 facelift",
+      "yearFrom": 2016,
+      "yearTo": 2021,
+      "bodyType": "hatchback",
+      "filename": "mitsubishi-mirage-a00-facelift-2016-2021.webp"
+    },
+    {
+      "priority": 282,
+      "make": "Subaru",
+      "model": "Forester",
+      "generation": "SK",
+      "yearFrom": 2019,
+      "yearTo": 2024,
+      "bodyType": "suv",
+      "filename": "subaru-forester-sk-2019-2024.webp"
+    },
+    {
+      "priority": 283,
+      "make": "Subaru",
+      "model": "Forester",
+      "generation": "SJ facelift",
+      "yearFrom": 2016,
+      "yearTo": 2018,
+      "bodyType": "suv",
+      "filename": "subaru-forester-sj-facelift-2016-2018.webp"
+    },
+    {
+      "priority": 284,
+      "make": "Subaru",
+      "model": "XV",
+      "generation": "GT",
+      "yearFrom": 2018,
+      "yearTo": 2023,
+      "bodyType": "crossover",
+      "filename": "subaru-xv-gt-2018-2023.webp"
+    },
+    {
+      "priority": 285,
+      "make": "Subaru",
+      "model": "Outback",
+      "generation": "BS",
+      "yearFrom": 2015,
+      "yearTo": 2020,
+      "bodyType": "estate-crossover",
+      "filename": "subaru-outback-bs-2015-2020.webp"
+    },
+    {
+      "priority": 286,
+      "make": "Jeep",
+      "model": "Renegade",
+      "generation": "BU",
+      "yearFrom": 2015,
+      "yearTo": 2024,
+      "bodyType": "crossover",
+      "filename": "jeep-renegade-bu-2015-2024.webp"
+    },
+    {
+      "priority": 287,
+      "make": "Jeep",
+      "model": "Compass",
+      "generation": "MP",
+      "yearFrom": 2018,
+      "yearTo": 2025,
+      "bodyType": "suv",
+      "filename": "jeep-compass-mp-2018-2025.webp"
+    },
+    {
+      "priority": 288,
+      "make": "Jeep",
+      "model": "Grand Cherokee",
+      "generation": "WK2 facelift",
+      "yearFrom": 2014,
+      "yearTo": 2021,
+      "bodyType": "suv",
+      "filename": "jeep-grand-cherokee-wk2-facelift-2014-2021.webp"
+    },
+    {
+      "priority": 289,
+      "make": "Jeep",
+      "model": "Wrangler",
+      "generation": "JL",
+      "yearFrom": 2018,
+      "yearTo": 2026,
+      "bodyType": "suv",
+      "filename": "jeep-wrangler-jl-2018-2026.webp"
+    },
+    {
+      "priority": 290,
+      "make": "Alfa Romeo",
+      "model": "Giulietta",
+      "generation": "940 facelift",
+      "yearFrom": 2016,
+      "yearTo": 2020,
+      "bodyType": "hatchback",
+      "filename": "alfa-romeo-giulietta-940-facelift-2016-2020.webp"
+    },
+    {
+      "priority": 291,
+      "make": "Alfa Romeo",
+      "model": "Giulia",
+      "generation": "952",
+      "yearFrom": 2016,
+      "yearTo": 2026,
+      "bodyType": "saloon",
+      "filename": "alfa-romeo-giulia-952-2016-2026.webp"
+    },
+    {
+      "priority": 292,
+      "make": "Alfa Romeo",
+      "model": "Stelvio",
+      "generation": "949",
+      "yearFrom": 2017,
+      "yearTo": 2026,
+      "bodyType": "suv",
+      "filename": "alfa-romeo-stelvio-949-2017-2026.webp"
+    },
+    {
+      "priority": 293,
+      "make": "MINI",
+      "model": "Countryman",
+      "generation": "F60",
+      "yearFrom": 2017,
+      "yearTo": 2023,
+      "bodyType": "crossover",
+      "filename": "mini-countryman-f60-2017-2023.webp"
+    },
+    {
+      "priority": 294,
+      "make": "MINI",
+      "model": "Countryman",
+      "generation": "R60",
+      "yearFrom": 2010,
+      "yearTo": 2016,
+      "bodyType": "crossover",
+      "filename": "mini-countryman-r60-2010-2016.webp"
+    },
+    {
+      "priority": 295,
+      "make": "MINI",
+      "model": "Clubman",
+      "generation": "F54",
+      "yearFrom": 2015,
+      "yearTo": 2024,
+      "bodyType": "estate",
+      "filename": "mini-clubman-f54-2015-2024.webp"
+    },
+    {
+      "priority": 296,
+      "make": "Smart",
+      "model": "Fortwo",
+      "generation": "453",
+      "yearFrom": 2015,
+      "yearTo": 2019,
+      "bodyType": "hatchback",
+      "filename": "smart-fortwo-453-2015-2019.webp"
+    },
+    {
+      "priority": 297,
+      "make": "Smart",
+      "model": "Forfour",
+      "generation": "453",
+      "yearFrom": 2015,
+      "yearTo": 2019,
+      "bodyType": "hatchback",
+      "filename": "smart-forfour-453-2015-2019.webp"
+    },
+    {
+      "priority": 298,
+      "make": "Porsche",
+      "model": "Macan",
+      "generation": "95B",
+      "yearFrom": 2014,
+      "yearTo": 2024,
+      "bodyType": "suv",
+      "filename": "porsche-macan-95b-2014-2024.webp"
+    },
+    {
+      "priority": 299,
+      "make": "Porsche",
+      "model": "Cayenne",
+      "generation": "9Y0",
+      "yearFrom": 2018,
+      "yearTo": 2026,
+      "bodyType": "suv",
+      "filename": "porsche-cayenne-9y0-2018-2026.webp"
+    },
+    {
+      "priority": 300,
+      "make": "Polestar",
+      "model": "2",
+      "generation": "Mk1",
+      "yearFrom": 2020,
+      "yearTo": 2026,
+      "bodyType": "fastback",
+      "filename": "polestar-2-mk1-2020-2026.webp"
+    }
+  ]
+}
