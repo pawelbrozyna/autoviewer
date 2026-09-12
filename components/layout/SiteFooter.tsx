@@ -8,8 +8,8 @@ export function SiteFooter() {
 
   return (
     <footer className="border-t border-border bg-white">
-      <Container className="pb-4 pt-2.5 md:pb-11 md:pt-7">
-        <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between md:gap-16">
+      <Container className="pb-4 pt-2.5 md:pb-11 md:pt-7 lg:pb-9 lg:pt-6">
+        <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between md:gap-16 lg:gap-14">
           <div className="md:min-w-0 md:max-w-sm">
             <BrandLogo size="header" />
             <p className="-mt-2.5 support-copy max-w-xs pl-[13px] leading-snug md:-mt-1">

@@ -70,7 +70,7 @@ export function ExampleReport() {
   ];
 
   return (
-    <section className="bg-[#F9FBFE] pb-3 pt-0.5 md:bg-surface-soft md:pb-4 md:pt-7">
+    <section className="bg-[#F9FBFE] pb-3 pt-0.5 md:bg-surface-soft md:pb-4 md:pt-7 lg:pb-3.5 lg:pt-6">
       <Container>
         {/* Mobile: same layout as vehicle result summary */}
         <div className="md:hidden">
@@ -82,15 +82,15 @@ export function ExampleReport() {
         </div>
 
         {/* Desktop: existing layout */}
-        <div className="card-surface hidden overflow-hidden p-5 pb-3.5 md:block">
-          <div className="mb-3.5 flex flex-wrap items-center gap-2.5">
+        <div className="card-surface hidden overflow-hidden p-5 pb-3.5 md:block lg:p-4.5 lg:pb-3">
+          <div className="mb-3.5 flex flex-wrap items-center gap-2.5 lg:mb-3">
             <p className="eyebrow mb-0">Example report</p>
             <StatusBadge tone="info">Demo data</StatusBadge>
           </div>
 
-          <div className="mb-4 flex flex-wrap items-start justify-between gap-x-6 gap-y-2">
+          <div className="mb-4 flex flex-wrap items-start justify-between gap-x-6 gap-y-2 lg:mb-3.5 lg:gap-x-5">
             <div className="min-w-0">
-              <h2 className="text-[1.35rem] font-bold tracking-tight text-navy md:text-[1.55rem]">
+              <h2 className="text-[1.35rem] font-bold tracking-tight text-navy md:text-[1.55rem] lg:text-[1.4rem]">
                 {vehicle.summary.make} {vehicle.summary.model}
               </h2>
               <p className="mt-1 text-[14px] text-muted md:text-[15px]">

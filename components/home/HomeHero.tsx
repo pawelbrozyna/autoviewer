@@ -24,18 +24,18 @@ export function HomeHero() {
       </div>
 
       <Container className="relative">
-        <div className="tool-hero-y pb-4 md:max-w-[720px] md:pb-[1.75rem] lg:max-w-[760px]">
+        <div className="tool-hero-y pb-4 md:max-w-[720px] md:pb-[1.75rem] lg:max-w-[700px] lg:pb-[1.55rem]">
           <div className="hero-topline">
             <p className="eyebrow mb-0 leading-none">Vehicle history check</p>
           </div>
           <h1 className="heading-page max-w-none md:whitespace-nowrap">
             Make a smarter buying decision.
           </h1>
-          <p className="body-copy mt-3 max-w-none md:mt-3.5 md:whitespace-nowrap">
+          <p className="body-copy mt-3 max-w-none md:mt-3.5 md:whitespace-nowrap lg:mt-3">
             Check MOT history, mileage, tax, recalls and more - all in one place.
           </p>
 
-          <div className="mt-5 md:mt-6">
+          <div className="mt-5 md:mt-6 lg:mt-5">
             <VehicleSearchForm checkSource="home" />
           </div>
 

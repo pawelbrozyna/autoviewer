@@ -1,11 +1,7 @@
 /**
- * Central contact / support email configuration.
- * Keep public addresses and mail transport settings here - do not scatter
- * hardcoded emails through page components.
+ * Central contact / mail transport configuration.
+ * Keep mail settings here - do not scatter transport details through page components.
  */
-
-/** Public-facing support address shown on the site. */
-export const PUBLIC_SUPPORT_EMAIL = "support@autoviewer.co.uk";
 
 /**
  * Gmail account used for Nodemailer transport and inbox destination.

@@ -41,6 +41,7 @@ See `.env.example`.
 | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` | Canonical site URL (default `https://autoviewer.co.uk`) |
 | `NEXT_PUBLIC_ENABLE_AUTH` | Show Sign in UI when `true` (no fake auth implemented) |
+| `NEXT_PUBLIC_GA_ID` | GA4 measurement ID (cookieless Consent Mode; omit to disable) |
 | `USE_MOCK_DATA` | `true` returns clearly labelled demo vehicles |
 | `DVLA_API_KEY` | DVLA Vehicle Enquiry Service key (server-only) |
 | `DVLA_API_URL` | DVLA VES endpoint |
@@ -75,7 +76,7 @@ lib/
   api/               DVLA, DVSA, mock, vehicle service, provenance interface
   vehicle/           Registration helpers, score, mileage
   seo/               Metadata + JSON-LD helpers
-  analytics.ts       GA-ready event helpers (safe no-ops)
+  analytics.ts       GA4 event helpers (safe when GA ID unset)
 types/               Shared domain types
 public/              header.png, autoviewer.png
 ```

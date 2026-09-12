@@ -347,7 +347,7 @@ function VehicleCompareCard({
   ];
 
   return (
-    <div className="flex min-w-0 flex-col overflow-hidden rounded-[14px] border border-[#E6EBF2] bg-white">
+    <div className="flex min-w-0 flex-col overflow-hidden rounded-[14px] border border-border bg-white">
       <div className="px-1.5 pt-1">
         <VehicleThumbnail
           label={name}
@@ -392,7 +392,7 @@ function VehicleCompareCard({
 
       <div
         className={cn(
-          "border-t border-[#E6EBF2] px-2.5 py-2",
+          "border-t border-border px-2.5 py-2",
           isLeader ? "bg-[#E8F6EE]" : "bg-[#F3F6FA]",
         )}
       >
@@ -509,9 +509,9 @@ export function VehicleComparisonMobile({
           return (
             <div
               key={row.key}
-              className="grid grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)_minmax(0,1fr)] items-center rounded-[12px] border border-[#E6EBF2] bg-white px-1.5 py-1.5"
+              className="grid grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)_minmax(0,1fr)] items-center rounded-[12px] border border-border bg-white px-1.5 py-1.5"
             >
-              <div className="flex min-w-0 items-center gap-1 border-r border-[#EEF2F7] pl-1 pr-1.5">
+              <div className="flex min-w-0 items-center gap-1 border-r border-border pl-1 pr-1.5">
                 <Icon
                   className="h-4 w-4 shrink-0 text-[#012046]"
                   strokeWidth={2}
@@ -525,7 +525,7 @@ export function VehicleComparisonMobile({
                 </div>
               </div>
 
-              <div className="border-r border-[#EEF2F7] px-0.5">
+              <div className="border-r border-border px-0.5">
                 <CompareValueCell
                   carLabel={leftLabel}
                   value={row.leftValue}
@@ -546,7 +546,7 @@ export function VehicleComparisonMobile({
         })}
       </div>
 
-      <div className="rounded-[14px] border border-[#E6EBF2] bg-white px-3.5 py-3">
+      <div className="rounded-[14px] border border-border bg-white px-3.5 py-3">
         <p className="text-[12px] font-semibold uppercase tracking-[0.06em] text-[#64748B]">
           Quick summary
         </p>

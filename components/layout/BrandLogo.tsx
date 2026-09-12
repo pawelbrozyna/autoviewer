@@ -16,7 +16,7 @@ export function BrandLogo({
 }) {
   const sizeClass =
     size === "header"
-      ? "h-[49px] w-[229px]"
+      ? "h-[49px] w-[229px] lg:h-[45px] lg:w-[210px]"
       : "h-9 w-[168px]";
 
   return (
@@ -31,7 +31,7 @@ export function BrandLogo({
         alt="AutoViewer"
         fill
         className="object-contain object-left"
-        sizes={size === "header" ? "229px" : "168px"}
+        sizes={size === "header" ? "(min-width: 1024px) 210px, 229px" : "168px"}
         priority
       />
     </Link>

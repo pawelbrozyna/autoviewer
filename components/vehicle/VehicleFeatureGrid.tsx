@@ -44,7 +44,7 @@ const features = [
 
 export function VehicleFeatureGrid() {
   return (
-    <section className="bg-surface-soft pb-7 pt-4 md:pb-9 md:pt-5">
+    <section className="bg-surface-soft pb-7 pt-4 md:pb-9 md:pt-5 lg:pb-8 lg:pt-4">
       <Container>
         <SectionHeading
           eyebrow="Everything you need"
@@ -54,17 +54,17 @@ export function VehicleFeatureGrid() {
             label: "Learn more about our checks →",
           }}
         />
-        <div className="grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 xl:grid-cols-5 xl:gap-4">
+        <div className="grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-4 xl:grid-cols-5 xl:gap-3.5">
           {features.map((feature) => {
             const Icon = feature.icon;
             return (
               <Link
                 key={feature.title}
                 href={feature.href}
-                className="group flex items-start gap-3 rounded-[12px] p-1"
+                className="group flex items-start gap-3 rounded-[12px] p-1 lg:gap-2.5"
               >
                 <div className="shrink-0 text-blue">
-                  <Icon className="h-6 w-6" strokeWidth={1.6} />
+                  <Icon className="h-6 w-6 lg:h-5 lg:w-5" strokeWidth={1.6} />
                 </div>
                 <div className="min-w-0">
                   <h3 className="heading-card group-hover:text-blue">

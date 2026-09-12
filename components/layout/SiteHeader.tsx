@@ -155,18 +155,18 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-white/95 backdrop-blur-sm">
-      <Container className="flex h-[68px] items-center justify-between gap-4">
+      <Container className="flex h-[68px] items-center justify-between gap-4 lg:h-[62px] lg:gap-3">
         <BrandLogo size="header" />
 
         <nav
-          className="hidden items-center gap-1 xl:gap-1.5 lg:flex"
+          className="hidden items-center gap-1 lg:flex xl:gap-1"
           aria-label="Primary"
         >
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="rounded-lg px-3 py-1.5 text-base font-semibold text-navy/85 transition-colors hover:bg-[#EEF2F7] hover:text-navy"
+              className="rounded-lg px-3 py-1.5 text-base font-semibold text-navy/85 transition-colors hover:bg-[#EEF2F7] hover:text-navy lg:px-2.5 lg:py-1 lg:text-[15px]"
             >
               {link.label}
             </Link>

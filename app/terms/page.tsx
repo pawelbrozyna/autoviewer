@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
-import { HeroMobileGradient } from "@/components/layout/ToolHeroBackdrop";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Container } from "@/components/ui/Container";
-import { PUBLIC_SUPPORT_EMAIL } from "@/lib/contact";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 
 export const metadata: Metadata = buildPageMetadata({
@@ -14,24 +12,21 @@ export const metadata: Metadata = buildPageMetadata({
 
 export default function TermsPage() {
   return (
-    <>
-      <section className="relative overflow-hidden border-b border-border bg-surface-soft">
-        <HeroMobileGradient />
-        <Container className="relative tool-hero-y max-w-3xl">
-          <Breadcrumbs
-            items={[
-              { label: "Home", href: "/" },
-              { label: "Terms" },
-            ]}
-          />
-          <p className="eyebrow mb-2.5">Legal</p>
-          <h1 className="heading-page">Terms of use</h1>
-        </Container>
-      </section>
-      <section className="section-y">
-        <Container className="max-w-3xl">
-          <div className="prose-av">
-            <p>Last updated: 12 September 2026</p>
+    <section className="bg-white">
+      <Container className="max-w-[860px] py-6 md:py-8">
+        <Breadcrumbs
+          items={[
+            { label: "Home", href: "/" },
+            { label: "Terms" },
+          ]}
+          className="mb-3"
+        />
+        <h1 className="text-[1.5rem] font-bold tracking-tight text-navy md:text-[1.75rem]">
+          Terms of use
+        </h1>
+
+        <div className="prose-av mt-4 md:mt-5">
+          <p>Last updated: 12 September 2026</p>
           <h2>Service</h2>
           <p>
             AutoViewer provides tools to help users review vehicle-related
@@ -57,12 +52,11 @@ export default function TermsPage() {
           </ul>
           <h2>Contact</h2>
           <p>
-            Questions:{" "}
-            <a href={`mailto:${PUBLIC_SUPPORT_EMAIL}`}>{PUBLIC_SUPPORT_EMAIL}</a>
+            Questions about these terms can be sent via our{" "}
+            <a href="/contact">contact form</a>.
           </p>
         </div>
-        </Container>
-      </section>
-    </>
+      </Container>
+    </section>
   );
 }

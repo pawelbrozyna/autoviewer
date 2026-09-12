@@ -14,7 +14,6 @@ import {
   GitCompare,
 } from "lucide-react";
 import { AboutBuyerScoreExample } from "@/components/about/AboutBuyerScoreExample";
-import { HeroMobileGradient } from "@/components/layout/ToolHeroBackdrop";
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Container } from "@/components/ui/Container";
 import { VehicleSearchForm } from "@/components/vehicle/VehicleSearchForm";
@@ -112,178 +111,154 @@ const principles = [
 
 export default function AboutPage() {
   return (
-    <>
-      {/* Hero */}
-      <section className="relative overflow-hidden border-b border-border bg-surface-soft">
-        <HeroMobileGradient />
-        <Container className="relative tool-hero-y max-w-[1240px]">
-          <Breadcrumbs
-            items={[
-              { label: "Home", href: "/" },
-              { label: "About" },
-            ]}
-          />
-          <p className="eyebrow mb-2.5 md:mb-3">About AutoViewer</p>
-          <h1 className="heading-page max-w-3xl">
-            Clear vehicle information.
-            <br className="hidden sm:block" /> Better buying decisions.
-          </h1>
-          <div className="body-copy mt-4 max-w-3xl space-y-3 md:mt-5">
-            <p>
-              Buying a used car should not mean jumping between multiple
-              websites, trying to decode MOT records or guessing what the
-              numbers actually mean.
-            </p>
-            <p>
-              AutoViewer brings useful UK vehicle information together in one
-              clear place.
-            </p>
-            <p>
-              Enter a registration and quickly see the details that matter -
-              MOT history, recorded mileage, tax status, recalls, vehicle
-              information and buying insights.
-            </p>
-          </div>
-          <p className="mt-5 max-w-2xl border-l-[3px] border-navy pl-4 text-[16px] font-semibold leading-snug text-navy md:mt-6 md:text-[17px]">
-            Our goal is simple:
-            <span className="mt-1 block font-medium text-navy/80">
-              make vehicle data easier to understand before you buy.
-            </span>
-          </p>
-        </Container>
-      </section>
+    <div className="bg-white">
+      <Container className="max-w-[900px] py-6 md:py-8">
+        <Breadcrumbs
+          items={[
+            { label: "Home", href: "/" },
+            { label: "About" },
+          ]}
+          className="mb-3"
+        />
+        <h1 className="text-[1.5rem] font-bold tracking-tight text-navy md:text-[1.75rem]">
+          About AutoViewer
+        </h1>
 
-      {/* What AutoViewer helps with */}
-      <section className="border-b border-border bg-white py-8 md:py-10">
-        <Container className="max-w-[1240px]">
+        <div className="mt-4 space-y-3 text-[15px] leading-relaxed text-muted md:mt-5 md:text-[16px]">
+          <p>
+            Buying a used car should not mean jumping between multiple websites,
+            trying to decode MOT records or guessing what the numbers actually
+            mean.
+          </p>
+          <p>
+            AutoViewer brings useful UK vehicle information together in one clear
+            place.
+          </p>
+          <p>
+            Enter a registration and quickly see the details that matter - MOT
+            history, recorded mileage, tax status, recalls, vehicle information
+            and buying insights.
+          </p>
+          <p className="border-l-[3px] border-navy pl-3.5 font-semibold text-navy">
+            Our goal is simple: make vehicle data easier to understand before you
+            buy.
+          </p>
+        </div>
+
+        <section className="mt-8 border-t border-border pt-7 md:mt-9 md:pt-8">
           <h2 className="heading-section">What AutoViewer helps you understand</h2>
-          <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4 md:mt-6 md:gap-3.5">
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 md:mt-5 md:gap-3.5">
             {helpItems.map((item) => {
               const Icon = item.icon;
               return (
                 <article
                   key={item.title}
-                  className="rounded-[12px] border border-border bg-white p-3.5 md:p-4"
+                  className="rounded-[12px] border border-border bg-white p-3.5"
                 >
                   <Icon
                     className="h-5 w-5 text-navy"
                     aria-hidden
                     strokeWidth={1.75}
                   />
-                  <h3 className="mt-2.5 text-[15px] font-semibold text-navy md:text-[16px]">
+                  <h3 className="mt-2 text-[15px] font-semibold text-navy">
                     {item.title}
                   </h3>
-                  <p className="mt-1 text-[14px] leading-snug text-muted md:text-[15px]">
+                  <p className="mt-1 text-[14px] leading-snug text-muted">
                     {item.body}
                   </p>
                 </article>
               );
             })}
           </div>
-        </Container>
-      </section>
+        </section>
 
-      {/* Independent */}
-      <section className="border-b border-border bg-surface-soft py-8 md:py-10">
-        <Container className="max-w-[1240px]">
-          <div className="grid gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,0.85fr)] lg:items-start lg:gap-10">
-            <div>
-              <h2 className="heading-section">Independent and straightforward</h2>
-              <div className="body-copy mt-4 max-w-3xl space-y-3">
-                <p>AutoViewer is an independent service.</p>
-                <p>
-                  We are not affiliated with or endorsed by DVLA, DVSA or any
-                  vehicle manufacturer.
-                </p>
-                <p>
-                  Where available, we use official UK vehicle data and present it
-                  in a simpler, more useful format.
-                </p>
-                <p>
-                  We do not want to overwhelm users with jargon, dozens of tabs
-                  or meaningless statistics.
-                </p>
-                <p>
-                  If a piece of information can help someone make a better buying
-                  decision, we show it clearly.
-                </p>
-                <p>
-                  If we do not have reliable data, we do not pretend that we do.
-                </p>
-              </div>
-            </div>
-            <aside className="rounded-[12px] border border-border bg-white p-4 md:p-5">
-              <p className="eyebrow mb-2.5">Our approach</p>
-              <ul className="space-y-3 text-[15px] leading-snug text-navy">
-                <li className="border-b border-border pb-3">
-                  Official sources where available
-                </li>
-                <li className="border-b border-border pb-3">
-                  Clear presentation over noise
-                </li>
-                <li className="border-b border-border pb-3">
-                  No invented conclusions
-                </li>
-                <li>Inspection still comes first</li>
-              </ul>
-            </aside>
+        <section className="mt-8 border-t border-border pt-7 md:mt-9 md:pt-8">
+          <h2 className="heading-section">Independent and straightforward</h2>
+          <div className="mt-4 space-y-3 text-[15px] leading-relaxed text-muted md:text-[16px]">
+            <p>AutoViewer is an independent service.</p>
+            <p>
+              We are not affiliated with or endorsed by DVLA, DVSA or any vehicle
+              manufacturer.
+            </p>
+            <p>
+              Where available, we use official UK vehicle data and present it in
+              a simpler, more useful format.
+            </p>
+            <p>
+              We do not want to overwhelm users with jargon, dozens of tabs or
+              meaningless statistics.
+            </p>
+            <p>
+              If a piece of information can help someone make a better buying
+              decision, we show it clearly.
+            </p>
+            <p>
+              If we do not have reliable data, we do not pretend that we do.
+            </p>
           </div>
-        </Container>
-      </section>
+          <aside className="mt-5 rounded-[12px] border border-border bg-surface-soft p-4">
+            <p className="eyebrow mb-2.5">Our approach</p>
+            <ul className="space-y-2.5 text-[15px] leading-snug text-navy">
+              <li className="border-b border-border pb-2.5">
+                Official sources where available
+              </li>
+              <li className="border-b border-border pb-2.5">
+                Clear presentation over noise
+              </li>
+              <li className="border-b border-border pb-2.5">
+                No invented conclusions
+              </li>
+              <li>Inspection still comes first</li>
+            </ul>
+          </aside>
+        </section>
 
-      {/* Buyer Score */}
-      <section className="border-b border-border bg-white py-8 md:py-10">
-        <Container className="max-w-[1240px]">
-          <div className="grid gap-6 lg:grid-cols-[minmax(0,1.25fr)_minmax(280px,0.75fr)] lg:items-start lg:gap-10">
-            <div>
-              <h2 className="heading-section">What the Buyer Score means</h2>
-              <div className="body-copy mt-4 max-w-3xl space-y-3">
-                <p>
-                  The AutoViewer Buyer Score is our interpretation of the
-                  vehicle history available to us.
-                </p>
-                <p>It can consider signals such as:</p>
-                <ul className="list-disc space-y-1.5 pl-5">
-                  <li>MOT results</li>
-                  <li>repeated defects or advisories</li>
-                  <li>mileage consistency</li>
-                  <li>safety recalls</li>
-                </ul>
-                <p>It is designed to make patterns easier to understand.</p>
-              </div>
-              <div className="mt-5 rounded-[12px] border border-border bg-surface-soft px-4 py-3.5 md:px-5">
-                <p className="text-[15px] font-semibold leading-snug text-navy md:text-[16px]">
+        <section className="mt-8 border-t border-border pt-7 md:mt-9 md:pt-8">
+          <h2 className="heading-section">What the Buyer Score means</h2>
+          <div className="mt-4 grid gap-5 lg:grid-cols-[minmax(0,1.2fr)_minmax(240px,0.8fr)] lg:items-start lg:gap-8">
+            <div className="space-y-3 text-[15px] leading-relaxed text-muted md:text-[16px]">
+              <p>
+                The AutoViewer Buyer Score is our interpretation of the vehicle
+                history available to us.
+              </p>
+              <p>It can consider signals such as:</p>
+              <ul className="list-disc space-y-1.5 pl-5">
+                <li>MOT results</li>
+                <li>repeated defects or advisories</li>
+                <li>mileage consistency</li>
+                <li>safety recalls</li>
+              </ul>
+              <p>It is designed to make patterns easier to understand.</p>
+              <div className="rounded-[12px] border border-border bg-surface-soft px-4 py-3">
+                <p className="text-[15px] font-semibold leading-snug text-navy">
                   It is not a mechanical inspection, valuation or guarantee of
                   vehicle condition.
                 </p>
-                <p className="mt-1.5 text-[14px] leading-snug text-muted md:text-[15px]">
+                <p className="mt-1.5 text-[14px] leading-snug text-muted">
                   A vehicle should always be inspected properly before purchase.
                 </p>
               </div>
             </div>
             <AboutBuyerScoreExample />
           </div>
-        </Container>
-      </section>
+        </section>
 
-      {/* Built for UK buyers */}
-      <section className="border-b border-border bg-surface-soft py-8 md:py-10">
-        <Container className="max-w-[1240px]">
+        <section className="mt-8 border-t border-border pt-7 md:mt-9 md:pt-8">
           <h2 className="heading-section">Built for UK car buyers</h2>
-          <p className="body-copy mt-4 max-w-3xl">
-            AutoViewer is designed around the UK used-car market.
-          </p>
-          <p className="body-copy mt-3 max-w-3xl">
-            From MOT history to road tax and registration-based checks, the
-            product is built around the information UK buyers actually use.
-          </p>
-          <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4 md:mt-6">
+          <div className="mt-4 space-y-3 text-[15px] leading-relaxed text-muted md:text-[16px]">
+            <p>AutoViewer is designed around the UK used-car market.</p>
+            <p>
+              From MOT history to road tax and registration-based checks, the
+              product is built around the information UK buyers actually use.
+            </p>
+          </div>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
             {ukPoints.map((point) => {
               const Icon = point.icon;
               return (
                 <div
                   key={point.title}
-                  className="flex items-center gap-2.5 rounded-[12px] border border-border bg-white px-3.5 py-3"
+                  className="flex items-center gap-2.5 rounded-[12px] border border-border px-3.5 py-3"
                 >
                   <Icon
                     className="h-5 w-5 shrink-0 text-navy"
@@ -297,42 +272,38 @@ export default function AboutPage() {
               );
             })}
           </div>
-        </Container>
-      </section>
+        </section>
 
-      {/* Product principles */}
-      <section className="border-b border-border bg-white py-8 md:py-10">
-        <Container className="max-w-[1240px]">
+        <section className="mt-8 border-t border-border pt-7 md:mt-9 md:pt-8">
           <h2 className="heading-section">Our approach</h2>
-          <div className="mt-6 grid gap-0 md:mt-7 md:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-5 grid gap-0 sm:grid-cols-2">
             {principles.map((item, index) => (
               <div
                 key={item.title}
                 className={cn(
-                  "py-4 md:px-5 md:py-1",
-                  index > 0 && "border-t border-border md:border-t-0 md:border-l",
+                  "py-4 sm:px-4 sm:py-3",
+                  index > 0 && "border-t border-border sm:border-t-0",
+                  index % 2 === 1 && "sm:border-l",
+                  index > 1 && "sm:border-t",
                 )}
               >
                 <p className="text-[13px] font-semibold uppercase tracking-[0.08em] text-muted">
                   {String(index + 1).padStart(2, "0")}
                 </p>
-                <h3 className="mt-2 text-[1.2rem] font-bold tracking-tight text-navy md:text-[1.3rem]">
+                <h3 className="mt-1.5 text-[1.15rem] font-bold tracking-tight text-navy">
                   {item.title}
                 </h3>
-                <p className="mt-2 text-[15px] leading-snug text-muted md:text-[16px]">
+                <p className="mt-1.5 text-[15px] leading-snug text-muted">
                   {item.body}
                 </p>
               </div>
             ))}
           </div>
-        </Container>
-      </section>
+        </section>
 
-      {/* Direction */}
-      <section className="border-b border-border bg-surface-soft py-8 md:py-10">
-        <Container className="max-w-[1240px]">
+        <section className="mt-8 border-t border-border pt-7 md:mt-9 md:pt-8">
           <h2 className="heading-section">Where AutoViewer is going</h2>
-          <div className="body-copy mt-4 max-w-3xl space-y-3">
+          <div className="mt-4 space-y-3 text-[15px] leading-relaxed text-muted md:text-[16px]">
             <p>AutoViewer is still growing.</p>
             <p>
               We are building towards a single place where someone can check,
@@ -340,27 +311,27 @@ export default function AboutPage() {
               become a vehicle-data expert first.
             </p>
           </div>
-          <p className="mt-5 text-[1.25rem] font-bold tracking-tight text-navy md:text-[1.4rem]">
+          <p className="mt-4 text-[1.15rem] font-bold tracking-tight text-navy md:text-[1.25rem]">
             Know more before you buy.
           </p>
-        </Container>
-      </section>
+        </section>
 
-      {/* Final CTA */}
-      <section className="bg-white py-8 md:py-10">
-        <Container className="max-w-[1240px]">
-          <div className="rounded-[12px] border border-border bg-surface-soft p-4 md:p-6">
+        <section className="mt-8 border-t border-border pt-7 md:mt-9 md:pt-8">
+          <div className="rounded-[12px] border border-border bg-surface-soft p-4 md:p-5">
             <h2 className="heading-section">Ready to check a vehicle?</h2>
-            <p className="body-copy mt-2.5 max-w-2xl">
+            <p className="mt-2 text-[15px] text-muted md:text-[16px]">
               Enter a UK registration and see the information available for that
               vehicle.
             </p>
-            <div className="mt-4 max-w-xl md:mt-5">
-              <VehicleSearchForm buttonLabel="Check vehicle →" checkSource="about" />
+            <div className="mt-4 max-w-xl">
+              <VehicleSearchForm
+                buttonLabel="Check vehicle →"
+                checkSource="about"
+              />
             </div>
           </div>
-        </Container>
-      </section>
-    </>
+        </section>
+      </Container>
+    </div>
   );
 }

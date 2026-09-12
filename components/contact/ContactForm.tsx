@@ -68,7 +68,7 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-3.5" noValidate>
+    <form onSubmit={handleSubmit} className="space-y-3" noValidate>
       {/* Honeypot: leave empty; bots often fill it */}
       <div className="absolute -left-[9999px] top-auto h-0 w-0 overflow-hidden" aria-hidden>
         <label htmlFor="company">Company</label>
@@ -120,7 +120,7 @@ export function ContactForm() {
           required
           minLength={CONTACT_MESSAGE_MIN}
           maxLength={CONTACT_MESSAGE_MAX}
-          rows={6}
+          rows={5}
           className="w-full resize-y rounded-[10px] border border-border bg-white px-3.5 py-2.5 text-[15px] text-navy outline-none transition focus:border-blue"
           placeholder="How can we help?"
         />

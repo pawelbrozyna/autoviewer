@@ -239,7 +239,7 @@ export function VehicleSummaryMobile({
       </div>
 
       {/* Buyer Score card */}
-      <div className="relative z-10 mt-1.5 rounded-[15px] border border-[#E3E9F2] bg-[#F7F9FC] p-5">
+      <div className="relative z-10 mt-1.5 rounded-[15px] border border-border bg-[#F7F9FC] p-5">
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-1.5 text-[17px] font-semibold text-[#012046]">
             Buyer Score
@@ -293,7 +293,7 @@ export function VehicleSummaryMobile({
       </div>
 
       {/* Status list card */}
-      <div className="mt-3.5 overflow-hidden rounded-[15px] border border-[#E6EBF2] bg-[#FBFCFE]">
+      <div className="mt-3.5 overflow-hidden rounded-[15px] border border-border bg-[#FBFCFE]">
         <ul>
           {rows.map((row, index) => {
             const Icon = row.icon;
@@ -301,7 +301,7 @@ export function VehicleSummaryMobile({
             return (
               <li
                 key={row.id}
-                className={cn(!isLast && "border-b border-[#E5EAF1]")}
+                className={cn(!isLast && "border-b border-border")}
               >
                 <a
                   href={row.href}

@@ -1,3 +1,5 @@
+import { isAnalyticsExcluded } from "@/lib/analytics-exclusion";
+
 type AnalyticsPayload = Record<string, string | number | boolean | null | undefined>;
 
 declare global {
@@ -8,18 +10,20 @@ declare global {
 }
 
 /**
- * Lightweight analytics abstraction. Safe when GA is absent.
- * Connect GA4 later by loading gtag and setting NEXT_PUBLIC_GA_ID.
+ * Lightweight analytics abstraction. Safe when GA is absent or excluded.
+ * GA4 is loaded only when NEXT_PUBLIC_GA_ID is set (cookieless consent defaults).
  * Never send registration numbers.
  */
 export function trackEvent(event: string, payload: AnalyticsPayload = {}): void {
   if (typeof window === "undefined") return;
+  if (isAnalyticsExcluded()) return;
 
   try {
     if (typeof window.gtag === "function") {
       window.gtag("event", event, payload);
       return;
     }
+    // Queue until gtag is available (or no-op if GA is not configured)
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({ event, ...payload });
   } catch {

@@ -64,7 +64,7 @@ export function CompareSearchForm({
         <button
           type="button"
           onClick={submit}
-          className="inline-flex h-[55px] w-full shrink-0 items-center justify-center rounded-[13px] bg-navy px-5 text-[16.5px] font-semibold text-white transition-all duration-150 hover:bg-navy-soft hover:shadow-md hover:brightness-110 active:scale-[0.98] lg:h-[54px] lg:w-auto lg:rounded-[10px] lg:text-[19px]"
+          className="inline-flex h-[55px] w-full shrink-0 items-center justify-center rounded-[13px] bg-navy px-5 text-[16.5px] font-semibold text-white transition-all duration-150 hover:bg-navy-soft hover:shadow-md hover:brightness-110 active:scale-[0.98] lg:h-[49px] lg:w-auto lg:rounded-[10px] lg:px-4.5 lg:text-[17.5px]"
         >
           Compare cars →
         </button>

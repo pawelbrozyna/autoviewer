@@ -68,9 +68,9 @@ export function RegistrationInput({
       <div className="flex w-full flex-col gap-2 lg:w-fit lg:max-w-full lg:flex-row lg:items-stretch">
         <div
           className={cn(
-            "flex min-h-[54px] w-full overflow-hidden rounded-[10px] border border-border bg-white shadow-[var(--shadow-card)] lg:w-[370px] lg:shrink-0",
+            "flex min-h-[54px] w-full overflow-hidden rounded-[10px] border border-border bg-white shadow-[var(--shadow-card)] lg:min-h-[49px] lg:w-[340px] lg:shrink-0",
             error && "border-danger",
-            variant === "compact" && "min-h-[48px]",
+            variant === "compact" && "min-h-[48px] lg:min-h-[44px]",
           )}
         >
           <div
@@ -108,8 +108,8 @@ export function RegistrationInput({
             aria-invalid={Boolean(error)}
             aria-describedby={error ? errorId : undefined}
             className={cn(
-              "w-full border-0 bg-transparent px-3.5 text-[1.125rem] font-medium tracking-[0.08em] text-navy placeholder:font-normal placeholder:tracking-normal placeholder:text-slate-400 focus:outline-none",
-              variant === "compact" && "text-[1.05rem]",
+              "w-full border-0 bg-transparent px-3.5 text-[1.125rem] font-medium tracking-[0.08em] text-navy placeholder:font-normal placeholder:tracking-normal placeholder:text-slate-400 focus:outline-none lg:text-[1.05rem]",
+              variant === "compact" && "text-[1.05rem] lg:text-[1rem]",
             )}
           />
         </div>
@@ -119,8 +119,9 @@ export function RegistrationInput({
             disabled={disabled}
             onClick={validateAndSubmit}
             className={cn(
-              "inline-flex min-h-[54px] shrink-0 items-center justify-center rounded-[10px] bg-navy px-5 text-[19px] font-semibold text-white transition-all duration-150 hover:bg-navy-soft hover:shadow-md hover:brightness-110 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:shadow-none disabled:hover:brightness-100 sm:min-h-[54px]",
-              variant === "compact" && "min-h-[48px] px-4 text-[17px]",
+              "inline-flex min-h-[54px] shrink-0 items-center justify-center rounded-[10px] bg-navy px-5 text-[19px] font-semibold text-white transition-all duration-150 hover:bg-navy-soft hover:shadow-md hover:brightness-110 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:shadow-none disabled:hover:brightness-100 sm:min-h-[54px] lg:min-h-[49px] lg:px-4.5 lg:text-[17.5px]",
+              variant === "compact" &&
+                "min-h-[48px] px-4 text-[17px] lg:min-h-[44px] lg:text-[15.5px]",
             )}
           >
             {buttonLabel}

@@ -523,7 +523,7 @@ function QuickSummaryBlock({
   const summary = buildQuickSummary(left, right, rows);
 
   return (
-    <div className="flex min-h-[120px] max-h-[150px] items-stretch overflow-hidden rounded-[12px] border border-[#E6EBF2] bg-white px-4 py-3.5">
+    <div className="flex min-h-[120px] max-h-[150px] items-stretch overflow-hidden rounded-[12px] border border-border bg-white px-4 py-3.5">
       <div className="flex w-[22%] min-w-[160px] max-w-[220px] shrink-0 flex-col justify-center pr-4">
         <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">
           Our take
@@ -665,8 +665,8 @@ function DesktopCompareHero({
   demo?: boolean;
 }) {
   return (
-    <div className="overflow-hidden rounded-[14px] border border-[#E6EBF2] bg-white shadow-[0_1px_2px_rgba(7,26,61,0.04)]">
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#EEF2F7] px-3 py-2 lg:px-4">
+    <div className="overflow-hidden rounded-[14px] border border-border bg-white shadow-[var(--shadow-card)]">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border px-3 py-2 lg:px-4">
         <div className="flex flex-wrap items-center gap-2.5">
           <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-navy">
             {demo ? "Example comparison" : "Comparison"}
@@ -682,10 +682,10 @@ function DesktopCompareHero({
 
       <div className="relative grid grid-cols-2">
         <DesktopVehiclePanel record={left} />
-        <div className="relative border-l border-[#E6EBF2]">
+        <div className="relative border-l border-border">
           <DesktopVehiclePanel record={right} />
         </div>
-        <div className="pointer-events-none absolute left-1/2 top-1/2 z-10 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-[#D7E0EC] bg-[#EFF4FA] text-[12px] font-bold tracking-wide text-navy shadow-[0_1px_4px_rgba(7,26,61,0.06)]">
+        <div className="pointer-events-none absolute left-1/2 top-1/2 z-10 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-[#EFF4FA] text-[12px] font-bold tracking-wide text-navy shadow-[0_1px_4px_rgba(7,26,61,0.06)]">
           VS
         </div>
       </div>
@@ -733,7 +733,7 @@ export function VehicleComparison({
       <div className="hidden space-y-3.5 md:block">
         <DesktopCompareHero left={left} right={right} demo={demo} />
 
-        <div className="overflow-hidden rounded-[14px] border border-[#E6EBF2] bg-white shadow-[0_1px_2px_rgba(7,26,61,0.04)]">
+        <div className="overflow-hidden rounded-[14px] border border-border bg-white shadow-[var(--shadow-card)]">
           <table className="min-w-full table-fixed text-[15px]">
             <colgroup>
               <col className="w-[28%]" />
@@ -757,7 +757,7 @@ export function VehicleComparison({
               {rows.map((row) => {
                 const Icon = row.icon;
                 return (
-                  <tr key={row.key} className="border-t border-[#EEF2F7]">
+                  <tr key={row.key} className="border-t border-border">
                     <th className="h-12 whitespace-nowrap bg-[#FBFCFE] px-4 py-2.5 text-left align-middle text-[13px] font-semibold text-[#475569]">
                       <span className="inline-flex items-center gap-2">
                         <Icon
