@@ -84,6 +84,71 @@ run("never matches a different model from the same make", () => {
   assert.notEqual(matchCatalogModel("Volkswagen", "Polo SE"), "Golf");
 });
 
+run("make aliases: VW and MERCEDES resolve like full catalogue names", () => {
+  assert.equal(matchCatalogModel("VW", "Golf"), "Golf");
+  assert.equal(matchCatalogModel("VOLKSWAGEN", "Golf"), "Golf");
+  assert.equal(matchCatalogModel("MERCEDES", "GLA"), "GLA");
+  assert.equal(matchCatalogModel("MERCEDES-BENZ", "GLA"), "GLA");
+
+  const vw = resolveVehicleImage({ make: "VW", model: "Golf", year: 2019 });
+  assert.equal(vw.match, "exact");
+  assert.equal(vw.src, "/cars/volkswagen-golf-mk7-5-2017-2020.webp");
+
+  const vwFull = resolveVehicleImage({
+    make: "VOLKSWAGEN",
+    model: "Golf",
+    year: 2019,
+  });
+  assert.equal(vwFull.src, vw.src);
+
+  const mercedes = resolveVehicleImage({
+    make: "MERCEDES",
+    model: "GLA",
+    year: 2021,
+  });
+  assert.equal(mercedes.match, "exact");
+  assert.equal(mercedes.src, "/cars/mercedes-benz-gla-h247-2020-2026.webp");
+
+  const mercedesBenz = resolveVehicleImage({
+    make: "MERCEDES-BENZ",
+    model: "GLA",
+    year: 2021,
+  });
+  assert.equal(mercedesBenz.src, mercedes.src);
+});
+
+run("overlapping year ranges prefer highest yearFrom", () => {
+  const xc60 = resolveVehicleImage({
+    make: "Volvo",
+    model: "XC60",
+    year: 2017,
+  });
+  assert.equal(xc60.match, "exact");
+  assert.equal(xc60.generation, "Mk2");
+  assert.equal(xc60.yearFrom, 2017);
+  assert.equal(xc60.src, "/cars/volvo-xc60-mk2-2017-2026.webp");
+
+  const gla = resolveVehicleImage({
+    make: "Mercedes-Benz",
+    model: "GLA",
+    year: 2020,
+  });
+  assert.equal(gla.match, "exact");
+  assert.equal(gla.generation, "H247");
+  assert.equal(gla.yearFrom, 2020);
+  assert.equal(gla.src, "/cars/mercedes-benz-gla-h247-2020-2026.webp");
+});
+
+run("missing model still returns placeholder (no make-only fallback)", () => {
+  const result = resolveVehicleImage({
+    make: "Ford",
+    model: "",
+    year: 2019,
+  });
+  assert.equal(result.match, "placeholder");
+  assert.equal(result.src, null);
+});
+
 run("Golf 2019 resolves exact Mk7.5 WebP image", () => {
   const result = resolveVehicleImage({
     make: "Volkswagen",

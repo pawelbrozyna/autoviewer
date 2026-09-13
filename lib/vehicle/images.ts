@@ -30,6 +30,12 @@ const CARS_PUBLIC_DIR = "/cars";
 /** Used when no same-model image exists. Components fall back to the generic icon. */
 export const GENERIC_VEHICLE_IMAGE_SRC: string | null = null;
 
+/** Minimal make aliases applied after normalizeKey. Full catalogue makes still match as-is. */
+const MAKE_ALIASES: Record<string, string> = {
+  vw: "volkswagen",
+  mercedes: "mercedes benz",
+};
+
 const libraryEntries = (vehicleImagesLibrary.vehicles ?? []) as VehicleImageEntry[];
 
 function normalizeKey(value: string): string {
@@ -40,6 +46,12 @@ function normalizeKey(value: string): string {
     .replace(/[^a-z0-9]+/g, " ")
     .trim()
     .replace(/\s+/g, " ");
+}
+
+/** Normalize make and map short aliases (VW, MERCEDES) onto catalogue forms. */
+function canonicalizeMake(make: string): string {
+  const key = normalizeKey(make);
+  return MAKE_ALIASES[key] ?? key;
 }
 
 function publicPathFor(filename: string): string {
@@ -61,14 +73,14 @@ export function matchCatalogModel(
   model: string,
   entries: VehicleImageEntry[] = libraryEntries,
 ): string | null {
-  const makeKey = normalizeKey(make);
+  const makeKey = canonicalizeMake(make);
   const modelKey = normalizeKey(model);
   if (!makeKey || !modelKey) return null;
 
   const candidates = [
     ...new Set(
       entries
-        .filter((entry) => normalizeKey(entry.make) === makeKey)
+        .filter((entry) => canonicalizeMake(entry.make) === makeKey)
         .map((entry) => entry.model),
     ),
   ].sort(
@@ -89,16 +101,31 @@ function entriesForModel(
   catalogModel: string,
   entries: VehicleImageEntry[],
 ): VehicleImageEntry[] {
-  const makeKey = normalizeKey(make);
+  const makeKey = canonicalizeMake(make);
   const modelKey = normalizeKey(catalogModel);
   return entries.filter(
     (entry) =>
-      normalizeKey(entry.make) === makeKey &&
+      canonicalizeMake(entry.make) === makeKey &&
       normalizeKey(entry.model) === modelKey,
   );
 }
 
-function pickBestEntry(
+/** Exact year hits: prefer newer generation (highest yearFrom), then lowest priority. */
+function pickExactYearEntry(
+  candidates: VehicleImageEntry[],
+): VehicleImageEntry | null {
+  if (candidates.length === 0) return null;
+
+  const ranked = [...candidates].sort((a, b) => {
+    if (a.yearFrom !== b.yearFrom) return b.yearFrom - a.yearFrom;
+    return a.priority - b.priority;
+  });
+
+  return ranked[0] ?? null;
+}
+
+/** Nearest generation when no year range contains the vehicle year. */
+function pickNearestEntry(
   candidates: VehicleImageEntry[],
   year: number,
 ): VehicleImageEntry | null {
@@ -176,11 +203,11 @@ export function resolveVehicleImage(input: {
     (entry) => year >= entry.yearFrom && year <= entry.yearTo,
   );
   if (exact.length > 0) {
-    const chosen = pickBestEntry(exact, year);
+    const chosen = pickExactYearEntry(exact);
     return chosen ? toResolution(chosen, "exact") : placeholderResult();
   }
 
-  const nearest = pickBestEntry(modelEntries, year);
+  const nearest = pickNearestEntry(modelEntries, year);
   if (!nearest) {
     return placeholderResult();
   }
