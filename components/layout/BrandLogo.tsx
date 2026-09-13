@@ -7,11 +7,14 @@ export function BrandLogo({
   className,
   href = "/",
   size = "default",
+  align = "left",
   onNavigate,
 }: {
   className?: string;
   href?: string;
   size?: "default" | "header";
+  /** Image alignment inside the logo box. Use center on standalone/hero placements. */
+  align?: "left" | "center";
   onNavigate?: () => void;
 }) {
   const sizeClass =
@@ -30,7 +33,10 @@ export function BrandLogo({
         src="/autoviewer-mark.png"
         alt="AutoViewer"
         fill
-        className="object-contain object-left"
+        className={cn(
+          "object-contain",
+          align === "center" ? "object-center" : "object-left",
+        )}
         sizes={size === "header" ? "(min-width: 1024px) 210px, 229px" : "168px"}
         priority
       />

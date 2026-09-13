@@ -6,7 +6,12 @@ export function ComingSoonHome() {
     <div className="flex min-h-[100dvh] flex-col items-center justify-center bg-white px-6 py-16">
       <div className="w-full max-w-md text-center">
         <div className="flex justify-center">
-          <BrandLogo size="header" href="/" className="pointer-events-none" />
+          <BrandLogo
+            size="header"
+            align="center"
+            href="/"
+            className="pointer-events-none"
+          />
         </div>
         <h1 className="mt-8 text-[1.75rem] font-bold tracking-tight text-navy md:text-[2rem]">
           AutoViewer is coming soon
