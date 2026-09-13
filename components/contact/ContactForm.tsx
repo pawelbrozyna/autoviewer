@@ -6,27 +6,69 @@ import { cn } from "@/lib/utils";
 
 type Status = "idle" | "loading" | "success" | "error";
 
+const FALLBACK_ERROR = "Something went wrong. Please try again.";
+
+function asTrimmedString(value: FormDataEntryValue | null): string {
+  return typeof value === "string" ? value.trim() : "";
+}
+
+function isValidEmail(email: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function validateContactFields(input: {
+  name: string;
+  email: string;
+  message: string;
+}): string | null {
+  if (!input.message || input.message.length < CONTACT_MESSAGE_MIN) {
+    return "Message must be at least 5 characters.";
+  }
+  if (input.message.length > CONTACT_MESSAGE_MAX) {
+    return "Message must be at most 1000 characters.";
+  }
+  if (input.email && !isValidEmail(input.email)) {
+    return "Please provide a valid email address.";
+  }
+  if (input.name.length > 120) {
+    return "Name is too long.";
+  }
+  return null;
+}
+
 export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setStatus("loading");
     setErrorMessage(null);
 
     const form = event.currentTarget;
     const formData = new FormData(form);
+    const name = asTrimmedString(formData.get("name"));
+    const email = asTrimmedString(formData.get("email"));
+    const message = asTrimmedString(formData.get("message"));
+    const company = asTrimmedString(formData.get("company"));
+
+    const clientError = validateContactFields({ name, email, message });
+    if (clientError) {
+      setStatus("error");
+      setErrorMessage(clientError);
+      return;
+    }
+
+    setStatus("loading");
 
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: formData.get("name"),
-          email: formData.get("email"),
-          message: formData.get("message"),
-          company: formData.get("company"),
+          name,
+          email,
+          message,
+          company,
         }),
       });
 
@@ -42,7 +84,11 @@ export function ContactForm() {
 
       if (!response.ok || payload.success !== true) {
         setStatus("error");
-        setErrorMessage("Something went wrong. Please try again.");
+        setErrorMessage(
+          typeof payload.error === "string" && payload.error.trim()
+            ? payload.error.trim()
+            : FALLBACK_ERROR,
+        );
         return;
       }
 
@@ -50,7 +96,7 @@ export function ContactForm() {
       form.reset();
     } catch {
       setStatus("error");
-      setErrorMessage("Something went wrong. Please try again.");
+      setErrorMessage(FALLBACK_ERROR);
     }
   }
 
@@ -131,7 +177,7 @@ export function ContactForm() {
 
       {status === "error" ? (
         <p role="alert" className="text-[14px] font-medium text-danger md:text-[15px]">
-          {errorMessage ?? "Something went wrong. Please try again."}
+          {errorMessage ?? FALLBACK_ERROR}
         </p>
       ) : null}
 
