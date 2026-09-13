@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { cookies } from "next/headers";
 import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
+import { ADMIN_ACCESS_KEY } from "@/lib/analytics-exclusion";
 import {
   DEFAULT_DESCRIPTION,
   SITE_NAME,
@@ -46,11 +48,16 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const maintenanceMode = process.env.MAINTENANCE_MODE === "true";
+  const cookieStore = await cookies();
+  const adminBypass = cookieStore.get(ADMIN_ACCESS_KEY)?.value === "true";
+  const showSiteChrome = !(maintenanceMode && !adminBypass);
+
   return (
     <html lang="en-GB" className={inter.variable}>
       <body className={`${inter.className} antialiased`}>
@@ -61,15 +68,21 @@ export default function RootLayout({
           }}
         />
         <GoogleAnalytics />
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-navy focus:px-3 focus:py-2 focus:text-white"
-        >
-          Skip to content
-        </a>
-        <SiteHeader />
-        <main id="main-content">{children}</main>
-        <SiteFooter />
+        {showSiteChrome ? (
+          <>
+            <a
+              href="#main-content"
+              className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-navy focus:px-3 focus:py-2 focus:text-white"
+            >
+              Skip to content
+            </a>
+            <SiteHeader />
+            <main id="main-content">{children}</main>
+            <SiteFooter />
+          </>
+        ) : (
+          <main id="main-content">{children}</main>
+        )}
       </body>
     </html>
   );
