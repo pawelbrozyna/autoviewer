@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
@@ -56,7 +56,11 @@ export default async function RootLayout({
   const maintenanceMode = process.env.MAINTENANCE_MODE === "true";
   const cookieStore = await cookies();
   const adminBypass = cookieStore.get(ADMIN_ACCESS_KEY)?.value === "true";
-  const showSiteChrome = !(maintenanceMode && !adminBypass);
+  const pathname = (await headers()).get("x-pathname") ?? "";
+  const productionComingSoonHome =
+    process.env.VERCEL_ENV === "production" && pathname === "/";
+  const showSiteChrome =
+    !productionComingSoonHome && !(maintenanceMode && !adminBypass);
 
   return (
     <html lang="en-GB" className={inter.variable}>

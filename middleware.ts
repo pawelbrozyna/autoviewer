@@ -36,6 +36,16 @@ function withAdminCookie(
   return response;
 }
 
+function nextWithPathname(request: NextRequest): NextResponse {
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-pathname", request.nextUrl.pathname);
+  return NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  });
+}
+
 export function middleware(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
   const adminParam = searchParams.get("admin");
@@ -61,7 +71,7 @@ export function middleware(request: NextRequest) {
     if (pathname === "/maintenance") {
       return NextResponse.redirect(new URL("/", request.url));
     }
-    return NextResponse.next();
+    return nextWithPathname(request);
   }
 
   const bypass = hasAdminBypass(request);
@@ -70,7 +80,7 @@ export function middleware(request: NextRequest) {
     if (pathname === "/maintenance") {
       return NextResponse.redirect(new URL("/", request.url));
     }
-    return NextResponse.next();
+    return nextWithPathname(request);
   }
 
   if (pathname.startsWith("/api/")) {
@@ -87,10 +97,16 @@ export function middleware(request: NextRequest) {
   }
 
   if (pathname !== "/maintenance") {
-    return NextResponse.rewrite(new URL("/maintenance", request.url));
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set("x-pathname", pathname);
+    return NextResponse.rewrite(new URL("/maintenance", request.url), {
+      request: {
+        headers: requestHeaders,
+      },
+    });
   }
 
-  return NextResponse.next();
+  return nextWithPathname(request);
 }
 
 export const config = {
