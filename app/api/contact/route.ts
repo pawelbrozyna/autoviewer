@@ -3,10 +3,9 @@ import nodemailer from "nodemailer";
 import {
   CONTACT_EMAIL_SUBJECT,
   CONTACT_FROM_NAME,
-  CONTACT_GMAIL_USER,
-  CONTACT_MAIL_TO,
   CONTACT_MESSAGE_MAX,
   CONTACT_MESSAGE_MIN,
+  getContactMailConfig,
 } from "@/lib/contact";
 
 type ContactBody = {
@@ -71,27 +70,32 @@ export async function POST(req: Request) {
     );
   }
 
-  const appPassword = process.env.GMAIL_APP_PASSWORD;
-  if (!appPassword) {
-    console.error("GMAIL_APP_PASSWORD is not configured");
+  const mailConfig = getContactMailConfig();
+  if (!mailConfig.ok) {
+    console.error(
+      "Contact mail is not configured. Missing:",
+      mailConfig.missing.join(", "),
+    );
     return NextResponse.json(
       { error: "Failed to send message" },
       { status: 500 },
     );
   }
 
+  const { gmailUser, mailTo, appPassword } = mailConfig.config;
+
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: CONTACT_GMAIL_USER,
+      user: gmailUser,
       pass: appPassword,
     },
   });
 
   try {
     await transporter.sendMail({
-      from: `"${CONTACT_FROM_NAME}" <${CONTACT_GMAIL_USER}>`,
-      to: CONTACT_MAIL_TO,
+      from: `"${CONTACT_FROM_NAME}" <${gmailUser}>`,
+      to: mailTo,
       replyTo: email || undefined,
       subject: CONTACT_EMAIL_SUBJECT,
       text: [

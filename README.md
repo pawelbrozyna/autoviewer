@@ -42,6 +42,9 @@ See `.env.example`.
 | `NEXT_PUBLIC_SITE_URL` | Canonical site URL (default `https://autoviewer.co.uk`) |
 | `NEXT_PUBLIC_ENABLE_AUTH` | Show Sign in UI when `true` (no fake auth implemented) |
 | `NEXT_PUBLIC_GA_ID` | GA4 measurement ID (cookieless Consent Mode; omit to disable) |
+| `CONTACT_GMAIL_USER` | Gmail account used to send contact-form mail (server-only) |
+| `CONTACT_MAIL_TO` | Inbox that receives contact-form messages (server-only) |
+| `GMAIL_APP_PASSWORD` | Gmail App Password for `CONTACT_GMAIL_USER` (server-only) |
 | `USE_MOCK_DATA` | `true` returns clearly labelled demo vehicles |
 | `DVLA_API_KEY` | DVLA Vehicle Enquiry Service key (server-only) |
 | `DVLA_API_URL` | DVLA VES endpoint |

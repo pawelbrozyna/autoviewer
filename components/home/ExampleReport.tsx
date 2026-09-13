@@ -115,7 +115,7 @@ export function ExampleReport() {
                 </div>
 
                 <div className="flex h-full flex-col rounded-[12px] border border-border bg-white px-2 pb-2.5 pt-2.5 md:px-3 md:pb-2.5 md:pt-3">
-                  <div className="grid flex-1 grid-cols-2 content-start lg:grid-cols-[1.15fr_0.65fr_1.1fr_1.35fr]">
+                  <div className="grid flex-1 grid-cols-2 content-start lg:grid-cols-[1.1fr_0.6fr_minmax(5.5rem,1.15fr)_1.3fr]">
                     {metrics.map((metric, index) => (
                       <div
                         key={metric.key}
@@ -128,13 +128,7 @@ export function ExampleReport() {
                         )}
                       >
                         <div className="mb-1 flex items-center justify-center gap-1 text-[12px] font-semibold uppercase tracking-[0.04em] text-muted md:text-[13px]">
-                          <span
-                            className={cn(
-                              metric.key === "score" && "whitespace-nowrap",
-                            )}
-                          >
-                            {metric.label}
-                          </span>
+                          <span className="whitespace-nowrap">{metric.label}</span>
                           {metric.withInfo ? (
                             <InfoTip
                               label="About Buyer score"
