@@ -206,18 +206,31 @@ run("unknown model uses placeholder, not another brand model", () => {
   assert.equal(result.isRepresentative, false);
 });
 
-run("demo Golf and Focus records use WebP resolver paths", () => {
-  const golf = getMockVehicle("AB12CDE");
+run("demo records use expected WebP resolver paths", () => {
+  const swift = getMockVehicle("AV19SWF");
   const focus = getMockVehicle("CD34EFG");
-  assert.ok(golf);
+  const glc = getMockVehicle("AV23GLC");
+  const q5 = getMockVehicle("AV20Q5X");
+  assert.ok(swift);
   assert.ok(focus);
+  assert.ok(glc);
+  assert.ok(q5);
   assert.equal(
-    golf!.summary.imageSrc,
-    "/cars/volkswagen-golf-mk7-5-2017-2020.webp",
+    swift!.summary.imageSrc,
+    "/cars/suzuki-swift-a2l-2017-2023.webp",
   );
-  assert.equal(golf!.summary.imageIsRepresentative, false);
+  assert.equal(swift!.summary.imageIsRepresentative, false);
   assert.equal(focus!.summary.imageSrc, "/cars/ford-focus-mk4-2018-2025.webp");
   assert.equal(focus!.summary.imageIsRepresentative, false);
+  assert.equal(
+    glc!.summary.imageSrc,
+    "/cars/mercedes-benz-glc-x254-2022-2026.webp",
+  );
+  assert.equal(glc!.summary.imageIsRepresentative, false);
+  assert.equal(q5!.summary.imageSrc, "/cars/audi-q5-fy-2017-2024.webp");
+  assert.equal(q5!.summary.imageIsRepresentative, false);
+  assert.equal(glc!.buyerScore?.score, 90);
+  assert.equal(q5!.buyerScore?.score, 83);
 });
 
 console.log("\nAll vehicle image resolver tests passed.");

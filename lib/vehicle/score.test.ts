@@ -326,53 +326,41 @@ run("G. Old vehicle excellent history (no age penalty)", () => {
   console.log(`      young=${young.score} old=${old.score}`);
 });
 
-// Golf demo (mock-equivalent)
-run("Golf demo mock-equivalent lands ~86-90", () => {
+// Swift demo (mock-equivalent)
+run("Swift demo mock-equivalent lands at 88 Good history", () => {
   const result = scoreOf({
     yearOfManufacture: 2019,
     motTests: [
       mot({
         completedDate: "2025-02-12",
         testResult: "PASS",
-        odometerValue: 65732,
-        defects: [
-          {
-            type: "ADVISORY",
-            text: "Nearside rear tyre worn close to legal limit",
-          },
-        ],
+        odometerValue: 46980,
       }),
       mot({
         completedDate: "2024-02-14",
         testResult: "PASS",
-        odometerValue: 54013,
+        odometerValue: 38420,
       }),
       mot({
         completedDate: "2023-02-16",
         testResult: "PASS",
-        odometerValue: 43290,
-        defects: [
-          {
-            type: "ADVISORY",
-            text: "Front brake disc worn, pitted or scored, but not seriously weakened",
-          },
-        ],
+        odometerValue: 29760,
       }),
     ],
     mileageHistory: [
-      { date: "2025-02-12", mileage: 65732, source: "MOT" },
-      { date: "2024-02-14", mileage: 54013, source: "MOT" },
-      { date: "2023-02-16", mileage: 43290, source: "MOT" },
+      { date: "2025-02-12", mileage: 46980, source: "MOT" },
+      { date: "2024-02-14", mileage: 38420, source: "MOT" },
+      { date: "2023-02-16", mileage: 29760, source: "MOT" },
     ],
     recalls: {
       hasOpenRecalls: true,
       count: 1,
-      items: [{ title: "Takata", status: "Open" }],
+      items: [{ title: "Software update", status: "Open" }],
     },
   });
 
-  assert.ok(result.score != null);
-  assert.ok(result.score >= 86 && result.score <= 90);
+  assert.equal(result.score, 88);
+  assert.equal(result.label, "Good history");
   assert.equal(result.label, buyerScoreBandLabel(result.band));
   const breakdown = getBuyerScoreBreakdown(result);
   const summed =

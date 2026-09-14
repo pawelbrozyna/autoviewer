@@ -9,12 +9,14 @@ export function MotTimeline({
   limit,
   viewAllHref,
   compact = false,
+  title = "MOT history",
   className,
 }: {
   tests: MotTest[];
   limit?: number;
   viewAllHref?: string;
   compact?: boolean;
+  title?: string;
   className?: string;
 }) {
   const sorted = [...tests].sort(
@@ -26,21 +28,31 @@ export function MotTimeline({
   return (
     <div
       className={cn(
-        "rounded-[12px] border border-border bg-white",
+        "rounded-[10px] border border-border bg-white",
         className,
       )}
     >
       <div
         className={cn(
           "flex items-center justify-between border-b border-border",
-          compact ? "px-3.5 py-2" : "px-4 py-2.5",
+          compact ? "px-2.5 py-1.5" : "px-3.5 py-2",
         )}
       >
-        <h3 className="text-[15px] font-semibold text-navy">MOT history</h3>
+        <h3
+          className={cn(
+            "font-semibold text-navy",
+            compact ? "text-[12px]" : "text-[15px]",
+          )}
+        >
+          {title}
+        </h3>
         {viewAllHref ? (
           <Link
             href={viewAllHref}
-            className="text-[13px] font-semibold text-blue hover:text-blue-hover md:text-[14px]"
+            className={cn(
+              "font-semibold text-blue hover:text-blue-hover",
+              compact ? "text-[11px]" : "text-[13px] md:text-[14px]",
+            )}
           >
             View full history →
           </Link>
@@ -48,21 +60,31 @@ export function MotTimeline({
       </div>
       <ul className="divide-y divide-border">
         {visible.length === 0 ? (
-          <li className="support-copy px-4 py-5">No MOT tests recorded.</li>
+          <li className="support-copy px-3 py-4">No MOT tests recorded.</li>
         ) : (
           visible.map((test) => (
             <li
               key={`${test.completedDate}-${test.motTestNumber ?? test.odometerValue}`}
               className={cn(
-                "flex items-center justify-between gap-3",
-                compact ? "min-h-[48px] px-3.5 py-1.5" : "px-4 py-2.5",
+                "flex items-center justify-between gap-2",
+                compact ? "min-h-[40px] px-2.5 py-1" : "px-3.5 py-2",
               )}
             >
               <div>
-                <div className="text-[14px] font-semibold text-navy md:text-[15px]">
+                <div
+                  className={cn(
+                    "font-semibold text-navy",
+                    compact ? "text-[12px]" : "text-[14px] md:text-[15px]",
+                  )}
+                >
                   {formatDateUk(test.completedDate)}
                 </div>
-                <div className="text-[13px] text-muted">
+                <div
+                  className={cn(
+                    "text-muted",
+                    compact ? "text-[11px]" : "text-[13px]",
+                  )}
+                >
                   {formatMileage(test.odometerValue, test.odometerUnit ?? "mi")}
                 </div>
               </div>

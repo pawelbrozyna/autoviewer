@@ -23,6 +23,52 @@ function isValidEmail(email: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
+type SmtpError = Error & {
+  code?: unknown;
+  command?: unknown;
+  responseCode?: unknown;
+  response?: unknown;
+};
+
+function redactSensitiveText(
+  value: unknown,
+  sensitiveValues: string[],
+): string | number | undefined {
+  if (typeof value === "number") return value;
+  if (typeof value !== "string") return undefined;
+
+  return sensitiveValues.reduce(
+    (safe, sensitive) =>
+      sensitive ? safe.replaceAll(sensitive, "[redacted]") : safe,
+    value,
+  );
+}
+
+function logContactEmailError(error: unknown, sensitiveValues: string[]) {
+  if (process.env.NODE_ENV !== "development") {
+    console.error("Contact email delivery failed.");
+    return;
+  }
+
+  if (!(error instanceof Error)) {
+    console.error("Contact email delivery failed with an unknown error.");
+    return;
+  }
+
+  const smtpError = error as SmtpError;
+  console.error("Contact email delivery failed:", {
+    name: smtpError.name,
+    message: redactSensitiveText(smtpError.message, sensitiveValues),
+    code: redactSensitiveText(smtpError.code, sensitiveValues),
+    command: redactSensitiveText(smtpError.command, sensitiveValues),
+    responseCode: redactSensitiveText(
+      smtpError.responseCode,
+      sensitiveValues,
+    ),
+    response: redactSensitiveText(smtpError.response, sensitiveValues),
+  });
+}
+
 export async function POST(req: Request) {
   let body: ContactBody;
 
@@ -73,7 +119,7 @@ export async function POST(req: Request) {
   const mailConfig = getContactMailConfig();
   if (!mailConfig.ok) {
     console.error(
-      "Contact mail is not configured. Missing:",
+      "Contact mail is not configured. Missing environment variables:",
       mailConfig.missing.join(", "),
     );
     return NextResponse.json(
@@ -109,7 +155,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Contact email error:", error);
+    logContactEmailError(error, [gmailUser, mailTo, appPassword]);
     return NextResponse.json(
       { error: "Failed to send message" },
       { status: 500 },

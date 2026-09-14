@@ -25,7 +25,7 @@ export function MileageHistory({ points }: { points: MileagePoint[] }) {
         <table className="min-w-full text-left text-[15px]">
           <thead className="bg-surface-soft text-[13px] font-semibold uppercase tracking-wide text-muted md:text-[14px]">
             <tr>
-              <th className="px-4 py-2.5">Date</th>
+              <th className="whitespace-nowrap px-4 py-2.5">Date</th>
               <th className="px-4 py-2.5">Mileage</th>
               <th className="px-4 py-2.5">Source</th>
             </tr>
@@ -33,7 +33,9 @@ export function MileageHistory({ points }: { points: MileagePoint[] }) {
           <tbody className="divide-y divide-border">
             {sorted.map((point) => (
               <tr key={`${point.date}-${point.mileage}`} className="h-11">
-                <td className="px-4 py-2.5 text-navy">{formatDateUk(point.date)}</td>
+                <td className="whitespace-nowrap px-4 py-2.5 text-navy">
+                  {formatDateUk(point.date)}
+                </td>
                 <td className="whitespace-nowrap px-4 py-2.5 font-medium text-navy">
                   {formatMileage(point.mileage)}
                 </td>

@@ -102,7 +102,7 @@ public/              header.png, autoviewer.png
 | `/vehicle/[registration]` | Result page (`noindex,follow`) |
 | `/about` `/contact` `/privacy` `/terms` | Company / legal |
 
-API: `GET /api/vehicle?registration=AB12CDE`
+API: `GET /api/vehicle?registration=AV19SWF`
 
 ## Configuring DVLA / DVSA later
 

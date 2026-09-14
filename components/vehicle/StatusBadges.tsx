@@ -5,19 +5,29 @@ import type { MotResult, TaxStatusValue } from "@/types/vehicle";
 export function MotResultBadge({ result }: { result: MotResult }) {
   if (result === "PASS") {
     return (
-      <StatusBadge tone="success" icon={<CheckCircle2 className="h-3.5 w-3.5" />}>
+      <StatusBadge
+        tone="success"
+        icon={<CheckCircle2 className="h-3.5 w-3.5" />}
+        className="min-w-[4.75rem] justify-center"
+      >
         PASS
       </StatusBadge>
     );
   }
   if (result === "FAIL") {
     return (
-      <StatusBadge tone="danger" icon={<AlertTriangle className="h-3.5 w-3.5" />}>
+      <StatusBadge
+        tone="danger"
+        icon={<AlertTriangle className="h-3.5 w-3.5" />}
+        className="min-w-[4.75rem] justify-center"
+      >
         FAIL
       </StatusBadge>
     );
   }
-  return <StatusBadge>UNKNOWN</StatusBadge>;
+  return (
+    <StatusBadge className="min-w-[4.75rem] justify-center">UNKNOWN</StatusBadge>
+  );
 }
 
 export function TaxStatusBadge({ status }: { status: TaxStatusValue }) {

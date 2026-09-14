@@ -21,28 +21,23 @@ function withResolvedImage(
   };
 }
 
-function buildGolf(): VehicleRecord {
-  const registration = "AB12CDE";
+function buildSwift(): VehicleRecord {
+  const registration = "AV19SWF";
   const motTests = [
     {
       completedDate: "2025-02-12",
       expiryDate: "2026-02-11",
       testResult: "PASS" as const,
-      odometerValue: 65732,
+      odometerValue: 46980,
       odometerUnit: "mi" as const,
       motTestNumber: "123456789012",
-      defects: [
-        {
-          type: "ADVISORY" as const,
-          text: "Nearside rear tyre worn close to legal limit",
-        },
-      ],
+      defects: [],
     },
     {
       completedDate: "2024-02-14",
       expiryDate: "2025-02-13",
       testResult: "PASS" as const,
-      odometerValue: 54013,
+      odometerValue: 38420,
       odometerUnit: "mi" as const,
       motTestNumber: "123456789013",
       defects: [],
@@ -51,15 +46,10 @@ function buildGolf(): VehicleRecord {
       completedDate: "2023-02-16",
       expiryDate: "2024-02-15",
       testResult: "PASS" as const,
-      odometerValue: 43290,
+      odometerValue: 29760,
       odometerUnit: "mi" as const,
       motTestNumber: "123456789014",
-      defects: [
-        {
-          type: "ADVISORY" as const,
-          text: "Front brake disc worn, pitted or scored, but not seriously weakened",
-        },
-      ],
+      defects: [],
     },
   ];
 
@@ -76,7 +66,7 @@ function buildGolf(): VehicleRecord {
     count: 1,
     items: [
       {
-        title: "Takata airbag inflator inspection",
+        title: "Software update for camera calibration",
         description:
           "Manufacturer safety recall - check with a franchised dealer for status.",
         date: "2024-06-01",
@@ -97,17 +87,17 @@ function buildGolf(): VehicleRecord {
     summary: {
       registration,
       displayRegistration: formatRegistrationDisplay(registration),
-      make: "Volkswagen",
-      model: "Golf 1.5 TSI EVO Match",
+      make: "Suzuki",
+      model: "Swift 1.2 Dualjet SZ5",
       year: 2019,
       fuelType: "Petrol",
-      colour: "White",
+      colour: "Yellow",
       transmission: "Manual",
-      engineCapacity: 1498,
-      powerBhp: 150,
-      combinedMpg: 47.9,
+      engineCapacity: 1242,
+      powerBhp: 90,
+      combinedMpg: 56.5,
       annualRoadTaxGbp: 195,
-      latestMileage: 67420,
+      latestMileage: 48320,
       tax: { status: "Taxed", dueDate: "2026-08-01" },
       motStatus: { status: "Valid", expiryDate: "2026-02-11" },
       recalls,
@@ -115,16 +105,248 @@ function buildGolf(): VehicleRecord {
     },
     details: {
       registration,
-      make: "Volkswagen",
-      model: "Golf 1.5 TSI EVO Match",
-      colour: "White",
+      make: "Suzuki",
+      model: "Swift 1.2 Dualjet SZ5",
+      colour: "Yellow",
       fuelType: "Petrol",
-      engineCapacity: 1498,
+      engineCapacity: 1242,
       yearOfManufacture: 2019,
       monthOfFirstRegistration: "2019-03",
-      co2Emissions: 113,
+      co2Emissions: 111,
       euroStatus: "EURO 6",
       transmission: "Manual",
+    },
+    motTests,
+    mileageHistory,
+    recalls,
+    buyerScore,
+    dataQuality: {
+      sources: ["MOCK"],
+      notes: [
+        "This is demo / sample data for local development and design preview.",
+        "It is not live government vehicle information.",
+      ],
+    },
+  };
+}
+
+function buildGlc(): VehicleRecord {
+  const registration = "AV23GLC";
+  const motTests = [
+    {
+      completedDate: "2026-09-06",
+      expiryDate: "2027-09-05",
+      testResult: "PASS" as const,
+      odometerValue: 40780,
+      odometerUnit: "mi" as const,
+      motTestNumber: "423456789012",
+      defects: [
+        {
+          type: "ADVISORY" as const,
+          text: "Front brake pads wearing thin",
+        },
+      ],
+    },
+    {
+      completedDate: "2025-09-08",
+      expiryDate: "2026-09-07",
+      testResult: "PASS" as const,
+      odometerValue: 29360,
+      odometerUnit: "mi" as const,
+      motTestNumber: "423456789013",
+      defects: [
+        {
+          type: "ADVISORY" as const,
+          text: "Front brake pads slightly worn",
+        },
+      ],
+    },
+  ];
+
+  const mileageHistory = [
+    { date: "2026-09-06", mileage: 40780, source: "MOT" as const },
+    { date: "2025-09-08", mileage: 29360, source: "MOT" as const },
+    { date: "2024-09-10", mileage: 18200, source: "OTHER" as const },
+  ];
+
+  const recalls = {
+    hasOpenRecalls: false,
+    count: 0,
+    items: [],
+    sourceNote: "Demo recall data for illustration only.",
+  };
+
+  const buyerScore = calculateBuyerScore({
+    yearOfManufacture: 2022,
+    motTests,
+    mileageHistory,
+    recalls,
+  });
+
+  return {
+    summary: {
+      registration,
+      displayRegistration: formatRegistrationDisplay(registration),
+      make: "Mercedes-Benz",
+      model: "GLC 220 d AMG Line",
+      year: 2022,
+      fuelType: "Diesel",
+      colour: "Silver",
+      transmission: "Automatic",
+      engineCapacity: 1993,
+      powerBhp: 197,
+      combinedMpg: 47.9,
+      annualRoadTaxGbp: 620,
+      latestMileage: 42150,
+      tax: { status: "Taxed", dueDate: "2027-03-01" },
+      motStatus: { status: "Valid", expiryDate: "2027-09-05" },
+      recalls,
+      isDemo: true,
+    },
+    details: {
+      registration,
+      make: "Mercedes-Benz",
+      model: "GLC 220 d AMG Line",
+      colour: "Silver",
+      fuelType: "Diesel",
+      engineCapacity: 1993,
+      yearOfManufacture: 2022,
+      monthOfFirstRegistration: "2022-09",
+      co2Emissions: 154,
+      euroStatus: "EURO 6",
+      transmission: "Automatic",
+    },
+    motTests,
+    mileageHistory,
+    recalls,
+    buyerScore,
+    dataQuality: {
+      sources: ["MOCK"],
+      notes: [
+        "This is demo / sample data for local development and design preview.",
+        "It is not live government vehicle information.",
+      ],
+    },
+  };
+}
+
+function buildQ5(): VehicleRecord {
+  const registration = "AV20Q5X";
+  const motTests = [
+    {
+      completedDate: "2026-08-20",
+      expiryDate: "2027-08-19",
+      testResult: "PASS" as const,
+      odometerValue: 55240,
+      odometerUnit: "mi" as const,
+      motTestNumber: "523456789012",
+      defects: [],
+    },
+    {
+      completedDate: "2026-08-15",
+      expiryDate: null,
+      testResult: "FAIL" as const,
+      odometerValue: 55210,
+      odometerUnit: "mi" as const,
+      motTestNumber: "523456789013",
+      defects: [
+        {
+          type: "MAJOR" as const,
+          text: "Offside front brake disc significantly worn",
+        },
+      ],
+    },
+    {
+      completedDate: "2025-08-12",
+      expiryDate: "2026-08-11",
+      testResult: "PASS" as const,
+      odometerValue: 44980,
+      odometerUnit: "mi" as const,
+      motTestNumber: "523456789014",
+      defects: [
+        {
+          type: "ADVISORY" as const,
+          text: "Nearside front tyre worn close to the legal limit",
+        },
+      ],
+    },
+    {
+      completedDate: "2024-08-10",
+      expiryDate: "2025-08-09",
+      testResult: "PASS" as const,
+      odometerValue: 34120,
+      odometerUnit: "mi" as const,
+      motTestNumber: "523456789015",
+      defects: [
+        {
+          type: "ADVISORY" as const,
+          text: "Nearside front tyre slightly worn on the inner edge",
+        },
+      ],
+    },
+    {
+      completedDate: "2023-08-08",
+      expiryDate: "2024-08-07",
+      testResult: "PASS" as const,
+      odometerValue: 24560,
+      odometerUnit: "mi" as const,
+      motTestNumber: "523456789016",
+      defects: [],
+    },
+  ];
+
+  const mileageHistory = motTests.map((test) => ({
+    date: test.completedDate,
+    mileage: test.odometerValue,
+    source: "MOT" as const,
+  }));
+
+  const recalls = {
+    hasOpenRecalls: false,
+    count: 0,
+    items: [],
+    sourceNote: "Demo recall data for illustration only.",
+  };
+
+  const buyerScore = calculateBuyerScore({
+    yearOfManufacture: 2020,
+    motTests,
+    mileageHistory,
+    recalls,
+  });
+
+  return {
+    summary: {
+      registration,
+      displayRegistration: formatRegistrationDisplay(registration),
+      make: "Audi",
+      model: "Q5 40 TDI S line quattro",
+      year: 2020,
+      fuelType: "Diesel",
+      colour: "White",
+      transmission: "Automatic",
+      engineCapacity: 1968,
+      powerBhp: 190,
+      combinedMpg: 44.8,
+      annualRoadTaxGbp: 195,
+      latestMileage: 56780,
+      tax: { status: "Taxed", dueDate: "2027-02-01" },
+      motStatus: { status: "Valid", expiryDate: "2027-08-19" },
+      recalls,
+      isDemo: true,
+    },
+    details: {
+      registration,
+      make: "Audi",
+      model: "Q5 40 TDI S line quattro",
+      colour: "White",
+      fuelType: "Diesel",
+      engineCapacity: 1968,
+      yearOfManufacture: 2020,
+      monthOfFirstRegistration: "2020-08",
+      co2Emissions: 164,
+      euroStatus: "EURO 6",
+      transmission: "Automatic",
     },
     motTests,
     mileageHistory,
@@ -244,7 +466,9 @@ function buildFocus(): VehicleRecord {
 }
 
 const MOCK_VEHICLES: Record<string, () => VehicleRecord> = {
-  AB12CDE: buildGolf,
+  AV19SWF: buildSwift,
+  AV23GLC: buildGlc,
+  AV20Q5X: buildQ5,
   CD34EFG: buildFocus,
 };
 

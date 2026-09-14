@@ -675,7 +675,7 @@ function DesktopCompareHero({
         </div>
         <p className="text-[13px] text-muted">
           {demo
-            ? "Two popular family hatchbacks compared side by side"
+            ? "Two premium SUVs compared side by side"
             : "Key details compared side by side"}
         </p>
       </div>
@@ -696,7 +696,7 @@ function DesktopCompareHero({
 function TableVehicleHeader({ record }: { record: VehicleRecord }) {
   return (
     <div className="flex items-center gap-2.5">
-      <div className="w-[52px] shrink-0">
+      <div className="w-[62px] shrink-0">
         <VehicleThumbnail
           label={shortName(record)}
           src={record.summary.imageSrc}
@@ -705,10 +705,10 @@ function TableVehicleHeader({ record }: { record: VehicleRecord }) {
         />
       </div>
       <div className="min-w-0">
-        <div className="truncate text-[15px] font-semibold text-navy">
+        <div className="truncate text-[16px] font-semibold text-navy">
           {shortName(record)}
         </div>
-        <div className="meta-copy truncate">
+        <div className="truncate text-[13px] text-muted">
           {record.summary.displayRegistration}
         </div>
       </div>
@@ -740,9 +740,9 @@ export function VehicleComparison({
               <col className="w-[36%]" />
               <col className="w-[36%]" />
             </colgroup>
-            <thead className="bg-[#F8FAFC]">
+            <thead className="bg-white">
               <tr>
-                <th className="px-4 py-3 text-left text-[13px] font-semibold text-muted">
+                <th className="px-4 py-3 text-left text-[16px] font-semibold text-muted">
                   Compare
                 </th>
                 <th className="px-4 py-3 text-left">

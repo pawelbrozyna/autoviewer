@@ -5,8 +5,8 @@ import { VehicleComparison } from "@/components/vehicle/VehicleComparison";
 import { getMockVehicle } from "@/lib/api/mock";
 
 export function HomeCompareSection() {
-  const left = getMockVehicle("AB12CDE")!;
-  const right = getMockVehicle("CD34EFG")!;
+  const left = getMockVehicle("AV23GLC")!;
+  const right = getMockVehicle("AV20Q5X")!;
 
   return (
     <section className="bg-white pb-5 pt-2 md:pb-6 md:pt-3 lg:pb-5 lg:pt-2.5">

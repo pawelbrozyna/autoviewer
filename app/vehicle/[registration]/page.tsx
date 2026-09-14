@@ -1,31 +1,37 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import type { ReactNode } from "react";
 import {
-  AlertTriangle,
   ArrowLeft,
-  CheckCircle2,
-  ClipboardList,
+  Calendar,
+  CalendarCheck,
   Gauge,
+  Globe2,
   Landmark,
-  ShieldAlert,
+  Leaf,
+  Palette,
+  Settings2,
+  Users,
+  Zap,
 } from "lucide-react";
 import { BuyerScore } from "@/components/vehicle/BuyerScore";
 import { MileageHistory } from "@/components/vehicle/MileageHistory";
 import { MotTimeline } from "@/components/vehicle/MotTimeline";
 import { MotResultBadge, TaxStatusBadge } from "@/components/vehicle/StatusBadges";
+import { VehicleReportDesktop } from "@/components/vehicle/VehicleReportDesktop";
 import { VehicleSummaryMobile } from "@/components/vehicle/VehicleSummaryMobile";
-import { StatusBadge } from "@/components/ui/StatusBadge";
 import { Container } from "@/components/ui/Container";
 import { ErrorState } from "@/components/ui/EmptyState";
+import { getMockVehicle } from "@/lib/api/mock";
 import { lookupVehicle } from "@/lib/api/vehicle-service";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import { formatDateUk } from "@/lib/utils";
-import { formatMileage } from "@/lib/vehicle/mileage";
 import {
   formatRegistrationDisplay,
   isValidRegistrationFormat,
   normalizeRegistration,
 } from "@/lib/vehicle/registration";
+import type { VehicleRecord } from "@/types/vehicle";
 
 type PageProps = {
   params: Promise<{ registration: string }>;
@@ -58,11 +64,16 @@ export default async function VehicleResultPage({ params }: PageProps) {
     );
   }
 
-  const result = await lookupVehicle(normalized);
+  const requestedResult = await lookupVehicle(normalized);
+  const result =
+    requestedResult.ok &&
+    requestedResult.data.summary.registration === "CD34EFG"
+      ? { ok: true as const, data: getMockVehicle("AV19SWF")! }
+      : requestedResult;
 
   if (!result.ok) {
     return (
-      <Container className="section-y space-y-5">
+      <Container className="space-y-2.5 pb-8 pt-2 md:space-y-5 md:py-10 lg:py-9">
         <BackLink />
         <ErrorState title={result.error.message} />
       </Container>
@@ -73,148 +84,20 @@ export default async function VehicleResultPage({ params }: PageProps) {
   const { summary } = vehicle;
 
   return (
-    <div className="bg-[#F9FBFE] pb-12 md:bg-surface-soft md:pb-14">
-      <Container className="py-7 md:py-9">
+    <div className="bg-[#F9FBFE] pb-3 md:bg-surface-soft md:pb-14">
+      <Container className="pb-4 pt-2 md:py-9">
         <BackLink />
 
-        <div className="mt-5">
-          <VehicleSummaryMobile vehicle={vehicle} className="md:hidden" />
+        {/* Mobile: preserve existing result layout */}
+        <div className="mt-2 md:hidden">
+          <VehicleSummaryMobile
+            vehicle={vehicle}
+            largerImage
+            showDerivative
+          />
+          <MobileVehicleDetails vehicle={vehicle} />
 
-          <div className="hidden card-surface p-4 md:block md:p-6">
-            <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-              <div>
-                <div className="flex flex-wrap items-center gap-2">
-                  <p className="text-[15px] font-semibold tracking-[0.06em] text-navy">
-                    {summary.displayRegistration}
-                  </p>
-                  {summary.isDemo ? (
-                    <StatusBadge tone="info">Demo data</StatusBadge>
-                  ) : (
-                    <StatusBadge tone="neutral">Vehicle information</StatusBadge>
-                  )}
-                </div>
-                <h1 className="mt-2 text-[1.75rem] font-bold tracking-tight text-navy md:text-[2.15rem]">
-                  {summary.make} {summary.model}
-                </h1>
-                <p className="support-copy mt-2">
-                  {[summary.year, summary.fuelType, summary.colour, summary.transmission]
-                    .filter(Boolean)
-                    .join(" · ")}
-                  {summary.engineCapacity
-                    ? ` · ${summary.engineCapacity.toLocaleString("en-GB")} cc`
-                    : ""}
-                </p>
-              </div>
-              <div className="md:min-w-[180px] md:rounded-[10px] md:border md:border-border md:bg-surface-soft md:p-4">
-                <BuyerScore result={vehicle.buyerScore} />
-              </div>
-            </div>
-
-            <div className="mt-5 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-4">
-              <StatusCard
-                icon={<Landmark className="h-4 w-4" />}
-                label="Tax"
-                value={<TaxStatusBadge status={summary.tax.status} />}
-                hint={
-                  summary.tax.dueDate
-                    ? `Due ${formatDateUk(summary.tax.dueDate)}`
-                    : undefined
-                }
-              />
-              <StatusCard
-                icon={<ClipboardList className="h-4 w-4" />}
-                label="MOT"
-                value={
-                  <StatusBadge
-                    tone={
-                      summary.motStatus.status === "Valid"
-                        ? "success"
-                        : summary.motStatus.status === "Expired"
-                          ? "danger"
-                          : "neutral"
-                    }
-                    icon={
-                      summary.motStatus.status === "Valid" ? (
-                        <CheckCircle2 className="h-3.5 w-3.5" />
-                      ) : (
-                        <AlertTriangle className="h-3.5 w-3.5" />
-                      )
-                    }
-                  >
-                    {summary.motStatus.status}
-                  </StatusBadge>
-                }
-                hint={
-                  summary.motStatus.expiryDate
-                    ? `Expires ${formatDateUk(summary.motStatus.expiryDate)}`
-                    : undefined
-                }
-              />
-              <StatusCard
-                icon={<Gauge className="h-4 w-4" />}
-                label="Mileage"
-                value={
-                  <span className="text-base font-bold text-navy">
-                    {formatMileage(summary.latestMileage)}
-                  </span>
-                }
-                hint="Latest recorded reading"
-              />
-              <StatusCard
-                icon={<ShieldAlert className="h-4 w-4" />}
-                label="Recalls"
-                value={
-                  summary.recalls.hasOpenRecalls ? (
-                    <StatusBadge
-                      tone="warning"
-                      icon={<AlertTriangle className="h-3.5 w-3.5" />}
-                    >
-                      {summary.recalls.count} recall
-                      {summary.recalls.count === 1 ? "" : "s"}
-                    </StatusBadge>
-                  ) : (
-                    <StatusBadge
-                      tone="success"
-                      icon={<CheckCircle2 className="h-3.5 w-3.5" />}
-                    >
-                      None indicated
-                    </StatusBadge>
-                  )
-                }
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_320px]">
-          <div className="space-y-6">
-            <SectionCard title="Vehicle overview">
-              <dl className="grid gap-3 sm:grid-cols-2">
-                <OverviewItem label="Make" value={vehicle.details.make} />
-                <OverviewItem label="Model" value={vehicle.details.model} />
-                <OverviewItem
-                  label="Year"
-                  value={vehicle.details.yearOfManufacture?.toString() ?? "-"}
-                />
-                <OverviewItem
-                  label="Fuel"
-                  value={vehicle.details.fuelType ?? "-"}
-                />
-                <OverviewItem
-                  label="Colour"
-                  value={vehicle.details.colour ?? "-"}
-                />
-                <OverviewItem
-                  label="Engine"
-                  value={
-                    vehicle.details.engineCapacity
-                      ? `${vehicle.details.engineCapacity.toLocaleString("en-GB")} cc`
-                      : "-"
-                  }
-                />
-              </dl>
-            </SectionCard>
-
+          <div className="mt-6 space-y-5">
             <SectionCard id="mot-history" title="MOT history">
               <MotTimeline tests={vehicle.motTests} />
               <div className="mt-4 space-y-3">
@@ -293,37 +176,16 @@ export default async function VehicleResultPage({ params }: PageProps) {
               ) : null}
             </SectionCard>
 
-            <SectionCard title="Technical details">
-              <dl className="grid gap-3 sm:grid-cols-2">
-                <OverviewItem
-                  label="Euro status"
-                  value={vehicle.details.euroStatus ?? "-"}
-                />
-                <OverviewItem
-                  label="CO₂"
-                  value={
-                    vehicle.details.co2Emissions != null
-                      ? `${vehicle.details.co2Emissions} g/km`
-                      : "-"
-                  }
-                />
-                <OverviewItem
-                  label="First registered"
-                  value={vehicle.details.monthOfFirstRegistration ?? "-"}
-                />
-                <OverviewItem
-                  label="Transmission"
-                  value={vehicle.details.transmission ?? "-"}
-                />
-              </dl>
-            </SectionCard>
-
             <SectionCard title="Buyer insights">
               <BuyerScore result={vehicle.buyerScore} />
               {vehicle.buyerScore?.reasons?.length ? (
                 <ul className="mt-4 list-disc space-y-1 pl-5 support-copy">
                   {vehicle.buyerScore.reasons
-                    .filter((item) => item.impact !== 0 || item.type === "insufficient-history")
+                    .filter(
+                      (item) =>
+                        item.impact !== 0 ||
+                        item.type === "insufficient-history",
+                    )
                     .map((item) => (
                       <li key={`${item.type}-${item.label}`}>
                         {item.impact !== 0
@@ -339,9 +201,7 @@ export default async function VehicleResultPage({ params }: PageProps) {
                 condition.
               </p>
             </SectionCard>
-          </div>
 
-          <aside className="space-y-4">
             <div className="card-surface p-4">
               <h2 className="heading-card">Data notes</h2>
               <ul className="mt-3 space-y-2 support-copy">
@@ -353,38 +213,61 @@ export default async function VehicleResultPage({ params }: PageProps) {
                 Sources: {vehicle.dataQuality.sources.join(", ")}
               </p>
             </div>
+
             <div className="card-surface p-4">
               <h2 className="heading-card">Related checks</h2>
               <ul className="mt-3 space-y-2 text-[15px]">
                 <li>
-                  <Link href="/mot-history" className="text-blue hover:text-blue-hover">
+                  <Link
+                    href="/mot-history"
+                    className="text-blue hover:text-blue-hover"
+                  >
                     MOT history checker
                   </Link>
                 </li>
                 <li>
-                  <Link href="/tax-mileage" className="text-blue hover:text-blue-hover">
+                  <Link
+                    href="/tax-mileage"
+                    className="text-blue hover:text-blue-hover"
+                  >
                     Tax &amp; mileage check
                   </Link>
                 </li>
                 <li>
-                  <Link href="/compare-cars" className="text-blue hover:text-blue-hover">
+                  <Link
+                    href="/compare-cars"
+                    className="text-blue hover:text-blue-hover"
+                  >
                     Compare cars
                   </Link>
                 </li>
                 <li>
-                  <Link href="/running-costs" className="text-blue hover:text-blue-hover">
+                  <Link
+                    href="/running-costs"
+                    className="text-blue hover:text-blue-hover"
+                  >
                     Running costs
                   </Link>
                 </li>
               </ul>
             </div>
+
             <div className="rounded-[12px] border border-border bg-white p-4">
               <p className="meta-copy leading-relaxed">
-                Outstanding finance, stolen status and write-off categories are not
-                provided by DVLA/DVSA free vehicle data and are not shown here.
+                Outstanding finance, stolen status and write-off categories are
+                not provided by DVLA/DVSA free vehicle data and are not shown
+                here.
               </p>
             </div>
-          </aside>
+          </div>
+        </div>
+
+        {/* Desktop / tablet-desktop redesign */}
+        <div className="mt-5 hidden md:block">
+          <VehicleReportDesktop
+            vehicle={vehicle}
+            ownersLabel={summary.isDemo ? "2" : null}
+          />
         </div>
       </Container>
     </div>
@@ -395,11 +278,103 @@ function BackLink() {
   return (
     <Link
       href="/check-a-vehicle"
-      className="inline-flex items-center gap-2 text-[15px] font-semibold text-navy hover:text-blue"
+      className="inline-flex items-center gap-2 text-[14px] font-semibold text-navy hover:text-blue md:text-[13px]"
     >
       <ArrowLeft className="h-4 w-4" />
       Back to search
     </Link>
+  );
+}
+
+function MobileVehicleDetails({ vehicle }: { vehicle: VehicleRecord }) {
+  const { summary, details } = vehicle;
+  const unavailable = "—";
+  const fields = [
+    {
+      label: "Year",
+      icon: Calendar,
+      value:
+        summary.year?.toString() ??
+        details.yearOfManufacture?.toString() ??
+        unavailable,
+    },
+    { label: "Colour", icon: Palette, value: details.colour ?? unavailable },
+    {
+      label: "Engine",
+      icon: Gauge,
+      value:
+        details.engineCapacity != null
+          ? `${details.engineCapacity.toLocaleString("en-GB")} cc`
+          : unavailable,
+    },
+    {
+      label: "Transmission",
+      icon: Settings2,
+      value: details.transmission ?? unavailable,
+    },
+    { label: "Owners", icon: Users, value: unavailable },
+    {
+      label: "Road tax",
+      icon: Landmark,
+      value:
+        summary.annualRoadTaxGbp != null
+          ? `£${summary.annualRoadTaxGbp.toLocaleString("en-GB")} / year`
+          : unavailable,
+    },
+    {
+      label: "First registered",
+      icon: CalendarCheck,
+      value: details.monthOfFirstRegistration ?? unavailable,
+    },
+    {
+      label: "Euro status",
+      icon: Globe2,
+      value: details.euroStatus ?? unavailable,
+    },
+    {
+      label: "CO₂ emissions",
+      icon: Leaf,
+      value:
+        details.co2Emissions != null
+          ? `${details.co2Emissions} g/km`
+          : unavailable,
+    },
+    {
+      label: "Power",
+      icon: Zap,
+      value:
+        summary.powerBhp != null ? `${summary.powerBhp} bhp` : unavailable,
+    },
+  ];
+
+  return (
+    <section className="card-surface mt-3.5 p-4">
+      <h2 className="text-[1.15rem] font-bold text-navy">Vehicle details</h2>
+      <dl className="mt-3 grid grid-cols-2 gap-x-4">
+        {fields.map((field, index) => {
+          const Icon = field.icon;
+          return (
+            <div
+              key={field.label}
+              className={`text-center ${
+                index < 2 ? "pb-2.5" : "border-t border-border py-2.5"
+              }`}
+            >
+              <dt className="flex items-center justify-center gap-1 text-[12px] font-medium text-muted">
+                <Icon
+                  className="h-3.5 w-3.5 shrink-0 text-navy/45"
+                  aria-hidden
+                />
+                {field.label}
+              </dt>
+              <dd className="mt-0.5 text-[16px] font-semibold text-navy">
+                {field.value}
+              </dd>
+            </div>
+          );
+        })}
+      </dl>
+    </section>
   );
 }
 
@@ -410,7 +385,7 @@ function SectionCard({
 }: {
   id?: string;
   title: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <section id={id} className="card-surface scroll-mt-24 p-4 md:p-5">
@@ -419,41 +394,5 @@ function SectionCard({
       </h2>
       {children}
     </section>
-  );
-}
-
-function OverviewItem({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-[10px] border border-border px-3.5 py-2.5">
-      <dt className="text-[12px] font-semibold uppercase tracking-wide text-muted md:text-[13px]">
-        {label}
-      </dt>
-      <dd className="mt-1 text-[15px] font-semibold text-navy">{value}</dd>
-    </div>
-  );
-}
-
-function StatusCard({
-  icon,
-  label,
-  value,
-  hint,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  value: React.ReactNode;
-  hint?: string;
-}) {
-  return (
-    <div className="rounded-[10px] border border-border bg-surface-soft px-3.5 py-2.5">
-      <div className="mb-1.5 flex items-center gap-2 text-muted">
-        {icon}
-        <span className="text-[12px] font-semibold uppercase tracking-wide md:text-[13px]">
-          {label}
-        </span>
-      </div>
-      <div>{value}</div>
-      {hint ? <p className="meta-copy mt-1">{hint}</p> : null}
-    </div>
   );
 }

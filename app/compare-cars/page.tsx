@@ -73,7 +73,7 @@ export default async function CompareCarsPage({
           ) : leftReg || rightReg ? (
             <div className="rounded-[12px] border border-warning/25 bg-warning-bg px-5 py-4 text-[15px] text-warning">
               We couldn’t compare those registrations. In demo mode, try{" "}
-              <Link href="/compare-cars?left=AB12CDE&right=CD34EFG" className="font-semibold underline">
+              <Link href="/compare-cars?left=AV19SWF&right=CD34EFG" className="font-semibold underline">
                 AB12 CDE vs CD34 EFG
               </Link>
               .
@@ -124,7 +124,7 @@ export default async function CompareCarsPage({
 }
 
 async function ExampleCompare() {
-  const left = await lookupVehicle("AB12CDE");
+  const left = await lookupVehicle("AV19SWF");
   const right = await lookupVehicle("CD34EFG");
   if (!left.ok || !right.ok) return null;
   return <VehicleComparison left={left.data} right={right.data} demo />;

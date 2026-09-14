@@ -31,9 +31,18 @@ type StatusRow = {
   icon: React.ComponentType<{ className?: string; strokeWidth?: number }>;
 };
 
-function shortDisplayName(make: string, model: string) {
-  const first = model.trim().split(/\s+/)[0] ?? model;
-  return `${make} ${first}`.trim();
+function displayVehicleName(make: string, model: string) {
+  const parts = model.trim().split(/\s+/);
+  const derivativeIndex = parts.findIndex(
+    (part, index) => index > 0 && /^\d+(?:\.\d+)?(?:d|i)?$/i.test(part),
+  );
+  const modelParts =
+    derivativeIndex > 0 ? parts.slice(0, derivativeIndex) : parts.slice(0, 1);
+  return {
+    name: `${make} ${modelParts.join(" ")}`.trim(),
+    derivative:
+      derivativeIndex > 0 ? parts.slice(derivativeIndex).join(" ") : null,
+  };
 }
 
 function engineLine(
@@ -184,11 +193,15 @@ export function VehicleSummaryMobile({
   titleAs = "h1",
   reportPath,
   className,
+  largerImage = false,
+  showDerivative = false,
 }: {
   vehicle: VehicleRecord;
   titleAs?: "h1" | "h2";
   reportPath?: string;
   className?: string;
+  largerImage?: boolean;
+  showDerivative?: boolean;
 }) {
   const { summary, buyerScore } = vehicle;
   const [ready, setReady] = useState(false);
@@ -197,7 +210,10 @@ export function VehicleSummaryMobile({
   const rows = buildStatusRows(vehicle, reportPath);
   const ctaHref = reportPath || "#mot-history";
   const TitleTag = titleAs;
-  const displayName = shortDisplayName(summary.make, summary.model);
+  const { name: displayName, derivative } = displayVehicleName(
+    summary.make,
+    summary.model,
+  );
   const engine = engineLine(summary.model, summary.engineCapacity);
   const detailParts = [
     summary.year?.toString(),
@@ -214,7 +230,12 @@ export function VehicleSummaryMobile({
     <div className={cn("text-[#012046]", className)}>
       {/* Vehicle header */}
       <div className="relative flex items-start gap-1.5 overflow-visible">
-        <div className="min-w-0 flex-1 pt-9 pr-1">
+        <div
+          className={cn(
+            "min-w-0 flex-1 pr-1",
+            largerImage ? "pt-2" : "pt-9",
+          )}
+        >
           <div className="inline-flex items-center rounded-[6px] bg-[#FACC35] px-[10px] py-[6px]">
             <span className="text-[19px] font-bold leading-none tracking-[0.04em] text-black">
               {summary.displayRegistration}
@@ -223,13 +244,25 @@ export function VehicleSummaryMobile({
           <TitleTag className="mt-3 whitespace-nowrap text-[22px] font-bold leading-[1.15] tracking-tight text-[#012046]">
             {displayName}
           </TitleTag>
+          {showDerivative && derivative ? (
+            <p className="mt-1 text-[14px] font-semibold leading-snug text-[#475569]">
+              {derivative}
+            </p>
+          ) : null}
           {detailParts.length > 0 ? (
-            <p className="mt-1.5 text-[14.5px] font-medium leading-snug text-[#64748B]">
+            <p className="mt-1 text-[14.5px] font-medium leading-snug text-[#64748B]">
               {detailParts.join(" · ")}
             </p>
           ) : null}
         </div>
-        <div className="mt-6 w-[176px] shrink-0 self-start sm:w-[185px]">
+        <div
+          className={cn(
+            "shrink-0 self-start",
+            largerImage
+              ? "mt-0 w-[194px] sm:w-[204px]"
+              : "mt-6 w-[176px] sm:w-[185px]",
+          )}
+        >
           <VehicleThumbnail
             label={displayName}
             src={summary.imageSrc}
