@@ -20,6 +20,8 @@ import { MotTimeline } from "@/components/vehicle/MotTimeline";
 import { MotResultBadge, TaxStatusBadge } from "@/components/vehicle/StatusBadges";
 import { ScoreGauge } from "@/components/vehicle/ScoreGauge";
 import { StatusBadge } from "@/components/ui/StatusBadge";
+import { VehicleColour } from "@/components/vehicle/VehicleColour";
+import { VehicleImageCaption } from "@/components/vehicle/VehicleImageCaption";
 import { VehicleThumbnail } from "@/components/vehicle/VehicleThumbnail";
 import { formatDateUk, cn } from "@/lib/utils";
 import {
@@ -65,7 +67,7 @@ function CardShell({
   );
 }
 
-function DetailRow({ label, value }: { label: string; value: string }) {
+function DetailRow({ label, value }: { label: string; value: ReactNode }) {
   return (
     <div className="flex items-baseline justify-between gap-3 border-b border-border py-1.5 last:border-b-0">
       <dt className="shrink-0 text-[13px] text-muted">{label}</dt>
@@ -82,6 +84,7 @@ export function VehicleReportDesktop({
   summaryOnly = false,
   highlightRegistration = false,
   stretchMotHistory = false,
+  showUnavailableStats = false,
 }: {
   vehicle: VehicleRecord;
   /** Only pass when owners are known (e.g. demo). Omit / null hides the column. */
@@ -89,6 +92,7 @@ export function VehicleReportDesktop({
   summaryOnly?: boolean;
   highlightRegistration?: boolean;
   stretchMotHistory?: boolean;
+  showUnavailableStats?: boolean;
 }) {
   const { summary, details, buyerScore, motTests, mileageHistory, recalls } =
     vehicle;
@@ -141,12 +145,16 @@ export function VehicleReportDesktop({
     });
   }
 
-  if (summary.annualRoadTaxGbp != null) {
+  if (summary.annualRoadTaxGbp != null || showUnavailableStats) {
     stats.push({
       key: "tax",
-      value: `£${summary.annualRoadTaxGbp}`,
+      value:
+        summary.annualRoadTaxGbp != null
+          ? `£${summary.annualRoadTaxGbp}`
+          : "-",
       label: "road tax",
-      hint: "per year",
+      hint:
+        summary.annualRoadTaxGbp != null ? "per year" : "Not available",
     });
   }
 
@@ -160,7 +168,8 @@ export function VehicleReportDesktop({
 
   const motValid = summary.motStatus.status === "Valid";
   const taxed = summary.tax.status === "Taxed";
-  const noRecalls = !summary.recalls.hasOpenRecalls;
+  const recallsAvailable = summary.recalls.dataAvailable !== false;
+  const noRecalls = recallsAvailable && !summary.recalls.hasOpenRecalls;
 
   const insightReasons =
     buyerScore?.reasons?.filter(
@@ -172,7 +181,7 @@ export function VehicleReportDesktop({
       {/* Top summary card */}
       <div className="card-surface grid gap-3 p-3 lg:grid-cols-[minmax(320px,1.15fr)_minmax(0,1.3fr)_minmax(220px,0.75fr)] lg:items-stretch lg:gap-3 lg:p-3">
         {/* Image */}
-        <div className="flex min-h-[260px] items-center justify-center lg:min-h-0">
+        <div className="relative flex min-h-[260px] flex-col items-center justify-center lg:min-h-0">
           <VehicleThumbnail
             label={`${summary.make} ${summary.model}`}
             src={summary.imageSrc}
@@ -180,6 +189,10 @@ export function VehicleReportDesktop({
             priority
             className="!aspect-auto h-full min-h-[250px] w-full max-w-[420px] border-0 bg-white"
             imageClassName="p-0 scale-[1.06]"
+          />
+          <VehicleImageCaption
+            summary={summary}
+            className="absolute inset-x-1 bottom-[-2px] text-center"
           />
         </div>
 
@@ -231,7 +244,7 @@ export function VehicleReportDesktop({
               <div
                 key={stat.key}
                 className={cn(
-                  "px-1.5 py-3.5 text-center",
+                  "relative top-[2px] px-1.5 py-3.5 text-center",
                   index > 0 && "border-l border-border",
                 )}
               >
@@ -329,19 +342,27 @@ export function VehicleReportDesktop({
               )}
             >
               <div className="flex items-center justify-center gap-1.5">
-                {noRecalls ? (
+                {!recallsAvailable ? (
+                  <ShieldAlert className="h-3.5 w-3.5 shrink-0 text-navy/55" />
+                ) : noRecalls ? (
                   <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-navy/55" />
                 ) : (
                   <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-warning" />
                 )}
                 <div className="text-[12px] font-semibold text-navy">
-                  {noRecalls
+                  {!recallsAvailable
+                    ? "Recalls unavailable"
+                    : noRecalls
                     ? "No recalls"
                     : `${summary.recalls.count} recall${summary.recalls.count === 1 ? "" : "s"}`}
                 </div>
               </div>
               <div className="mt-0.5 text-[11px] text-muted">
-                {noRecalls ? "None indicated" : "Open recall indicated"}
+                {!recallsAvailable
+                  ? "Data not available yet"
+                  : noRecalls
+                    ? "None indicated"
+                    : "Open recall indicated"}
               </div>
             </div>
           </div>
@@ -381,7 +402,15 @@ export function VehicleReportDesktop({
                 value={details.yearOfManufacture?.toString() ?? "-"}
               />
               <DetailRow label="Fuel" value={details.fuelType ?? "-"} />
-              <DetailRow label="Colour" value={details.colour ?? "-"} />
+              <DetailRow
+                label="Colour"
+                value={
+                  <VehicleColour
+                    colour={details.colour}
+                    unavailableLabel="-"
+                  />
+                }
+              />
               <DetailRow
                 label="Engine size"
                 value={
@@ -394,6 +423,40 @@ export function VehicleReportDesktop({
                 label="Transmission"
                 value={details.transmission ?? "-"}
               />
+              {details.typeApproval ? (
+                <DetailRow label="Type approval" value={details.typeApproval} />
+              ) : null}
+              {details.wheelplan ? (
+                <DetailRow label="Wheelplan" value={details.wheelplan} />
+              ) : null}
+              {details.markedForExport != null ? (
+                <DetailRow
+                  label="Export status"
+                  value={
+                    details.markedForExport
+                      ? "Marked for export"
+                      : "Not marked for export"
+                  }
+                />
+              ) : null}
+              {details.revenueWeight != null ? (
+                <DetailRow
+                  label="Revenue weight"
+                  value={`${details.revenueWeight.toLocaleString("en-GB")} kg`}
+                />
+              ) : null}
+              {details.dateOfLastV5CIssued ? (
+                <DetailRow
+                  label="Last V5C issued"
+                  value={details.dateOfLastV5CIssued}
+                />
+              ) : null}
+              {details.realDrivingEmissions ? (
+                <DetailRow
+                  label="RDE"
+                  value={details.realDrivingEmissions}
+                />
+              ) : null}
             </dl>
           </CardShell>
 
@@ -541,7 +604,11 @@ export function VehicleReportDesktop({
             title="Recall information"
             icon={ShieldAlert}
           >
-            {recalls.items.length > 0 ? (
+            {!recallsAvailable ? (
+              <p className="text-[13px] text-muted">
+                Recall data is not available from DVLA Vehicle Enquiry.
+              </p>
+            ) : recalls.items.length > 0 ? (
               <ul className="space-y-2.5">
                 {recalls.items.map((item) => (
                   <li

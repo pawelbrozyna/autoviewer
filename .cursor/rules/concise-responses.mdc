@@ -1,0 +1,11 @@
+---
+description: Keep user-facing chat responses extremely concise
+alwaysApply: true
+---
+
+# Concise responses
+
+- Use the fewest words needed.
+- Prefer one sentence or one word when sufficient.
+- Avoid summaries, headings, and repeated details unless requested.
+- For completed small changes, briefly confirm the result.

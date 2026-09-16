@@ -4,6 +4,8 @@ import { FAQ } from "@/components/ui/FAQ";
 import { RelatedTools } from "@/components/ui/RelatedTools";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ToolHero } from "@/components/tools/ToolHero";
+import { DvlaLookupProvider } from "@/components/vehicle/DvlaLookupContext";
+import { DvlaLookupReport } from "@/components/vehicle/DvlaLookupReport";
 import { VehicleSearchForm } from "@/components/vehicle/VehicleSearchForm";
 import type { CheckSource } from "@/lib/analytics";
 import { relatedToolsMap } from "@/lib/site";
@@ -20,6 +22,7 @@ export function CheckerLandingPage({
   buttonLabel,
   checkSource = "unknown",
   crossLink,
+  inlineDvlaLookup = false,
 }: {
   toolKey: keyof typeof relatedToolsMap;
   breadcrumbs: Array<{ label: string; href?: string }>;
@@ -32,18 +35,31 @@ export function CheckerLandingPage({
   buttonLabel?: string;
   checkSource?: CheckSource;
   crossLink?: { href: string; label: string };
+  inlineDvlaLookup?: boolean;
   /** @deprecated No longer shown in ToolHero by default */
   eyebrow?: string;
 }) {
+  const hero = (
+    <ToolHero
+      breadcrumbs={breadcrumbs}
+      title={title}
+      description={description}
+      buttonLabel={buttonLabel}
+      checkSource={checkSource}
+      inlineDvlaLookup={inlineDvlaLookup}
+    />
+  );
+
   return (
     <>
-      <ToolHero
-        breadcrumbs={breadcrumbs}
-        title={title}
-        description={description}
-        buttonLabel={buttonLabel}
-        checkSource={checkSource}
-      />
+      {inlineDvlaLookup ? (
+        <DvlaLookupProvider>
+          {hero}
+          <DvlaLookupReport />
+        </DvlaLookupProvider>
+      ) : (
+        hero
+      )}
 
       <section className="section-y">
         <Container className="space-y-11 md:space-y-12">

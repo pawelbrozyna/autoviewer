@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { InfoTip } from "@/components/ui/InfoTip";
 import { StatusBadge } from "@/components/ui/StatusBadge";
+import { VehicleImageCaption } from "@/components/vehicle/VehicleImageCaption";
 import { VehicleThumbnail } from "@/components/vehicle/VehicleThumbnail";
 import { VehicleComparisonMobile } from "@/components/vehicle/VehicleComparisonMobile";
 import { formatEngineCc, formatEngineLitres } from "@/lib/vehicle/engine";
@@ -568,7 +569,13 @@ function QuickSummaryBlock({
   );
 }
 
-function DesktopVehiclePanel({ record }: { record: VehicleRecord }) {
+function DesktopVehiclePanel({
+  record,
+  showImageCaption = false,
+}: {
+  record: VehicleRecord;
+  showImageCaption?: boolean;
+}) {
   const name = shortName(record);
   const subtitle = cardSubtitle(record);
   const score = record.buyerScore?.score ?? null;
@@ -591,6 +598,12 @@ function DesktopVehiclePanel({ record }: { record: VehicleRecord }) {
           className="aspect-[2.1/1] border-0 shadow-none"
           imageClassName="object-contain object-center p-0 scale-[0.95]"
         />
+        {showImageCaption ? (
+          <VehicleImageCaption
+            summary={record.summary}
+            className="relative z-10 -mt-1 text-center text-[9px] leading-tight"
+          />
+        ) : null}
       </div>
 
       <div className="min-w-0">
@@ -681,9 +694,9 @@ function DesktopCompareHero({
       </div>
 
       <div className="relative grid grid-cols-2">
-        <DesktopVehiclePanel record={left} />
+        <DesktopVehiclePanel record={left} showImageCaption={demo} />
         <div className="relative border-l border-border">
-          <DesktopVehiclePanel record={right} />
+          <DesktopVehiclePanel record={right} showImageCaption={demo} />
         </div>
         <div className="pointer-events-none absolute left-1/2 top-1/2 z-10 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-[#EFF4FA] text-[12px] font-bold tracking-wide text-navy shadow-[0_1px_4px_rgba(7,26,61,0.06)]">
           VS
@@ -810,7 +823,11 @@ export function VehicleComparison({
             </p>
           </div>
         ) : null}
-        <VehicleComparisonMobile left={left} right={right} />
+        <VehicleComparisonMobile
+          left={left}
+          right={right}
+          showImageCaption={demo}
+        />
       </div>
     </div>
   );

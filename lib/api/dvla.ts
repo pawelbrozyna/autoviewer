@@ -73,6 +73,8 @@ export function mapDvlaToDetails(data: DvlaVehicleResponse): {
       typeApproval: data.typeApproval ?? null,
       revenueWeight: data.revenueWeight ?? null,
       markedForExport: data.markedForExport,
+      dateOfLastV5CIssued: data.dateOfLastV5CIssued ?? null,
+      realDrivingEmissions: data.realDrivingEmissions ?? null,
     },
     tax,
     motExpiryDate: data.motExpiryDate ?? null,
@@ -86,13 +88,14 @@ export function mapDvlaToDetails(data: DvlaVehicleResponse): {
  */
 export async function fetchDvlaVehicle(
   registration: string,
+  endpoint?: string,
 ): Promise<DvlaVehicleResponse> {
   const apiKey = process.env.DVLA_API_KEY;
   if (!apiKey) {
     throw new DvlaApiError("DVLA API key is not configured", 503, "UNAVAILABLE");
   }
 
-  const url = process.env.DVLA_API_URL || DEFAULT_URL;
+  const url = endpoint || process.env.DVLA_API_URL || DEFAULT_URL;
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 12_000);
 

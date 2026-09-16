@@ -43,6 +43,8 @@ export interface TaxStatus {
 }
 
 export interface RecallStatus {
+  /** False when the active data source does not provide recall information. */
+  dataAvailable?: boolean;
   hasOpenRecalls: boolean;
   count: number;
   items: Array<{
@@ -70,6 +72,8 @@ export interface VehicleDetails {
   typeApproval?: string | null;
   revenueWeight?: number | null;
   markedForExport?: boolean;
+  dateOfLastV5CIssued?: string | null;
+  realDrivingEmissions?: string | null;
 }
 
 export interface VehicleSummary {

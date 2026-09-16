@@ -32,6 +32,7 @@ export default function CheckAVehiclePage() {
       <CheckerLandingPage
         toolKey="check-a-vehicle"
         checkSource="check-a-vehicle"
+        inlineDvlaLookup
         breadcrumbs={[
           { label: "Home", href: "/" },
           { label: "Check a Vehicle" },

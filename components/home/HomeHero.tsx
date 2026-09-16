@@ -4,7 +4,11 @@ import { HeroFeatureStrip } from "@/components/layout/PageHero";
 import { HeroMobileGradient } from "@/components/layout/ToolHeroBackdrop";
 import { VehicleSearchForm } from "@/components/vehicle/VehicleSearchForm";
 
-export function HomeHero() {
+export function HomeHero({
+  inlineDvlaLookup = false,
+}: {
+  inlineDvlaLookup?: boolean;
+}) {
   return (
     <section className="relative overflow-hidden border-b border-border bg-[#f4f6f9]">
       <HeroMobileGradient />
@@ -36,7 +40,10 @@ export function HomeHero() {
           </p>
 
           <div className="mt-5 md:mt-6 lg:mt-5">
-            <VehicleSearchForm checkSource="home" />
+            <VehicleSearchForm
+              checkSource="home"
+              inlineDvlaLookup={inlineDvlaLookup}
+            />
           </div>
 
           <HeroFeatureStrip />

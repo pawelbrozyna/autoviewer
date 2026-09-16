@@ -10,6 +10,7 @@ import {
   ShieldAlert,
 } from "lucide-react";
 import { InfoTip } from "@/components/ui/InfoTip";
+import { VehicleImageCaption } from "@/components/vehicle/VehicleImageCaption";
 import { VehicleThumbnail } from "@/components/vehicle/VehicleThumbnail";
 import { formatEngineLitres } from "@/lib/vehicle/engine";
 import {
@@ -143,7 +144,13 @@ function buildStatusRows(
             };
 
   const recalls =
-    summary.recalls.hasOpenRecalls && summary.recalls.count > 0
+    summary.recalls.dataAvailable === false
+      ? {
+          value: "Not available",
+          tone: "neutral" as const,
+          showAlert: false,
+        }
+      : summary.recalls.hasOpenRecalls && summary.recalls.count > 0
       ? {
           value: `${summary.recalls.count} open`,
           tone: "danger" as const,
@@ -195,6 +202,7 @@ export function VehicleSummaryMobile({
   className,
   largerImage = false,
   showDerivative = false,
+  showCta = true,
 }: {
   vehicle: VehicleRecord;
   titleAs?: "h1" | "h2";
@@ -202,6 +210,7 @@ export function VehicleSummaryMobile({
   className?: string;
   largerImage?: boolean;
   showDerivative?: boolean;
+  showCta?: boolean;
 }) {
   const { summary, buyerScore } = vehicle;
   const [ready, setReady] = useState(false);
@@ -264,12 +273,17 @@ export function VehicleSummaryMobile({
           )}
         >
           <VehicleThumbnail
-            label={displayName}
+            label={`${summary.make} ${summary.model}`.trim()}
             src={summary.imageSrc}
             variant="bare"
           />
         </div>
       </div>
+      <VehicleImageCaption
+        summary={summary}
+        className="mt-1 text-center"
+        stackColourOnMobile
+      />
 
       {/* Buyer Score card */}
       <div className="relative z-10 mt-1.5 rounded-[15px] border border-border bg-[#F7F9FC] p-5">
@@ -377,13 +391,15 @@ export function VehicleSummaryMobile({
         </ul>
       </div>
 
-      <a
-        href={ctaHref}
-        className="mt-3.5 flex h-[55px] w-full items-center justify-center rounded-[13px] bg-[#012046] text-[16.5px] font-semibold outline-none transition-colors hover:bg-[#0c2758] focus-visible:ring-2 focus-visible:ring-[#1769e0] focus-visible:ring-offset-2"
-        style={{ color: "#FFFFFF" }}
-      >
-        <span style={{ color: "#FFFFFF" }}>View full report →</span>
-      </a>
+      {showCta ? (
+        <a
+          href={ctaHref}
+          className="mt-3.5 flex h-[55px] w-full items-center justify-center rounded-[13px] bg-[#012046] text-[16.5px] font-semibold outline-none transition-colors hover:bg-[#0c2758] focus-visible:ring-2 focus-visible:ring-[#1769e0] focus-visible:ring-offset-2"
+          style={{ color: "#FFFFFF" }}
+        >
+          <span style={{ color: "#FFFFFF" }}>View full report →</span>
+        </a>
+      ) : null}
     </div>
   );
 }

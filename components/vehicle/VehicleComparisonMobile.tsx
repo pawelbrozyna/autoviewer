@@ -15,6 +15,7 @@ import {
   Zap,
 } from "lucide-react";
 import { InfoTip } from "@/components/ui/InfoTip";
+import { VehicleImageCaption } from "@/components/vehicle/VehicleImageCaption";
 import { VehicleThumbnail } from "@/components/vehicle/VehicleThumbnail";
 import { formatEngineLitres } from "@/lib/vehicle/engine";
 import {
@@ -316,9 +317,11 @@ function buildQuickSummary(
 function VehicleCompareCard({
   record,
   isLeader,
+  showImageCaption = false,
 }: {
   record: VehicleRecord;
   isLeader: boolean;
+  showImageCaption?: boolean;
 }) {
   const score = record.buyerScore?.score ?? null;
   const name = shortName(record);
@@ -356,6 +359,12 @@ function VehicleCompareCard({
           className="aspect-[3/2]"
           imageClassName="object-center"
         />
+        {showImageCaption ? (
+          <VehicleImageCaption
+            summary={record.summary}
+            className="relative z-10 -mt-1 text-center text-[8px] leading-tight"
+          />
+        ) : null}
       </div>
 
       <div className="flex flex-1 flex-col px-2.5 pb-2.5 pt-1">
@@ -483,9 +492,11 @@ function CompareValueCell({
 export function VehicleComparisonMobile({
   left,
   right,
+  showImageCaption = false,
 }: {
   left: VehicleRecord;
   right: VehicleRecord;
+  showImageCaption?: boolean;
 }) {
   const rows = buildMobileRows(left, right);
   const leftScore = left.buyerScore?.score ?? -1;
@@ -499,8 +510,16 @@ export function VehicleComparisonMobile({
   return (
     <div className="space-y-3.5">
       <div className="grid grid-cols-2 gap-2.5">
-        <VehicleCompareCard record={left} isLeader={leftLeads} />
-        <VehicleCompareCard record={right} isLeader={rightLeads} />
+        <VehicleCompareCard
+          record={left}
+          isLeader={leftLeads}
+          showImageCaption={showImageCaption}
+        />
+        <VehicleCompareCard
+          record={right}
+          isLeader={rightLeads}
+          showImageCaption={showImageCaption}
+        />
       </div>
 
       <div className="space-y-1.5">

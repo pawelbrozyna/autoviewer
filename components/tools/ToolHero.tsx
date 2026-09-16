@@ -9,6 +9,7 @@ export function ToolHero({
   buttonLabel = "Check vehicle →",
   checkSource = "unknown",
   eyebrow,
+  inlineDvlaLookup = false,
 }: {
   breadcrumbs: Array<{ label: string; href?: string }>;
   title: string;
@@ -17,6 +18,7 @@ export function ToolHero({
   checkSource?: CheckSource;
   /** Optional label under breadcrumbs (tax-mileage and similar). */
   eyebrow?: string;
+  inlineDvlaLookup?: boolean;
 }) {
   return (
     <PageHero
@@ -29,6 +31,7 @@ export function ToolHero({
       <VehicleSearchForm
         buttonLabel={buttonLabel}
         checkSource={checkSource}
+        inlineDvlaLookup={inlineDvlaLookup}
       />
     </PageHero>
   );

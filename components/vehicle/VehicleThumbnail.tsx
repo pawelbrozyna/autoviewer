@@ -61,7 +61,7 @@ export function VehicleThumbnail({
       {hasImage && src ? (
         <Image
           src={src}
-          alt={label ? label : "Vehicle"}
+          alt={label ? `Illustrative image of ${label}` : "Illustrative vehicle image"}
           fill
           sizes={
             hero

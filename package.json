@@ -9,14 +9,17 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test:score": "npx tsx lib/vehicle/score.test.ts",
-    "test:images": "npx tsx lib/vehicle/images.test.ts"
+    "test:images": "npx tsx lib/vehicle/images.test.ts",
+    "test:mail": "node --conditions=react-server --import tsx lib/mail/messages.test.ts"
   },
   "dependencies": {
     "lucide-react": "^0.544.0",
     "next": "^15.5.2",
     "nodemailer": "^10.0.8",
+    "pdf-lib": "^1.17.1",
     "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react-dom": "^19.1.1",
+    "server-only": "^0.0.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
@@ -28,6 +31,7 @@
     "eslint": "^9.33.0",
     "eslint-config-next": "^15.5.2",
     "tailwindcss": "^4.1.12",
+    "tsx": "^4.23.13",
     "typescript": "^5.9.2"
   }
 }

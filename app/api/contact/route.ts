@@ -1,12 +1,20 @@
 import { NextResponse } from "next/server";
-import nodemailer from "nodemailer";
 import {
-  CONTACT_EMAIL_SUBJECT,
-  CONTACT_FROM_NAME,
   CONTACT_MESSAGE_MAX,
   CONTACT_MESSAGE_MIN,
-  getContactMailConfig,
 } from "@/lib/contact";
+import {
+  buildContactMessage,
+  normalizeEmail,
+} from "@/lib/mail/messages";
+import {
+  getMailConfig,
+  logMailError,
+  MailConfigurationError,
+  sendMail,
+} from "@/lib/server/mail";
+
+export const runtime = "nodejs";
 
 type ContactBody = {
   name?: unknown;
@@ -19,56 +27,6 @@ function asTrimmedString(value: unknown): string {
   return typeof value === "string" ? value.trim() : "";
 }
 
-function isValidEmail(email: string): boolean {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
-
-type SmtpError = Error & {
-  code?: unknown;
-  command?: unknown;
-  responseCode?: unknown;
-  response?: unknown;
-};
-
-function redactSensitiveText(
-  value: unknown,
-  sensitiveValues: string[],
-): string | number | undefined {
-  if (typeof value === "number") return value;
-  if (typeof value !== "string") return undefined;
-
-  return sensitiveValues.reduce(
-    (safe, sensitive) =>
-      sensitive ? safe.replaceAll(sensitive, "[redacted]") : safe,
-    value,
-  );
-}
-
-function logContactEmailError(error: unknown, sensitiveValues: string[]) {
-  if (process.env.NODE_ENV !== "development") {
-    console.error("Contact email delivery failed.");
-    return;
-  }
-
-  if (!(error instanceof Error)) {
-    console.error("Contact email delivery failed with an unknown error.");
-    return;
-  }
-
-  const smtpError = error as SmtpError;
-  console.error("Contact email delivery failed:", {
-    name: smtpError.name,
-    message: redactSensitiveText(smtpError.message, sensitiveValues),
-    code: redactSensitiveText(smtpError.code, sensitiveValues),
-    command: redactSensitiveText(smtpError.command, sensitiveValues),
-    responseCode: redactSensitiveText(
-      smtpError.responseCode,
-      sensitiveValues,
-    ),
-    response: redactSensitiveText(smtpError.response, sensitiveValues),
-  });
-}
-
 export async function POST(req: Request) {
   let body: ContactBody;
 
@@ -79,7 +37,8 @@ export async function POST(req: Request) {
   }
 
   const name = asTrimmedString(body.name);
-  const email = asTrimmedString(body.email);
+  const emailInput = asTrimmedString(body.email);
+  const email = emailInput ? normalizeEmail(emailInput) : null;
   const message = asTrimmedString(body.message);
   const company = asTrimmedString(body.company);
 
@@ -102,7 +61,7 @@ export async function POST(req: Request) {
     );
   }
 
-  if (email && !isValidEmail(email)) {
+  if (emailInput && !email) {
     return NextResponse.json(
       { error: "Please provide a valid email address." },
       { status: 400 },
@@ -116,49 +75,19 @@ export async function POST(req: Request) {
     );
   }
 
-  const mailConfig = getContactMailConfig();
-  if (!mailConfig.ok) {
-    console.error(
-      "Contact mail is not configured. Missing environment variables:",
-      mailConfig.missing.join(", "),
-    );
-    return NextResponse.json(
-      { error: "Failed to send message" },
-      { status: 500 },
-    );
-  }
-
-  const { gmailUser, mailTo, appPassword } = mailConfig.config;
-
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: gmailUser,
-      pass: appPassword,
-    },
-  });
-
   try {
-    await transporter.sendMail({
-      from: `"${CONTACT_FROM_NAME}" <${gmailUser}>`,
-      to: mailTo,
-      replyTo: email || undefined,
-      subject: CONTACT_EMAIL_SUBJECT,
-      text: [
-        `Name: ${name || "Not provided"}`,
-        `Email: ${email || "Not provided"}`,
-        "",
-        "Message:",
-        message,
-      ].join("\n"),
-    });
+    const config = getMailConfig();
+    await sendMail(
+      config,
+      buildContactMessage(config, { name, email, message }),
+    );
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    logContactEmailError(error, [gmailUser, mailTo, appPassword]);
+    logMailError("Contact email delivery failed.", error);
     return NextResponse.json(
       { error: "Failed to send message" },
-      { status: 500 },
+      { status: error instanceof MailConfigurationError ? 503 : 502 },
     );
   }
 }

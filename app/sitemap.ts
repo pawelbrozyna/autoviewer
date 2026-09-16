@@ -5,6 +5,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const routes = [
     "/",
     "/check-a-vehicle",
+    "/example-report",
     "/mot-history",
     "/car-tax-check",
     "/mileage-check",
