@@ -17,7 +17,7 @@ import type { VehicleRecord } from "@/types/vehicle";
 export function MobileVehicleDetails({
   vehicle,
   showExtended = false,
-  unavailableLabel = "—",
+  unavailableLabel = "-",
 }: {
   vehicle: VehicleRecord;
   showExtended?: boolean;

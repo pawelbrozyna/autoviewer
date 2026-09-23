@@ -137,6 +137,235 @@ run("overlapping year ranges prefer highest yearFrom", () => {
   assert.equal(gla.generation, "H247");
   assert.equal(gla.yearFrom, 2020);
   assert.equal(gla.src, "/cars/mercedes-benz-gla-h247-2020-2026.webp");
+  assert.equal(gla.confidence, "low");
+  assert.equal(gla.ambiguous, true);
+});
+
+run("returns a selected record, confidence, reasons and fallback metadata", () => {
+  const result = resolveVehicleImage({
+    make: "Volkswagen",
+    model: "Golf 1.5 TSI Match",
+    year: 2019,
+  });
+  assert.equal(result.record?.generation, "Mk7.5");
+  assert.equal(result.confidence, "high");
+  assert.equal(result.fallbackUsed, false);
+  assert.equal(result.ambiguous, false);
+  assert.ok(result.matchedFields.includes("make:exact"));
+  assert.ok(result.matchedFields.includes("model:prefix"));
+  assert.match(result.reason, /one catalogue generation/i);
+});
+
+run("normalizes accents, punctuation, electric prefixes and make aliases", () => {
+  const citroen = resolveVehicleImage({
+    make: "Citroën",
+    model: "C3 1.2 PureTech",
+    year: 2022,
+  });
+  assert.equal(
+    citroen.src,
+    "/cars/citroen-c3-mk3-facelift-2020-2024.webp",
+  );
+
+  const peugeot = resolveVehicleImage({
+    make: "PEUGEOT",
+    model: "e-208 GT",
+    year: 2022,
+  });
+  assert.equal(peugeot.src, "/cars/peugeot-208-p21-2019-2026.webp");
+
+  const opel = resolveVehicleImage({
+    make: "Opel",
+    model: "Corsa-e Ultimate",
+    year: 2022,
+  });
+  assert.equal(opel.src, "/cars/vauxhall-corsa-f-2019-2026.webp");
+  assert.ok(opel.matchedFields.includes("make:alias"));
+
+  const vauxhall = resolveVehicleImage({
+    make: "Vauxhall Motors",
+    model: "Astra 1.4 Turbo",
+    year: 2018,
+  });
+  assert.equal(vauxhall.src, "/cars/vauxhall-astra-k-2015-2021.webp");
+
+  const mg = resolveVehicleImage({
+    make: "MG",
+    model: "MG4 Trophy",
+    year: 2023,
+  });
+  assert.equal(mg.src, "/cars/mg-mg4-ev-mk1-2022-2026.webp");
+
+  const fiat = resolveVehicleImage({
+    make: "Fiat",
+    model: "500 Electric",
+    year: 2022,
+  });
+  assert.equal(fiat.src, "/cars/fiat-500e-332-2021-2026.webp");
+});
+
+run("maps common BMW and Mercedes derivative-style model names", () => {
+  const bmw = resolveVehicleImage({
+    make: "BMW",
+    model: "320d M Sport Touring",
+    year: 2018,
+    bodyType: "estate",
+  });
+  assert.equal(
+    bmw.src,
+    "/cars/bmw-3-series-f30-facelift-2015-2019.webp",
+  );
+  assert.ok(bmw.matchedFields.includes("model:alias"));
+  assert.ok(bmw.matchedFields.includes("bodyType:hint"));
+
+  const mercedes = resolveVehicleImage({
+    make: "Mercedes Benz",
+    model: "A 180 d AMG Line",
+    year: 2021,
+  });
+  assert.equal(
+    mercedes.src,
+    "/cars/mercedes-a-class-w177-2018-2026.webp",
+  );
+  assert.ok(mercedes.matchedFields.includes("model:alias"));
+});
+
+run("uses explicit Yaris facelift and pre-facelift clues", () => {
+  const facelift = resolveVehicleImage({
+    make: "Toyota",
+    model: "Yaris",
+    derivative: "XP130 facelift Icon",
+    year: 2014,
+  });
+  assert.equal(
+    facelift.src,
+    "/cars/toyota-yaris-xp130-facelift-2014-2020.webp",
+  );
+  assert.equal(facelift.confidence, "high");
+  assert.equal(facelift.ambiguous, false);
+  assert.ok(facelift.matchedFields.includes("generation:source-clue"));
+
+  const preFacelift = resolveVehicleImage({
+    make: "Toyota",
+    model: "Yaris",
+    derivative: "XP130 pre-facelift",
+    year: 2014,
+  });
+  assert.equal(
+    preFacelift.src,
+    "/cars/toyota-yaris-xp130-2011-2014.webp",
+  );
+  assert.equal(preFacelift.confidence, "high");
+});
+
+run("uses first-registration month for unresolved boundary years", () => {
+  const early = resolveVehicleImage({
+    make: "Toyota",
+    model: "Yaris Icon",
+    year: 2014,
+    firstRegistrationDate: "2014-03-18",
+  });
+  assert.equal(early.src, "/cars/toyota-yaris-xp130-2011-2014.webp");
+  assert.equal(early.confidence, "medium");
+  assert.equal(early.ambiguous, true);
+  assert.ok(
+    early.matchedFields.includes("firstRegistration:boundary-period"),
+  );
+
+  const late = resolveVehicleImage({
+    make: "Toyota",
+    model: "Yaris Icon",
+    year: 2014,
+    firstRegistrationDate: "2014-10-02",
+  });
+  assert.equal(
+    late.src,
+    "/cars/toyota-yaris-xp130-facelift-2014-2020.webp",
+  );
+  assert.equal(late.confidence, "medium");
+  assert.equal(late.ambiguous, true);
+});
+
+run("retains deterministic newer-generation fallback when overlap is unresolved", () => {
+  const result = resolveVehicleImage({
+    make: "Toyota",
+    model: "Yaris Icon",
+    year: 2014,
+  });
+  assert.equal(
+    result.src,
+    "/cars/toyota-yaris-xp130-facelift-2014-2020.webp",
+  );
+  assert.equal(result.confidence, "low");
+  assert.equal(result.ambiguous, true);
+  assert.match(result.reason, /newer-generation rule/i);
+});
+
+run("matches vans, pickups, motorcycles and scooters", () => {
+  const van = resolveVehicleImage({
+    make: "VW",
+    model: "Transporter T32 Highline",
+    derivative: "T6.1 panel van",
+    year: 2020,
+    bodyType: "van",
+  });
+  assert.equal(
+    van.src,
+    "/cars/volkswagen-transporter-t6-1-2019-2024.webp",
+  );
+
+  const pickup = resolveVehicleImage({
+    make: "Isuzu",
+    model: "D MAX Utah",
+    year: 2019,
+    bodyType: "pick-up",
+  });
+  assert.equal(
+    pickup.src,
+    "/cars/isuzu-d-max-mk2-facelift-2017-2020.webp",
+  );
+
+  const motorcycle = resolveVehicleImage({
+    make: "Honda",
+    model: "CB 125 R",
+    year: 2021,
+    vehicleType: "motorcycle",
+  });
+  assert.equal(
+    motorcycle.src,
+    "/cars/honda-cb125r-2018-generation-2018-2023.webp",
+  );
+
+  const scooter = resolveVehicleImage({
+    make: "Yamaha",
+    model: "NMAX125",
+    year: 2023,
+    vehicleType: "scooter",
+  });
+  assert.equal(
+    scooter.src,
+    "/cars/yamaha-nmax-125-2021-generation-2021-2024.webp",
+  );
+});
+
+run("handles incomplete input without crossing to another model", () => {
+  const missingModel = resolveVehicleImage({
+    make: "Ford",
+    model: "",
+    year: 2019,
+  });
+  assert.equal(missingModel.match, "placeholder");
+  assert.equal(missingModel.record, null);
+  assert.equal(missingModel.fallbackUsed, true);
+
+  const missingYear = resolveVehicleImage({
+    make: "Volkswagen",
+    model: "Golf Match",
+  });
+  assert.equal(missingYear.generation, "Mk8");
+  assert.equal(missingYear.confidence, "low");
+  assert.equal(missingYear.fallbackUsed, true);
+  assert.equal(missingYear.ambiguous, true);
 });
 
 run("missing model still returns placeholder (no make-only fallback)", () => {
@@ -187,12 +416,23 @@ run("nearest same-model generation is marked representative", () => {
   const result = resolveVehicleImage({
     make: "Volkswagen",
     model: "Golf",
-    year: 2002,
+    year: 1995,
   });
   assert.equal(result.match, "nearest-generation");
   assert.equal(result.isRepresentative, true);
-  assert.equal(result.generation, "Mk5");
-  assert.equal(result.src, "/cars/volkswagen-golf-mk5-2004-2008.webp");
+  assert.equal(result.generation, "Mk4");
+  assert.equal(result.src, "/cars/volkswagen-golf-mk4-1998-2004.webp");
+});
+
+run("rejects an implausibly distant nearest-generation fallback", () => {
+  const result = resolveVehicleImage({
+    make: "Volkswagen",
+    model: "Golf",
+    year: 1990,
+  });
+  assert.equal(result.match, "placeholder");
+  assert.equal(result.record, null);
+  assert.match(result.reason, /safe 3-year fallback limit/i);
 });
 
 run("unknown model uses placeholder, not another brand model", () => {

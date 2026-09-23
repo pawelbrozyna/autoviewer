@@ -10,9 +10,13 @@
     "typecheck": "tsc --noEmit",
     "test:score": "npx tsx lib/vehicle/score.test.ts",
     "test:images": "npx tsx lib/vehicle/images.test.ts",
+    "test:pdf": "npx tsx lib/reports/pdf.test.ts",
+    "pdf:stress-test": "npx tsx lib/reports/stress/run.ts",
+    "pdf:sample-preview": "npx tsx scripts/generate-sample-report-preview.ts",
     "test:mail": "node --conditions=react-server --import tsx lib/mail/messages.test.ts"
   },
   "dependencies": {
+    "@pdf-lib/fontkit": "^1.1.1",
     "lucide-react": "^0.544.0",
     "next": "^15.5.2",
     "nodemailer": "^10.0.8",
@@ -30,6 +34,7 @@
     "@types/react-dom": "^19.1.7",
     "eslint": "^9.33.0",
     "eslint-config-next": "^15.5.2",
+    "pdf-to-img": "^7.0.0",
     "tailwindcss": "^4.1.12",
     "tsx": "^4.23.13",
     "typescript": "^5.9.2"

@@ -104,6 +104,14 @@ export interface VehicleSummary {
   imageSrc?: string | null;
   /** True when the image is the nearest same-model generation, not an exact year match. */
   imageIsRepresentative?: boolean;
+  /** Confidence reported by the catalogue matcher. */
+  imageMatchConfidence?: "high" | "medium" | "low";
+  /** Human-readable explanation of the catalogue match decision. */
+  imageMatchReason?: string;
+  /** True when a nearest/missing-year fallback selected the image. */
+  imageFallbackUsed?: boolean;
+  /** True when multiple generations remained plausible. */
+  imageMatchAmbiguous?: boolean;
 }
 
 export interface VehicleRecord {

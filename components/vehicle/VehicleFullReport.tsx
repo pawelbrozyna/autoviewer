@@ -1,6 +1,8 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { BuyerScore } from "@/components/vehicle/BuyerScore";
+import { FullReportCta } from "@/components/vehicle/FullReportCta";
+import { LockedPremiumChecks } from "@/components/vehicle/LockedPremiumChecks";
 import { MileageHistory } from "@/components/vehicle/MileageHistory";
 import { MobileVehicleDetails } from "@/components/vehicle/MobileVehicleDetails";
 import { MotTimeline } from "@/components/vehicle/MotTimeline";
@@ -10,6 +12,7 @@ import {
 } from "@/components/vehicle/StatusBadges";
 import { VehicleReportDesktop } from "@/components/vehicle/VehicleReportDesktop";
 import { VehicleSummaryMobile } from "@/components/vehicle/VehicleSummaryMobile";
+import { ReportAvailability } from "@/components/vehicle/ReportAvailability";
 import { formatDateUk } from "@/lib/utils";
 import type { VehicleRecord } from "@/types/vehicle";
 
@@ -40,8 +43,13 @@ export function VehicleFullReport({
         <MobileVehicleDetails
           vehicle={vehicle}
           showExtended={showExtendedDetails}
-          unavailableLabel={showUnavailableStats ? "Not available" : "—"}
+          unavailableLabel={showUnavailableStats ? "Not available" : "-"}
         />
+
+        <div className="mt-5 space-y-3">
+          <ReportAvailability vehicle={vehicle} />
+          <FullReportCta registration={summary.registration} compact />
+        </div>
 
         <div className="mt-6 space-y-5">
           <SectionCard id="mot-history" title="MOT history">
@@ -199,7 +207,17 @@ export function VehicleFullReport({
           ownersLabel={ownersLabel}
           highlightRegistration
           showUnavailableStats={showUnavailableStats}
+          afterSummary={
+            <div className="grid gap-3 lg:grid-cols-[1fr_1fr]">
+              <ReportAvailability vehicle={vehicle} />
+              <FullReportCta registration={summary.registration} compact />
+            </div>
+          }
         />
+      </div>
+
+      <div className="mt-4">
+        <LockedPremiumChecks registration={summary.registration} />
       </div>
     </>
   );

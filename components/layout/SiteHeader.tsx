@@ -166,7 +166,7 @@ export function SiteHeader() {
             <Link
               key={link.href}
               href={link.href}
-              className="rounded-lg px-3 py-1.5 text-base font-semibold text-navy/85 transition-colors hover:bg-[#EEF2F7] hover:text-navy lg:px-2.5 lg:py-1 lg:text-[15px]"
+              className="rounded-lg px-3 py-1.5 text-base font-semibold text-navy/85 transition-colors hover:bg-[#EEF2F7] hover:text-navy lg:px-2.5 lg:py-1 lg:text-[16px]"
             >
               {link.label}
             </Link>

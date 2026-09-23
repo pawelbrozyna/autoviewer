@@ -44,7 +44,7 @@ const features = [
 
 export function VehicleFeatureGrid() {
   return (
-    <section className="bg-surface-soft pb-7 pt-4 md:pb-9 md:pt-5 lg:pb-8 lg:pt-4">
+    <section className="bg-surface-soft pb-6 pt-3 md:pb-8 md:pt-4 lg:pb-7 lg:pt-3">
       <Container>
         <SectionHeading
           eyebrow="Everything you need"

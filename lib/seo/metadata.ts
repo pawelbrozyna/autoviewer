@@ -57,7 +57,7 @@ export function organizationJsonLd() {
     "@type": "Organization",
     name: SITE_NAME,
     url: SITE_URL,
-    logo: absoluteUrl("/autoviewer.png"),
+    logo: absoluteUrl("/autoviewer-icon.png"),
     description: DEFAULT_DESCRIPTION,
     areaServed: "GB",
   };

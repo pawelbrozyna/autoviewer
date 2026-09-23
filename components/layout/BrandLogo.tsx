@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
-/** Brand wordmark from /public/autoviewer-mark.png (transparent bg). */
+/** Proportionally trimmed transparent AutoViewer wordmark. */
 export function BrandLogo({
   className,
   href = "/",
@@ -19,8 +19,8 @@ export function BrandLogo({
 }) {
   const sizeClass =
     size === "header"
-      ? "h-[49px] w-[229px] lg:h-[45px] lg:w-[210px]"
-      : "h-9 w-[168px]";
+      ? "h-8 w-[149px] lg:h-[29px] lg:w-[136px]"
+      : "h-[23px] w-[109px]";
 
   return (
     <Link
@@ -30,14 +30,15 @@ export function BrandLogo({
       onClick={onNavigate}
     >
       <Image
-        src="/autoviewer-mark.png"
+        src="/autoviewer-mark-optimized.png"
         alt="AutoViewer"
         fill
+        quality={100}
         className={cn(
           "object-contain",
           align === "center" ? "object-center" : "object-left",
         )}
-        sizes={size === "header" ? "(min-width: 1024px) 210px, 229px" : "168px"}
+        sizes={size === "header" ? "(min-width: 1024px) 136px, 149px" : "109px"}
         priority
       />
     </Link>

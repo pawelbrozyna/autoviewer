@@ -10,6 +10,10 @@ function withResolvedImage(
     make: record.summary.make,
     model: record.summary.model,
     year: record.summary.year,
+    firstRegistrationDate: record.details.monthOfFirstRegistration,
+    fuelType: record.summary.fuelType,
+    engineCapacity: record.summary.engineCapacity,
+    wheelplan: record.details.wheelplan,
   });
   return {
     ...record,
@@ -17,6 +21,10 @@ function withResolvedImage(
       ...record.summary,
       imageSrc: image.imageSrc,
       imageIsRepresentative: image.imageIsRepresentative,
+      imageMatchConfidence: image.imageConfidence,
+      imageMatchReason: image.imageMatchReason,
+      imageFallbackUsed: image.imageFallbackUsed,
+      imageMatchAmbiguous: image.imageMatchAmbiguous,
     },
   };
 }

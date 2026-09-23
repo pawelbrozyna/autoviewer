@@ -9,7 +9,7 @@ export function HomeCompareSection() {
   const right = getMockVehicle("AV20Q5X")!;
 
   return (
-    <section className="bg-white pb-5 pt-2 md:pb-6 md:pt-3 lg:pb-5 lg:pt-2.5">
+    <section className="bg-white pb-4 pt-1 md:pb-5 md:pt-2 lg:pb-4 lg:pt-1.5">
       <Container>
         <SectionHeading
           eyebrow="Compare vehicles"

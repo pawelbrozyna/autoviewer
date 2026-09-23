@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { FreeReportActions } from "@/components/vehicle/FreeReportActions";
 import { VehicleFullReport } from "@/components/vehicle/VehicleFullReport";
 import { Container } from "@/components/ui/Container";
 import { ErrorState } from "@/components/ui/EmptyState";
@@ -66,7 +67,13 @@ export default async function VehicleResultPage({ params }: PageProps) {
   return (
     <div className="bg-[#F9FBFE] pb-3 md:bg-surface-soft md:pb-14">
       <Container className="pb-4 pt-2 md:py-9">
-        <BackLink />
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <BackLink />
+          <FreeReportActions
+            vehicle={vehicle}
+            ownersLabel={summary.isDemo ? "2" : null}
+          />
+        </div>
 
         <div className="mt-2 md:mt-5">
           <VehicleFullReport

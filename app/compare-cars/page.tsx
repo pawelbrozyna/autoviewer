@@ -66,7 +66,7 @@ export default async function CompareCarsPage({
         />
       </PageHero>
 
-      <section className="section-y">
+      <section className="pt-5 pb-8 md:pt-6 md:pb-10 lg:pt-5 lg:pb-9">
         <Container className="space-y-6 md:space-y-7">
           {canCompare && leftResult?.ok && rightResult?.ok ? (
             <VehicleComparison left={leftResult.data} right={rightResult.data} />

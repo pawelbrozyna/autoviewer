@@ -85,6 +85,7 @@ export function VehicleReportDesktop({
   highlightRegistration = false,
   stretchMotHistory = false,
   showUnavailableStats = false,
+  afterSummary,
 }: {
   vehicle: VehicleRecord;
   /** Only pass when owners are known (e.g. demo). Omit / null hides the column. */
@@ -93,6 +94,7 @@ export function VehicleReportDesktop({
   highlightRegistration?: boolean;
   stretchMotHistory?: boolean;
   showUnavailableStats?: boolean;
+  afterSummary?: ReactNode;
 }) {
   const { summary, details, buyerScore, motTests, mileageHistory, recalls } =
     vehicle;
@@ -383,6 +385,8 @@ export function VehicleReportDesktop({
           />
         </div>
       </div>
+
+      {!summaryOnly && afterSummary ? afterSummary : null}
 
       {/* Main 3-column grid */}
       <div

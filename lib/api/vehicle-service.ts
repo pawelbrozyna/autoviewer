@@ -55,6 +55,13 @@ function mapMotStatus(
   return { status: "Unknown", expiryDate: expiry ?? null };
 }
 
+function yearFromDate(value?: string | null): number | null {
+  const match = value?.match(/^(\d{4})/);
+  if (!match) return null;
+  const year = Number.parseInt(match[1], 10);
+  return Number.isInteger(year) ? year : null;
+}
+
 export async function lookupVehicle(
   registrationInput: string,
 ): Promise<VehicleLookupResult> {
@@ -94,6 +101,7 @@ export async function lookupVehicle(
     let fuelType: string | null = null;
     let year: number | null = null;
     let engineCapacity: number | null = null;
+    let firstRegistrationDate: string | null = null;
     let hasOutstandingRecall = false;
     const sources: VehicleRecord["dataQuality"]["sources"] = [];
 
@@ -105,6 +113,8 @@ export async function lookupVehicle(
       fuelType = detailsPart.details.fuelType ?? null;
       year = detailsPart.details.yearOfManufacture ?? null;
       engineCapacity = detailsPart.details.engineCapacity ?? null;
+      firstRegistrationDate =
+        detailsPart.details.monthOfFirstRegistration ?? null;
       sources.push("DVLA");
     }
 
@@ -121,6 +131,15 @@ export async function lookupVehicle(
             ? Number.parseInt(dvsa.engineSize, 10)
             : dvsa.engineSize;
       }
+      firstRegistrationDate =
+        dvsa.registrationDate ||
+        dvsa.firstUsedDate ||
+        firstRegistrationDate;
+      year =
+        year ??
+        yearFromDate(dvsa.manufactureDate) ??
+        yearFromDate(dvsa.registrationDate) ??
+        yearFromDate(dvsa.firstUsedDate);
       hasOutstandingRecall =
         (dvsa.hasOutstandingRecall ?? "").toLowerCase() === "yes";
       sources.push("DVSA");
@@ -190,10 +209,24 @@ export async function lookupVehicle(
     });
 
     const image = resolveImageFieldsForVehicle({
+      registration,
       make,
       model: model || detailsPart?.details.model || "Vehicle",
       year,
+      firstRegistrationDate,
+      fuelType,
+      engineCapacity,
+      wheelplan: detailsPart?.details.wheelplan,
     });
+    if (image.imageMatchAmbiguous) {
+      console.warn("Ambiguous vehicle image match.", {
+        registration,
+        make,
+        model: model || detailsPart?.details.model || "Vehicle",
+        year,
+        reason: image.imageMatchReason,
+      });
+    }
 
     const record: VehicleRecord = {
       summary: {
@@ -216,6 +249,10 @@ export async function lookupVehicle(
         isDemo: false,
         imageSrc: image.imageSrc,
         imageIsRepresentative: image.imageIsRepresentative,
+        imageMatchConfidence: image.imageConfidence,
+        imageMatchReason: image.imageMatchReason,
+        imageFallbackUsed: image.imageFallbackUsed,
+        imageMatchAmbiguous: image.imageMatchAmbiguous,
       },
       details: {
         registration,
@@ -234,6 +271,10 @@ export async function lookupVehicle(
         typeApproval: detailsPart?.details.typeApproval ?? null,
         revenueWeight: detailsPart?.details.revenueWeight ?? null,
         markedForExport: detailsPart?.details.markedForExport,
+        dateOfLastV5CIssued:
+          detailsPart?.details.dateOfLastV5CIssued ?? null,
+        realDrivingEmissions:
+          detailsPart?.details.realDrivingEmissions ?? null,
       },
       motTests,
       mileageHistory,
