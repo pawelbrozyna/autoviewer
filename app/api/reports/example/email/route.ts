@@ -5,6 +5,11 @@ import {
   normalizeEmail,
 } from "@/lib/mail/messages";
 import {
+  FREE_EMAIL_LIMIT_MESSAGE,
+  getRequestIp,
+  tryConsumeFreeReportEmail,
+} from "@/lib/server/free-email-limits";
+import {
   getMailConfig,
   logMailError,
   MailConfigurationError,
@@ -39,6 +44,18 @@ export async function POST(request: Request) {
     return NextResponse.json(
       { error: "Failed to prepare report." },
       { status: 500 },
+    );
+  }
+
+  const allowed = await tryConsumeFreeReportEmail({
+    ip: getRequestIp(request),
+    email,
+    registration: vehicle.summary.registration,
+  });
+  if (!allowed) {
+    return NextResponse.json(
+      { error: FREE_EMAIL_LIMIT_MESSAGE },
+      { status: 429 },
     );
   }
 

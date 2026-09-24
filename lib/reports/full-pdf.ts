@@ -3,10 +3,11 @@ import {
   StandardFonts,
   rgb,
   type PDFFont,
+  type PDFImage,
   type PDFPage,
 } from "pdf-lib";
 import fontkit from "@pdf-lib/fontkit";
-import type { VehicleReportPdfOptions } from "@/lib/reports/pdf";
+import type { ReportIconName, VehicleReportPdfOptions } from "@/lib/reports/pdf";
 import {
   PAID_ADVISORY_LIMIT,
   PAID_MILEAGE_LIMIT,
@@ -42,6 +43,27 @@ const RED_BG = rgb(0.996, 0.93, 0.93);
 const YELLOW = rgb(0.98, 0.8, 0.14);
 const WHITE = rgb(1, 1, 1);
 const BLACK = rgb(0, 0, 0);
+
+const REPORT_ICON_NAMES: ReportIconName[] = [
+  "check",
+  "warning",
+  "lock",
+  "lock-white",
+  "calendar",
+  "mileage",
+  "engine",
+  "co2",
+  "leaf",
+  "car",
+  "shield-check",
+  "clipboard",
+  "document",
+  "user",
+  "wrench",
+  "pound",
+  "history",
+  "info",
+];
 
 function wrapText(text: string, font: PDFFont, size: number, maxWidth: number) {
   const words = text.trim().split(/\s+/).filter(Boolean);
@@ -136,16 +158,39 @@ function drawSection(
     Math.max(1, radius - stroke),
   );
   if (headerHeight > 0) {
+    const innerX = x + stroke;
+    const innerWidth = width - stroke * 2;
+    const headerBottom = y + height - headerHeight;
+    const headerRadius = Math.max(1, radius - stroke);
+    // Top rounded strip so header fill stays inside rounded corners.
     page.drawRectangle({
-      x: x + stroke,
-      y: y + height - headerHeight,
-      width: width - stroke * 2,
-      height: headerHeight - stroke,
+      x: innerX + headerRadius,
+      y: headerBottom + headerHeight - stroke - headerRadius,
+      width: innerWidth - headerRadius * 2,
+      height: headerRadius,
       color: headerFill,
     });
+    page.drawRectangle({
+      x: innerX,
+      y: headerBottom,
+      width: innerWidth,
+      height: headerHeight - stroke - headerRadius,
+      color: headerFill,
+    });
+    for (const cx of [
+      innerX + headerRadius,
+      innerX + innerWidth - headerRadius,
+    ]) {
+      page.drawCircle({
+        x: cx,
+        y: y + height - stroke - headerRadius,
+        size: headerRadius,
+        color: headerFill,
+      });
+    }
     page.drawLine({
-      start: { x: x + stroke, y: y + height - headerHeight },
-      end: { x: x + width - stroke, y: y + height - headerHeight },
+      start: { x: innerX, y: headerBottom },
+      end: { x: innerX + innerWidth, y: headerBottom },
       thickness: 0.55,
       color: INNER_LINE,
     });
@@ -154,6 +199,64 @@ function drawSection(
 
 function textY(centerY: number, size: number) {
   return centerY - size * 0.35;
+}
+
+function headerTitleY(
+  sectionY: number,
+  sectionHeight: number,
+  headerHeight: number,
+  size: number,
+) {
+  return textY(sectionY + sectionHeight - headerHeight / 2, size);
+}
+
+function headerIconY(
+  sectionY: number,
+  sectionHeight: number,
+  headerHeight: number,
+  iconSize: number,
+) {
+  return sectionY + sectionHeight - headerHeight / 2 - iconSize / 2;
+}
+
+function rowCenterY(contentTop: number, row: number, rowHeight: number) {
+  return contentTop - (row + 0.5) * rowHeight;
+}
+
+function rowIconY(centerY: number, iconSize: number) {
+  return centerY - iconSize / 2;
+}
+
+function drawInnerHLine(page: PDFPage, x: number, y: number, width: number) {
+  page.drawLine({
+    start: { x, y },
+    end: { x: x + width, y },
+    thickness: 0.5,
+    color: INNER_LINE,
+  });
+}
+
+function drawInnerVLine(page: PDFPage, x: number, y: number, height: number) {
+  page.drawLine({
+    start: { x, y },
+    end: { x, y: y + height },
+    thickness: 0.5,
+    color: INNER_LINE,
+  });
+}
+
+function drawEmbeddedIcon(
+  page: PDFPage,
+  icons: Partial<Record<ReportIconName, PDFImage>>,
+  name: ReportIconName,
+  x: number,
+  y: number,
+  size: number,
+): boolean {
+  const icon = icons[name];
+  if (!icon) return false;
+  page.drawImage(icon, { x, y, width: size, height: size });
+  return true;
 }
 
 function wordmark(page: PDFPage, bold: PDFFont, x: number, y: number) {
@@ -224,14 +327,12 @@ function statusTone(status: string) {
   return { fill: AMBER_BG, color: AMBER };
 }
 
-export function paidReportNeedsFourthPage(premium: PremiumMockData, vehicle: VehicleRecord) {
-  return (
-    premium.keepers.timeline.length > 5 ||
-    vehicle.recalls.items.length > 2 ||
-    (premium.finance.status === "RECORD FOUND" &&
-      premium.writeOff.status !== "NO RECORD" &&
-      premium.keepers.count >= 6)
-  );
+export function paidReportNeedsFourthPage(
+  _premium: PremiumMockData,
+  _vehicle: VehicleRecord,
+) {
+  // Page count is dynamic; kept for callers that still import this helper.
+  return true;
 }
 
 export async function generateFullReportPdf(
@@ -245,9 +346,13 @@ export async function generateFullReportPdf(
   const plateFont = options.plateFontBytes
     ? await pdf.embedFont(options.plateFontBytes, { subset: true })
     : bold;
+  const embeddedIcons: Partial<Record<ReportIconName, PDFImage>> = {};
+  for (const name of REPORT_ICON_NAMES) {
+    const bytes = options.iconPngs?.[name];
+    if (bytes) embeddedIcons[name] = await pdf.embedPng(bytes);
+  }
   const { summary, details } = vehicle;
   const premium = options.premium;
-  const pageCount = paidReportNeedsFourthPage(premium, vehicle) ? 4 : 3;
   const generatedAt = options.generatedAt ?? new Date();
   const generatedDate = generatedAt.toLocaleDateString("en-GB");
   const reportId = `AVF-${summary.registration}-${generatedAt
@@ -257,13 +362,33 @@ export async function generateFullReportPdf(
 
   const page1 = pdf.addPage([PAGE_WIDTH, PAGE_HEIGHT]);
   wordmark(page1, bold, MARGIN, 797);
-  page1.drawText("CLEARER CARS. BRIGHTER DECISIONS.", {
+  const tagline = "CLEARER CARS. BRIGHTER DECISIONS.";
+  page1.drawText(tagline, {
     x: MARGIN,
     y: 785,
     size: 6.2,
     font: regular,
     color: MUTED,
   });
+  if (summary.isDemo) {
+    const demoX = MARGIN + regular.widthOfTextAtSize(tagline, 6.2) + 10;
+    page1.drawRectangle({
+      x: demoX,
+      y: 781,
+      width: 58,
+      height: 12,
+      color: rgb(0.93, 0.96, 1),
+      borderColor: BORDER,
+      borderWidth: 0.5,
+    });
+    page1.drawText("DEMO DATA", {
+      x: demoX + 8,
+      y: 784,
+      size: 6.5,
+      font: bold,
+      color: BLUE,
+    });
+  }
   const title = "Full Vehicle Report";
   page1.drawText(title, {
     x: PAGE_WIDTH - MARGIN - bold.widthOfTextAtSize(title, 15),
@@ -288,404 +413,289 @@ export async function generateFullReportPdf(
     color: BLUE,
   });
 
+  if (options.imagePng) {
+    const image = await pdf.embedPng(options.imagePng);
+    const dimensions = image.scaleToFit(275.5, 142.5);
+    page1.drawImage(image, {
+      x: 552 - dimensions.width,
+      y: 594 + (150 - dimensions.height) / 2,
+      width: dimensions.width,
+      height: dimensions.height,
+    });
+  }
+
+  const vehicleTitle = [summary.year, summary.make, summary.model]
+    .filter(Boolean)
+    .join(" ");
+  const titleSize = 17;
+  page1.drawText(fitText(vehicleTitle, bold, titleSize, PAGE_WIDTH - MARGIN - 32), {
+    x: MARGIN + 12,
+    y: 732,
+    size: titleSize,
+    font: bold,
+    color: NAVY,
+  });
+
   const plateText = summary.displayRegistration;
-  const plateWidth = Math.max(150, plateFont.widthOfTextAtSize(plateText, 29) + 30);
-  drawRounded(page1, MARGIN + 12, 696, plateWidth, 38, BLACK, 5);
-  drawRounded(page1, MARGIN + 13.5, 697.5, plateWidth - 3, 35, YELLOW, 4);
+  const plateFontSize = 29;
+  const plateHeight = 38;
+  const plateWidth = Math.max(
+    150,
+    plateFont.widthOfTextAtSize(plateText, plateFontSize) + 30,
+  );
+  const plateX = MARGIN + 12;
+  const plateY = 675;
+  const plateTextWidth = plateFont.widthOfTextAtSize(plateText, plateFontSize);
+  const plateTextFullHeight = plateFont.heightAtSize(plateFontSize, {
+    descender: true,
+  });
+  drawRounded(page1, plateX, plateY, plateWidth, plateHeight, BLACK, 5);
+  drawRounded(
+    page1,
+    plateX + 1.5,
+    plateY + 1.5,
+    plateWidth - 3,
+    plateHeight - 3,
+    YELLOW,
+    4,
+  );
   page1.drawText(plateText, {
-    x: MARGIN + 12 + (plateWidth - plateFont.widthOfTextAtSize(plateText, 29)) / 2,
-    y: 706,
-    size: 29,
+    x: plateX + (plateWidth - plateTextWidth) / 2,
+    y: plateY + (plateHeight - plateTextFullHeight) / 2 + 6,
+    size: plateFontSize,
     font: plateFont,
     color: BLACK,
   });
-  const vehicleTitle = [summary.year, summary.make, summary.model].filter(Boolean).join(" ");
-  const titleLines = wrapText(vehicleTitle, bold, 16, 270).slice(0, 2);
-  titleLines.forEach((line, index) => {
-    page1.drawText(line, {
+
+  const vehicleMetadataY = 658;
+  const specsLineY = vehicleMetadataY - 4;
+  const specParts = [summary.colour, summary.fuelType, summary.transmission].filter(
+    Boolean,
+  ) as string[];
+  if (specParts.length === 0) {
+    page1.drawText("Specification not available", {
       x: MARGIN + 12,
-      y: 671 - index * 18,
-      size: 16,
-      font: bold,
-      color: NAVY,
+      y: specsLineY,
+      size: 11.2,
+      font: regular,
+      color: BLACK,
     });
-  });
-  const specY = titleLines.length > 1 ? 628 : 648;
-  const spec = [summary.colour, summary.fuelType, summary.transmission]
-    .filter(Boolean)
-    .join("  |  ");
-  page1.drawText(spec || "Specification not available", {
-    x: MARGIN + 12,
-    y: specY,
-    size: 11.2,
-    font: regular,
-    color: BLACK,
-  });
+  } else {
+    let specX = MARGIN + 12;
+    specParts.forEach((part, index) => {
+      if (index > 0) {
+        const divider = "  |  ";
+        page1.drawText(divider, {
+          x: specX,
+          y: specsLineY,
+          size: 11.2,
+          font: regular,
+          color: MUTED,
+        });
+        specX += regular.widthOfTextAtSize(divider, 11.2);
+      }
+      page1.drawText(part, {
+        x: specX,
+        y: specsLineY,
+        size: 11.2,
+        font: regular,
+        color: BLACK,
+      });
+      specX += regular.widthOfTextAtSize(part, 11.2);
+    });
+  }
   page1.drawText("First registered", {
     x: MARGIN + 12,
-    y: specY - 22,
+    y: vehicleMetadataY - 22,
     size: 8.5,
     font: regular,
     color: MUTED,
   });
   page1.drawText(formatDate(details.monthOfFirstRegistration), {
     x: MARGIN + 12,
-    y: specY - 39,
+    y: vehicleMetadataY - 39,
     size: 12,
     font: bold,
     color: BLACK,
   });
-  if (options.imagePng) {
-    const image = await pdf.embedPng(options.imagePng);
-    const dimensions = image.scaleToFit(275.5, 142.5);
-    page1.drawImage(image, {
-      x: 552 - dimensions.width,
-      y: 603 + (150 - dimensions.height) / 2,
-      width: dimensions.width,
-      height: dimensions.height,
-    });
-  }
 
   const warning =
     premium.finance.status !== "CLEAR" ||
     premium.writeOff.status !== "NO RECORD" ||
     premium.stolen.status !== "NO RECORD" ||
     vehicle.recalls.hasOpenRecalls ||
-    vehicle.motTests.some((test) => test.testResult === "FAIL");
-  drawSection(page1, MARGIN, 530, CONTENT_WIDTH, 58, warning ? AMBER_BG : GREEN_BG);
-  page1.drawText("Vehicle history summary", {
-    x: MARGIN + 16,
-    y: 568,
-    size: 9,
-    font: regular,
-    color: MUTED,
-  });
+    vehicle.motTests.some((test) => test.testResult === "FAIL") ||
+    premium.mileageConsistency.status === "Needs review";
+  const summaryY = 543;
+  const summaryIconSize = 30.8;
+  drawSection(page1, MARGIN, summaryY, CONTENT_WIDTH, 52, warning ? AMBER_BG : GREEN_BG);
   page1.drawText(
-    warning
-      ? "Items require attention"
-      : "No major premium-history issues found",
+    `Summary: ${warning ? "Items require attention" : "No major premium-history issues found"}`,
     {
-      x: MARGIN + 16,
-      y: 548,
-      size: 14,
+      x: 88,
+      y: textY(569, 13) + 5,
+      size: 13,
       font: bold,
       color: warning ? NAVY : GREEN,
     },
   );
-
-  const facts = [
-    ["Finance", premium.finance.status === "CLEAR" ? "Clear" : "Record found"],
-    ["Write-off", premium.writeOff.status === "NO RECORD" ? "No record" : premium.writeOff.status],
-    ["Stolen", premium.stolen.status === "NO RECORD" ? "No record" : "Record found"],
-    ["Previous keepers", String(premium.keepers.count)],
-    ["Keeper changes", String(Math.max(0, premium.keepers.timeline.length - 1))],
-    ["Recalls", vehicle.recalls.hasOpenRecalls ? `${vehicle.recalls.count} open` : "None open"],
-    ["MOT", summary.motStatus.status],
-    ["Mileage consistency", premium.mileageConsistency.status],
-  ] as const;
-  const factRows = Math.ceil(facts.length / 2);
-  const factsHeight = 48 + factRows * 42 + 12;
-  const factsTop = 514;
-  const factsY = factsTop - factsHeight;
-  drawSection(page1, MARGIN, factsY, CONTENT_WIDTH, factsHeight);
-  page1.drawText("Premium checks", {
-    x: MARGIN + 14,
-    y: factsTop - 22,
-    size: 13,
-    font: bold,
-    color: NAVY,
-  });
-  facts.forEach(([label, value], index) => {
-    const column = index % 2;
-    const row = Math.floor(index / 2);
-    const x = MARGIN + 16 + column * (CONTENT_WIDTH / 2);
-    const y = factsTop - 62 - row * 42;
-    const tone = statusTone(value);
-    drawRounded(page1, x, y - 8, CONTENT_WIDTH / 2 - 28, 34, tone.fill, 5);
-    page1.drawText(label, {
-      x: x + 10,
-      y: y + 12,
-      size: 8,
+  const hasSummaryIcon = drawEmbeddedIcon(
+    page1,
+    embeddedIcons,
+    warning ? "warning" : "check",
+    50,
+    summaryY + 52 / 2 - summaryIconSize / 2,
+    summaryIconSize,
+  );
+  if (!hasSummaryIcon) {
+    page1.drawCircle({
+      x: 65,
+      y: 569,
+      size: 15.4,
+      color: warning ? AMBER : GREEN,
+    });
+  }
+  page1.drawText(
+    fitText(
+      warning
+        ? "Review premium checks, recalls and history details below."
+        : "Based on the premium and vehicle history data shown in this report.",
+      regular,
+      8.3,
+      430,
+    ),
+    {
+      x: 88,
+      y: textY(569, 8.3) - 8,
+      size: 8.3,
       font: regular,
       color: MUTED,
-    });
-    page1.drawText(value, {
-      x: x + 10,
-      y: y - 2,
-      size: 11,
-      font: bold,
-      color: tone.color,
-    });
-  });
+    },
+  );
+
   const contents = [
-    ["Page 1", "Premium overview"],
-    ["Page 2", "MOT and specification"],
-    [pageCount === 4 ? "Pages 3-4" : "Page 3", "History and risk checks"],
+    ["Overview", "Premium summary"],
+    ["Technical", "MOT, mileage, advisories"],
+    ["History", "Finance, keepers, recalls"],
   ] as const;
+  const contentsHeaderHeight = 26;
   const contentsHeight = 70;
-  const contentsTop = factsY - 16;
-  drawSection(page1, MARGIN, contentsTop - contentsHeight, CONTENT_WIDTH, contentsHeight);
+  const contentsTop = 530;
+  const contentsY = contentsTop - contentsHeight;
+  drawSection(
+    page1,
+    MARGIN,
+    contentsY,
+    CONTENT_WIDTH,
+    contentsHeight,
+    WHITE,
+    contentsHeaderHeight,
+  );
   page1.drawText("In this full report", {
     x: MARGIN + 14,
-    y: contentsTop - 22,
-    size: 11,
+    y: headerTitleY(contentsY, contentsHeight, contentsHeaderHeight, 12),
+    size: 12,
     font: bold,
     color: NAVY,
   });
+  const contentsBodyCenter = contentsY + (contentsHeight - contentsHeaderHeight) / 2;
   contents.forEach(([label, detail], index) => {
     const x = MARGIN + 14 + index * (CONTENT_WIDTH / 3);
     page1.drawText(label, {
       x,
-      y: contentsTop - 42,
+      y: textY(contentsBodyCenter + 8, 9),
       size: 9,
       font: bold,
       color: BLUE,
     });
     page1.drawText(detail, {
       x,
-      y: contentsTop - 56,
+      y: textY(contentsBodyCenter - 8, 8),
       size: 8,
       font: regular,
       color: MUTED,
     });
   });
-  footer(page1, regular, bold, 1, pageCount);
 
-  const page2 = pdf.addPage([PAGE_WIDTH, PAGE_HEIGHT]);
-  wordmark(page2, bold, MARGIN, 797);
-  page2.drawText("Technical Evidence", {
-    x: PAGE_WIDTH - MARGIN - bold.widthOfTextAtSize("Technical Evidence", 13),
-    y: 800,
-    size: 13,
-    font: bold,
-    color: NAVY,
-  });
-  page2.drawLine({
-    start: { x: MARGIN, y: 765 },
-    end: { x: PAGE_WIDTH - MARGIN, y: 765 },
-    thickness: 1.4,
-    color: BLUE,
-  });
-  const motSlice = motRowsForPaidPdf(vehicle.motTests);
-  const motRows = motSlice.shown;
-  const motTop = 740;
-  const motHeaderHeight = 26;
-  const motColH = 22;
-  const motRowH = 22;
-  const motNoteH = motSlice.note ? 14 : 0;
-  const motBottom =
-    motTop -
-    motHeaderHeight -
-    motColH -
-    Math.max(1, motRows.length) * motRowH -
-    motNoteH;
-  drawSection(page2, MARGIN, motBottom, CONTENT_WIDTH, motTop - motBottom, WHITE, motHeaderHeight);
-  page2.drawText("MOT history", {
+  const facts: Array<[string, string, ReportIconName]> = [
+    [
+      "Finance",
+      premium.finance.status === "CLEAR" ? "Clear" : "Record found",
+      "pound",
+    ],
+    [
+      "Write-off",
+      premium.writeOff.status === "NO RECORD" ? "No record" : premium.writeOff.status,
+      "warning",
+    ],
+    [
+      "Stolen",
+      premium.stolen.status === "NO RECORD" ? "No record" : "Record found",
+      "shield-check",
+    ],
+    ["Previous keepers", String(premium.keepers.count), "user"],
+    [
+      "Keeper changes",
+      String(Math.max(0, premium.keepers.timeline.length - 1)),
+      "history",
+    ],
+    [
+      "Recalls",
+      vehicle.recalls.hasOpenRecalls ? `${vehicle.recalls.count} open` : "None open",
+      "clipboard",
+    ],
+    ["MOT", summary.motStatus.status, "shield-check"],
+    ["Mileage consistency", premium.mileageConsistency.status, "mileage"],
+  ];
+  const factsHeaderHeight = 26;
+  const factsRowHeight = 28;
+  const factsHeight = factsHeaderHeight + Math.ceil(facts.length / 2) * factsRowHeight;
+  const factsTop = contentsY - 12;
+  const factsY = factsTop - factsHeight;
+  drawSection(page1, MARGIN, factsY, CONTENT_WIDTH, factsHeight, WHITE, factsHeaderHeight);
+  page1.drawText("Premium checks", {
     x: 48,
-    y: motTop - 17,
+    y: headerTitleY(factsY, factsHeight, factsHeaderHeight, 12.5),
     size: 12.5,
     font: bold,
     color: NAVY,
   });
-  const motCols = [
-    { title: "DATE", x: 51 },
-    { title: "RESULT", x: 140 },
-    { title: "MILEAGE", x: 205 },
-    { title: "NOTES", x: 305 },
-  ];
-  const motColY = motTop - motHeaderHeight - motColH;
-  page2.drawRectangle({
-    x: MARGIN,
-    y: motColY,
-    width: CONTENT_WIDTH,
-    height: motColH,
-    color: SOFT,
-  });
-  motCols.forEach((column) => {
-    page2.drawText(column.title, {
-      x: column.x,
-      y: textY(motColY + motColH / 2, 8),
-      size: 8,
-      font: bold,
-      color: MUTED,
-    });
-  });
-  motRows.forEach((test, index) => {
-    const y = motColY - (index + 0.5) * motRowH;
-    if (index > 0) {
-      page2.drawLine({
-        start: { x: MARGIN, y: motColY - index * motRowH },
-        end: { x: PAGE_WIDTH - MARGIN, y: motColY - index * motRowH },
-        thickness: 0.5,
-        color: INNER_LINE,
-      });
+  const factColumnWidth = CONTENT_WIDTH / 2;
+  const factsContentTop = factsY + factsHeight - factsHeaderHeight;
+  facts.forEach(([label, value, icon], index) => {
+    const column = index % 2;
+    const row = Math.floor(index / 2);
+    const baseX = MARGIN + column * factColumnWidth;
+    const centerY = rowCenterY(factsContentTop, row, factsRowHeight);
+    if (column === 0 && row === 0) {
+      drawInnerVLine(page1, MARGIN + factColumnWidth, factsY, factsHeight - factsHeaderHeight);
     }
-    page2.drawText(formatDate(test.completedDate), {
-      x: 51,
-      y: textY(y, 9),
-      size: 9,
-      font: regular,
-      color: NAVY,
-    });
-    page2.drawText(test.testResult, {
-      x: 140,
-      y: textY(y, 9),
-      size: 9,
-      font: bold,
-      color:
-        test.testResult === "PASS"
-          ? GREEN
-          : test.testResult === "FAIL"
-            ? RED
-            : AMBER,
-    });
-    page2.drawText(
-      test.odometerValue != null
-        ? `${test.odometerValue.toLocaleString("en-GB")} mi`
-        : "Not available",
-      {
-        x: 205,
-        y: textY(y, 9),
-        size: 9,
-        font: bold,
-        color: NAVY,
-      },
-    );
-    page2.drawText(
-      fitText(
-        test.defects.length > 0
-          ? `${test.defects.length} advisory / defect item${test.defects.length === 1 ? "" : "s"}`
-          : "No advisories recorded",
-        regular,
-        8.8,
-        230,
-      ),
-      {
-        x: 305,
-        y: textY(y, 8.8),
-        size: 8.8,
-        font: regular,
-        color: MUTED,
-      },
-    );
-  });
-  if (motSlice.note) {
-    page2.drawText(motSlice.note, {
-      x: 51,
-      y: motBottom + 5,
-      size: 7.5,
+    if (column === 0 && row > 0) {
+      drawInnerHLine(
+        page1,
+        MARGIN,
+        factsContentTop - row * factsRowHeight,
+        CONTENT_WIDTH,
+      );
+    }
+    drawEmbeddedIcon(page1, embeddedIcons, icon, baseX + 11, rowIconY(centerY, 14), 14);
+    page1.drawText(label, {
+      x: baseX + 34,
+      y: textY(centerY, 8.6),
+      size: 8.6,
       font: regular,
       color: MUTED,
     });
-  }
+    const tone = statusTone(value);
+    page1.drawText(fitText(value, bold, 9.2, 92), {
+      x: baseX + factColumnWidth - 105,
+      y: textY(centerY, 9.2),
+      size: 9.2,
+      font: bold,
+      color: tone.color,
+    });
+  });
 
-  const mileageSlice = mileageRowsForPdf(
-    [...vehicle.mileageHistory].sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
-    ),
-    PAID_MILEAGE_LIMIT,
-  );
-  const advisoryItems: Array<{ date: string; type: string; text: string }> =
-    collectAdvisories(vehicle).map((item) => ({
-      date: item.date,
-      type: item.type,
-      text: item.text,
-    }));
-  const advisorySlice = advisoryRowsForPdf(
-    advisoryItems.length > 0
-      ? advisoryItems
-      : [
-          {
-            date: "",
-            type: "No advisories recorded",
-            text: "No MOT advisories are shown in the available history.",
-          },
-        ],
-    PAID_ADVISORY_LIMIT,
-  );
-  const detailTop = motBottom - 14;
-  const halfWidth = (CONTENT_WIDTH - 12) / 2;
-  const mileageHeight =
-    48 + Math.max(1, mileageSlice.shown.length) * 22 + (mileageSlice.note ? 14 : 0);
-  const notesHeight =
-    26 + Math.max(1, advisorySlice.shown.length) * 28 + (advisorySlice.note ? 14 : 0);
-  drawSection(page2, MARGIN, detailTop - mileageHeight, halfWidth, mileageHeight, WHITE, 26);
-  page2.drawText("Mileage history", {
-    x: 48,
-    y: detailTop - 17,
-    size: 12,
-    font: bold,
-    color: NAVY,
-  });
-  mileageSlice.shown.forEach((point, index) => {
-    const y = detailTop - 48 - index * 22;
-    page2.drawText(formatDate(point.date), {
-      x: 51,
-      y: textY(y, 9),
-      size: 9,
-      font: regular,
-      color: NAVY,
-    });
-    page2.drawText(`${point.mileage.toLocaleString("en-GB")} mi`, {
-      x: MARGIN + 130,
-      y: textY(y, 9),
-      size: 9,
-      font: bold,
-      color: NAVY,
-    });
-  });
-  if (mileageSlice.note) {
-    page2.drawText(mileageSlice.note, {
-      x: 51,
-      y: detailTop - mileageHeight + 5,
-      size: 7.2,
-      font: regular,
-      color: MUTED,
-    });
-  }
-  const specX = MARGIN + halfWidth + 12;
-  drawSection(
-    page2,
-    specX,
-    detailTop - notesHeight,
-    halfWidth,
-    notesHeight,
-    AMBER_BG,
-    26,
-    rgb(1, 0.96, 0.84),
-  );
-  page2.drawText("Advisories / Notes", {
-    x: specX + 12,
-    y: detailTop - 17,
-    size: 12,
-    font: bold,
-    color: NAVY,
-  });
-  advisorySlice.shown.forEach((item, index) => {
-    const y = detailTop - 48 - index * 28;
-    page2.drawText(fitText(item.type, bold, 8.4, halfWidth - 28), {
-      x: specX + 12,
-      y: y + 4,
-      size: 8.4,
-      font: bold,
-      color: NAVY,
-    });
-    page2.drawText(
-      fitText(
-        item.date ? `${item.text} - ${formatDate(item.date)}` : item.text,
-        regular,
-        7.3,
-        halfWidth - 28,
-      ),
-      {
-        x: specX + 12,
-        y: y - 8,
-        size: 7.3,
-        font: regular,
-        color: MUTED,
-      },
-    );
-  });
   const specs = [
     ["Colour", details.colour],
     [
@@ -696,265 +706,927 @@ export async function generateFullReportPdf(
     ],
     ["Fuel", details.fuelType],
     ["Transmission", details.transmission],
+    ["Power", summary.powerBhp != null ? `${summary.powerBhp} bhp` : null],
     ["CO2", details.co2Emissions != null ? `${details.co2Emissions} g/km` : null],
     ["Euro status", details.euroStatus],
     ["First registered", formatDate(details.monthOfFirstRegistration)],
     ["Tax status", summary.tax.status],
+    ["MOT status", summary.motStatus.status],
+    ["MOT expiry", formatDate(summary.motStatus.expiryDate)],
+    [
+      "Current mileage",
+      summary.latestMileage != null
+        ? `${summary.latestMileage.toLocaleString("en-GB")} miles`
+        : null,
+    ],
   ].filter(
     (item): item is [string, string] =>
       typeof item[1] === "string" && item[1] !== "Not available",
   );
-  const specTop = detailTop - Math.max(mileageHeight, notesHeight) - 14;
-  const specRows = Math.ceil(Math.min(specs.length, PAID_SPEC_LIMIT) / 2);
-  const specHeight = 26 + specRows * 24;
-  drawSection(page2, MARGIN, specTop - specHeight, CONTENT_WIDTH, specHeight, WHITE, 26);
-  page2.drawText("Vehicle specification", {
+  const specHeaderHeight = 26;
+  const specRowHeight = 26;
+  const specificationRows = Math.ceil(Math.min(specs.length, PAID_SPEC_LIMIT) / 2);
+  const specHeight = specHeaderHeight + Math.max(1, specificationRows) * specRowHeight;
+  const specTop = factsY - 12;
+  const specBottom = specTop - specHeight;
+  drawSection(page1, MARGIN, specBottom, CONTENT_WIDTH, specHeight, WHITE, specHeaderHeight);
+  page1.drawText("Vehicle specification", {
     x: MARGIN + 12,
-    y: specTop - 17,
+    y: headerTitleY(specBottom, specHeight, specHeaderHeight, 12),
     size: 12,
     font: bold,
     color: NAVY,
   });
+  const specColumnWidth = CONTENT_WIDTH / 2;
+  const specContentTop = specTop - specHeaderHeight;
   specs.slice(0, PAID_SPEC_LIMIT).forEach(([label, value], index) => {
     const column = index % 2;
     const row = Math.floor(index / 2);
-    page2.drawText(label, {
-      x: MARGIN + 12 + column * (CONTENT_WIDTH / 2),
-      y: specTop - 48 - row * 24,
+    const baseX = MARGIN + column * specColumnWidth;
+    const centerY = rowCenterY(specContentTop, row, specRowHeight);
+    if (column === 0 && row === 0) {
+      drawInnerVLine(
+        page1,
+        MARGIN + specColumnWidth,
+        specBottom,
+        specHeight - specHeaderHeight,
+      );
+    }
+    if (column === 0 && row > 0) {
+      drawInnerHLine(
+        page1,
+        MARGIN,
+        specContentTop - row * specRowHeight,
+        CONTENT_WIDTH,
+      );
+    }
+    page1.drawText(label, {
+      x: baseX + 12,
+      y: textY(centerY, 8.4),
       size: 8.4,
       font: regular,
       color: MUTED,
     });
-    page2.drawText(fitText(value, bold, 8.8, 120), {
-      x: MARGIN + 110 + column * (CONTENT_WIDTH / 2),
-      y: specTop - 48 - row * 24,
-      size: 8.8,
+    page1.drawText(fitText(value, bold, 8.9, 105), {
+      x: baseX + 105,
+      y: textY(centerY, 8.9),
+      size: 8.9,
       font: bold,
       color: NAVY,
     });
   });
-  footer(page2, regular, bold, 2, pageCount);
+  // Footers are applied after all pages are known.
+  const allPages: PDFPage[] = [page1];
 
-  const page3 = pdf.addPage([PAGE_WIDTH, PAGE_HEIGHT]);
-  wordmark(page3, bold, MARGIN, 797);
-  page3.drawText("Premium history details", {
-    x: PAGE_WIDTH - MARGIN - bold.widthOfTextAtSize("Premium history details", 13),
-    y: 800,
-    size: 13,
-    font: bold,
-    color: NAVY,
-  });
-  page3.drawLine({
-    start: { x: MARGIN, y: 765 },
-    end: { x: PAGE_WIDTH - MARGIN, y: 765 },
-    thickness: 1.4,
-    color: BLUE,
-  });
+  const FLOW_TOP = 740;
+  const FLOW_BOTTOM = 56;
+  const FLOW_GAP = 14;
+  const vehicleLabel = `${summary.year ?? ""} ${summary.make} ${summary.model}`.trim();
 
-  const checks = [
-    ["Finance check", premium.finance.status, premium.finance.detail],
+  type Flow = {
+    page: PDFPage;
+    y: number;
+  };
+
+  const startContentPage = (heading: string, subheading: string): Flow => {
+    const page = pdf.addPage([PAGE_WIDTH, PAGE_HEIGHT]);
+    allPages.push(page);
+    wordmark(page, bold, MARGIN, 797);
+    page.drawText("CLEARER CARS. BRIGHTER DECISIONS.", {
+      x: MARGIN,
+      y: 785,
+      size: 6.2,
+      font: regular,
+      color: MUTED,
+    });
+    page.drawText(heading, {
+      x: PAGE_WIDTH - MARGIN - bold.widthOfTextAtSize(heading, 13),
+      y: 800,
+      size: 13,
+      font: bold,
+      color: NAVY,
+    });
+    const meta = `${summary.displayRegistration}  |  Page ${allPages.length}`;
+    page.drawText(meta, {
+      x: PAGE_WIDTH - MARGIN - regular.widthOfTextAtSize(meta, 7.5),
+      y: 783,
+      size: 7.5,
+      font: regular,
+      color: MUTED,
+    });
+    page.drawLine({
+      start: { x: MARGIN, y: 765 },
+      end: { x: PAGE_WIDTH - MARGIN, y: 765 },
+      thickness: 1.4,
+      color: BLUE,
+    });
+    page.drawText(subheading, {
+      x: MARGIN,
+      y: 740,
+      size: 17.5,
+      font: bold,
+      color: NAVY,
+    });
+    page.drawRectangle({
+      x: PAGE_WIDTH - MARGIN - 132,
+      y: 726,
+      width: 132,
+      height: 32,
+      color: SOFT,
+    });
+    page.drawText(summary.displayRegistration, {
+      x: PAGE_WIDTH - MARGIN - 122,
+      y: 744,
+      size: 10,
+      font: bold,
+      color: NAVY,
+    });
+    page.drawText(fitText(vehicleLabel, regular, 6.8, 112), {
+      x: PAGE_WIDTH - MARGIN - 122,
+      y: 733,
+      size: 6.8,
+      font: regular,
+      color: MUTED,
+    });
+    return { page, y: 715 };
+  };
+
+  const ensureSpace = (flow: Flow, needed: number, heading: string, subheading: string) => {
+    if (flow.y - needed >= FLOW_BOTTOM) return;
+    const next = startContentPage(heading, `${subheading} (continued)`);
+    flow.page = next.page;
+    flow.y = next.y;
+  };
+
+  // --- Technical evidence: MOT, mileage, advisories (all rows) ---
+  let flow = startContentPage("Technical Evidence", "MOT History & Advisories");
+
+  const motSlice = motRowsForPaidPdf(vehicle.motTests);
+  const motRows = motSlice.shown;
+  const motHeaderHeight = 26;
+  const motColHeaderHeight = 22;
+  const motRowHeight = 24;
+  const motColumns = [
+    { title: "Date", x: 51, width: 84 },
+    { title: "Result", x: 140, width: 60 },
+    { title: "Mileage", x: 205, width: 95 },
+    { title: "Notes", x: 305, width: 238 },
+  ];
+
+  const drawMotChunk = (
+    flowState: Flow,
+    chunk: typeof motRows,
+    title: string,
+  ) => {
+    const panelTop = flowState.y;
+    const panelHeight =
+      motHeaderHeight +
+      motColHeaderHeight +
+      Math.max(1, chunk.length) * motRowHeight;
+    const panelBottom = panelTop - panelHeight;
+    drawSection(
+      flowState.page,
+      MARGIN,
+      panelBottom,
+      CONTENT_WIDTH,
+      panelHeight,
+      WHITE,
+      motHeaderHeight,
+    );
+    flowState.page.drawText(title, {
+      x: 48,
+      y: headerTitleY(panelBottom, panelHeight, motHeaderHeight, 12.5),
+      size: 12.5,
+      font: bold,
+      color: NAVY,
+    });
+    const motColHeaderY = panelTop - motHeaderHeight - motColHeaderHeight;
+    const motInset = 0.8;
+    flowState.page.drawRectangle({
+      x: MARGIN + motInset,
+      y: motColHeaderY,
+      width: CONTENT_WIDTH - motInset * 2,
+      height: motColHeaderHeight,
+      color: SOFT,
+    });
+    drawInnerHLine(
+      flowState.page,
+      MARGIN + motInset,
+      motColHeaderY,
+      CONTENT_WIDTH - motInset * 2,
+    );
+    const motColHeaderCenter = motColHeaderY + motColHeaderHeight / 2;
+    motColumns.forEach((column) => {
+      flowState.page.drawText(column.title.toUpperCase(), {
+        x: column.x,
+        y: textY(motColHeaderCenter, 8),
+        size: 8,
+        font: bold,
+        color: MUTED,
+      });
+    });
+    const motBodyHeight = motColHeaderY + motColHeaderHeight - panelBottom;
+    drawInnerVLine(
+      flowState.page,
+      MARGIN + motInset,
+      panelBottom + motInset,
+      motBodyHeight - motInset,
+    );
+    drawInnerVLine(
+      flowState.page,
+      MARGIN + CONTENT_WIDTH - motInset,
+      panelBottom + motInset,
+      motBodyHeight - motInset,
+    );
+    for (const x of [135, 200, 300]) {
+      drawInnerVLine(
+        flowState.page,
+        x,
+        panelBottom + motInset,
+        motBodyHeight - motInset,
+      );
+    }
+    if (chunk.length === 0) {
+      flowState.page.drawText("MOT history is not available from the connected source.", {
+        x: 51,
+        y: textY(rowCenterY(motColHeaderY, 0, motRowHeight), 9),
+        size: 9,
+        font: regular,
+        color: MUTED,
+      });
+    } else {
+      chunk.forEach((test, index) => {
+        const centerY = rowCenterY(motColHeaderY, index, motRowHeight);
+        if (index > 0) {
+          drawInnerHLine(
+            flowState.page,
+            MARGIN + motInset,
+            motColHeaderY - index * motRowHeight,
+            CONTENT_WIDTH - motInset * 2,
+          );
+        }
+        flowState.page.drawText(formatDate(test.completedDate), {
+          x: motColumns[0].x,
+          y: textY(centerY, 9.4),
+          size: 9.4,
+          font: regular,
+          color: NAVY,
+        });
+        flowState.page.drawText(test.testResult, {
+          x: motColumns[1].x,
+          y: textY(centerY, 9.4),
+          size: 9.4,
+          font: bold,
+          color:
+            test.testResult === "PASS"
+              ? GREEN
+              : test.testResult === "FAIL"
+                ? RED
+                : AMBER,
+        });
+        flowState.page.drawText(
+          test.odometerValue != null
+            ? `${test.odometerValue.toLocaleString("en-GB")} mi`
+            : "Not available",
+          {
+            x: motColumns[2].x,
+            y: textY(centerY, 9.4),
+            size: 9.4,
+            font: bold,
+            color: NAVY,
+          },
+        );
+        const note =
+          test.defects.length > 0
+            ? `${test.defects.length} advisory / defect item${test.defects.length === 1 ? "" : "s"}`
+            : "No advisories recorded";
+        flowState.page.drawText(fitText(note, regular, 9.1, motColumns[3].width), {
+          x: motColumns[3].x,
+          y: textY(centerY, 9.1),
+          size: 9.1,
+          font: regular,
+          color: MUTED,
+        });
+      });
+    }
+    flowState.y = panelBottom - FLOW_GAP;
+  };
+
+  {
+    let remaining = [...motRows];
+    let first = true;
+    if (remaining.length === 0) {
+      ensureSpace(
+        flow,
+        motHeaderHeight + motColHeaderHeight + motRowHeight,
+        "Technical Evidence",
+        "MOT History",
+      );
+      drawMotChunk(flow, [], "MOT history");
+    }
+    while (remaining.length > 0) {
+      const headerBlock = motHeaderHeight + motColHeaderHeight;
+      const available = flow.y - FLOW_BOTTOM - headerBlock;
+      const maxRows = Math.max(1, Math.floor(available / motRowHeight));
+      if (flow.y - (headerBlock + Math.min(maxRows, remaining.length) * motRowHeight) < FLOW_BOTTOM) {
+        ensureSpace(
+          flow,
+          headerBlock + motRowHeight,
+          "Technical Evidence",
+          "MOT History",
+        );
+      }
+      const availAfterEnsure = flow.y - FLOW_BOTTOM - headerBlock;
+      const rowsThisPage = Math.max(
+        1,
+        Math.min(remaining.length, Math.floor(availAfterEnsure / motRowHeight)),
+      );
+      const chunk = remaining.slice(0, rowsThisPage);
+      remaining = remaining.slice(rowsThisPage);
+      drawMotChunk(flow, chunk, first ? "MOT history" : "MOT history (continued)");
+      first = false;
+    }
+  }
+
+  const mileageRows = mileageRowsForPdf(
+    [...vehicle.mileageHistory].sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+    ),
+    PAID_MILEAGE_LIMIT,
+  ).shown;
+  const advisoryItems =
+    collectAdvisories(vehicle).length > 0
+      ? collectAdvisories(vehicle).map((item) => ({
+          date: item.date,
+          type: item.type,
+          text: item.text,
+        }))
+      : [
+          {
+            date: "",
+            type: "No advisories recorded",
+            text: "No MOT advisories are shown in the available history.",
+          },
+        ];
+  const advisoryRows = advisoryRowsForPdf(advisoryItems, PAID_ADVISORY_LIMIT).shown;
+
+  const mileageHeaderHeight = 26;
+  const mileageColHeaderHeight = 22;
+  const mileageRowHeight = 24;
+
+  const drawMileageChunk = (
+    flowState: Flow,
+    chunk: typeof mileageRows,
+    title: string,
+  ) => {
+    const panelTop = flowState.y;
+    const panelHeight =
+      mileageHeaderHeight +
+      mileageColHeaderHeight +
+      Math.max(1, chunk.length) * mileageRowHeight;
+    const panelBottom = panelTop - panelHeight;
+    drawSection(
+      flowState.page,
+      MARGIN,
+      panelBottom,
+      CONTENT_WIDTH,
+      panelHeight,
+      WHITE,
+      mileageHeaderHeight,
+    );
+    flowState.page.drawText(title, {
+      x: 48,
+      y: headerTitleY(panelBottom, panelHeight, mileageHeaderHeight, 12.5),
+      size: 12.5,
+      font: bold,
+      color: NAVY,
+    });
+    const mileageColY = panelTop - mileageHeaderHeight - mileageColHeaderHeight;
+    const mileageInset = 0.8;
+    const mileageSplitX = MARGIN + CONTENT_WIDTH / 2;
+    flowState.page.drawRectangle({
+      x: MARGIN + mileageInset,
+      y: mileageColY,
+      width: CONTENT_WIDTH - mileageInset * 2,
+      height: mileageColHeaderHeight,
+      color: SOFT,
+    });
+    drawInnerHLine(
+      flowState.page,
+      MARGIN + mileageInset,
+      mileageColY,
+      CONTENT_WIDTH - mileageInset * 2,
+    );
+    const bodyH = mileageColY + mileageColHeaderHeight - panelBottom;
+    drawInnerVLine(
+      flowState.page,
+      MARGIN + mileageInset,
+      panelBottom + mileageInset,
+      bodyH - mileageInset,
+    );
+    drawInnerVLine(
+      flowState.page,
+      mileageSplitX,
+      panelBottom + mileageInset,
+      bodyH - mileageInset,
+    );
+    drawInnerVLine(
+      flowState.page,
+      MARGIN + CONTENT_WIDTH - mileageInset,
+      panelBottom + mileageInset,
+      bodyH - mileageInset,
+    );
+    const colCenter = mileageColY + mileageColHeaderHeight / 2;
+    flowState.page.drawText("DATE", {
+      x: 51,
+      y: textY(colCenter, 8),
+      size: 8,
+      font: bold,
+      color: MUTED,
+    });
+    flowState.page.drawText("MILEAGE", {
+      x: mileageSplitX + 10,
+      y: textY(colCenter, 8),
+      size: 8,
+      font: bold,
+      color: MUTED,
+    });
+    if (chunk.length === 0) {
+      flowState.page.drawText("Mileage history is not available.", {
+        x: 51,
+        y: textY(rowCenterY(mileageColY, 0, mileageRowHeight), 9.4),
+        size: 9.4,
+        font: regular,
+        color: MUTED,
+      });
+    } else {
+      chunk.forEach((point, index) => {
+        const centerY = rowCenterY(mileageColY, index, mileageRowHeight);
+        if (index > 0) {
+          drawInnerHLine(
+            flowState.page,
+            MARGIN + mileageInset,
+            mileageColY - index * mileageRowHeight,
+            CONTENT_WIDTH - mileageInset * 2,
+          );
+        }
+        flowState.page.drawText(formatDate(point.date), {
+          x: 51,
+          y: textY(centerY, 9.4),
+          size: 9.4,
+          font: regular,
+          color: NAVY,
+        });
+        flowState.page.drawText(`${point.mileage.toLocaleString("en-GB")} mi`, {
+          x: mileageSplitX + 10,
+          y: textY(centerY, 9.4),
+          size: 9.4,
+          font: bold,
+          color: NAVY,
+        });
+      });
+    }
+    flowState.y = panelBottom - FLOW_GAP;
+  };
+
+  {
+    let remaining = [...mileageRows];
+    let first = true;
+    while (remaining.length > 0 || first) {
+      const headerBlock = mileageHeaderHeight + mileageColHeaderHeight;
+      if (remaining.length === 0 && first) {
+        ensureSpace(
+          flow,
+          headerBlock + mileageRowHeight,
+          "Technical Evidence",
+          "Mileage history",
+        );
+        drawMileageChunk(flow, [], "Mileage history");
+        break;
+      }
+      const avail = flow.y - FLOW_BOTTOM - headerBlock;
+      let rowsThisPage = Math.max(1, Math.floor(avail / mileageRowHeight));
+      if (flow.y - (headerBlock + Math.min(rowsThisPage, remaining.length) * mileageRowHeight) < FLOW_BOTTOM) {
+        ensureSpace(
+          flow,
+          headerBlock + mileageRowHeight,
+          "Technical Evidence",
+          "Mileage history",
+        );
+        rowsThisPage = Math.max(
+          1,
+          Math.floor((flow.y - FLOW_BOTTOM - headerBlock) / mileageRowHeight),
+        );
+      }
+      rowsThisPage = Math.min(rowsThisPage, remaining.length);
+      const chunk = remaining.slice(0, rowsThisPage);
+      remaining = remaining.slice(rowsThisPage);
+      drawMileageChunk(
+        flow,
+        chunk,
+        first ? "Mileage history" : "Mileage history (continued)",
+      );
+      first = false;
+      if (remaining.length === 0) break;
+    }
+  }
+
+  const advisoryHeaderHeight = 26;
+  const advisoryRowHeight = 30;
+
+  const drawAdvisoryChunk = (
+    flowState: Flow,
+    chunk: typeof advisoryRows,
+    title: string,
+  ) => {
+    const panelTop = flowState.y;
+    const panelHeight =
+      advisoryHeaderHeight + Math.max(1, chunk.length) * advisoryRowHeight;
+    const panelBottom = panelTop - panelHeight;
+    drawSection(
+      flowState.page,
+      MARGIN,
+      panelBottom,
+      CONTENT_WIDTH,
+      panelHeight,
+      AMBER_BG,
+      advisoryHeaderHeight,
+      rgb(1, 0.96, 0.84),
+    );
+    flowState.page.drawText(title, {
+      x: MARGIN + 32,
+      y: headerTitleY(panelBottom, panelHeight, advisoryHeaderHeight, 12),
+      size: 12,
+      font: bold,
+      color: NAVY,
+    });
+    drawEmbeddedIcon(
+      flowState.page,
+      embeddedIcons,
+      "warning",
+      MARGIN + 12,
+      headerIconY(panelBottom, panelHeight, advisoryHeaderHeight, 14),
+      14,
+    );
+    const contentTop = panelTop - advisoryHeaderHeight;
+    chunk.forEach((item, index) => {
+      const centerY = rowCenterY(contentTop, index, advisoryRowHeight);
+      if (index > 0) {
+        drawInnerHLine(
+          flowState.page,
+          MARGIN,
+          contentTop - index * advisoryRowHeight,
+          CONTENT_WIDTH,
+        );
+      }
+      drawEmbeddedIcon(
+        flowState.page,
+        embeddedIcons,
+        "warning",
+        MARGIN + 11,
+        rowIconY(centerY, 15),
+        15,
+      );
+      const typeColor =
+        item.type === "MAJOR" || item.type === "DANGEROUS" ? RED : AMBER;
+      flowState.page.drawText(fitText(item.type, bold, 8.4, CONTENT_WIDTH - 48), {
+        x: MARGIN + 30,
+        y: textY(centerY + 6, 8.4),
+        size: 8.4,
+        font: bold,
+        color: typeColor,
+      });
+      flowState.page.drawText(
+        fitText(
+          item.date ? `${item.text} - ${formatDate(item.date)}` : item.text,
+          regular,
+          7.3,
+          CONTENT_WIDTH - 48,
+        ),
+        {
+          x: MARGIN + 30,
+          y: textY(centerY - 7, 7.3),
+          size: 7.3,
+          font: regular,
+          color: MUTED,
+        },
+      );
+    });
+    flowState.y = panelBottom - FLOW_GAP;
+  };
+
+  {
+    let remaining = [...advisoryRows];
+    let first = true;
+    while (remaining.length > 0) {
+      const headerBlock = advisoryHeaderHeight;
+      if (flow.y - (headerBlock + advisoryRowHeight) < FLOW_BOTTOM) {
+        ensureSpace(
+          flow,
+          headerBlock + advisoryRowHeight,
+          "Technical Evidence",
+          "Advisories",
+        );
+      }
+      const rowsThisPage = Math.max(
+        1,
+        Math.min(
+          remaining.length,
+          Math.floor((flow.y - FLOW_BOTTOM - headerBlock) / advisoryRowHeight),
+        ),
+      );
+      const chunk = remaining.slice(0, rowsThisPage);
+      remaining = remaining.slice(rowsThisPage);
+      drawAdvisoryChunk(
+        flow,
+        chunk,
+        first ? "Advisories / Notes" : "Advisories / Notes (continued)",
+      );
+      first = false;
+    }
+  }
+
+  // --- Premium history: finance, write-off, stolen, mileage, keepers, recalls ---
+  flow = startContentPage("Premium history details", "History & risk checks");
+
+  const checks: Array<[string, string, string, ReportIconName]> = [
+    ["Finance check", premium.finance.status, premium.finance.detail, "pound"],
     [
       "Write-off history",
       premium.writeOff.status,
       premium.writeOff.date
         ? `${premium.writeOff.detail} Recorded: ${formatDate(premium.writeOff.date)}`
         : premium.writeOff.detail,
+      "warning",
     ],
-    ["Stolen vehicle check", premium.stolen.status, premium.stolen.detail],
+    ["Stolen vehicle check", premium.stolen.status, premium.stolen.detail, "shield-check"],
     [
       "Mileage consistency",
       premium.mileageConsistency.status,
       premium.mileageConsistency.detail,
+      "mileage",
     ],
-  ] as const;
-  checks.forEach((item, index) => {
-    const y = 680 - index * 78;
+  ];
+
+  for (const item of checks) {
+    const lines = wrapText(item[2], regular, 9, CONTENT_WIDTH - 28);
+    const cardHeight = 26 + Math.max(28, 16 + lines.length * 12);
+    ensureSpace(flow, cardHeight + FLOW_GAP, "Premium history details", "History & risk checks");
+    const y = flow.y - cardHeight;
     const tone = statusTone(item[1]);
-    drawSection(page3, MARGIN, y, CONTENT_WIDTH, 70, WHITE, 26, tone.fill);
-    page3.drawText(item[0], {
-      x: MARGIN + 14,
-      y: y + 48,
+    drawSection(flow.page, MARGIN, y, CONTENT_WIDTH, cardHeight, WHITE, 26, tone.fill);
+    drawEmbeddedIcon(
+      flow.page,
+      embeddedIcons,
+      item[3],
+      MARGIN + 12,
+      headerIconY(y, cardHeight, 26, 14),
+      14,
+    );
+    flow.page.drawText(item[0], {
+      x: MARGIN + 32,
+      y: headerTitleY(y, cardHeight, 26, 12),
       size: 12,
       font: bold,
       color: NAVY,
     });
-    page3.drawText(item[1], {
+    flow.page.drawText(item[1], {
       x: PAGE_WIDTH - MARGIN - 14 - bold.widthOfTextAtSize(item[1], 10),
-      y: y + 48,
+      y: headerTitleY(y, cardHeight, 26, 10),
       size: 10,
       font: bold,
       color: tone.color,
     });
-    wrapText(item[2], regular, 9, CONTENT_WIDTH - 28)
-      .slice(0, 2)
-      .forEach((line, lineIndex) => {
-        page3.drawText(line, {
+    lines.forEach((line, lineIndex) => {
+      flow.page.drawText(line, {
+        x: MARGIN + 14,
+        y: y + cardHeight - 26 - 16 - lineIndex * 12,
+        size: 9,
+        font: regular,
+        color: MUTED,
+      });
+    });
+    flow.y = y - FLOW_GAP;
+  }
+
+  const keeperEvents = premium.keepers.timeline;
+  const keeperRowHeight = 28;
+  const keeperHeaderHeight = 48;
+
+  {
+    let remaining = [...keeperEvents];
+    let first = true;
+    while (remaining.length > 0 || first) {
+      const minHeight = keeperHeaderHeight + keeperRowHeight;
+      ensureSpace(flow, minHeight, "Premium history details", "Previous keepers");
+      const rowsThisPage = Math.max(
+        1,
+        Math.min(
+          Math.max(remaining.length, 1),
+          Math.floor((flow.y - FLOW_BOTTOM - keeperHeaderHeight) / keeperRowHeight),
+        ),
+      );
+      const chunk =
+        remaining.length === 0 ? [] : remaining.slice(0, rowsThisPage);
+      if (remaining.length > 0) remaining = remaining.slice(rowsThisPage);
+      const panelHeight =
+        keeperHeaderHeight + Math.max(1, chunk.length) * keeperRowHeight;
+      const panelTop = flow.y;
+      const panelBottom = panelTop - panelHeight;
+      drawSection(
+        flow.page,
+        MARGIN,
+        panelBottom,
+        CONTENT_WIDTH,
+        panelHeight,
+        WHITE,
+        26,
+      );
+      drawEmbeddedIcon(
+        flow.page,
+        embeddedIcons,
+        "user",
+        MARGIN + 12,
+        headerIconY(panelBottom, panelHeight, 26, 14),
+        14,
+      );
+      flow.page.drawText(
+        first ? "Previous keepers" : "Previous keepers (continued)",
+        {
+          x: MARGIN + 32,
+          y: headerTitleY(panelBottom, panelHeight, 26, 12),
+          size: 12,
+          font: bold,
+          color: NAVY,
+        },
+      );
+      flow.page.drawText(`${premium.keepers.count} registered keepers`, {
+        x: MARGIN + 14,
+        y: panelTop - 40,
+        size: 9,
+        font: regular,
+        color: MUTED,
+      });
+      if (chunk.length === 0) {
+        flow.page.drawText("No keeper timeline available.", {
           x: MARGIN + 14,
-          y: y + 24 - lineIndex * 12,
+          y: textY(panelTop - keeperHeaderHeight - keeperRowHeight / 2, 9),
           size: 9,
           font: regular,
           color: MUTED,
         });
-      });
-  });
-
-  const keeperY = 330;
-  const keeperEvents = premium.keepers.timeline.slice(0, 5);
-  const keeperHeight = 70 + keeperEvents.length * 28;
-  const keeperBottom = keeperY - keeperHeight + 26;
-  drawSection(page3, MARGIN, keeperBottom, CONTENT_WIDTH / 2 - 6, keeperHeight);
-  page3.drawText("Previous keepers", {
-    x: MARGIN + 12,
-    y: keeperY + 6,
-    size: 12,
-    font: bold,
-    color: NAVY,
-  });
-  page3.drawText(`${premium.keepers.count} registered keepers`, {
-    x: MARGIN + 12,
-    y: keeperY - 18,
-    size: 9,
-    font: regular,
-    color: MUTED,
-  });
-  keeperEvents.forEach((event, index) => {
-    const y = keeperY - 46 - index * 28;
-    page3.drawText(event.year, {
-      x: MARGIN + 12,
-      y,
-      size: 10,
-      font: bold,
-      color: NAVY,
-    });
-    page3.drawText(event.label, {
-      x: MARGIN + 70,
-      y,
-      size: 9,
-      font: regular,
-      color: MUTED,
-    });
-  });
-
-  const recallX = MARGIN + CONTENT_WIDTH / 2 + 6;
-  const recallItems = vehicle.recalls.items.slice(0, 4);
-  const recallHeight = 52 + Math.max(1, recallItems.length) * 28;
-  drawSection(page3, recallX, keeperY - recallHeight + 26, CONTENT_WIDTH / 2 - 6, recallHeight);
-  page3.drawText("Recalls", {
-    x: recallX + 12,
-    y: keeperY + 6,
-    size: 12,
-    font: bold,
-    color: NAVY,
-  });
-  if (recallItems.length === 0) {
-    page3.drawText("No open manufacturer recalls in this sample.", {
-      x: recallX + 12,
-      y: keeperY - 24,
-      size: 8.5,
-      font: regular,
-      color: MUTED,
-    });
-  } else {
-    recallItems.forEach((item, index) => {
-      const y = keeperY - 28 - index * 28;
-      page3.drawText(fitText(item.title, bold, 8.4, CONTENT_WIDTH / 2 - 36), {
-        x: recallX + 12,
-        y,
-        size: 8.4,
-        font: bold,
-        color: NAVY,
-      });
-      page3.drawText(
-        [item.status ?? "Open", item.date ? formatDate(item.date) : null]
-          .filter(Boolean)
-          .join("  |  "),
-        {
-          x: recallX + 12,
-          y: y - 11,
-          size: 7.5,
-          font: regular,
-          color: MUTED,
-        },
-      );
-    });
+      } else {
+        chunk.forEach((event, index) => {
+          const centerY =
+            panelTop - keeperHeaderHeight - (index + 0.5) * keeperRowHeight;
+          if (index > 0) {
+            drawInnerHLine(
+              flow.page,
+              MARGIN,
+              panelTop - keeperHeaderHeight - index * keeperRowHeight,
+              CONTENT_WIDTH,
+            );
+          }
+          flow.page.drawText(event.year, {
+            x: MARGIN + 14,
+            y: textY(centerY, 10),
+            size: 10,
+            font: bold,
+            color: NAVY,
+          });
+          flow.page.drawText(fitText(event.label, regular, 9, CONTENT_WIDTH - 90), {
+            x: MARGIN + 70,
+            y: textY(centerY, 9),
+            size: 9,
+            font: regular,
+            color: MUTED,
+          });
+        });
+      }
+      flow.y = panelBottom - FLOW_GAP;
+      first = false;
+      if (remaining.length === 0) break;
+    }
   }
-  footer(page3, regular, bold, 3, pageCount);
 
-  if (pageCount === 4) {
-    const page4 = pdf.addPage([PAGE_WIDTH, PAGE_HEIGHT]);
-    wordmark(page4, bold, MARGIN, 797);
-    page4.drawText("Additional premium history", {
-      x: PAGE_WIDTH - MARGIN - bold.widthOfTextAtSize("Additional premium history", 13),
-      y: 800,
-      size: 13,
-      font: bold,
-      color: NAVY,
-    });
-    page4.drawLine({
-      start: { x: MARGIN, y: 765 },
-      end: { x: PAGE_WIDTH - MARGIN, y: 765 },
-      thickness: 1.4,
-      color: BLUE,
-    });
-    const timelineHeight = 56 + premium.keepers.timeline.length * 22;
-    drawSection(page4, MARGIN, 740 - timelineHeight, CONTENT_WIDTH, timelineHeight);
-    page4.drawText("Full keeper timeline", {
-      x: MARGIN + 14,
-      y: 716,
-      size: 13,
-      font: bold,
-      color: NAVY,
-    });
-    premium.keepers.timeline.forEach((event, index) => {
-      page4.drawText(`${event.year}    ${event.label}`, {
-        x: MARGIN + 14,
-        y: 680 - index * 22,
-        size: 11,
-        font: regular,
-        color: NAVY,
-      });
-    });
-    const recallList = vehicle.recalls.items.length > 0
-      ? vehicle.recalls.items
-      : [{ title: "No further recall records in this mock.", date: "", status: "" }];
-    const recallListHeight = 56 + recallList.length * 36;
-    const recallListTop = 740 - timelineHeight - 16;
-    drawSection(
-      page4,
-      MARGIN,
-      recallListTop - recallListHeight,
-      CONTENT_WIDTH,
-      recallListHeight,
+  const recallItems = vehicle.recalls.items;
+  const recallRowHeight = 36;
+  const recallHeaderHeight = 26;
+  const CONTENT_FLOW_TOP = 715;
+
+  {
+    let remaining =
+      recallItems.length > 0
+        ? [...recallItems]
+        : [{ title: "No manufacturer recalls in this sample.", date: "", status: "" }];
+    let first = true;
+
+    const sectionHeight = (rowCount: number) =>
+      recallHeaderHeight + Math.max(1, rowCount) * recallRowHeight;
+    const maxRowsOnFreshPage = Math.max(
+      1,
+      Math.floor((CONTENT_FLOW_TOP - FLOW_BOTTOM - recallHeaderHeight) / recallRowHeight),
     );
-    page4.drawText("Complete recall list", {
-      x: MARGIN + 14,
-      y: recallListTop - 24,
-      size: 13,
-      font: bold,
-      color: NAVY,
-    });
-    recallList.forEach((item, index) => {
-      page4.drawText(fitText(item.title, bold, 10, CONTENT_WIDTH - 40), {
-        x: MARGIN + 14,
-        y: recallListTop - 52 - index * 36,
-        size: 10,
+
+    // Prefer keeping the whole Recalls block on one page when it fits.
+    const fullHeight = sectionHeight(remaining.length);
+    if (flow.y - fullHeight < FLOW_BOTTOM && remaining.length <= maxRowsOnFreshPage) {
+      const next = startContentPage("Premium history details", "Recalls");
+      flow.page = next.page;
+      flow.y = next.y;
+    }
+
+    while (remaining.length > 0) {
+      const heightNeeded = sectionHeight(remaining.length);
+      if (
+        flow.y - heightNeeded < FLOW_BOTTOM &&
+        remaining.length <= maxRowsOnFreshPage
+      ) {
+        const next = startContentPage(
+          "Premium history details",
+          first ? "Recalls" : "Recalls (continued)",
+        );
+        flow.page = next.page;
+        flow.y = next.y;
+      } else if (flow.y - (recallHeaderHeight + recallRowHeight) < FLOW_BOTTOM) {
+        const next = startContentPage(
+          "Premium history details",
+          first ? "Recalls" : "Recalls (continued)",
+        );
+        flow.page = next.page;
+        flow.y = next.y;
+      }
+
+      const rowsThisPage = Math.max(
+        1,
+        Math.min(
+          remaining.length,
+          Math.floor((flow.y - FLOW_BOTTOM - recallHeaderHeight) / recallRowHeight),
+        ),
+      );
+      const chunk = remaining.slice(0, rowsThisPage);
+      remaining = remaining.slice(rowsThisPage);
+      const panelHeight = recallHeaderHeight + chunk.length * recallRowHeight;
+      const panelTop = flow.y;
+      const panelBottom = panelTop - panelHeight;
+      drawSection(
+        flow.page,
+        MARGIN,
+        panelBottom,
+        CONTENT_WIDTH,
+        panelHeight,
+        WHITE,
+        recallHeaderHeight,
+      );
+      drawEmbeddedIcon(
+        flow.page,
+        embeddedIcons,
+        "clipboard",
+        MARGIN + 12,
+        headerIconY(panelBottom, panelHeight, recallHeaderHeight, 14),
+        14,
+      );
+      flow.page.drawText(first ? "Recalls" : "Recalls (continued)", {
+        x: MARGIN + 32,
+        y: headerTitleY(panelBottom, panelHeight, recallHeaderHeight, 12),
+        size: 12,
         font: bold,
         color: NAVY,
       });
-      page4.drawText(
-        [item.status, item.date ? formatDate(item.date) : null].filter(Boolean).join("  |  ") ||
-          "Not available",
-        {
+      chunk.forEach((item, index) => {
+        const topY = panelTop - recallHeaderHeight - index * recallRowHeight;
+        if (index > 0) {
+          drawInnerHLine(flow.page, MARGIN, topY, CONTENT_WIDTH);
+        }
+        flow.page.drawText(fitText(item.title, bold, 10, CONTENT_WIDTH - 40), {
           x: MARGIN + 14,
-          y: recallListTop - 66 - index * 36,
-          size: 8.5,
-          font: regular,
-          color: MUTED,
-        },
-      );
-    });
-    footer(page4, regular, bold, 4, pageCount);
+          y: topY - 14,
+          size: 10,
+          font: bold,
+          color: NAVY,
+        });
+        flow.page.drawText(
+          [item.status, item.date ? formatDate(item.date) : null]
+            .filter(Boolean)
+            .join("  |  ") || "Not available",
+          {
+            x: MARGIN + 14,
+            y: topY - 28,
+            size: 8.5,
+            font: regular,
+            color: MUTED,
+          },
+        );
+      });
+      flow.y = panelBottom - FLOW_GAP;
+      first = false;
+    }
   }
+
+  const finalPageCount = allPages.length;
+  allPages.forEach((page, index) => {
+    footer(page, regular, bold, index + 1, finalPageCount);
+  });
 
   pdf.setTitle(`AutoViewer Full Vehicle Report - ${summary.displayRegistration}`);
   pdf.setSubject(`Development mock of the paid AutoViewer full report. Report ID ${reportId}`);

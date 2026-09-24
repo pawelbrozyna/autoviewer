@@ -727,7 +727,7 @@ export function FreeReportHtml({
           </SectionCard>
 
           <div
-            className="grid grid-cols-1 gap-3 sm:grid-cols-2"
+            className="grid grid-cols-1 items-start gap-3 sm:grid-cols-2"
             style={{ marginTop: pt(12), gap: pt(12) }}
           >
             <SectionCard title="Mileage history" marginTopPt={0}>
