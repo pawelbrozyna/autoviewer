@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import localFont from "next/font/local";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Calendar, Fuel, Settings2 } from "lucide-react";
 import { FULL_REPORT_PRICE, fullReportHref } from "@/lib/full-report";
 import {
   FREE_ADVISORY_LIMIT,
@@ -12,6 +12,7 @@ import {
   mileageRowsForPdf,
   motRowsForFreePdf,
 } from "@/lib/reports/pdf-limits";
+import { vehicleColourSwatch } from "@/components/vehicle/VehicleColour";
 import type { VehicleRecord } from "@/types/vehicle";
 
 const plateFont = localFont({
@@ -49,6 +50,40 @@ function ReportIcon({ name, sizePt }: { name: string; sizePt: number }) {
       style={{ width: pt(sizePt), height: pt(sizePt) }}
       unoptimized
     />
+  );
+}
+
+function SpecFact({
+  label,
+  value,
+  icon,
+}: {
+  label: string;
+  value: string;
+  icon: React.ReactNode;
+}) {
+  return (
+    <div className="min-w-0">
+      <p
+        className="leading-none text-muted"
+        style={{ fontSize: pt(7.8) }}
+      >
+        {label}
+      </p>
+      <div
+        className="flex min-w-0 items-center"
+        style={{ marginTop: pt(4), gap: pt(5) }}
+      >
+        {icon}
+        <p
+          className="min-w-0 truncate font-bold leading-none text-navy"
+          style={{ fontSize: pt(10.5) }}
+          title={value}
+        >
+          {value}
+        </p>
+      </div>
+    </div>
   );
 }
 
@@ -134,9 +169,11 @@ export function FreeReportHtml({
   const vehicleTitle = [summary.year, summary.make, summary.model]
     .filter(Boolean)
     .join(" ");
-  const specParts = [summary.colour, summary.fuelType, summary.transmission].filter(
-    Boolean,
-  ) as string[];
+  const colourValue = summary.colour?.trim() || details.colour?.trim() || null;
+  const fuelValue = summary.fuelType?.trim() || details.fuelType?.trim() || null;
+  const transmissionValue =
+    summary.transmission?.trim() || details.transmission?.trim() || null;
+  const firstRegisteredValue = formatPdfDate(details.monthOfFirstRegistration);
   const isPreview = mode === "preview";
 
   const facts: Array<{ label: string; value: string; icon: string }> = [
@@ -419,40 +456,82 @@ export function FreeReportHtml({
               fontSize: pt(29),
             }}
           >
-            {summary.displayRegistration}
+            <span className="inline-block translate-y-[-2px]">
+              {summary.displayRegistration}
+            </span>
           </span>
-        </div>
 
-        <div
-          className="relative z-10"
-          style={{ marginTop: pt(14), maxWidth: "48%" }}
-        >
-          <p className="leading-none" style={{ fontSize: pt(11.2) }}>
-            {specParts.length > 0 ? (
-              specParts.map((part, index) => (
-                <span key={part}>
-                  {index > 0 ? (
-                    <span className="text-muted">&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-                  ) : null}
-                  {part}
-                </span>
-              ))
-            ) : (
-              "Specification not available"
-            )}
-          </p>
-          <p
-            className="leading-none text-muted"
-            style={{ marginTop: pt(14), fontSize: pt(8.5) }}
+          <div
+            className="grid"
+            style={{
+              marginTop: pt(12),
+              columnGap: pt(12),
+              gridTemplateColumns: "minmax(0, 0.88fr) minmax(0, 1.2fr)",
+            }}
           >
-            First registered
-          </p>
-          <p
-            className="font-bold leading-none text-navy"
-            style={{ marginTop: pt(7), fontSize: pt(12) }}
-          >
-            {formatPdfDate(details.monthOfFirstRegistration)}
-          </p>
+            <div
+              className="relative flex flex-col"
+              style={{ gap: pt(10), paddingRight: pt(10) }}
+            >
+              <span
+                className="pointer-events-none absolute right-0 top-[6%] bottom-[6%] w-px bg-border"
+                aria-hidden
+              />
+              <SpecFact
+                label="Fuel type"
+                value={fuelValue || "Not available"}
+                icon={
+                  <Fuel
+                    className="shrink-0 text-navy/75"
+                    style={{ width: pt(11), height: pt(11) }}
+                    strokeWidth={2}
+                    aria-hidden
+                  />
+                }
+              />
+              <SpecFact
+                label="First registered"
+                value={firstRegisteredValue}
+                icon={
+                  <Calendar
+                    className="shrink-0 text-navy/75"
+                    style={{ width: pt(11), height: pt(11) }}
+                    strokeWidth={2}
+                    aria-hidden
+                  />
+                }
+              />
+            </div>
+            <div className="flex min-w-0 flex-col" style={{ gap: pt(10) }}>
+              <SpecFact
+                label="Transmission"
+                value={transmissionValue || "Not available"}
+                icon={
+                  <Settings2
+                    className="shrink-0 text-navy/75"
+                    style={{ width: pt(11), height: pt(11) }}
+                    strokeWidth={2}
+                    aria-hidden
+                  />
+                }
+              />
+              <SpecFact
+                label="Colour"
+                value={colourValue || "Not available"}
+                icon={
+                  <span
+                    className="shrink-0 rounded-full border border-slate-400/60"
+                    style={{
+                      width: pt(10),
+                      height: pt(10),
+                      backgroundColor: vehicleColourSwatch(colourValue),
+                    }}
+                    aria-hidden
+                  />
+                }
+              />
+            </div>
+          </div>
         </div>
 
         {!summary.imageSrc ? (

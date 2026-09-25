@@ -8,6 +8,7 @@ import {
 } from "pdf-lib";
 import fontkit from "@pdf-lib/fontkit";
 import type { ReportIconName, VehicleReportPdfOptions } from "@/lib/reports/pdf";
+import { drawVehicleSpecBlock } from "@/lib/reports/pdf-vehicle-specs";
 import {
   PAID_ADVISORY_LIMIT,
   PAID_MILEAGE_LIMIT,
@@ -55,6 +56,7 @@ const REPORT_ICON_NAMES: ReportIconName[] = [
   "engine",
   "co2",
   "leaf",
+  "fuel",
   "car",
   "shield-check",
   "clipboard",
@@ -402,7 +404,7 @@ export async function generateFullReportPdf(
   page1.drawLine({
     start: { x: MARGIN, y: 765 },
     end: { x: PAGE_WIDTH - MARGIN, y: 765 },
-    thickness: 1.4,
+    thickness: 0.65,
     color: BLUE,
   });
 
@@ -423,7 +425,7 @@ export async function generateFullReportPdf(
   const titleSize = 17;
   page1.drawText(fitText(vehicleTitle, bold, titleSize, PAGE_WIDTH - MARGIN - 32), {
     x: MARGIN + 12,
-    y: 732,
+    y: 735,
     size: titleSize,
     font: bold,
     color: NAVY,
@@ -437,12 +439,12 @@ export async function generateFullReportPdf(
     plateFont.widthOfTextAtSize(plateText, plateFontSize) + 30,
   );
   const plateX = MARGIN + 12;
-  const plateY = 675;
+  const plateY = 681;
   const plateTextWidth = plateFont.widthOfTextAtSize(plateText, plateFontSize);
   const plateTextFullHeight = plateFont.heightAtSize(plateFontSize, {
     descender: true,
   });
-  drawRounded(page1, plateX, plateY, plateWidth, plateHeight, BLACK, 5);
+  drawRounded(page1, plateX, plateY, plateWidth, plateHeight, BLACK, 4);
   drawRounded(
     page1,
     plateX + 1.5,
@@ -450,66 +452,31 @@ export async function generateFullReportPdf(
     plateWidth - 3,
     plateHeight - 3,
     YELLOW,
-    4,
+    3,
   );
   page1.drawText(plateText, {
     x: plateX + (plateWidth - plateTextWidth) / 2,
-    y: plateY + (plateHeight - plateTextFullHeight) / 2 + 6,
+    y: plateY + (plateHeight - plateTextFullHeight) / 2 + 7,
     size: plateFontSize,
     font: plateFont,
     color: BLACK,
   });
 
-  const vehicleMetadataY = 658;
-  const specsLineY = vehicleMetadataY - 4;
-  const specParts = [summary.colour, summary.fuelType, summary.transmission].filter(
-    Boolean,
-  ) as string[];
-  if (specParts.length === 0) {
-    page1.drawText("Specification not available", {
-      x: MARGIN + 12,
-      y: specsLineY,
-      size: 11.2,
-      font: regular,
-      color: BLACK,
-    });
-  } else {
-    let specX = MARGIN + 12;
-    specParts.forEach((part, index) => {
-      if (index > 0) {
-        const divider = "  |  ";
-        page1.drawText(divider, {
-          x: specX,
-          y: specsLineY,
-          size: 11.2,
-          font: regular,
-          color: MUTED,
-        });
-        specX += regular.widthOfTextAtSize(divider, 11.2);
-      }
-      page1.drawText(part, {
-        x: specX,
-        y: specsLineY,
-        size: 11.2,
-        font: regular,
-        color: BLACK,
-      });
-      specX += regular.widthOfTextAtSize(part, 11.2);
-    });
-  }
-  page1.drawText("First registered", {
+  const colourValue = summary.colour?.trim() || details.colour?.trim() || null;
+  drawVehicleSpecBlock(page1, {
     x: MARGIN + 12,
-    y: vehicleMetadataY - 22,
-    size: 8.5,
-    font: regular,
-    color: MUTED,
-  });
-  page1.drawText(formatDate(details.monthOfFirstRegistration), {
-    x: MARGIN + 12,
-    y: vehicleMetadataY - 39,
-    size: 12,
-    font: bold,
-    color: BLACK,
+    topY: plateY - 12,
+    width: CONTENT_WIDTH * 0.48,
+    regular,
+    bold,
+    icons: embeddedIcons,
+    fuel: summary.fuelType?.trim() || details.fuelType?.trim() || "Not available",
+    transmission:
+      summary.transmission?.trim() ||
+      details.transmission?.trim() ||
+      "Not available",
+    colour: colourValue,
+    firstRegistered: formatDate(details.monthOfFirstRegistration),
   });
 
   const warning =
@@ -809,7 +776,7 @@ export async function generateFullReportPdf(
     page.drawLine({
       start: { x: MARGIN, y: 765 },
       end: { x: PAGE_WIDTH - MARGIN, y: 765 },
-      thickness: 1.4,
+      thickness: 0.65,
       color: BLUE,
     });
     page.drawText(subheading, {

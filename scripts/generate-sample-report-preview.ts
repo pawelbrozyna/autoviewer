@@ -38,6 +38,7 @@ const ICON_NAMES = [
   "engine",
   "co2",
   "leaf",
+  "fuel",
   "car",
   "shield-check",
   "clipboard",
