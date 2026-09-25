@@ -72,7 +72,7 @@ export function CompareSearchForm({
       <p
         role="alert"
         aria-live="polite"
-        className={`mt-1.5 min-h-[1.1rem] text-[14px] text-danger md:text-[15px] ${error ? "" : "invisible"}`}
+        className={`mt-1.5 h-[1.25rem] overflow-hidden text-[14px] leading-none text-danger md:text-[15px] md:leading-none ${error ? "" : "invisible"}`}
       >
         {error || "placeholder"}
       </p>

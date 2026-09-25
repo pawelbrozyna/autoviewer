@@ -11,9 +11,13 @@ export function Breadcrumbs({
   return (
     <nav
       aria-label="Breadcrumb"
-      className={cn(className == null && "mb-5 md:mb-6", className)}
+      className={cn(
+        "flex h-full items-center",
+        className == null && "mb-5 md:mb-6",
+        className,
+      )}
     >
-      <ol className="eyebrow mb-0 flex flex-wrap items-center gap-1.5 leading-none">
+      <ol className="eyebrow mb-0 flex h-full flex-nowrap items-center gap-1.5 leading-none">
         {items.map((item, index) => {
           const isLast = index === items.length - 1;
           return (

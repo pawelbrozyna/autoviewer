@@ -387,7 +387,7 @@ export function FreeReportHtml({
               alt={`${summary.make} ${summary.model}`}
               fill
               sizes="(max-width: 768px) 58vw, 500px"
-              className="object-contain object-center"
+              className="origin-center translate-y-[-8%] scale-90 object-contain object-center"
               priority
             />
           ) : null}
@@ -472,14 +472,14 @@ export function FreeReportHtml({
             : "border-success/25 bg-success-bg"
         }`}
           style={{
-            marginTop: pt(-12),
-            minHeight: pt(52),
-            gap: pt(14),
+            marginTop: pt(-32),
+            minHeight: pt(44),
+            gap: pt(12),
             paddingInline: pt(16),
-            paddingBlock: pt(10),
+            paddingBlock: pt(7),
           }}
         >
-        <ReportIcon name={needsAttention ? "warning" : "check"} sizePt={31} />
+        <ReportIcon name={needsAttention ? "warning" : "check"} sizePt={28} />
         <div className="min-w-0">
           <p
             className={`font-bold leading-tight ${

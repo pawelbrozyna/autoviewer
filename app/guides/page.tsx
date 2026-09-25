@@ -44,7 +44,6 @@ export default function GuidesIndexPage() {
         title="Clear guidance for UK used car buyers"
         description="Short, practical articles to help you check a vehicle with more confidence."
         variant="tool"
-        titleClassName="max-w-none md:whitespace-nowrap"
       >
         <VehicleSearchForm
           buttonLabel="Check vehicle →"

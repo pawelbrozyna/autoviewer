@@ -20,7 +20,6 @@ export function GuideLayout({
         title={title}
         description={description}
         variant="tool"
-        titleClassName="max-w-none md:whitespace-nowrap"
       >
         <VehicleSearchForm
           buttonLabel="Check vehicle →"

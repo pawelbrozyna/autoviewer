@@ -176,17 +176,19 @@ export function RegistrationInput({
         ) : null}
       </div>
       {error || (showButton && reserveErrorSpace) ? (
-        <p
-          id={errorId}
-          role="alert"
-          aria-live="polite"
-          className={cn(
-            "mt-1.5 min-h-[1.1rem] text-[14px] text-danger md:text-[15px]",
-            !error && "invisible",
-          )}
-        >
-          {error || "placeholder"}
-        </p>
+        <div className="mt-1.5 h-[1.25rem] overflow-hidden">
+          <p
+            id={errorId}
+            role="alert"
+            aria-live="polite"
+            className={cn(
+              "text-[14px] leading-none text-danger md:text-[15px] md:leading-none",
+              !error && "invisible",
+            )}
+          >
+            {error || "placeholder"}
+          </p>
+        </div>
       ) : null}
       {externalError ? (
         <p

@@ -28,7 +28,7 @@ export function HomeHero({
       </div>
 
       <Container className="relative">
-        <div className="tool-hero-y pb-4 md:max-w-[720px] md:pb-[1.75rem] lg:max-w-[700px] lg:pb-[1.55rem]">
+        <div className="tool-hero-y md:max-w-[720px] lg:max-w-[700px]">
           <div className="hero-topline">
             <p className="eyebrow mb-0 leading-none">Vehicle history check</p>
           </div>
@@ -39,14 +39,14 @@ export function HomeHero({
             Check MOT history, mileage, tax, recalls and more - all in one place.
           </p>
 
-          <div className="mt-5 md:mt-6 lg:mt-5">
+          <div className="mt-5 shrink-0 md:mt-6 lg:mt-5">
             <VehicleSearchForm
               checkSource="home"
               inlineDvlaLookup={inlineDvlaLookup}
             />
           </div>
 
-          <HeroFeatureStrip />
+          <HeroFeatureStrip className="shrink-0" />
         </div>
       </Container>
     </section>

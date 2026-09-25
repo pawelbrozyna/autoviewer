@@ -152,11 +152,12 @@ textarea {
   }
 }
 
-/* Shared page hero height - matches HomeHero; top-aligned so H1 does not jump */
+/* Shared page hero height - locked on md+ so every page matches HomeHero */
 .tool-hero-y {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  box-sizing: border-box;
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
   min-height: 0;
@@ -172,6 +173,7 @@ textarea {
 
 @media (min-width: 768px) {
   .tool-hero-y {
+    height: 320px;
     min-height: 320px;
     padding-top: 1.75rem;
     padding-bottom: 1.75rem;
@@ -180,6 +182,7 @@ textarea {
 
 @media (min-width: 1024px) {
   .tool-hero-y {
+    height: 310px;
     min-height: 310px;
     padding-top: 1.55rem;
     padding-bottom: 1.55rem;
@@ -190,6 +193,7 @@ textarea {
 .hero-topline {
   display: flex;
   align-items: center;
+  flex-shrink: 0;
   height: 1.25rem;
   margin-bottom: 0.5rem;
   overflow: hidden;
@@ -200,6 +204,37 @@ textarea {
 .hero-topline ol {
   line-height: 1.25rem;
   margin-bottom: 0;
+}
+
+/* Lock title + lead slots so registration field stays put across pages */
+.tool-hero-y > .heading-page {
+  margin: 0;
+  flex-shrink: 0;
+  min-height: calc(1.85rem * 1.08);
+}
+
+.tool-hero-y > .body-copy {
+  margin-bottom: 0;
+  flex-shrink: 0;
+  min-height: calc(1rem * 1.55);
+}
+
+@media (min-width: 640px) {
+  .tool-hero-y > .heading-page {
+    min-height: calc(2.25rem * 1.08);
+  }
+}
+
+@media (min-width: 768px) {
+  .tool-hero-y > .heading-page {
+    min-height: calc(2.55rem * 1.08);
+  }
+}
+
+@media (min-width: 1024px) {
+  .tool-hero-y > .heading-page {
+    min-height: calc(2.5rem * 1.08);
+  }
 }
 
 .heading-page {

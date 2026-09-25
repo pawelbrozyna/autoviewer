@@ -14,7 +14,6 @@ export function RunningCostsHero() {
       title="Car running costs calculator"
       description="See what a car could really cost you each month and year."
       variant="tool"
-      titleClassName="max-w-none md:whitespace-nowrap"
     >
       <VehicleSearchForm
         buttonLabel="Check vehicle →"

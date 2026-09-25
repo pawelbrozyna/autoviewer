@@ -72,7 +72,7 @@ function getRedis(): Redis | null {
   return redisClient;
 }
 
-function useFileStore(): boolean {
+function shouldUseFileStore(): boolean {
   if (redisEnv()) return false;
   // Vercel filesystem is ephemeral; require Redis in production.
   if (process.env.VERCEL === "1") return false;
@@ -266,7 +266,7 @@ export async function tryConsumeFreeReportEmail(input: {
   const payload = { ip, email, regEmailKey };
 
   try {
-    if (useFileStore()) {
+    if (shouldUseFileStore()) {
       return await tryConsumeFileStore(payload);
     }
     return await tryConsumeRedisStore(payload);

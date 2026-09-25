@@ -31,6 +31,7 @@ const CONTENT_WIDTH = PAGE_WIDTH - MARGIN * 2;
 const NAVY = rgb(0.027, 0.106, 0.227);
 const BLUE = rgb(0.02, 0.39, 0.75);
 const MUTED = rgb(0.37, 0.43, 0.51);
+const BODY = rgb(0.2, 0.24, 0.3);
 const BORDER = rgb(0.8, 0.83, 0.86);
 const INNER_LINE = rgb(0.86, 0.88, 0.91);
 const SOFT = rgb(0.925, 0.94, 0.955);
@@ -327,14 +328,6 @@ function statusTone(status: string) {
   return { fill: AMBER_BG, color: AMBER };
 }
 
-export function paidReportNeedsFourthPage(
-  _premium: PremiumMockData,
-  _vehicle: VehicleRecord,
-) {
-  // Page count is dynamic; kept for callers that still import this helper.
-  return true;
-}
-
 export async function generateFullReportPdf(
   vehicle: VehicleRecord,
   options: FullReportPdfOptions,
@@ -603,17 +596,17 @@ export async function generateFullReportPdf(
     const x = MARGIN + 14 + index * (CONTENT_WIDTH / 3);
     page1.drawText(label, {
       x,
-      y: textY(contentsBodyCenter + 8, 9),
-      size: 9,
+      y: textY(contentsBodyCenter + 9, 11),
+      size: 11,
       font: bold,
       color: BLUE,
     });
     page1.drawText(detail, {
       x,
-      y: textY(contentsBodyCenter - 8, 8),
-      size: 8,
+      y: textY(contentsBodyCenter - 9, 9.5),
+      size: 9.5,
       font: regular,
-      color: MUTED,
+      color: BODY,
     });
   });
 
@@ -778,7 +771,6 @@ export async function generateFullReportPdf(
   // Footers are applied after all pages are known.
   const allPages: PDFPage[] = [page1];
 
-  const FLOW_TOP = 740;
   const FLOW_BOTTOM = 56;
   const FLOW_GAP = 14;
   const vehicleLabel = `${summary.year ?? ""} ${summary.make} ${summary.model}`.trim();
@@ -1232,7 +1224,7 @@ export async function generateFullReportPdf(
   }
 
   const advisoryHeaderHeight = 26;
-  const advisoryRowHeight = 30;
+  const advisoryRowHeight = 32;
 
   const drawAdvisoryChunk = (
     flowState: Flow,
@@ -1289,10 +1281,12 @@ export async function generateFullReportPdf(
       );
       const typeColor =
         item.type === "MAJOR" || item.type === "DANGEROUS" ? RED : AMBER;
-      flowState.page.drawText(fitText(item.type, bold, 8.4, CONTENT_WIDTH - 48), {
-        x: MARGIN + 30,
-        y: textY(centerY + 6, 8.4),
-        size: 8.4,
+      const textX = MARGIN + 38;
+      const textWidth = CONTENT_WIDTH - 52;
+      flowState.page.drawText(fitText(item.type, bold, 8.6, textWidth), {
+        x: textX,
+        y: textY(centerY + 6, 8.6),
+        size: 8.6,
         font: bold,
         color: typeColor,
       });
@@ -1300,15 +1294,15 @@ export async function generateFullReportPdf(
         fitText(
           item.date ? `${item.text} - ${formatDate(item.date)}` : item.text,
           regular,
-          7.3,
-          CONTENT_WIDTH - 48,
+          8.2,
+          textWidth,
         ),
         {
-          x: MARGIN + 30,
-          y: textY(centerY - 7, 7.3),
-          size: 7.3,
+          x: textX,
+          y: textY(centerY - 8, 8.2),
+          size: 8.2,
           font: regular,
-          color: MUTED,
+          color: BODY,
         },
       );
     });
@@ -1369,8 +1363,10 @@ export async function generateFullReportPdf(
   ];
 
   for (const item of checks) {
-    const lines = wrapText(item[2], regular, 9, CONTENT_WIDTH - 28);
-    const cardHeight = 26 + Math.max(28, 16 + lines.length * 12);
+    const detailSize = 10;
+    const detailLine = 13;
+    const lines = wrapText(item[2], regular, detailSize, CONTENT_WIDTH - 36);
+    const cardHeight = 26 + Math.max(30, 18 + lines.length * detailLine);
     ensureSpace(flow, cardHeight + FLOW_GAP, "Premium history details", "History & risk checks");
     const y = flow.y - cardHeight;
     const tone = statusTone(item[1]);
@@ -1384,7 +1380,7 @@ export async function generateFullReportPdf(
       14,
     );
     flow.page.drawText(item[0], {
-      x: MARGIN + 32,
+      x: MARGIN + 38,
       y: headerTitleY(y, cardHeight, 26, 12),
       size: 12,
       font: bold,
@@ -1399,11 +1395,11 @@ export async function generateFullReportPdf(
     });
     lines.forEach((line, lineIndex) => {
       flow.page.drawText(line, {
-        x: MARGIN + 14,
-        y: y + cardHeight - 26 - 16 - lineIndex * 12,
-        size: 9,
+        x: MARGIN + 18,
+        y: y + cardHeight - 26 - 18 - lineIndex * detailLine,
+        size: detailSize,
         font: regular,
-        color: MUTED,
+        color: BODY,
       });
     });
     flow.y = y - FLOW_GAP;

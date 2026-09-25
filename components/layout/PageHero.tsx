@@ -50,7 +50,7 @@ export function HeroFeatureStrip({ className }: { className?: string }) {
 }
 
 /**
- * Shared subpage hero: same height + H1 position as HomeHero / ToolHero.
+ * Shared subpage hero: same shell, height and type scale as HomeHero.
  * variant="tool" adds the shared header.png backdrop (subtle).
  */
 export function PageHero({
@@ -60,7 +60,6 @@ export function PageHero({
   children,
   className,
   showFeatureStrip = true,
-  eyebrow,
   variant = "plain",
   titleClassName,
 }: {
@@ -71,7 +70,7 @@ export function PageHero({
   className?: string;
   /** Vehicle-check feature row. Opt out on pages where it is irrelevant. */
   showFeatureStrip?: boolean;
-  /** Optional small label under the topline (does not change tool-hero-y min-height). */
+  /** @deprecated Kept for call-site compat. Not rendered (would stretch hero height). */
   eyebrow?: string;
   /** "tool" = shared header.png backdrop; "plain" = soft surface (guides etc.). */
   variant?: "plain" | "tool";
@@ -87,25 +86,40 @@ export function PageHero({
       )}
     >
       {isTool ? <ToolHeroBackdrop /> : <HeroMobileGradient />}
-      <Container className={cn("relative tool-hero-y", className)}>
-        <div className="hero-topline">
-          <Breadcrumbs items={breadcrumbs} className="mb-0" />
+      <Container className="relative">
+        <div
+          className={cn(
+            "tool-hero-y md:max-w-[720px] lg:max-w-[700px]",
+            className,
+          )}
+        >
+          <div className="hero-topline">
+            <Breadcrumbs items={breadcrumbs} className="mb-0" />
+          </div>
+          <h1
+            className={cn(
+              "heading-page max-w-none md:whitespace-nowrap",
+              titleClassName,
+            )}
+          >
+            {title}
+          </h1>
+          <p className="body-copy mt-3 max-w-none md:mt-3.5 md:whitespace-nowrap lg:mt-3">
+            {description}
+          </p>
+          {children ? (
+            <div className="mt-5 shrink-0 md:mt-6 lg:mt-5">{children}</div>
+          ) : null}
+          {showFeatureStrip ? (
+            <HeroFeatureStrip
+              className={
+                children
+                  ? "shrink-0"
+                  : "mt-5 shrink-0 md:mt-6 lg:mt-5"
+              }
+            />
+          ) : null}
         </div>
-        {eyebrow ? (
-          <p className="eyebrow mb-2 mt-0.5">{eyebrow}</p>
-        ) : null}
-        <h1 className={cn("heading-page", titleClassName ?? "max-w-3xl")}>
-          {title}
-        </h1>
-        <p className="body-copy mt-3 max-w-2xl md:mt-3.5 lg:mt-3">{description}</p>
-        {children ? (
-          <div className="mt-5 md:mt-6 lg:mt-5">{children}</div>
-        ) : null}
-        {showFeatureStrip ? (
-          <HeroFeatureStrip
-            className={children ? undefined : "mt-5 md:mt-6 lg:mt-5"}
-          />
-        ) : null}
       </Container>
     </section>
   );

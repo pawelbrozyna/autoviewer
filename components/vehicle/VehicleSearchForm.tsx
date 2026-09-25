@@ -68,27 +68,21 @@ export function VehicleSearchForm({
   }
 
   return (
-    <>
-      <RegistrationInput
-        defaultValue={defaultValue}
-        buttonLabel={buttonLabel}
-        variant={variant}
-        className={className}
-        loading={isLoading}
-        externalError={error}
-        reserveErrorSpace={!inlineDvlaLookup}
-        onSubmitValid={handleLookup}
-        onChange={() => {
-          if (inlineDvlaLookup) {
-            setError(null);
-            dvlaLookup?.setVehicle(null);
-          }
-        }}
-      />
-
-      {inlineDvlaLookup ? (
-        <div className="mt-1.5 h-[1.25rem]" aria-hidden />
-      ) : null}
-    </>
+    <RegistrationInput
+      defaultValue={defaultValue}
+      buttonLabel={buttonLabel}
+      variant={variant}
+      className={className}
+      loading={isLoading}
+      externalError={error}
+      reserveErrorSpace
+      onSubmitValid={handleLookup}
+      onChange={() => {
+        if (inlineDvlaLookup) {
+          setError(null);
+          dvlaLookup?.setVehicle(null);
+        }
+      }}
+    />
   );
 }
