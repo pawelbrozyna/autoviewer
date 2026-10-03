@@ -90,11 +90,11 @@ export function RegistrationInput({
           )}
         >
           <div
-      className="flex w-14 shrink-0 flex-col items-center justify-center gap-0.5 bg-[#003399] font-semibold leading-none text-white"
+      className="flex w-14 shrink-0 flex-col items-center justify-center gap-1 bg-[#003399] font-semibold leading-none text-white"
             aria-hidden="true"
           >
-            <span className="text-[16px] leading-none">🇬🇧</span>
-            <span className="text-[16px] tracking-wide">GB</span>
+            <UnionJack />
+            <span className="text-[16px] leading-none tracking-wide">GB</span>
           </div>
           <div className="relative min-w-0 flex-1">
             <input
@@ -205,5 +205,22 @@ export function RegistrationInput({
         </p>
       ) : null}
     </div>
+  );
+}
+
+function UnionJack() {
+  return (
+    <svg
+      viewBox="0 0 60 30"
+      className="h-[11px] w-[22px] shrink-0 rounded-[1.5px]"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <rect width="60" height="30" fill="#012169" />
+      <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" strokeWidth="6" />
+      <path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" strokeWidth="2" />
+      <path d="M30,0 V30 M0,15 H60" stroke="#fff" strokeWidth="10" />
+      <path d="M30,0 V30 M0,15 H60" stroke="#C8102E" strokeWidth="6" />
+    </svg>
   );
 }

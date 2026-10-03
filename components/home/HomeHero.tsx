@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import { HeroFeatureStrip } from "@/components/layout/PageHero";
-import { HeroMobileGradient } from "@/components/layout/ToolHeroBackdrop";
+import { HomeHeroMobileBackdrop } from "@/components/layout/ToolHeroBackdrop";
 import { VehicleSearchForm } from "@/components/vehicle/VehicleSearchForm";
 
 export function HomeHero({
@@ -15,7 +15,7 @@ export function HomeHero({
 
   return (
     <section className="relative overflow-hidden border-b border-border bg-[#f4f6f9]">
-      <HeroMobileGradient />
+      <HomeHeroMobileBackdrop />
 
       <div className="absolute inset-0 hidden bg-[#f4f6f9] md:block">
         <div className="absolute -bottom-[24%] right-0 h-[185%] w-full">
@@ -37,10 +37,26 @@ export function HomeHero({
             <p className="eyebrow mb-0 leading-none">Vehicle history check</p>
           </div>
           <Heading className="heading-page max-w-none md:whitespace-nowrap">
-            Free car check for smarter buying.
+            <span className="block text-[2.35rem] md:hidden">
+              Check a car’s
+              <br />
+              history before
+              <br />
+              you buy.
+            </span>
+            <span className="hidden md:inline">
+              Free car check for smarter buying.
+            </span>
           </Heading>
           <p className="body-copy mt-3 max-w-none md:mt-3.5 md:whitespace-nowrap lg:mt-3">
-            Check MOT history, mileage, tax, recalls and more - all in one place.
+            <span className="block max-w-[30ch] md:hidden">
+              Check MOT history, mileage, tax, recalls and key vehicle details -
+              all in one place.
+            </span>
+            <span className="hidden md:inline">
+              Check MOT history, mileage, tax, recalls and more - all in one
+              place.
+            </span>
           </p>
 
           <div className="mt-5 shrink-0 md:mt-6 lg:mt-5">

@@ -18,6 +18,30 @@ export function HeroMobileGradient({ className }: { className?: string }) {
   );
 }
 
+/** Homepage mobile hero: London road visual on the right, faded behind the text. */
+export function HomeHeroMobileBackdrop() {
+  return (
+    <div
+      className="pointer-events-none absolute inset-0 overflow-hidden md:hidden"
+      aria-hidden="true"
+    >
+      <HeroMobileGradient />
+      <div className="absolute right-0 top-0 h-[72%] w-[83%] opacity-85">
+        <Image
+          src="/hero-mobile-london.png"
+          alt=""
+          fill
+          priority
+          sizes="83vw"
+          className="object-cover object-right"
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,#f6f8fb_0%,rgba(246,248,251,0.94)_40%,rgba(246,248,251,0.55)_64%,rgba(246,248,251,0)_86%)]" />
+        <div className="absolute inset-x-0 bottom-0 h-[35%] bg-[linear-gradient(to_top,#f6f8fb_0%,rgba(246,248,251,0)_100%)]" />
+      </div>
+    </div>
+  );
+}
+
 /**
  * Shared decorative hero backdrop.
  * Mobile: gradient only. Desktop: header.png + washes.

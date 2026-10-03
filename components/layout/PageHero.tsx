@@ -21,7 +21,7 @@ const featureIcons = [
 export function HeroFeatureStrip({ className }: { className?: string }) {
   return (
     <div className={className}>
-      <ul className="-mt-1.5 flex flex-nowrap items-center justify-center gap-x-2.5 gap-y-2 md:-mt-1 md:flex-wrap md:justify-start md:gap-x-6 md:gap-y-3 lg:gap-x-5">
+      <ul className="-mt-1.5 flex flex-nowrap items-center justify-center gap-x-5 gap-y-2 max-[379px]:gap-x-2.5 md:-mt-1 md:flex-wrap md:justify-start md:gap-x-6 md:gap-y-3 lg:gap-x-5">
         {featureIcons.map((item) => {
           const Icon = item.icon;
           return (
