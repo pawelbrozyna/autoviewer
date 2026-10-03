@@ -1,6 +1,7 @@
 import { FreeReportHtml } from "@/components/reports/FreeReportHtml";
 import { Container } from "@/components/ui/Container";
 import { ExampleReportActions } from "@/components/vehicle/ExampleReportActions";
+import { LiveReportNextSteps } from "@/components/vehicle/LiveReportNextSteps";
 import type { VehicleRecord } from "@/types/vehicle";
 
 export function VehicleReportSection({
@@ -11,6 +12,7 @@ export function VehicleReportSection({
   headingLevel = "h1",
   ownersLabel = null,
   className = "",
+  footer = null,
 }: {
   vehicle: VehicleRecord;
   eyebrow: string;
@@ -19,6 +21,7 @@ export function VehicleReportSection({
   headingLevel?: "h1" | "h2";
   ownersLabel?: string | null;
   className?: string;
+  footer?: React.ReactNode;
 }) {
   const Heading = headingLevel;
 
@@ -47,6 +50,8 @@ export function VehicleReportSection({
         <div className="mt-4 md:hidden">
           <ExampleReportActions vehicle={vehicle} ownersLabel={ownersLabel} />
         </div>
+
+        {footer}
       </Container>
     </section>
   );
@@ -74,6 +79,7 @@ export function LiveVehicleReportSection({
       headingLevel={headingLevel}
       ownersLabel={vehicle.summary.isDemo ? "2" : null}
       className={className}
+      footer={<LiveReportNextSteps vehicle={vehicle} />}
     />
   );
 }

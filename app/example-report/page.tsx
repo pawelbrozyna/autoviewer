@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { HomeHero } from "@/components/home/HomeHero";
 import { VehicleReportSection } from "@/components/reports/VehicleReportSection";
-import { DvlaLookupProvider } from "@/components/vehicle/DvlaLookupContext";
+import {
+  DvlaLookupProvider,
+  HiddenWhenLookupResult,
+} from "@/components/vehicle/DvlaLookupContext";
 import { DvlaLookupReport } from "@/components/vehicle/DvlaLookupReport";
 import { getMockVehicle } from "@/lib/api/mock";
 import { buildPageMetadata } from "@/lib/seo/metadata";
@@ -11,6 +14,7 @@ export const metadata: Metadata = buildPageMetadata({
   description:
     "Explore a complete AutoViewer vehicle report using demonstration data.",
   path: "/example-report",
+  noIndex: true,
 });
 
 export default function ExampleReportPage() {
@@ -19,17 +23,18 @@ export default function ExampleReportPage() {
   return (
     <>
       <DvlaLookupProvider>
-        <HomeHero inlineDvlaLookup />
+        <HomeHero inlineDvlaLookup headingLevel="h2" />
         <DvlaLookupReport />
+        <HiddenWhenLookupResult>
+          <VehicleReportSection
+            vehicle={vehicle}
+            eyebrow="Example report"
+            title="Full example vehicle report"
+            description="Explore a complete AutoViewer report using demonstration data."
+            ownersLabel="2"
+          />
+        </HiddenWhenLookupResult>
       </DvlaLookupProvider>
-
-      <VehicleReportSection
-        vehicle={vehicle}
-        eyebrow="Example report"
-        title="Full example vehicle report"
-        description="Explore a complete AutoViewer report using demonstration data."
-        ownersLabel="2"
-      />
     </>
   );
 }

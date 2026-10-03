@@ -20,6 +20,7 @@ export const metadata: Metadata = buildPageMetadata({
     "Learn about the planned AutoViewer Full Report and its premium vehicle-history checks.",
   path: "/full-report",
   noIndex: true,
+  absoluteTitle: true,
 });
 
 type PageProps = {

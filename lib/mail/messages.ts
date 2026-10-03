@@ -1,5 +1,9 @@
 import type { SendMailOptions } from "nodemailer";
 import type { MailConfig } from "@/lib/server/mail";
+import {
+  buildReportEmailHtml,
+  buildReportEmailText,
+} from "@/lib/mail/report-email";
 import type { VehicleRecord } from "@/types/vehicle";
 
 export const SUPPORT_INBOX = "support@autoviewer.co.uk";
@@ -56,13 +60,7 @@ export function buildReportMessage(
     to: input.recipient,
     replyTo: config.replyTo,
     subject: `Your AutoViewer vehicle report - ${registration}`,
-    text: [
-      `View your AutoViewer vehicle report for ${registration}:`,
-      input.reportUrl,
-      "",
-      input.vehicle.summary.isDemo
-        ? "This report contains demonstration data only."
-        : "This report is based on the free public data available for this vehicle.",
-    ].join("\n"),
+    text: buildReportEmailText(input.vehicle, input.reportUrl),
+    html: buildReportEmailHtml(input.vehicle, input.reportUrl),
   };
 }

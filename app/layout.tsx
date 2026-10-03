@@ -6,6 +6,8 @@ import { SiteHeader } from "@/components/layout/SiteHeader";
 import { robotsMetadata } from "@/lib/seo/indexing";
 import {
   DEFAULT_DESCRIPTION,
+  HOME_TITLE,
+  OG_IMAGE,
   SITE_NAME,
   SITE_URL,
   organizationJsonLd,
@@ -24,7 +26,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Free Car Check UK - MOT, Tax, Mileage & Vehicle History | AutoViewer",
+    default: HOME_TITLE,
     template: `%s | ${SITE_NAME}`,
   },
   description: DEFAULT_DESCRIPTION,
@@ -33,13 +35,15 @@ export const metadata: Metadata = {
     locale: "en_GB",
     url: SITE_URL,
     siteName: SITE_NAME,
-    title: "Free Car Check UK - MOT, Tax, Mileage & Vehicle History | AutoViewer",
+    title: HOME_TITLE,
     description: DEFAULT_DESCRIPTION,
+    images: [OG_IMAGE],
   },
   twitter: {
     card: "summary_large_image",
     title: "Free Car Check UK | AutoViewer",
     description: DEFAULT_DESCRIPTION,
+    images: [OG_IMAGE.url],
   },
   robots: robotsMetadata(),
   icons: {

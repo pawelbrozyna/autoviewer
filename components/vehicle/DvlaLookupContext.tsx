@@ -27,3 +27,14 @@ export function DvlaLookupProvider({
 export function useDvlaLookup() {
   return useContext(DvlaLookupContext);
 }
+
+/** Renders children only while no inline lookup result is shown. */
+export function HiddenWhenLookupResult({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const lookup = useDvlaLookup();
+  if (lookup?.vehicle) return null;
+  return <>{children}</>;
+}

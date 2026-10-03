@@ -32,8 +32,9 @@ export default async function CompareCarsPage({
   const leftReg = params.left ? normalizeRegistration(params.left) : "";
   const rightReg = params.right ? normalizeRegistration(params.right) : "";
 
-  const leftResult = leftReg ? await lookupVehicle(leftReg) : null;
-  const rightResult = rightReg ? await lookupVehicle(rightReg) : null;
+  const bothProvided = Boolean(leftReg && rightReg);
+  const leftResult = bothProvided ? await lookupVehicle(leftReg) : null;
+  const rightResult = bothProvided ? await lookupVehicle(rightReg) : null;
   const canCompare =
     leftResult?.ok && rightResult?.ok ? true : false;
 
@@ -70,12 +71,12 @@ export default async function CompareCarsPage({
         <Container className="space-y-6 md:space-y-7">
           {canCompare && leftResult?.ok && rightResult?.ok ? (
             <VehicleComparison left={leftResult.data} right={rightResult.data} />
-          ) : leftReg || rightReg ? (
+          ) : leftReg && rightReg ? (
             <div className="rounded-[12px] border border-warning/25 bg-warning-bg px-5 py-4 text-[15px] text-warning">
               We couldn’t compare those registrations. Check both registrations
               and try again.
             </div>
-          ) : (
+          ) : leftReg || rightReg ? null : (
             <div>
               <p className="eyebrow mb-3">Example comparison</p>
               <ExampleCompare />

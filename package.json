@@ -15,7 +15,8 @@
     "pdf:sample-preview": "npx tsx scripts/generate-sample-report-preview.ts",
     "test:mail": "node --conditions=react-server --import tsx lib/mail/messages.test.ts",
     "test:dvsa": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/dvsa-mot-test.ts",
-    "test:live-lookup": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/live-lookup-test.ts"
+    "test:live-lookup": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/live-lookup-test.ts",
+    "email:preview": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/report-email-preview.ts"
   },
   "dependencies": {
     "@pdf-lib/fontkit": "^1.1.1",

@@ -4,7 +4,10 @@ import { FAQ } from "@/components/ui/FAQ";
 import { RelatedTools } from "@/components/ui/RelatedTools";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ToolHero } from "@/components/tools/ToolHero";
-import { DvlaLookupProvider } from "@/components/vehicle/DvlaLookupContext";
+import {
+  DvlaLookupProvider,
+  HiddenWhenLookupResult,
+} from "@/components/vehicle/DvlaLookupContext";
 import { DvlaLookupReport } from "@/components/vehicle/DvlaLookupReport";
 import { VehicleSearchForm } from "@/components/vehicle/VehicleSearchForm";
 import type { CheckSource } from "@/lib/analytics";
@@ -50,93 +53,98 @@ export function CheckerLandingPage({
     />
   );
 
-  return (
-    <>
-      {inlineDvlaLookup ? (
-        <DvlaLookupProvider>
-          {hero}
-          <DvlaLookupReport />
-        </DvlaLookupProvider>
-      ) : (
-        hero
-      )}
+  const content = (
+    <section className="section-y">
+      <Container className="space-y-11 md:space-y-12">
+        {crossLink ? (
+          <p className="rounded-[12px] border border-border bg-surface-soft px-4 py-3.5 text-[15px] text-navy/80 md:px-5">
+            {crossLink.label}{" "}
+            <Link
+              href={crossLink.href}
+              className="font-semibold text-blue hover:text-blue-hover"
+            >
+              Tax &amp; Mileage →
+            </Link>
+          </p>
+        ) : null}
 
-      <section className="section-y">
-        <Container className="space-y-11 md:space-y-12">
-          {crossLink ? (
-            <p className="rounded-[12px] border border-border bg-surface-soft px-4 py-3.5 text-[15px] text-navy/80 md:px-5">
-              {crossLink.label}{" "}
-              <Link
-                href={crossLink.href}
-                className="font-semibold text-blue hover:text-blue-hover"
+        <div>
+          <SectionHeading title="What you’ll see" />
+          <div className="grid gap-4 md:grid-cols-3 md:gap-5">
+            {whatYoullSee.map((item) => (
+              <div
+                key={item.title}
+                className="rounded-[12px] border border-border bg-white p-5"
               >
-                Tax &amp; Mileage →
-              </Link>
-            </p>
-          ) : null}
+                <h3 className="heading-card">{item.title}</h3>
+                <p className="support-copy mt-2">{item.text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
 
-          <div>
-            <SectionHeading title="What you’ll see" />
-            <div className="grid gap-4 md:grid-cols-3 md:gap-5">
-              {whatYoullSee.map((item) => (
-                <div
-                  key={item.title}
-                  className="rounded-[12px] border border-border bg-white p-5"
-                >
-                  <h3 className="heading-card">{item.title}</h3>
-                  <p className="support-copy mt-2">{item.text}</p>
+        <div>
+          <SectionHeading title="How it works" />
+          <ol className="grid gap-4 md:grid-cols-3 md:gap-5">
+            {howItWorks.map((item, index) => (
+              <li
+                key={item.step}
+                className="rounded-[12px] border border-border bg-surface-soft p-5"
+              >
+                <div className="mb-2 text-[12px] font-semibold uppercase tracking-wide text-blue md:text-[13px]">
+                  Step {index + 1}
                 </div>
-              ))}
-            </div>
-          </div>
+                <h3 className="heading-card">{item.step}</h3>
+                <p className="support-copy mt-2">{item.text}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
 
-          <div>
-            <SectionHeading title="How it works" />
-            <ol className="grid gap-4 md:grid-cols-3 md:gap-5">
-              {howItWorks.map((item, index) => (
-                <li
-                  key={item.step}
-                  className="rounded-[12px] border border-border bg-surface-soft p-5"
-                >
-                  <div className="mb-2 text-[12px] font-semibold uppercase tracking-wide text-blue md:text-[13px]">
-                    Step {index + 1}
-                  </div>
-                  <h3 className="heading-card">{item.step}</h3>
-                  <p className="support-copy mt-2">{item.text}</p>
-                </li>
-              ))}
-            </ol>
-          </div>
+        <div className="prose-av max-w-[46rem]">{explanation}</div>
 
-          <div className="prose-av max-w-[46rem]">{explanation}</div>
+        <div>
+          <SectionHeading title="Related tools" />
+          <RelatedTools tools={relatedToolsMap[toolKey]} />
+        </div>
 
-          <div>
-            <SectionHeading title="Related tools" />
-            <RelatedTools tools={relatedToolsMap[toolKey]} />
-          </div>
+        <div>
+          <SectionHeading title="Frequently asked questions" />
+          <FAQ items={faqs} />
+        </div>
 
-          <div>
-            <SectionHeading title="Frequently asked questions" />
-            <FAQ items={faqs} />
+        <div className="rounded-[12px] border border-border bg-surface-soft p-5 md:p-6">
+          <h2 className="heading-section text-[1.35rem] md:text-[1.5rem]">
+            Ready to check a vehicle?
+          </h2>
+          <p className="support-copy mt-2 max-w-xl">
+            Enter a UK registration to get started.
+          </p>
+          <div className="mt-4 max-w-xl md:mt-5">
+            <VehicleSearchForm
+              buttonLabel={buttonLabel}
+              checkSource={checkSource}
+            />
           </div>
+        </div>
+      </Container>
+    </section>
+  );
 
-          <div className="rounded-[12px] border border-border bg-surface-soft p-5 md:p-6">
-            <h2 className="heading-section text-[1.35rem] md:text-[1.5rem]">
-              Ready to check a vehicle?
-            </h2>
-            <p className="support-copy mt-2 max-w-xl">
-              Enter a UK registration to get started. In demo mode, try AB12 CDE or
-              CD34 EFG.
-            </p>
-            <div className="mt-4 max-w-xl md:mt-5">
-              <VehicleSearchForm
-                buttonLabel={buttonLabel}
-                checkSource={checkSource}
-              />
-            </div>
-          </div>
-        </Container>
-      </section>
-    </>
+  if (!inlineDvlaLookup) {
+    return (
+      <>
+        {hero}
+        {content}
+      </>
+    );
+  }
+
+  return (
+    <DvlaLookupProvider>
+      {hero}
+      <DvlaLookupReport />
+      <HiddenWhenLookupResult>{content}</HiddenWhenLookupResult>
+    </DvlaLookupProvider>
   );
 }

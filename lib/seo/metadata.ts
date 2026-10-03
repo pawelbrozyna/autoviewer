@@ -6,8 +6,17 @@ export const SITE_URL =
 
 export const SITE_NAME = "AutoViewer";
 
+export const HOME_TITLE = "Free Car Check UK: MOT, Tax & Mileage History | AutoViewer";
+
 export const DEFAULT_DESCRIPTION =
   "Free UK car check for MOT history, tax, mileage, recalls and vehicle details. Make a smarter used car buying decision with AutoViewer.";
+
+export const OG_IMAGE = {
+  url: "/og-image.png",
+  width: 1200,
+  height: 630,
+  alt: "AutoViewer free UK car check",
+};
 
 export function absoluteUrl(path = "/"): string {
   const base = SITE_URL.replace(/\/$/, "");
@@ -40,11 +49,13 @@ export function buildPageMetadata({
       siteName: SITE_NAME,
       locale: "en_GB",
       type: "website",
+      images: [OG_IMAGE],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
+      images: [OG_IMAGE.url],
     },
     robots: robotsMetadata(noIndex),
   };
@@ -68,11 +79,6 @@ export function websiteJsonLd() {
     "@type": "WebSite",
     name: SITE_NAME,
     url: SITE_URL,
-    potentialAction: {
-      "@type": "SearchAction",
-      target: `${SITE_URL}/vehicle/{registration}`,
-      "query-input": "required name=registration",
-    },
   };
 }
 

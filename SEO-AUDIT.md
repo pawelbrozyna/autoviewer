@@ -6,6 +6,27 @@ No production code was changed for this audit.
 
 ---
 
+## Cleanup status (updated 3 October 2026)
+
+Done:
+- `ALLOW_INDEXING` flag drives robots meta, `X-Robots-Tag`, robots.txt and sitemap.xml. `false` (or unset) = global `noindex, nofollow`, robots.txt `Disallow: /`, empty sitemap.
+- `/vehicle/[registration]` is always `noindex`, disallowed in robots.txt and never in the sitemap.
+- Coming-soon homepage, `MAINTENANCE_MODE` gate and `/maintenance` page removed. All routes except reports are now static.
+- Inline searches use the live DVSA report. Demo-mode copy removed from live pages.
+- Duplicate brand titles fixed (Contact, Full Report). Shorter homepage title. Topical homepage H1.
+- `/example-report` noindexed and limited to one H1.
+- Default `og:image` / `twitter:image` (`/og-image.png`, 1200x630) on every page.
+- Obsolete `SearchAction` removed from `WebSite` schema.
+- Custom `app/not-found.tsx` (real 404, noindex).
+- robots.txt (when indexing is on) also disallows `/api/` and `/compare-cars?`. Sitemap no longer emits a fake `lastModified`.
+- Internal links: `/mileage-check`, `/recall-check` and `/vehicle-details` added to the footer and related-tools cards.
+
+Flagged for consolidation (not changed yet):
+- `/tax-mileage`, `/car-tax-check`, `/mileage-check`: overlapping intent. Plan: retire `/tax-mileage` (301 to `/car-tax-check` or noindex) and put Mileage Check in the nav.
+- `/vehicle-details` vs `/check-a-vehicle`: near-identical intent. Plan: 301 to `/check-a-vehicle` or reposition as a specs page.
+
+---
+
 ## 0. Critical findings (read first)
 
 1. **There is no `ALLOW_INDEXING` flag in the codebase.** Indexing is currently controlled by three unrelated mechanisms:

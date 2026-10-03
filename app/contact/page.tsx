@@ -9,6 +9,7 @@ export const metadata: Metadata = buildPageMetadata({
   description:
     "Contact AutoViewer for product questions, data feedback or support.",
   path: "/contact",
+  absoluteTitle: true,
 });
 
 export default function ContactPage() {

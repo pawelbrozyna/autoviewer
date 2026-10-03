@@ -6,9 +6,13 @@ import { VehicleSearchForm } from "@/components/vehicle/VehicleSearchForm";
 
 export function HomeHero({
   inlineDvlaLookup = false,
+  headingLevel = "h1",
 }: {
   inlineDvlaLookup?: boolean;
+  headingLevel?: "h1" | "h2";
 }) {
+  const Heading = headingLevel;
+
   return (
     <section className="relative overflow-hidden border-b border-border bg-[#f4f6f9]">
       <HeroMobileGradient />
@@ -32,9 +36,9 @@ export function HomeHero({
           <div className="hero-topline">
             <p className="eyebrow mb-0 leading-none">Vehicle history check</p>
           </div>
-          <h1 className="heading-page max-w-none md:whitespace-nowrap">
-            Make a smarter buying decision.
-          </h1>
+          <Heading className="heading-page max-w-none md:whitespace-nowrap">
+            Free car check for smarter buying.
+          </Heading>
           <p className="body-copy mt-3 max-w-none md:mt-3.5 md:whitespace-nowrap lg:mt-3">
             Check MOT history, mileage, tax, recalls and more - all in one place.
           </p>

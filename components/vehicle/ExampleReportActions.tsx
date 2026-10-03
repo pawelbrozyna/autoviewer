@@ -6,7 +6,7 @@ import { downloadVehicleReportPdf } from "@/lib/reports/pdf";
 import { registrationToSlug } from "@/lib/vehicle/registration";
 import type { VehicleRecord } from "@/types/vehicle";
 
-const buttonClass =
+export const reportActionButtonClass =
   "inline-flex min-h-11 items-center justify-center gap-2 rounded-[9px] border border-border bg-white px-3.5 text-[14px] font-semibold text-navy transition hover:border-navy/30 hover:bg-surface-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60";
 
 export function ExampleReportActions({
@@ -153,7 +153,7 @@ export function ExampleReportActions({
       <div className="grid grid-cols-1 gap-2 sm:flex sm:flex-wrap">
         <button
           type="button"
-          className={buttonClass}
+          className={reportActionButtonClass}
           onClick={downloadPdf}
           disabled={downloading}
         >
@@ -167,7 +167,7 @@ export function ExampleReportActions({
         <button
           ref={emailTriggerRef}
           type="button"
-          className={buttonClass}
+          className={reportActionButtonClass}
           onClick={() => {
             setEmailStatus("idle");
             setEmailError("");
@@ -177,7 +177,11 @@ export function ExampleReportActions({
           <Mail className="h-4 w-4" aria-hidden />
           Email report
         </button>
-        <button type="button" className={buttonClass} onClick={shareReport}>
+        <button
+          type="button"
+          className={reportActionButtonClass}
+          onClick={shareReport}
+        >
           <Share2 className="h-4 w-4" aria-hidden />
           Share
         </button>
@@ -224,7 +228,7 @@ export function ExampleReportActions({
                 <p className="font-semibold text-success">Report email sent.</p>
                 <button
                   type="button"
-                  className={`${buttonClass} mt-4`}
+                  className={`${reportActionButtonClass} mt-4`}
                   onClick={closeModal}
                 >
                   Close

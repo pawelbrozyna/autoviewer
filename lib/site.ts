@@ -10,6 +10,9 @@ export const navLinks = [
 export const footerTools = [
   { href: "/check-a-vehicle", label: "Check a Vehicle" },
   { href: "/mot-history", label: "MOT History" },
+  { href: "/mileage-check", label: "Mileage Check" },
+  { href: "/recall-check", label: "Recall Check" },
+  { href: "/vehicle-details", label: "Vehicle Details" },
   { href: "/tax-mileage", label: "Tax & Mileage" },
   { href: "/compare-cars", label: "Compare Cars" },
   { href: "/running-costs", label: "Running Costs" },
@@ -34,9 +37,9 @@ export const relatedToolsMap: Record<
       description: "Review past MOT results and advisories.",
     },
     {
-      href: "/tax-mileage",
-      label: "Tax & Mileage",
-      description: "Check tax status and mileage history together.",
+      href: "/recall-check",
+      label: "Recall Check",
+      description: "See available safety recall information.",
     },
     {
       href: "/compare-cars",
@@ -46,9 +49,9 @@ export const relatedToolsMap: Record<
   ],
   "mot-history": [
     {
-      href: "/tax-mileage",
-      label: "Tax & Mileage",
-      description: "Pair MOT history with tax and mileage.",
+      href: "/mileage-check",
+      label: "Mileage Check",
+      description: "Review mileage recorded at each MOT.",
     },
     {
       href: "/check-a-vehicle",
@@ -97,9 +100,9 @@ export const relatedToolsMap: Record<
   ],
   "mileage-check": [
     {
-      href: "/tax-mileage",
-      label: "Tax & Mileage",
-      description: "See mileage history with current tax status.",
+      href: "/recall-check",
+      label: "Recall Check",
+      description: "See available safety recall information.",
     },
     {
       href: "/mot-history",
@@ -158,16 +161,16 @@ export const relatedToolsMap: Record<
       description: "Estimate yearly costs for either car.",
     },
     {
-      href: "/mot-history",
-      label: "MOT History",
-      description: "Compare MOT outcomes in detail.",
+      href: "/vehicle-details",
+      label: "Vehicle Details",
+      description: "Look up make, model, fuel and year by registration.",
     },
   ],
   "running-costs": [
     {
-      href: "/tax-mileage",
-      label: "Tax & Mileage",
-      description: "Check tax status and mileage together.",
+      href: "/car-tax-check",
+      label: "Car Tax Check",
+      description: "Check tax and SORN status by registration.",
     },
     {
       href: "/check-a-vehicle",
