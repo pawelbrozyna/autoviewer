@@ -15,14 +15,23 @@ import {
   MailConfigurationError,
   sendMail,
 } from "@/lib/server/mail";
-import { isValidRegistrationFormat } from "@/lib/vehicle/registration";
+import { lookupVehicle } from "@/lib/api/vehicle-service";
+import {
+  isValidRegistrationFormat,
+  normalizeRegistration,
+  registrationToSlug,
+} from "@/lib/vehicle/registration";
+import type { VehicleRecord } from "@/types/vehicle";
 
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
-  let body: { email?: unknown };
+  let body: { email?: unknown; registration?: unknown };
   try {
-    body = (await request.json()) as { email?: unknown };
+    body = (await request.json()) as {
+      email?: unknown;
+      registration?: unknown;
+    };
   } catch {
     return NextResponse.json({ error: "Invalid request." }, { status: 400 });
   }
@@ -35,16 +44,42 @@ export async function POST(request: Request) {
     );
   }
 
-  const vehicle = getMockVehicle("AV19SWF");
-  if (
-    !vehicle ||
-    !isValidRegistrationFormat(vehicle.summary.registration)
-  ) {
-    console.error("Example report vehicle configuration is invalid.");
-    return NextResponse.json(
-      { error: "Failed to prepare report." },
-      { status: 500 },
-    );
+  const requestedRegistration =
+    typeof body.registration === "string"
+      ? normalizeRegistration(body.registration)
+      : "";
+
+  let vehicle: VehicleRecord | null;
+  let reportPath: string;
+  if (requestedRegistration) {
+    if (!isValidRegistrationFormat(requestedRegistration)) {
+      return NextResponse.json(
+        { error: "Enter a valid UK registration number." },
+        { status: 400 },
+      );
+    }
+    const result = await lookupVehicle(requestedRegistration);
+    if (!result.ok) {
+      return NextResponse.json(
+        { error: result.error.message },
+        { status: result.error.code === "NOT_FOUND" ? 404 : 502 },
+      );
+    }
+    vehicle = result.data;
+    reportPath = `/vehicle/${registrationToSlug(vehicle.summary.registration)}`;
+  } else {
+    vehicle = getMockVehicle("AV19SWF");
+    reportPath = "/example-report";
+    if (
+      !vehicle ||
+      !isValidRegistrationFormat(vehicle.summary.registration)
+    ) {
+      console.error("Example report vehicle configuration is invalid.");
+      return NextResponse.json(
+        { error: "Failed to prepare report." },
+        { status: 500 },
+      );
+    }
   }
 
   const allowed = await tryConsumeFreeReportEmail({
@@ -60,7 +95,7 @@ export async function POST(request: Request) {
   }
 
   const reportUrl = new URL(
-    "/example-report",
+    reportPath,
     process.env.NEXT_PUBLIC_SITE_URL || request.url,
   ).toString();
 

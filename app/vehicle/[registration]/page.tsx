@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import { FreeReportActions } from "@/components/vehicle/FreeReportActions";
-import { VehicleFullReport } from "@/components/vehicle/VehicleFullReport";
+import { LiveVehicleReportSection } from "@/components/reports/VehicleReportSection";
 import { Container } from "@/components/ui/Container";
 import { ErrorState } from "@/components/ui/EmptyState";
 import { getMockVehicle } from "@/lib/api/mock";
@@ -48,6 +47,7 @@ export default async function VehicleResultPage({ params }: PageProps) {
   const requestedResult = await lookupVehicle(normalized);
   const result =
     requestedResult.ok &&
+    requestedResult.data.summary.isDemo &&
     requestedResult.data.summary.registration === "CD34EFG"
       ? { ok: true as const, data: getMockVehicle("AV19SWF")! }
       : requestedResult;
@@ -61,30 +61,7 @@ export default async function VehicleResultPage({ params }: PageProps) {
     );
   }
 
-  const vehicle = result.data;
-  const { summary } = vehicle;
-
-  return (
-    <div className="bg-[#F9FBFE] pb-3 md:bg-surface-soft md:pb-14">
-      <Container className="pb-4 pt-2 md:py-9">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <BackLink />
-          <FreeReportActions
-            vehicle={vehicle}
-            ownersLabel={summary.isDemo ? "2" : null}
-          />
-        </div>
-
-        <div className="mt-2 md:mt-5">
-          <VehicleFullReport
-            vehicle={vehicle}
-            ownersLabel={summary.isDemo ? "2" : null}
-            mobileLargerImage
-          />
-        </div>
-      </Container>
-    </div>
-  );
+  return <LiveVehicleReportSection vehicle={result.data} />;
 }
 
 function BackLink() {

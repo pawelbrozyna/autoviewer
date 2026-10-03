@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Download, LoaderCircle, Mail, Share2, X } from "lucide-react";
 import { downloadVehicleReportPdf } from "@/lib/reports/pdf";
+import { registrationToSlug } from "@/lib/vehicle/registration";
 import type { VehicleRecord } from "@/types/vehicle";
 
 const buttonClass =
@@ -15,6 +16,7 @@ export function ExampleReportActions({
   vehicle: VehicleRecord;
   ownersLabel?: string | null;
 }) {
+  const isDemo = vehicle.summary.isDemo;
   const [downloading, setDownloading] = useState(false);
   const [shareStatus, setShareStatus] = useState("");
   const [emailOpen, setEmailOpen] = useState(false);
@@ -72,16 +74,26 @@ export function ExampleReportActions({
   }
 
   async function shareReport() {
-    const url = `${window.location.origin}/example-report`;
+    const url = isDemo
+      ? `${window.location.origin}/example-report`
+      : `${window.location.origin}/vehicle/${registrationToSlug(vehicle.summary.registration)}`;
     setShareStatus("");
 
     try {
       if (navigator.share) {
-        await navigator.share({
-          title: "AutoViewer Example Report",
-          text: "Explore a complete AutoViewer demonstration vehicle report.",
-          url,
-        });
+        await navigator.share(
+          isDemo
+            ? {
+                title: "AutoViewer Example Report",
+                text: "Explore a complete AutoViewer demonstration vehicle report.",
+                url,
+              }
+            : {
+                title: `AutoViewer Vehicle Report - ${vehicle.summary.displayRegistration}`,
+                text: `View the AutoViewer vehicle report for ${vehicle.summary.displayRegistration}.`,
+                url,
+              },
+        );
         setShareStatus("Report shared");
       } else {
         await navigator.clipboard.writeText(url);
@@ -107,7 +119,11 @@ export function ExampleReportActions({
       const response = await fetch("/api/reports/example/email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify(
+          isDemo
+            ? { email }
+            : { email, registration: vehicle.summary.registration },
+        ),
       });
       const payload = (await response.json()) as {
         success?: boolean;

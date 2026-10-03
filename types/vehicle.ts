@@ -95,7 +95,8 @@ export interface VehicleSummary {
   latestMileage?: number | null;
   tax: TaxStatus;
   motStatus: {
-    status: "Valid" | "Expired" | "No MOT" | "Unknown";
+    status: "Valid" | "Expired" | "No MOT" | "First MOT due" | "Unknown";
+    /** Expiry date, or the first MOT due date when status is "First MOT due". */
     expiryDate?: string | null;
   };
   recalls: RecallStatus;

@@ -22,9 +22,11 @@ import {
   DEFAULT_ANNUAL_MILEAGE,
   DEFAULT_FUEL_PRICE_PER_LITRE_GBP,
   calculateAnnualFuelCost,
+  formatFuelPricePencePerLitre,
 } from "@/lib/vehicle/running-costs";
 import { buyerScoreDisclaimer } from "@/lib/vehicle/score";
 import { cn } from "@/lib/utils";
+import { NA, compactValue } from "@/lib/vehicle/missing-data";
 import type { VehicleRecord } from "@/types/vehicle";
 
 /** Classic dashboard “check engine” / MIL silhouette. */
@@ -67,7 +69,6 @@ type MobileRow = {
   winner: Winner;
   leftWarning?: boolean;
   rightWarning?: boolean;
-  labelExtra?: React.ReactNode;
 };
 
 function shortName(record: VehicleRecord) {
@@ -127,24 +128,32 @@ function buildMobileRows(left: VehicleRecord, right: VehicleRecord): MobileRow[]
   });
   const leftAdv = countAdvisories(left);
   const rightAdv = countAdvisories(right);
-  const leftRecalls = left.recalls.hasOpenRecalls ? left.recalls.count : 0;
-  const rightRecalls = right.recalls.hasOpenRecalls ? right.recalls.count : 0;
+  const recallCount = (record: VehicleRecord) =>
+    record.recalls.dataAvailable === false
+      ? null
+      : record.recalls.hasOpenRecalls
+        ? record.recalls.count
+        : 0;
+  const recallValue = (count: number | null) =>
+    count == null ? NA : count > 0 ? `${count} open` : "None";
+  const leftRecalls = recallCount(left);
+  const rightRecalls = recallCount(right);
 
   return [
     {
       key: "year",
       label: "Year",
       icon: Calendar,
-      leftValue: left.summary.year != null ? String(left.summary.year) : "-",
-      rightValue: right.summary.year != null ? String(right.summary.year) : "-",
+      leftValue: left.summary.year != null ? String(left.summary.year) : NA,
+      rightValue: right.summary.year != null ? String(right.summary.year) : NA,
       winner: betterHigher(left.summary.year, right.summary.year),
     },
     {
       key: "engine",
       label: "Engine size",
       icon: EngineIcon,
-      leftValue: formatEngineLitres(left.summary.engineCapacity) ?? "-",
-      rightValue: formatEngineLitres(right.summary.engineCapacity) ?? "-",
+      leftValue: formatEngineLitres(left.summary.engineCapacity) ?? NA,
+      rightValue: formatEngineLitres(right.summary.engineCapacity) ?? NA,
       winner: betterHigher(
         left.summary.engineCapacity,
         right.summary.engineCapacity,
@@ -155,25 +164,25 @@ function buildMobileRows(left: VehicleRecord, right: VehicleRecord): MobileRow[]
       label: "Power",
       icon: Zap,
       leftValue:
-        left.summary.powerBhp != null ? `${left.summary.powerBhp} bhp` : "-",
+        left.summary.powerBhp != null ? `${left.summary.powerBhp} bhp` : NA,
       rightValue:
-        right.summary.powerBhp != null ? `${right.summary.powerBhp} bhp` : "-",
+        right.summary.powerBhp != null ? `${right.summary.powerBhp} bhp` : NA,
       winner: betterHigher(left.summary.powerBhp, right.summary.powerBhp),
     },
     {
       key: "fuel",
       label: "Fuel",
       icon: Fuel,
-      leftValue: left.summary.fuelType ?? "-",
-      rightValue: right.summary.fuelType ?? "-",
+      leftValue: left.summary.fuelType ?? NA,
+      rightValue: right.summary.fuelType ?? NA,
       winner: "none",
     },
     {
       key: "transmission",
       label: "Transmission",
       icon: Settings2,
-      leftValue: left.summary.transmission ?? "-",
-      rightValue: right.summary.transmission ?? "-",
+      leftValue: left.summary.transmission ?? NA,
+      rightValue: right.summary.transmission ?? NA,
       winner: "none",
     },
     {
@@ -183,11 +192,11 @@ function buildMobileRows(left: VehicleRecord, right: VehicleRecord): MobileRow[]
       leftValue:
         left.summary.latestMileage != null
           ? `${left.summary.latestMileage.toLocaleString("en-GB")} mi`
-          : "-",
+          : NA,
       rightValue:
         right.summary.latestMileage != null
           ? `${right.summary.latestMileage.toLocaleString("en-GB")} mi`
-          : "-",
+          : NA,
       winner: betterLower(
         left.summary.latestMileage,
         right.summary.latestMileage,
@@ -200,11 +209,11 @@ function buildMobileRows(left: VehicleRecord, right: VehicleRecord): MobileRow[]
       leftValue:
         left.summary.annualRoadTaxGbp != null
           ? `£${left.summary.annualRoadTaxGbp.toLocaleString("en-GB")} /yr`
-          : left.summary.tax.status || "-",
+          : compactValue(left.summary.tax.status),
       rightValue:
         right.summary.annualRoadTaxGbp != null
           ? `£${right.summary.annualRoadTaxGbp.toLocaleString("en-GB")} /yr`
-          : right.summary.tax.status || "-",
+          : compactValue(right.summary.tax.status),
       winner: betterLower(
         left.summary.annualRoadTaxGbp,
         right.summary.annualRoadTaxGbp,
@@ -217,31 +226,25 @@ function buildMobileRows(left: VehicleRecord, right: VehicleRecord): MobileRow[]
       leftValue:
         left.summary.combinedMpg != null
           ? `${left.summary.combinedMpg} mpg`
-          : "-",
+          : NA,
       rightValue:
         right.summary.combinedMpg != null
           ? `${right.summary.combinedMpg} mpg`
-          : "-",
+          : NA,
       winner: betterHigher(left.summary.combinedMpg, right.summary.combinedMpg),
     },
     {
       key: "fuel-cost",
       label: "Fuel cost",
       icon: CircleDollarSign,
-      labelExtra: (
-        <InfoTip
-          label="About estimated fuel cost"
-          text={`Estimate using ${DEFAULT_ANNUAL_MILEAGE.toLocaleString("en-GB")} miles/year, combined MPG when available, and £${DEFAULT_FUEL_PRICE_PER_LITRE_GBP.toFixed(2)}/litre. Not a live fuel-price quote.`}
-        />
-      ),
       leftValue:
         leftFuel != null
           ? `£${leftFuel.toLocaleString("en-GB")}`
-          : "-",
+          : NA,
       rightValue:
         rightFuel != null
           ? `£${rightFuel.toLocaleString("en-GB")}`
-          : "-",
+          : NA,
       winner: betterLower(leftFuel, rightFuel),
     },
     {
@@ -256,11 +259,11 @@ function buildMobileRows(left: VehicleRecord, right: VehicleRecord): MobileRow[]
       key: "recalls",
       label: "Recalls",
       icon: ShieldAlert,
-      leftValue: leftRecalls > 0 ? `${leftRecalls} open` : "None",
-      rightValue: rightRecalls > 0 ? `${rightRecalls} open` : "None",
+      leftValue: recallValue(leftRecalls),
+      rightValue: recallValue(rightRecalls),
       winner: betterLower(leftRecalls, rightRecalls),
-      leftWarning: leftRecalls > 0,
-      rightWarning: rightRecalls > 0,
+      leftWarning: (leftRecalls ?? 0) > 0,
+      rightWarning: (rightRecalls ?? 0) > 0,
     },
     {
       key: "score",
@@ -269,11 +272,11 @@ function buildMobileRows(left: VehicleRecord, right: VehicleRecord): MobileRow[]
       leftValue:
         left.buyerScore?.score != null
           ? `${left.buyerScore.score}/100`
-          : "-",
+          : NA,
       rightValue:
         right.buyerScore?.score != null
           ? `${right.buyerScore.score}/100`
-          : "-",
+          : NA,
       winner: betterHigher(left.buyerScore?.score, right.buyerScore?.score),
     },
   ];
@@ -330,27 +333,27 @@ function VehicleCompareCard({
   const specs = [
     {
       icon: Calendar,
-      value: record.summary.year != null ? String(record.summary.year) : "-",
+      value: record.summary.year != null ? String(record.summary.year) : NA,
     },
     {
       icon: EngineIcon,
-      value: formatEngineLitres(record.summary.engineCapacity) ?? "-",
+      value: formatEngineLitres(record.summary.engineCapacity) ?? NA,
     },
     {
       icon: Zap,
       value:
         record.summary.powerBhp != null
           ? `${record.summary.powerBhp} bhp`
-          : "-",
+          : NA,
     },
     {
       icon: Fuel,
-      value: record.summary.fuelType ?? "-",
+      value: record.summary.fuelType ?? NA,
     },
   ];
 
   return (
-    <div className="flex min-w-0 flex-col overflow-hidden rounded-[14px] border border-border bg-white">
+    <div className="flex h-full min-w-0 w-full flex-col overflow-hidden rounded-[14px] border border-border bg-white">
       <div className="px-1.5 pt-1">
         <VehicleThumbnail
           label={name}
@@ -362,37 +365,48 @@ function VehicleCompareCard({
         {showImageCaption ? (
           <VehicleImageCaption
             summary={record.summary}
-            className="relative z-10 -mt-1 text-center text-[8px] leading-tight"
+            className="relative z-10 -mt-1 min-h-[1.5em] text-center text-[8px] leading-tight"
           />
-        ) : null}
+        ) : (
+          <div className="min-h-[1.5em]" aria-hidden />
+        )}
       </div>
 
-      <div className="flex flex-1 flex-col px-2.5 pb-2.5 pt-1">
-        <div className="mx-auto inline-flex items-center rounded-[5px] bg-[#FACC35] px-2 py-[3px]">
-          <span className="text-[11px] font-bold tracking-[0.04em] text-black">
+      <div className="flex flex-1 flex-col px-2 pb-2 pt-1">
+        <div className="mx-auto inline-flex max-w-full items-center rounded-[5px] bg-[#FACC35] px-1.5 py-[3px]">
+          <span className="truncate text-[11px] font-bold tracking-[0.04em] text-black">
             {record.summary.displayRegistration}
           </span>
         </div>
 
-        <h3 className="mt-2 text-center text-[14px] font-bold leading-tight text-[#012046]">
-          {name}
-        </h3>
-        {trim ? (
-          <p className="mt-0.5 truncate text-center text-[11px] text-[#64748B]">
-            {trim}
+        <div className="mt-2 w-full">
+          <h3 className="line-clamp-2 h-[1.875rem] w-full text-center text-[13px] font-bold leading-[1.15] text-[#012046]">
+            {name}
+          </h3>
+          <p className="mt-0.5 h-4 w-full truncate text-center text-[11px] leading-4 text-[#64748B]">
+            {trim || "\u00a0"}
           </p>
-        ) : null}
+        </div>
 
-        <div className="mt-2.5 grid grid-cols-2 gap-x-1 gap-y-1.5 pl-1.5">
+        <div className="mt-2 grid grid-cols-2 gap-x-1 gap-y-1.5">
           {specs.map((spec, index) => {
             const Icon = spec.icon;
+            const isRightCol = index % 2 === 1;
             return (
               <div
                 key={`${index}-${spec.value}`}
-                className="flex items-center gap-1 text-[11px] font-medium text-[#475569]"
+                className={cn(
+                  "flex min-w-0 items-center gap-0.5 text-[10.5px] font-medium leading-none text-[#475569]",
+                  isRightCol && "pl-2.5",
+                )}
               >
-                <Icon className="h-3 w-3 shrink-0" strokeWidth={2} />
-                <span className="truncate">{spec.value}</span>
+                <Icon
+                  className="block h-3 w-3 shrink-0"
+                  strokeWidth={2}
+                />
+                <span className="truncate leading-none tabular-nums">
+                  {spec.value}
+                </span>
               </div>
             );
           })}
@@ -401,31 +415,22 @@ function VehicleCompareCard({
 
       <div
         className={cn(
-          "border-t border-border px-2.5 py-2",
+          "mt-auto border-t border-border px-2.5 py-2",
           isLeader ? "bg-[#E8F6EE]" : "bg-[#F3F6FA]",
         )}
       >
-        <div className="flex items-center justify-between gap-1">
-          <div className="flex flex-col items-center">
-            <div className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wide text-[#64748B]">
-              Buyer Score
-              <InfoTip label="About Buyer Score" text={buyerScoreDisclaimer()} />
-            </div>
-            <div
-              className={cn(
-                "mt-1 text-[22px] font-extrabold leading-none tabular-nums",
-                isLeader ? "text-[#157A45]" : "text-[#012046]",
-              )}
-            >
-              {score == null ? "-" : score}
-              <span className="text-[12px] font-semibold text-[#64748B]">
-                /100
-              </span>
-            </div>
+        <div className="flex items-start justify-between gap-1">
+          <div className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wide text-[#64748B]">
+            Buyer Score
+            <InfoTip
+              label="About Buyer Score"
+              text={buyerScoreDisclaimer()}
+              className="-translate-y-[2px]"
+            />
           </div>
           <p
             className={cn(
-              "flex flex-col items-center gap-0.5 text-center text-[11px] font-semibold leading-none",
+              "flex flex-col items-center gap-0.5 pt-0.5 text-center text-[11px] font-semibold leading-none",
               isLeader ? "text-[#157A45]" : "text-[#64748B]",
             )}
           >
@@ -435,6 +440,19 @@ function VehicleCompareCard({
               </span>
             ))}
           </p>
+        </div>
+        <div
+          className={cn(
+            "mt-1 text-center text-[26px] font-extrabold leading-none tabular-nums",
+            isLeader ? "text-[#157A45]" : "text-[#012046]",
+          )}
+        >
+          {score == null ? NA : score}
+          {score != null ? (
+            <span className="text-[13px] font-semibold text-[#64748B]">
+              /100
+            </span>
+          ) : null}
         </div>
       </div>
     </div>
@@ -508,8 +526,8 @@ export function VehicleComparisonMobile({
   const summary = buildQuickSummary(left, right, rows);
 
   return (
-    <div className="space-y-3.5">
-      <div className="grid grid-cols-2 gap-2.5">
+    <div className="space-y-2.5">
+      <div className="grid grid-cols-2 items-stretch gap-1.5 [&>*]:min-w-0">
         <VehicleCompareCard
           record={left}
           isLeader={leftLeads}
@@ -522,13 +540,13 @@ export function VehicleComparisonMobile({
         />
       </div>
 
-      <div className="space-y-1.5">
+      <div className="space-y-1">
         {rows.map((row) => {
           const Icon = row.icon;
           return (
             <div
               key={row.key}
-              className="grid grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)_minmax(0,1fr)] items-center rounded-[12px] border border-border bg-white px-1.5 py-1.5"
+              className="grid grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)_minmax(0,1fr)] items-center rounded-[10px] border border-border bg-white px-1 py-1"
             >
               <div className="flex min-w-0 items-center gap-1 border-r border-border pl-1 pr-1.5">
                 <Icon
@@ -536,12 +554,9 @@ export function VehicleComparisonMobile({
                   strokeWidth={2}
                   aria-hidden
                 />
-                <div className="flex min-w-0 items-center gap-0.5">
-                  <p className="truncate text-[11px] font-semibold leading-snug text-[#012046]">
-                    {row.label}
-                  </p>
-                  {row.labelExtra}
-                </div>
+                <p className="truncate text-[11px] font-semibold leading-snug text-[#012046]">
+                  {row.label}
+                </p>
               </div>
 
               <div className="border-r border-border px-0.5">
@@ -565,11 +580,16 @@ export function VehicleComparisonMobile({
         })}
       </div>
 
-      <div className="rounded-[14px] border border-border bg-white px-3.5 py-3">
+      <p className="px-0.5 text-[11px] leading-snug text-[#64748B]">
+        Fuel cost estimate: {DEFAULT_ANNUAL_MILEAGE.toLocaleString("en-GB")}{" "}
+        miles/year at {formatFuelPricePencePerLitre()}/litre.
+      </p>
+
+      <div className="rounded-[12px] border border-border bg-white px-3 py-2.5">
         <p className="text-[12px] font-semibold uppercase tracking-[0.06em] text-[#64748B]">
           Quick summary
         </p>
-        <ul className="mt-2 space-y-2 text-[14px] leading-snug text-[#012046]">
+        <ul className="mt-1.5 space-y-1.5 text-[14px] leading-snug text-[#012046]">
           <li>
             <span className="font-semibold">{summary.leftName}</span>
             {" - "}

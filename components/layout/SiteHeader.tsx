@@ -3,7 +3,19 @@
 import Link from "next/link";
 import { useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { Menu, X } from "lucide-react";
+import {
+  ArrowLeftRight,
+  BookOpen,
+  Calculator,
+  ChevronRight,
+  ClipboardCheck,
+  Gauge,
+  LogIn,
+  Menu,
+  Search,
+  X,
+  type LucideIcon,
+} from "lucide-react";
 import { BrandLogo } from "@/components/layout/BrandLogo";
 import { Container } from "@/components/ui/Container";
 import { navLinks } from "@/lib/site";
@@ -11,12 +23,46 @@ import { cn } from "@/lib/utils";
 
 const authEnabled = process.env.NEXT_PUBLIC_ENABLE_AUTH === "true";
 
+const mobileNavIcons: Record<(typeof navLinks)[number]["href"], LucideIcon> = {
+  "/check-a-vehicle": Search,
+  "/mot-history": ClipboardCheck,
+  "/tax-mileage": Gauge,
+  "/compare-cars": ArrowLeftRight,
+  "/running-costs": Calculator,
+  "/guides": BookOpen,
+};
+
+function MobileMenuLink({
+  href,
+  label,
+  icon: Icon,
+  onNavigate,
+}: {
+  href: string;
+  label: string;
+  icon: LucideIcon;
+  onNavigate: () => void;
+}) {
+  return (
+    <Link
+      href={href}
+      className="flex items-center gap-3 px-3.5 py-3.5 text-base font-semibold text-[#012046] transition-colors hover:bg-surface-soft focus-visible:bg-surface-soft focus-visible:outline-none"
+      onClick={onNavigate}
+    >
+      <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-[#EEF3FA] text-navy">
+        <Icon className="h-4 w-4" strokeWidth={2.25} aria-hidden />
+      </span>
+      <span className="min-w-0 flex-1 truncate">{label}</span>
+      <ChevronRight className="h-4 w-4 shrink-0 text-muted" aria-hidden />
+    </Link>
+  );
+}
+
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const menuId = useId();
   const menuButtonRef = useRef<HTMLButtonElement>(null);
-  const closeButtonRef = useRef<HTMLButtonElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -33,9 +79,10 @@ export function SiteHeader() {
       }
       if (e.key !== "Tab" || !drawerRef.current) return;
 
-      const focusable = drawerRef.current.querySelectorAll<HTMLElement>(
-        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
-      );
+      const focusable = [
+        menuButtonRef.current,
+        ...drawerRef.current.querySelectorAll<HTMLElement>("a[href]"),
+      ].filter((el): el is HTMLElement => Boolean(el));
       if (focusable.length === 0) return;
       const first = focusable[0];
       const last = focusable[focusable.length - 1];
@@ -66,7 +113,7 @@ export function SiteHeader() {
     }
 
     const focusTimer = window.setTimeout(() => {
-      closeButtonRef.current?.focus();
+      drawerRef.current?.querySelector<HTMLElement>("a[href]")?.focus();
     }, 20);
     const menuButton = menuButtonRef.current;
 
@@ -88,10 +135,10 @@ export function SiteHeader() {
       <div className="lg:hidden">
         <button
           type="button"
-          tabIndex={open ? 0 : -1}
+          tabIndex={-1}
           aria-label="Close menu"
           className={cn(
-            "fixed inset-0 z-[100] bg-[rgba(0,20,50,0.28)] transition-opacity duration-300 ease-out",
+            "fixed inset-x-0 bottom-0 top-[59px] z-[100] bg-[rgba(0,20,50,0.28)] transition-opacity duration-200 ease-out md:top-[69px]",
             open
               ? "pointer-events-auto opacity-100"
               : "pointer-events-none opacity-0",
@@ -107,46 +154,35 @@ export function SiteHeader() {
           aria-label="Site menu"
           inert={!open ? true : undefined}
           className={cn(
-            "fixed top-0 right-0 z-[110] flex max-h-[100dvh] w-[72vw] max-w-[300px] flex-col bg-white shadow-[-8px_0_24px_rgba(7,26,61,0.12)] transition-transform duration-300 ease-out",
-            open ? "translate-x-0" : "translate-x-full pointer-events-none",
+            "fixed right-3 top-[66px] z-[110] w-[min(273px,calc(100vw-24px))] origin-top-right transition duration-200 ease-out md:right-6 md:top-[76px]",
+            open
+              ? "translate-y-0 scale-100 opacity-100"
+              : "pointer-events-none -translate-y-1 scale-[0.98] opacity-0",
           )}
         >
-          <div className="flex h-[68px] shrink-0 items-center justify-between gap-3 border-b border-border px-4">
-            <BrandLogo size="default" onNavigate={closeMenu} />
-            <button
-              ref={closeButtonRef}
-              type="button"
-              className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-border text-navy"
-              aria-label="Close menu"
-              onClick={closeMenu}
-            >
-              <X className="h-5 w-5" aria-hidden />
-            </button>
-          </div>
-
           <nav
-            className="flex flex-col gap-0.5 overflow-y-auto px-4 pb-4 pt-2"
+            className="max-h-[calc(100dvh-80px)] overflow-y-auto"
             aria-label="Mobile"
           >
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="rounded-md px-3 py-2.5 text-base font-semibold text-[#012046] hover:bg-surface-soft focus-visible:bg-surface-soft"
-                onClick={closeMenu}
-              >
-                {link.label}
-              </Link>
-            ))}
-            {authEnabled ? (
-              <Link
-                href="/sign-in"
-                className="rounded-md px-3 py-2.5 text-base font-semibold text-[#012046] hover:bg-surface-soft focus-visible:bg-surface-soft"
-                onClick={closeMenu}
-              >
-                Sign in
-              </Link>
-            ) : null}
+            <div className="divide-y divide-[#E6EBF2] overflow-hidden rounded-[12px] border border-border bg-white shadow-[0_8px_24px_rgba(7,26,61,0.14)]">
+              {navLinks.map((link) => (
+                <MobileMenuLink
+                  key={link.href}
+                  href={link.href}
+                  label={link.label}
+                  icon={mobileNavIcons[link.href]}
+                  onNavigate={closeMenu}
+                />
+              ))}
+              {authEnabled ? (
+                <MobileMenuLink
+                  href="/sign-in"
+                  label="Sign in"
+                  icon={LogIn}
+                  onNavigate={closeMenu}
+                />
+              ) : null}
+            </div>
           </nav>
         </div>
       </div>,
@@ -155,7 +191,7 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-white/95 backdrop-blur-sm">
-      <Container className="flex h-[68px] items-center justify-between gap-4 lg:h-[62px] lg:gap-3">
+      <Container className="flex h-[58px] items-center justify-between gap-4 md:h-[68px] lg:h-[62px] lg:gap-3">
         <BrandLogo size="header" />
 
         <nav
@@ -193,7 +229,11 @@ export function SiteHeader() {
             aria-label={open ? "Close menu" : "Open menu"}
             onClick={() => setOpen((v) => !v)}
           >
-            <Menu className="h-5 w-5" aria-hidden />
+            {open ? (
+              <X className="h-5 w-5" aria-hidden />
+            ) : (
+              <Menu className="h-5 w-5" aria-hidden />
+            )}
           </button>
         </div>
       </Container>

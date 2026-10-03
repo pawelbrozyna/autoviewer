@@ -21,7 +21,10 @@ import {
   motRowsForFreePdf,
 } from "@/lib/reports/pdf-limits";
 import { absoluteUrl } from "@/lib/seo/metadata";
-import { drawVehicleSpecBlock } from "@/lib/reports/pdf-vehicle-specs";
+import { motDateLabel } from "@/lib/vehicle/mot-status";
+import { statusLabel } from "@/lib/vehicle/missing-data";
+import { checkedItems } from "@/lib/reports/checked-items";
+import { drawIllustrativeImageCaption, drawVehicleSpecBlock } from "@/lib/reports/pdf-vehicle-specs";
 import type { MotTest, VehicleRecord } from "@/types/vehicle";
 
 const PAGE_WIDTH = 595.28;
@@ -38,6 +41,9 @@ const GREEN = rgb(0.075, 0.53, 0.24);
 const GREEN_BG = rgb(0.918, 0.973, 0.929);
 const AMBER = rgb(0.82, 0.48, 0.04);
 const AMBER_BG = rgb(1, 0.973, 0.9);
+/** Lighter body fill for amber tables; keep header at full intensity. */
+const AMBER_BODY_BG = rgb(1, 0.992, 0.978);
+const AMBER_HEADER_BG = rgb(1, 0.96, 0.84);
 const YELLOW = rgb(0.98, 0.8, 0.14);
 const WHITE = rgb(1, 1, 1);
 const BLACK = rgb(0, 0, 0);
@@ -671,44 +677,9 @@ function reportSummary(vehicle: VehicleRecord): {
       ? "No immediate issues indicated"
       : "Available checks completed",
     detail:
-      "Based only on the free public and demonstration data shown in this report.",
+      "Based only on the data shown in this report.",
     positive: coreAvailable,
   };
-}
-
-function checkedItems(
-  vehicle: VehicleRecord,
-): Array<{ title: string; detail: string }> {
-  const { summary } = vehicle;
-  return [
-    vehicle.dataQuality.sources.includes("DVLA") ||
-    vehicle.dataQuality.sources.includes("MOCK")
-      ? {
-          title: "DVLA registration details",
-          detail: "Make, model, colour and status",
-        }
-      : null,
-    summary.motStatus.status !== "Unknown"
-      ? { title: "MOT status", detail: "Current status and history" }
-      : null,
-    summary.tax.status !== "Unknown"
-      ? { title: "Tax status", detail: "Vehicle tax and due date" }
-      : null,
-    vehicle.mileageHistory.length > 1
-      ? { title: "Mileage consistency", detail: "Checked for irregularities" }
-      : null,
-    summary.make && summary.make !== "Unknown"
-      ? {
-          title: "Vehicle identity basics",
-          detail: "Make, model and engine details",
-        }
-      : null,
-    vehicle.motTests.length > 0
-      ? { title: "MOT advisories", detail: "Notable advisories from past tests" }
-      : null,
-  ].filter(
-    (item): item is { title: string; detail: string } => Boolean(item),
-  );
 }
 
 function reportUrl(registration: string, baseUrl?: string): string {
@@ -805,14 +776,25 @@ export async function generateVehicleReportPdf(
   const imageBytes =
     options.imagePng ??
     (summary.imageSrc ? await imageUrlToPng(summary.imageSrc) : null);
+  const colourValue = summary.colour?.trim() || details.colour?.trim() || null;
   if (imageBytes) {
     const image = await pdf.embedPng(imageBytes);
     const dimensions = image.scaleToFit(275.5, 142.5);
+    const imageX = 552 - dimensions.width;
+    const imageY = 594 + (150 - dimensions.height) / 2;
     page1.drawImage(image, {
-      x: 552 - dimensions.width,
-      y: 594 + (150 - dimensions.height) / 2,
+      x: imageX,
+      y: imageY,
       width: dimensions.width,
       height: dimensions.height,
+    });
+    drawIllustrativeImageCaption(page1, {
+      imageX,
+      imageWidth: dimensions.width,
+      y: Math.max(582, imageY - 11),
+      regular,
+      bold,
+      colour: colourValue,
     });
   } else {
     page1.drawText("Representative image unavailable", {
@@ -879,7 +861,6 @@ export async function generateVehicleReportPdf(
     color: BLACK,
   });
 
-  const colourValue = summary.colour?.trim() || details.colour?.trim() || null;
   drawVehicleSpecBlock(page1, {
     x: MARGIN + 12,
     topY: plateY - 12,
@@ -897,14 +878,16 @@ export async function generateVehicleReportPdf(
   });
 
   const summaryResult = reportSummary(vehicle);
-  const summaryY = 543;
-  const summaryIconSize = 30.8;
-  drawSection(page1, MARGIN, summaryY, CONTENT_WIDTH, 52, {
+  const summaryY = 532;
+  const summaryHeight = 46;
+  const summaryCenterY = summaryY + summaryHeight / 2;
+  const summaryIconSize = 23;
+  drawSection(page1, MARGIN, summaryY, CONTENT_WIDTH, summaryHeight, {
     fill: summaryResult.positive ? GREEN_BG : AMBER_BG,
   });
   page1.drawText(`Summary: ${summaryResult.title}`, {
-    x: 88,
-    y: textY(569, 13) + 5,
+    x: 82,
+    y: textY(summaryCenterY, 13) + 5,
     size: 13,
     font: bold,
     color: summaryResult.positive ? GREEN : NAVY,
@@ -913,49 +896,49 @@ export async function generateVehicleReportPdf(
     page1,
     embeddedIcons,
     summaryResult.positive ? "check" : "warning",
-    50,
-    554,
+    48,
+    summaryCenterY - summaryIconSize / 2,
     summaryIconSize,
   );
   if (!hasSummaryIcon) {
     page1.drawCircle({
-      x: 65,
-      y: 569,
-      size: 15.4,
+      x: 59.5,
+      y: summaryCenterY,
+      size: 11.5,
       color: summaryResult.positive ? GREEN : AMBER,
     });
   }
   if (!hasSummaryIcon && summaryResult.positive) {
     page1.drawLine({
-      start: { x: 59, y: 569 },
-      end: { x: 63, y: 565 },
-      thickness: 2,
+      start: { x: 54.5, y: summaryCenterY },
+      end: { x: 57.5, y: summaryCenterY - 3 },
+      thickness: 1.75,
       color: WHITE,
     });
     page1.drawLine({
-      start: { x: 63, y: 565 },
-      end: { x: 71, y: 574 },
-      thickness: 2,
+      start: { x: 57.5, y: summaryCenterY - 3 },
+      end: { x: 64, y: summaryCenterY + 4 },
+      thickness: 1.75,
       color: WHITE,
     });
   } else if (!hasSummaryIcon) {
     page1.drawText("!", {
-      x: 63,
-      y: 563,
-      size: 14,
+      x: 57,
+      y: summaryCenterY - 5,
+      size: 11,
       font: bold,
       color: WHITE,
     });
   }
-  page1.drawText(fitText(summaryResult.detail, regular, 8.3, 430), {
-    x: 88,
-    y: textY(569, 8.3) - 8,
+  page1.drawText(fitText(summaryResult.detail, regular, 8.3, 436), {
+    x: 82,
+    y: textY(summaryCenterY, 8.3) - 8,
     size: 8.3,
     font: regular,
     color: MUTED,
   });
 
-  const factsY = 370;
+  const factsY = 355;
   const factsHeight = 156;
   const factsHeaderHeight = 26;
   const factsRowHeight = 26;
@@ -971,11 +954,14 @@ export async function generateVehicleReportPdf(
     color: NAVY,
   });
   const facts = [
-    ["MOT status", summary.motStatus.status],
+    ["MOT status", statusLabel(summary.motStatus.status)],
     ["Mileage", summary.latestMileage != null ? `${summary.latestMileage.toLocaleString("en-GB")} miles` : "Not available"],
-    ["MOT expiry date", formatDate(summary.motStatus.expiryDate)],
+    [
+      motDateLabel(summary.motStatus.status, "MOT expiry date"),
+      formatDate(summary.motStatus.expiryDate),
+    ],
     ["Engine size", summary.engineCapacity != null ? `${summary.engineCapacity.toLocaleString("en-GB")} cc` : "Not available"],
-    ["Tax status", summary.tax.status],
+    ["Tax status", statusLabel(summary.tax.status)],
     ["CO2 emissions", details.co2Emissions != null ? `${details.co2Emissions} g/km` : "Not available"],
     ["Tax due date", formatDate(summary.tax.dueDate)],
     ["Euro status", details.euroStatus ?? "Not available"],
@@ -1047,7 +1033,7 @@ export async function generateVehicleReportPdf(
   const leftWidth = CONTENT_WIDTH;
   const rightX = MARGIN;
   const rightWidth = CONTENT_WIDTH;
-  const checksY = 230;
+  const checksY = 215;
   const checksHeight = 128;
   const checksHeaderHeight = 26;
   const checksRowHeight = 34;
@@ -1109,11 +1095,11 @@ export async function generateVehicleReportPdf(
   const premiumHeaderHeight = 26;
   const premiumRowHeight = 29;
   const premiumHeight = premiumHeaderHeight + premiumRowHeight * 3 + 8;
-  const premiumY = 218 - premiumHeight;
+  const premiumY = 203 - premiumHeight;
   drawSection(page1, rightX, premiumY, rightWidth, premiumHeight, {
-    fill: AMBER_BG,
+    fill: AMBER_BODY_BG,
     headerHeight: premiumHeaderHeight,
-    headerFill: rgb(1, 0.96, 0.84),
+    headerFill: AMBER_HEADER_BG,
   });
   page1.drawText("More available in Full Report", {
     x: rightX + 12,
@@ -1569,9 +1555,9 @@ export async function generateVehicleReportPdf(
     (advisorySlice.note ? 16 : 0);
   const notesBottom = detailTop - notesHeight;
   drawSection(page2, specX, notesBottom, halfWidth, notesHeight, {
-    fill: AMBER_BG,
+    fill: AMBER_BODY_BG,
     headerHeight: advisoryHeaderHeight,
-    headerFill: rgb(1, 0.96, 0.84),
+    headerFill: AMBER_HEADER_BG,
   });
   page2.drawText("Advisories / Notes", {
     x: specX + 32,
@@ -1611,8 +1597,11 @@ export async function generateVehicleReportPdf(
     ["Euro status", details.euroStatus],
     ["MOT test number", motRows[0]?.motTestNumber ?? null],
     ["First registered", formatDate(details.monthOfFirstRegistration)],
-    ["Tax status", summary.tax.status],
-    ["MOT expiry", formatDate(summary.motStatus.expiryDate)],
+    ["Tax status", statusLabel(summary.tax.status)],
+    [
+      motDateLabel(summary.motStatus.status, "MOT expiry"),
+      formatDate(summary.motStatus.expiryDate),
+    ],
     ["V5C issued", formatDate(details.dateOfLastV5CIssued)],
     ["Wheelplan", details.wheelplan],
     ["Type approval", details.typeApproval],

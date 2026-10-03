@@ -60,7 +60,9 @@ export function buildReportMessage(
       `View your AutoViewer vehicle report for ${registration}:`,
       input.reportUrl,
       "",
-      "This report contains demonstration data only.",
+      input.vehicle.summary.isDemo
+        ? "This report contains demonstration data only."
+        : "This report is based on the free public data available for this vehicle.",
     ].join("\n"),
   };
 }

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useDvlaLookup } from "@/components/vehicle/DvlaLookupContext";
 import { RegistrationInput } from "@/components/vehicle/RegistrationInput";
 import { analytics, type CheckSource } from "@/lib/analytics";
-import type { DvlaVehicleResponse } from "@/lib/api/dvla";
+import type { VehicleLookupResult } from "@/types/vehicle";
 import { registrationToSlug } from "@/lib/vehicle/registration";
 
 export function VehicleSearchForm({
@@ -41,25 +41,19 @@ export function VehicleSearchForm({
     dvlaLookup?.setVehicle(null);
 
     try {
-      const response = await fetch("/api/vehicle", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ registrationNumber: normalized }),
-      });
-      const payload = (await response.json()) as DvlaVehicleResponse & {
-        error?: string;
-      };
+      const response = await fetch(
+        `/api/vehicle?registration=${encodeURIComponent(normalized)}`,
+      );
+      const payload = (await response.json()) as VehicleLookupResult;
 
-      if (!response.ok || payload.error) {
+      if (!payload.ok) {
         setError(
-          payload.error
-            ? payload.error
-            : "Vehicle lookup failed. Please try again.",
+          payload.error?.message ?? "Vehicle lookup failed. Please try again.",
         );
         return;
       }
 
-      dvlaLookup?.setVehicle(payload);
+      dvlaLookup?.setVehicle(payload.data);
     } catch {
       setError("Vehicle lookup failed. Please try again.");
     } finally {

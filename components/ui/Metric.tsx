@@ -16,7 +16,7 @@ export function Metric({
   return (
     <div
       className={cn(
-        "rounded-[10px] border border-border bg-surface px-4 py-3.5",
+        "rounded-[10px] border border-border bg-surface px-3 py-2.5 md:px-4 md:py-3.5",
         className,
       )}
     >

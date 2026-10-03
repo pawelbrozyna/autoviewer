@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { cookies, headers } from "next/headers";
 import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
-import { ADMIN_ACCESS_KEY } from "@/lib/analytics-exclusion";
+import { robotsMetadata } from "@/lib/seo/indexing";
 import {
   DEFAULT_DESCRIPTION,
   SITE_NAME,
@@ -42,10 +41,7 @@ export const metadata: Metadata = {
     title: "Free Car Check UK | AutoViewer",
     description: DEFAULT_DESCRIPTION,
   },
-  robots: {
-    index: true,
-    follow: true,
-  },
+  robots: robotsMetadata(),
   icons: {
     icon: [
       { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
@@ -59,20 +55,11 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const maintenanceMode = process.env.MAINTENANCE_MODE === "true";
-  const cookieStore = await cookies();
-  const adminBypass = cookieStore.get(ADMIN_ACCESS_KEY)?.value === "true";
-  const pathname = (await headers()).get("x-pathname") ?? "";
-  const productionComingSoonHome =
-    process.env.VERCEL_ENV === "production" && pathname === "/";
-  const showSiteChrome =
-    !productionComingSoonHome && !(maintenanceMode && !adminBypass);
-
   return (
     <html lang="en-GB" className={inter.variable}>
       <body className={`${inter.className} antialiased`}>
@@ -83,21 +70,15 @@ export default async function RootLayout({
           }}
         />
         <GoogleAnalytics />
-        {showSiteChrome ? (
-          <>
-            <a
-              href="#main-content"
-              className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-navy focus:px-3 focus:py-2 focus:text-white"
-            >
-              Skip to content
-            </a>
-            <SiteHeader />
-            <main id="main-content">{children}</main>
-            <SiteFooter />
-          </>
-        ) : (
-          <main id="main-content">{children}</main>
-        )}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-navy focus:px-3 focus:py-2 focus:text-white"
+        >
+          Skip to content
+        </a>
+        <SiteHeader />
+        <main id="main-content">{children}</main>
+        <SiteFooter />
       </body>
     </html>
   );

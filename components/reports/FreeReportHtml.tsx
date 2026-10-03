@@ -3,6 +3,9 @@ import Link from "next/link";
 import localFont from "next/font/local";
 import { ArrowRight, Calendar, Fuel, Settings2 } from "lucide-react";
 import { FULL_REPORT_PRICE, fullReportHref } from "@/lib/full-report";
+import { motDateLabel } from "@/lib/vehicle/mot-status";
+import { statusLabel } from "@/lib/vehicle/missing-data";
+import { checkedItems } from "@/lib/reports/checked-items";
 import {
   FREE_ADVISORY_LIMIT,
   FREE_MILEAGE_LIMIT,
@@ -50,6 +53,60 @@ function ReportIcon({ name, sizePt }: { name: string; sizePt: number }) {
       style={{ width: pt(sizePt), height: pt(sizePt) }}
       unoptimized
     />
+  );
+}
+
+function UnlockFullReportButton({
+  href,
+  mobileLarge,
+}: {
+  href: string;
+  mobileLarge: boolean;
+}) {
+  const label = `Unlock Full Report - ${FULL_REPORT_PRICE}`;
+
+  if (!mobileLarge) {
+    return (
+      <Link
+        href={href}
+        className="inline-flex items-center rounded-[6px] bg-blue font-bold !text-white shadow-sm transition hover:bg-blue-hover"
+        style={{
+          minHeight: pt(28),
+          gap: pt(8),
+          paddingInline: pt(18),
+          fontSize: pt(10.5),
+        }}
+      >
+        <ReportIcon name="lock-white" sizePt={13} />
+        {label}
+      </Link>
+    );
+  }
+
+  return (
+    <Link
+      href={href}
+      className="inline-flex min-h-12 items-center gap-2 rounded-[9px] bg-blue px-5 text-[15px] font-bold !text-white shadow-sm transition hover:bg-blue-hover md:min-h-[var(--btn-h)] md:gap-[var(--btn-gap)] md:rounded-[6px] md:px-[var(--btn-px)] md:text-[length:var(--btn-fs)]"
+      style={
+        {
+          "--btn-h": pt(28),
+          "--btn-gap": pt(8),
+          "--btn-px": pt(18),
+          "--btn-fs": pt(10.5),
+          "--btn-icon": pt(13),
+        } as React.CSSProperties
+      }
+    >
+      <Image
+        src="/report-icons/lock-white.png"
+        alt=""
+        width={20}
+        height={20}
+        className="h-4 w-4 shrink-0 object-contain md:h-[var(--btn-icon)] md:w-[var(--btn-icon)]"
+        unoptimized
+      />
+      {label}
+    </Link>
   );
 }
 
@@ -118,7 +175,7 @@ function SectionCard({
   return (
     <section
       className={`overflow-hidden rounded-[6px] border ${
-        amber ? "border-[#f0d9a0] bg-warning-bg" : "border-border bg-white"
+        amber ? "border-[#f0d9a0] bg-[#fffdf8]" : "border-border bg-white"
       } ${className}`}
       style={{ marginTop: pt(marginTopPt) }}
     >
@@ -157,7 +214,9 @@ export function FreeReportHtml({
   mode?: FreeReportHtmlMode;
 }) {
   const { summary, details } = vehicle;
-  const generatedAt = new Date("2026-09-20T12:00:00Z");
+  const generatedAt = summary.isDemo
+    ? new Date("2026-09-20T12:00:00Z")
+    : new Date();
   const generatedDate = generatedAt.toLocaleDateString("en-GB");
   const reportId = `AV-${summary.registration}-${generatedAt
     .toISOString()
@@ -177,7 +236,11 @@ export function FreeReportHtml({
   const isPreview = mode === "preview";
 
   const facts: Array<{ label: string; value: string; icon: string }> = [
-    { label: "MOT status", value: summary.motStatus.status, icon: "shield-check" },
+    {
+      label: "MOT status",
+      value: statusLabel(summary.motStatus.status),
+      icon: "shield-check",
+    },
     {
       label: "Mileage",
       value:
@@ -187,7 +250,7 @@ export function FreeReportHtml({
       icon: "mileage",
     },
     {
-      label: "MOT expiry date",
+      label: motDateLabel(summary.motStatus.status, "MOT expiry date"),
       value: formatPdfDate(summary.motStatus.expiryDate),
       icon: "calendar",
     },
@@ -199,7 +262,7 @@ export function FreeReportHtml({
           : "Not available",
       icon: "engine",
     },
-    { label: "Tax status", value: summary.tax.status, icon: "car" },
+    { label: "Tax status", value: statusLabel(summary.tax.status), icon: "car" },
     {
       label: "CO2 emissions",
       value:
@@ -229,26 +292,7 @@ export function FreeReportHtml({
     { label: "ULEZ status", value: "Not checked", icon: "check" },
   ];
 
-  const checks = [
-    {
-      title: "DVLA registration details",
-      detail: "Make, model, colour and status",
-    },
-    { title: "MOT status", detail: "Current status and history" },
-    { title: "Tax status", detail: "Vehicle tax and due date" },
-    {
-      title: "Mileage consistency",
-      detail: "Checked for irregularities",
-    },
-    {
-      title: "Vehicle identity basics",
-      detail: "Make, model and engine details",
-    },
-    {
-      title: "MOT advisories",
-      detail: "Notable advisories from past tests",
-    },
-  ];
+  const checks = checkedItems(vehicle);
 
   const lockedItems = [
     {
@@ -342,8 +386,11 @@ export function FreeReportHtml({
     ["Euro status", details.euroStatus],
     ["MOT test number", motSlice.shown[0]?.motTestNumber ?? null],
     ["First registered", formatPdfDate(details.monthOfFirstRegistration)],
-    ["Tax status", summary.tax.status],
-    ["MOT expiry", formatPdfDate(summary.motStatus.expiryDate)],
+    ["Tax status", statusLabel(summary.tax.status)],
+    [
+      motDateLabel(summary.motStatus.status, "MOT expiry"),
+      formatPdfDate(summary.motStatus.expiryDate),
+    ],
     ["V5C issued", formatPdfDate(details.dateOfLastV5CIssued)],
     ["Wheelplan", details.wheelplan],
     ["Type approval", details.typeApproval],
@@ -419,14 +466,30 @@ export function FreeReportHtml({
       >
         <div className="absolute inset-y-0 right-0 w-[55%]">
           {summary.imageSrc ? (
-            <Image
-              src={summary.imageSrc}
-              alt={`${summary.make} ${summary.model}`}
-              fill
-              sizes="(max-width: 768px) 58vw, 500px"
-              className="origin-center translate-y-[-8%] scale-90 object-contain object-center"
-              priority
-            />
+            <>
+              <Image
+                src={summary.imageSrc}
+                alt={`${summary.make} ${summary.model}`}
+                fill
+                sizes="(max-width: 768px) 58vw, 500px"
+                className="origin-center translate-y-[-8%] scale-90 object-contain object-center"
+                priority
+              />
+              <p
+                className="absolute inset-x-0 z-30 px-1 text-center text-muted"
+                style={{
+                  bottom: pt(34),
+                  fontSize: pt(7),
+                  lineHeight: 1.3,
+                }}
+              >
+                Illustrative image. Registered colour:{" "}
+                <span className="font-bold text-navy">
+                  {colourValue || "Not available"}
+                </span>
+                .
+              </p>
+            </>
           ) : null}
         </div>
 
@@ -448,15 +511,15 @@ export function FreeReportHtml({
           style={{ marginTop: pt(10), maxWidth: "48%" }}
         >
           <span
-            className={`${plateFont.className} inline-flex items-center justify-center rounded-[5px] border-[3px] border-black bg-[#fac023] font-semibold leading-none tracking-[0.04em] text-black`}
             style={{
               minHeight: pt(38),
               minWidth: pt(150),
               paddingInline: pt(15),
               fontSize: pt(29),
             }}
+            className={`${plateFont.className} inline-flex items-center justify-center rounded-[5px] border-black bg-[#fac023] font-semibold leading-none tracking-[0.04em] text-black border-[1.5px] pb-px md:border-[2.5px] md:pb-0`}
           >
-            <span className="inline-block translate-y-[-2px]">
+            <span className="inline-block md:translate-y-[-2px]">
               {summary.displayRegistration}
             </span>
           </span>
@@ -551,14 +614,14 @@ export function FreeReportHtml({
             : "border-success/25 bg-success-bg"
         }`}
           style={{
-            marginTop: pt(-32),
-            minHeight: pt(44),
-            gap: pt(12),
+            marginTop: pt(-26),
+            minHeight: pt(40),
+            gap: pt(10),
             paddingInline: pt(16),
-            paddingBlock: pt(7),
+            paddingBlock: pt(5),
           }}
         >
-        <ReportIcon name={needsAttention ? "warning" : "check"} sizePt={28} />
+        <ReportIcon name={needsAttention ? "warning" : "check"} sizePt={22} />
         <div className="min-w-0">
           <p
             className={`font-bold leading-tight ${
@@ -574,7 +637,9 @@ export function FreeReportHtml({
           <p className="text-muted" style={{ marginTop: pt(3), fontSize: pt(8.3) }}>
             {needsAttention
               ? "Review the available recall information below."
-              : "Based only on the free public and demonstration data shown in this report."}
+              : summary.isDemo
+                ? "Based only on the free public and demonstration data shown in this report."
+                : "Based only on the free public data shown in this report."}
           </p>
         </div>
       </div>
@@ -709,19 +774,7 @@ export function FreeReportHtml({
       </SectionCard>
 
       <div className="flex justify-center" style={{ marginTop: pt(16) }}>
-        <Link
-          href={upgradeHref}
-          className="inline-flex items-center rounded-[6px] bg-blue font-bold !text-white shadow-sm transition hover:bg-blue-hover"
-          style={{
-            minHeight: pt(28),
-            gap: pt(8),
-            paddingInline: pt(18),
-            fontSize: pt(10.5),
-          }}
-        >
-          <ReportIcon name="lock-white" sizePt={13} />
-          Unlock Full Report - {FULL_REPORT_PRICE}
-        </Link>
+        <UnlockFullReportButton href={upgradeHref} mobileLarge={!isPreview} />
       </div>
 
       {!isPreview ? (
@@ -946,19 +999,7 @@ export function FreeReportHtml({
           </SectionCard>
 
           <div className="flex justify-center" style={{ marginTop: pt(18) }}>
-            <Link
-              href={upgradeHref}
-              className="inline-flex items-center rounded-[6px] bg-blue font-bold !text-white shadow-sm transition hover:bg-blue-hover"
-              style={{
-                minHeight: pt(28),
-                gap: pt(8),
-                paddingInline: pt(18),
-                fontSize: pt(10.5),
-              }}
-            >
-              <ReportIcon name="lock-white" sizePt={13} />
-              Unlock Full Report - {FULL_REPORT_PRICE}
-            </Link>
+            <UnlockFullReportButton href={upgradeHref} mobileLarge />
           </div>
         </>
       ) : null}
@@ -1011,7 +1052,8 @@ export function FreeReportHtml({
             href="/example-report"
             className="inline-flex min-h-12 items-center justify-center gap-2 rounded-[9px] bg-navy px-5 text-[15px] font-semibold !text-white shadow-sm transition hover:bg-navy-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue focus-visible:ring-offset-2 sm:min-h-[52px] sm:px-6 sm:text-[16px]"
           >
-            See full free example report
+            <span className="sm:hidden">Full example report</span>
+            <span className="hidden sm:inline">See full free example report</span>
             <ArrowRight className="h-4 w-4" aria-hidden />
           </Link>
         </div>

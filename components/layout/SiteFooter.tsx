@@ -9,11 +9,11 @@ export function SiteFooter() {
 
   return (
     <footer className="border-t border-border bg-white">
-      <Container className="pb-4 pt-2.5 md:pb-11 md:pt-7 lg:pb-9 lg:pt-6">
-        <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between md:gap-16 lg:gap-14">
+      <Container className="pb-4 pt-[12px] md:pb-11 md:pt-7 lg:pb-9 lg:pt-6">
+        <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between md:gap-16 lg:gap-14">
           <div className="md:min-w-0 md:max-w-sm">
             <BrandLogo size="header" />
-            <p className="-mt-2.5 support-copy max-w-xs leading-snug md:-mt-1">
+            <p className="-mt-0.5 support-copy max-w-xs leading-snug md:-mt-1">
               A clearer view for a better drive.
             </p>
           </div>
@@ -61,7 +61,7 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <div className="mt-8 border-t border-border pt-5 md:mt-9">
+        <div className="mt-5 border-t border-border pt-4 md:mt-9 md:pt-5">
           <p className="meta-copy max-w-3xl leading-relaxed">
             AutoViewer is an independent service and is not affiliated with or
             endorsed by DVLA, DVSA or vehicle manufacturers. MOT and vehicle data

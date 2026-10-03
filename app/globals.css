@@ -88,7 +88,7 @@ textarea {
   width: 100%;
   max-width: 1220px;
   margin-inline: auto;
-  padding-inline: 20px;
+  padding-inline: 12px;
 }
 
 @media (min-width: 768px) {
@@ -121,7 +121,7 @@ textarea {
 
 /* Shared vertical rhythm */
 .section-y {
-  padding-block: 2rem;
+  padding-block: 1.25rem;
 }
 
 @media (min-width: 768px) {
@@ -137,7 +137,7 @@ textarea {
 }
 
 .section-y-home {
-  padding-block: 1.75rem;
+  padding-block: 1.25rem;
 }
 
 @media (min-width: 768px) {
@@ -159,7 +159,7 @@ textarea {
   justify-content: flex-start;
   box-sizing: border-box;
   padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
   min-height: 0;
   /* Prevent nowrap H1 (min-width:auto) from expanding the page by a few px */
   min-width: 0;
@@ -264,7 +264,7 @@ textarea {
 }
 
 .heading-section {
-  font-size: 1.5rem;
+  font-size: 1.35rem;
   font-weight: 700;
   line-height: 1.15;
   letter-spacing: -0.02em;

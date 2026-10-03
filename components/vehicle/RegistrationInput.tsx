@@ -82,9 +82,11 @@ export function RegistrationInput({
       <div className="flex w-full flex-col gap-2 lg:w-fit lg:max-w-full lg:flex-row lg:items-stretch">
         <div
           className={cn(
-            "flex min-h-[54px] w-full overflow-hidden rounded-[10px] border border-border bg-white shadow-[var(--shadow-card)] lg:min-h-[49px] lg:w-[340px] lg:shrink-0",
+            "flex min-h-[54px] w-full overflow-hidden rounded-[10px] border border-border bg-white shadow-[var(--shadow-card)] lg:min-h-[49px] lg:shrink-0",
             (error || externalError) && "border-danger",
-            variant === "compact" && "min-h-[48px] lg:min-h-[44px]",
+            variant === "compact"
+              ? "min-h-[48px] lg:min-h-[44px] lg:w-[221px]"
+              : "lg:w-[340px]",
           )}
         >
           <div

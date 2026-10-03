@@ -1,3 +1,6 @@
+"use client";
+
+import { useLayoutEffect, useRef } from "react";
 import {
   AlertTriangle,
   Calendar,
@@ -25,9 +28,15 @@ import {
   DEFAULT_FUEL_PRICE_PER_LITRE_GBP,
   calculateAnnualFuelCost,
   formatAnnualFuelCost,
+  formatFuelPricePencePerLitre,
 } from "@/lib/vehicle/running-costs";
 import { buyerScoreDisclaimer } from "@/lib/vehicle/score";
 import { cn } from "@/lib/utils";
+import {
+  DATA_NOT_AVAILABLE,
+  NA,
+  compactValue,
+} from "@/lib/vehicle/missing-data";
 import type { VehicleRecord } from "@/types/vehicle";
 
 type CellTone = "success" | "warning" | "danger" | "neutral";
@@ -83,8 +92,8 @@ function toneClass(tone?: CellTone) {
   return "";
 }
 
-function displayOrDash(value: React.ReactNode): React.ReactNode {
-  if (value == null || value === "") return "-";
+function displayOrNa(value: React.ReactNode): React.ReactNode {
+  if (value == null || value === "") return NA;
   return value;
 }
 
@@ -123,7 +132,7 @@ function winnerTone(
 function EngineCell({ cc }: { cc?: number | null }) {
   const litres = formatEngineLitres(cc);
   const raw = formatEngineCc(cc);
-  if (!litres) return "-";
+  if (!litres) return NA;
   return (
     <span className="inline-flex flex-col leading-tight">
       <span>{litres}</span>
@@ -140,7 +149,7 @@ function FuelCostCell({ mpg }: { mpg?: number | null }) {
     mpg,
     fuelPricePerLitre: DEFAULT_FUEL_PRICE_PER_LITRE_GBP,
   });
-  if (amount == null) return "-";
+  if (amount == null) return NA;
   return (
     <span className="inline-flex flex-col leading-tight">
       <span>{formatAnnualFuelCost(amount)}</span>
@@ -154,7 +163,7 @@ function FuelCostCell({ mpg }: { mpg?: number | null }) {
 function BuyerScoreCell({ record }: { record: VehicleRecord }) {
   const score = record.buyerScore?.score;
   const label = record.buyerScore?.label;
-  if (score == null) return "-";
+  if (score == null) return NA;
   return (
     <span className="inline-flex flex-col leading-tight">
       <span className="font-extrabold tabular-nums">{score}/100</span>
@@ -169,10 +178,11 @@ function RoadTaxCell({ record }: { record: VehicleRecord }) {
   if (record.summary.annualRoadTaxGbp != null) {
     return `£${record.summary.annualRoadTaxGbp.toLocaleString("en-GB")} / year`;
   }
-  return record.summary.tax.status || "-";
+  return compactValue(record.summary.tax.status);
 }
 
 function OpenRecallsCell({ record }: { record: VehicleRecord }) {
+  if (record.recalls.dataAvailable === false) return DATA_NOT_AVAILABLE;
   if (!record.recalls.hasOpenRecalls || record.recalls.count <= 0) {
     return "None indicated";
   }
@@ -244,8 +254,8 @@ function buildRows(left: VehicleRecord, right: VehicleRecord): CompareRow[] {
       key: "year",
       label: "Year",
       icon: Calendar,
-      left: displayOrDash(left.summary.year),
-      right: displayOrDash(right.summary.year),
+      left: displayOrNa(left.summary.year),
+      right: displayOrNa(right.summary.year),
       // Year shown for context only - not treated as automatically better
       leftTone: "neutral",
       rightTone: "neutral",
@@ -262,23 +272,23 @@ function buildRows(left: VehicleRecord, right: VehicleRecord): CompareRow[] {
       label: "Power",
       icon: Zap,
       left:
-        left.summary.powerBhp != null ? `${left.summary.powerBhp} bhp` : "-",
+        left.summary.powerBhp != null ? `${left.summary.powerBhp} bhp` : NA,
       right:
-        right.summary.powerBhp != null ? `${right.summary.powerBhp} bhp` : "-",
+        right.summary.powerBhp != null ? `${right.summary.powerBhp} bhp` : NA,
     },
     {
       key: "fuel",
       label: "Fuel",
       icon: Fuel,
-      left: displayOrDash(left.summary.fuelType),
-      right: displayOrDash(right.summary.fuelType),
+      left: displayOrNa(left.summary.fuelType),
+      right: displayOrNa(right.summary.fuelType),
     },
     {
       key: "transmission",
       label: "Transmission",
       icon: Settings2,
-      left: displayOrDash(left.summary.transmission),
-      right: displayOrDash(right.summary.transmission),
+      left: displayOrNa(left.summary.transmission),
+      right: displayOrNa(right.summary.transmission),
     },
     {
       key: "mileage",
@@ -305,11 +315,11 @@ function buildRows(left: VehicleRecord, right: VehicleRecord): CompareRow[] {
       left:
         left.summary.combinedMpg != null
           ? `${left.summary.combinedMpg} mpg`
-          : "-",
+          : NA,
       right:
         right.summary.combinedMpg != null
           ? `${right.summary.combinedMpg} mpg`
-          : "-",
+          : NA,
       ...mpgTone,
       summaryPhrase: "Better fuel economy",
     },
@@ -320,7 +330,7 @@ function buildRows(left: VehicleRecord, right: VehicleRecord): CompareRow[] {
       labelExtra: (
         <InfoTip
           label="About estimated fuel cost"
-          text={`Estimate using ${DEFAULT_ANNUAL_MILEAGE.toLocaleString("en-GB")} miles/year, combined MPG when available, and £${DEFAULT_FUEL_PRICE_PER_LITRE_GBP.toFixed(2)}/litre. Not a live fuel-price quote.`}
+          text={`Estimate using ${DEFAULT_ANNUAL_MILEAGE.toLocaleString("en-GB")} miles/year, combined MPG when available, and ${formatFuelPricePencePerLitre()}/litre. Not a live fuel-price quote.`}
         />
       ),
       left: <FuelCostCell mpg={left.summary.combinedMpg} />,
@@ -335,11 +345,11 @@ function buildRows(left: VehicleRecord, right: VehicleRecord): CompareRow[] {
       left:
         left.details.co2Emissions != null
           ? `${left.details.co2Emissions} g/km`
-          : "-",
+          : NA,
       right:
         right.details.co2Emissions != null
           ? `${right.details.co2Emissions} g/km`
-          : "-",
+          : NA,
       ...co2Tone,
       summaryPhrase: "Lower CO₂",
     },
@@ -425,7 +435,7 @@ function buildQuickSummary(
           text: `${leftRecallCount} open recall${leftRecallCount === 1 ? "" : "s"}`,
           tone: "warning",
         }
-      : rightRecallCount > 0
+      : rightRecallCount > 0 && left.recalls.dataAvailable !== false
         ? { text: "No open recalls", tone: "success" }
         : null;
 
@@ -435,7 +445,7 @@ function buildQuickSummary(
           text: `${rightRecallCount} open recall${rightRecallCount === 1 ? "" : "s"}`,
           tone: "warning",
         }
-      : leftRecallCount > 0
+      : leftRecallCount > 0 && right.recalls.dataAvailable !== false
         ? { text: "No open recalls", tone: "success" }
         : null;
 
@@ -492,19 +502,19 @@ function SummaryPointRow({ point }: { point: SummaryPoint }) {
   return (
     <li
       className={cn(
-        "flex items-center gap-1.5 text-[13px] leading-snug",
+        "flex items-center gap-1.5 text-[15px] leading-snug",
         warning ? "text-[#B45309]" : "text-navy",
       )}
     >
       {warning ? (
         <AlertTriangle
-          className="h-3.5 w-3.5 shrink-0 text-[#B45309]"
+          className="h-4 w-4 shrink-0 text-[#B45309]"
           strokeWidth={2.25}
           aria-hidden
         />
       ) : (
-        <span className="inline-flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full bg-[#23A05C] text-white">
-          <Check className="h-2 w-2" strokeWidth={3} aria-hidden />
+        <span className="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#23A05C] text-white">
+          <Check className="h-2.5 w-2.5" strokeWidth={3} aria-hidden />
         </span>
       )}
       <span className="truncate">{point.text}</span>
@@ -524,20 +534,22 @@ function QuickSummaryBlock({
   const summary = buildQuickSummary(left, right, rows);
 
   return (
-    <div className="flex min-h-[120px] max-h-[150px] items-stretch overflow-hidden rounded-[12px] border border-border bg-white px-4 py-3.5">
-      <div className="flex w-[22%] min-w-[160px] max-w-[220px] shrink-0 flex-col justify-center pr-4">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted">
+    <div className="flex min-h-[120px] max-h-[165px] items-stretch overflow-hidden rounded-[12px] border border-border bg-white px-4 py-3">
+      <div className="flex w-[32%] min-w-[200px] max-w-[280px] shrink-0 flex-col pr-4">
+        <p className="text-center text-[17px] font-semibold text-navy lg:text-[18px]">
           Our take
         </p>
-        <p className="mt-1.5 text-[14px] font-semibold leading-snug text-navy">
-          {summary.verdict}
-        </p>
+        <div className="flex flex-1 items-center justify-center">
+          <p className="text-center text-[15px] leading-snug text-navy">
+            {summary.verdict}
+          </p>
+        </div>
       </div>
 
       <div className="w-px shrink-0 self-stretch bg-[#E6EBF2]" aria-hidden />
 
-      <div className="flex min-w-0 flex-1 flex-col justify-center px-4">
-        <p className="text-[12px] font-semibold text-navy">
+      <div className="flex min-w-0 flex-[0.85] flex-col justify-start px-3">
+        <p className="text-center text-[17px] font-semibold text-navy lg:text-[18px]">
           {summary.leftName}
         </p>
         <ul className="mt-1.5 space-y-1">
@@ -552,8 +564,8 @@ function QuickSummaryBlock({
 
       <div className="w-px shrink-0 self-stretch bg-[#E6EBF2]" aria-hidden />
 
-      <div className="flex min-w-0 flex-1 flex-col justify-center pl-4">
-        <p className="text-[12px] font-semibold text-navy">
+      <div className="flex min-w-0 flex-[0.85] flex-col justify-start pl-3">
+        <p className="text-center text-[17px] font-semibold text-navy lg:text-[18px]">
           {summary.rightName}
         </p>
         <ul className="mt-1.5 space-y-1">
@@ -572,9 +584,11 @@ function QuickSummaryBlock({
 function DesktopVehiclePanel({
   record,
   showImageCaption = false,
+  titleRef,
 }: {
   record: VehicleRecord;
   showImageCaption?: boolean;
+  titleRef?: React.Ref<HTMLHeadingElement>;
 }) {
   const name = shortName(record);
   const subtitle = cardSubtitle(record);
@@ -589,7 +603,7 @@ function DesktopVehiclePanel({
   ].filter((s) => Boolean(s.value));
 
   return (
-    <div className="grid min-w-0 grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] items-center gap-2.5 px-3 py-2.5 lg:gap-3.5 lg:px-4 lg:py-3">
+    <div className="grid min-w-0 grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] items-start gap-2.5 px-3 py-2.5 lg:gap-3.5 lg:px-4 lg:py-3">
       <div className="min-w-0">
         <VehicleThumbnail
           label={name}
@@ -612,7 +626,10 @@ function DesktopVehiclePanel({
             {record.summary.displayRegistration}
           </span>
         </div>
-        <h3 className="mt-1.5 text-[20px] font-bold tracking-tight text-navy lg:text-[22px]">
+        <h3
+          ref={titleRef}
+          className="mt-1.5 text-[20px] font-bold leading-tight tracking-tight text-navy lg:text-[22px]"
+        >
           {name}
         </h3>
         {subtitle ? (
@@ -640,24 +657,26 @@ function DesktopVehiclePanel({
         </div>
 
         <div className="mt-2.5 rounded-[10px] bg-[#E8F6EE] px-3 py-2">
-          <div className="flex items-center justify-between gap-3">
-            <div className="flex flex-col items-start">
-              <div className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-[0.06em] text-[#64748B]">
+          <div className="flex items-center justify-between gap-2.5">
+            <div className="flex shrink-0 flex-col items-center">
+              <div className="flex items-center gap-1 whitespace-nowrap text-[10px] font-semibold uppercase tracking-[0.06em] text-[#64748B]">
                 Buyer Score
                 <InfoTip
                   label="About Buyer Score"
                   text={buyerScoreDisclaimer()}
                 />
               </div>
-              <div className="mt-0.5 text-[22px] font-extrabold leading-none tabular-nums text-[#157A45] lg:text-[24px]">
-                {score == null ? "-" : score}
-                <span className="text-[13px] font-semibold text-[#64748B]">
-                  /100
-                </span>
+              <div className="mt-0.5 text-center text-[28px] font-extrabold leading-none tabular-nums text-[#157A45] lg:text-[30px]">
+                {score == null ? NA : score}
+                {score != null ? (
+                  <span className="text-[14px] font-semibold text-[#64748B]">
+                    /100
+                  </span>
+                ) : null}
               </div>
             </div>
             {bandLabel ? (
-              <p className="text-[13px] font-semibold text-[#157A45]">
+              <p className="shrink-0 whitespace-nowrap text-right text-[15px] font-semibold text-[#157A45] lg:text-[16px]">
                 {bandLabel}
               </p>
             ) : null}
@@ -677,6 +696,27 @@ function DesktopCompareHero({
   right: VehicleRecord;
   demo?: boolean;
 }) {
+  const leftTitleRef = useRef<HTMLHeadingElement>(null);
+  const rightTitleRef = useRef<HTMLHeadingElement>(null);
+
+  useLayoutEffect(() => {
+    const syncTitleHeights = () => {
+      const leftEl = leftTitleRef.current;
+      const rightEl = rightTitleRef.current;
+      if (!leftEl || !rightEl) return;
+
+      leftEl.style.minHeight = "";
+      rightEl.style.minHeight = "";
+      const maxHeight = Math.max(leftEl.offsetHeight, rightEl.offsetHeight);
+      leftEl.style.minHeight = `${maxHeight}px`;
+      rightEl.style.minHeight = `${maxHeight}px`;
+    };
+
+    syncTitleHeights();
+    window.addEventListener("resize", syncTitleHeights);
+    return () => window.removeEventListener("resize", syncTitleHeights);
+  }, [left, right]);
+
   return (
     <div className="overflow-hidden rounded-[14px] border border-border bg-white shadow-[var(--shadow-card)]">
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border px-3 py-2 lg:px-4">
@@ -694,9 +734,17 @@ function DesktopCompareHero({
       </div>
 
       <div className="relative grid grid-cols-2">
-        <DesktopVehiclePanel record={left} showImageCaption={demo} />
+        <DesktopVehiclePanel
+          record={left}
+          showImageCaption={demo}
+          titleRef={leftTitleRef}
+        />
         <div className="relative border-l border-border">
-          <DesktopVehiclePanel record={right} showImageCaption={demo} />
+          <DesktopVehiclePanel
+            record={right}
+            showImageCaption={demo}
+            titleRef={rightTitleRef}
+          />
         </div>
         <div className="pointer-events-none absolute left-1/2 top-1/2 z-10 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-[#EFF4FA] text-[12px] font-bold tracking-wide text-navy shadow-[0_1px_4px_rgba(7,26,61,0.06)]">
           VS
@@ -815,14 +863,6 @@ export function VehicleComparison({
 
       {/* Mobile - unchanged */}
       <div className="md:hidden">
-        {demo ? (
-          <div className="mb-3 flex flex-wrap items-center gap-2">
-            <StatusBadge tone="info">Demo data</StatusBadge>
-            <p className="text-[13px] text-muted">
-              See how these two cars compare side by side.
-            </p>
-          </div>
-        ) : null}
         <VehicleComparisonMobile
           left={left}
           right={right}

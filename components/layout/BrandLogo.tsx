@@ -19,8 +19,8 @@ export function BrandLogo({
 }) {
   const sizeClass =
     size === "header"
-      ? "h-8 w-[149px] lg:h-[29px] lg:w-[136px]"
-      : "h-[23px] w-[109px]";
+      ? "h-[26px] w-[119px] md:h-8 md:w-[149px] lg:h-[29px] lg:w-[136px]"
+      : "h-[18px] w-[87px] md:h-[23px] md:w-[109px]";
 
   return (
     <Link
@@ -38,7 +38,11 @@ export function BrandLogo({
           "object-contain",
           align === "center" ? "object-center" : "object-left",
         )}
-        sizes={size === "header" ? "(min-width: 1024px) 136px, 149px" : "109px"}
+        sizes={
+          size === "header"
+            ? "(min-width: 1024px) 136px, (min-width: 768px) 149px, 119px"
+            : "(min-width: 768px) 109px, 87px"
+        }
         priority
       />
     </Link>

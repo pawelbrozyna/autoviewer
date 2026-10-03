@@ -77,17 +77,17 @@ export default function RunningCostsPage() {
 
       <section className="section-y">
         <Container>
-          <div className="mx-auto w-full max-w-[1180px] space-y-10 md:space-y-12">
+          <div className="mx-auto w-full max-w-[1180px] space-y-7 md:space-y-12">
             <div>
               <RunningCostsCalculator />
 
-              <div className="rounded-b-[12px] border-x border-b border-border bg-surface-soft/70 px-6 py-7 md:px-7 md:py-8">
-                <div className="grid gap-8 md:grid-cols-2 md:gap-10">
+              <div className="border-t border-border bg-transparent py-5 md:rounded-b-[12px] md:border-x md:border-b md:bg-surface-soft/70 md:px-7 md:py-8">
+                <div className="grid gap-5 md:grid-cols-2 md:gap-10">
                   <div>
-                    <h2 className="text-[20px] font-bold tracking-tight text-navy md:text-[22px]">
+                    <h2 className="text-[18px] font-bold tracking-tight text-navy md:text-[22px]">
                       What&apos;s included?
                     </h2>
-                    <ul className="mt-4 space-y-2.5">
+                    <ul className="mt-3 space-y-2 md:mt-4 md:space-y-2.5">
                       {includedItems.map((item) => (
                         <li
                           key={item}
@@ -104,10 +104,10 @@ export default function RunningCostsPage() {
                     </ul>
                   </div>
                   <div>
-                    <h2 className="text-[20px] font-bold tracking-tight text-navy md:text-[22px]">
+                    <h2 className="text-[18px] font-bold tracking-tight text-navy md:text-[22px]">
                       What isn&apos;t included?
                     </h2>
-                    <ul className="mt-4 space-y-2.5">
+                    <ul className="mt-3 space-y-2 md:mt-4 md:space-y-2.5">
                       {excludedItems.map((item) => (
                         <li
                           key={item}

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { robotsMetadata } from "@/lib/seo/indexing";
 
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "https://autoviewer.co.uk";
@@ -45,9 +46,7 @@ export function buildPageMetadata({
       title,
       description,
     },
-    robots: noIndex
-      ? { index: false, follow: true }
-      : { index: true, follow: true },
+    robots: robotsMetadata(noIndex),
   };
 }
 

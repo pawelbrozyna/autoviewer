@@ -207,8 +207,31 @@ function findCatalogModel(
   if (candidates.length === 0) return null;
 
   const rawText = [model, derivative].filter(Boolean).join(" ");
-  const modelKey = stripLeadingMake(rawText, make);
-  if (!modelKey) return null;
+  // Make aliases can also be model prefixes ("Range Rover Sport"), so try the unstripped text too.
+  const modelKeys = [
+    ...new Set([stripLeadingMake(rawText, make), normalizeKey(rawText)]),
+  ].filter(Boolean);
+
+  const matches: ModelMatch[] = [];
+  for (const modelKey of modelKeys) {
+    matches.push(...matchModelKey(make, modelKey, candidates));
+  }
+
+  return (
+    matches.sort(
+      (a, b) =>
+        b.score - a.score ||
+        normalizeKey(b.model).length - normalizeKey(a.model).length ||
+        a.model.localeCompare(b.model),
+    )[0] ?? null
+  );
+}
+
+function matchModelKey(
+  make: string,
+  modelKey: string,
+  candidates: string[],
+): ModelMatch[] {
   const modelCompact = compactKey(modelKey);
   const alias = knownModelAlias(canonicalizeMake(make), modelKey, candidates);
 
@@ -242,15 +265,7 @@ function findCatalogModel(
     }
     if (match) matches.push(match);
   }
-
-  return (
-    matches.sort(
-      (a, b) =>
-        b.score - a.score ||
-        normalizeKey(b.model).length - normalizeKey(a.model).length ||
-        a.model.localeCompare(b.model),
-    )[0] ?? null
-  );
+  return matches;
 }
 
 function parseRegistrationDate(value?: string | null): {

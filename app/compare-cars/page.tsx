@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { FAQ } from "@/components/ui/FAQ";
 import { RelatedTools } from "@/components/ui/RelatedTools";
@@ -7,6 +6,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { PageHero } from "@/components/layout/PageHero";
 import { CompareSearchForm } from "@/components/vehicle/CompareSearchForm";
 import { VehicleComparison } from "@/components/vehicle/VehicleComparison";
+import { getMockVehicle } from "@/lib/api/mock";
 import { lookupVehicle } from "@/lib/api/vehicle-service";
 import { relatedToolsMap } from "@/lib/site";
 import {
@@ -61,8 +61,8 @@ export default async function CompareCarsPage({
         variant="tool"
       >
         <CompareSearchForm
-          defaultLeft={leftReg || "AB12 CDE"}
-          defaultRight={rightReg || "CD34 EFG"}
+          defaultLeft={leftReg}
+          defaultRight={rightReg}
         />
       </PageHero>
 
@@ -72,16 +72,12 @@ export default async function CompareCarsPage({
             <VehicleComparison left={leftResult.data} right={rightResult.data} />
           ) : leftReg || rightReg ? (
             <div className="rounded-[12px] border border-warning/25 bg-warning-bg px-5 py-4 text-[15px] text-warning">
-              We couldn’t compare those registrations. In demo mode, try{" "}
-              <Link href="/compare-cars?left=AV19SWF&right=CD34EFG" className="font-semibold underline">
-                AB12 CDE vs CD34 EFG
-              </Link>
-              .
+              We couldn’t compare those registrations. Check both registrations
+              and try again.
             </div>
           ) : (
             <div>
               <p className="eyebrow mb-3">Example comparison</p>
-              {/* Lazy import avoided - use mock via lookup */}
               <ExampleCompare />
             </div>
           )}
@@ -107,7 +103,7 @@ export default async function CompareCarsPage({
                 {
                   question: "Can I compare any two registrations?",
                   answer:
-                    "Yes, when data is available for both. In demo mode, use AB12 CDE and CD34 EFG.",
+                    "Yes, when official MOT history is available for both vehicles.",
                 },
                 {
                   question: "Is the buyer score official?",
@@ -123,9 +119,9 @@ export default async function CompareCarsPage({
   );
 }
 
-async function ExampleCompare() {
-  const left = await lookupVehicle("AV19SWF");
-  const right = await lookupVehicle("CD34EFG");
-  if (!left.ok || !right.ok) return null;
-  return <VehicleComparison left={left.data} right={right.data} demo />;
+function ExampleCompare() {
+  const left = getMockVehicle("AV19SWF");
+  const right = getMockVehicle("CD34EFG");
+  if (!left || !right) return null;
+  return <VehicleComparison left={left} right={right} demo />;
 }

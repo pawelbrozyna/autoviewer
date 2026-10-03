@@ -176,3 +176,49 @@ export function drawVehicleSpecBlock(
   drawColumn(leftItems, leftX, leftWidth);
   drawColumn(rightItems, rightX, rightWidth);
 }
+
+/** Small caption centred under the vehicle image in free/full PDFs. */
+export function drawIllustrativeImageCaption(
+  page: PDFPage,
+  input: {
+    imageX: number;
+    imageWidth: number;
+    y: number;
+    regular: PDFFont;
+    bold: PDFFont;
+    colour: string | null;
+  },
+) {
+  const size = 7;
+  const prefix = "Illustrative image. Registered colour: ";
+  const colourText = input.colour?.trim() || "Not available";
+  const suffix = ".";
+  const fullWidth =
+    input.regular.widthOfTextAtSize(prefix, size) +
+    input.bold.widthOfTextAtSize(colourText, size) +
+    input.regular.widthOfTextAtSize(suffix, size);
+  let x = input.imageX + (input.imageWidth - fullWidth) / 2;
+  page.drawText(prefix, {
+    x,
+    y: input.y,
+    size,
+    font: input.regular,
+    color: MUTED,
+  });
+  x += input.regular.widthOfTextAtSize(prefix, size);
+  page.drawText(colourText, {
+    x,
+    y: input.y,
+    size,
+    font: input.bold,
+    color: NAVY,
+  });
+  x += input.bold.widthOfTextAtSize(colourText, size);
+  page.drawText(suffix, {
+    x,
+    y: input.y,
+    size,
+    font: input.regular,
+    color: MUTED,
+  });
+}

@@ -10,6 +10,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { analytics } from "@/lib/analytics";
+import { DEFAULT_FUEL_PRICE_PER_LITRE_GBP } from "@/lib/vehicle/running-costs";
 import { cn, formatGbp } from "@/lib/utils";
 
 type FuelType = "Petrol" | "Diesel" | "Hybrid";
@@ -26,10 +27,10 @@ const BREAKDOWN_ICONS: Record<string, LucideIcon> = {
   finance: CreditCard,
 };
 
-const labelClass = "mb-2 block text-[15px] font-semibold text-navy md:text-[16px]";
-
 const fieldClass =
-  "w-full min-h-[52px] rounded-[10px] border border-border bg-white px-3.5 text-[16px] font-medium text-navy tabular-nums shadow-[var(--shadow-card)] placeholder:font-normal placeholder:text-slate-400 focus:border-blue/40 focus:outline-none focus:ring-2 focus:ring-blue/15 md:text-[17px]";
+  "w-full min-h-[48px] rounded-[10px] border border-border bg-white px-3 text-[16px] font-medium text-navy tabular-nums shadow-[var(--shadow-card)] placeholder:font-normal placeholder:text-slate-400 focus:border-blue/40 focus:outline-none focus:ring-2 focus:ring-blue/15 md:min-h-[52px] md:px-3.5 md:text-[17px]";
+
+const labelClass = "mb-1.5 block text-[14px] font-semibold text-navy md:mb-2 md:text-[16px]";
 
 function parseNonNegative(raw: string): number {
   if (raw.trim() === "" || raw === ".") return 0;
@@ -48,7 +49,9 @@ export function RunningCostsCalculator() {
   const [fuelType, setFuelType] = useState<FuelType>("Petrol");
   const [annualMileage, setAnnualMileage] = useState("8000");
   const [mpg, setMpg] = useState("45");
-  const [fuelPrice, setFuelPrice] = useState("1.45");
+  const [fuelPrice, setFuelPrice] = useState(
+    String(DEFAULT_FUEL_PRICE_PER_LITRE_GBP),
+  );
   const [roadTax, setRoadTax] = useState("195");
   const [insurance, setInsurance] = useState("650");
   const [maintenance, setMaintenance] = useState("400");
@@ -160,21 +163,21 @@ export function RunningCostsCalculator() {
   }, [results.total]);
 
   return (
-    <div className="overflow-hidden rounded-t-[12px] border border-border bg-white">
+    <div className="bg-white md:overflow-hidden md:rounded-t-[12px] md:border md:border-border">
       <div className="grid gap-0 lg:grid-cols-[3fr_2fr] lg:gap-0">
         {/* Left: inputs */}
-        <div className="border-b border-border p-7 md:p-8 lg:border-b-0 lg:border-r lg:p-8">
-          <h2 className="text-[22px] font-bold tracking-tight text-navy md:text-[24px]">
+        <div className="border-b border-border pb-5 pt-1 md:p-8 lg:border-b-0 lg:border-r">
+          <h2 className="text-[20px] font-bold tracking-tight text-navy md:text-[24px]">
             Your car & usage
           </h2>
-          <p className="mt-2.5 text-[15px] leading-relaxed text-muted md:text-[16px]">
+          <p className="mt-1.5 text-[14px] leading-relaxed text-muted md:mt-2.5 md:text-[16px]">
             Adjust the figures below to see how your running costs change.
           </p>
-          <p className="mt-2.5 text-[15px] leading-snug text-muted">
+          <p className="mt-1.5 text-[14px] leading-snug text-muted md:mt-2.5 md:text-[15px]">
             Using example assumptions. Adjust them to match your car.
           </p>
 
-          <div className="mt-7 space-y-5">
+          <div className="mt-5 space-y-4 md:mt-7 md:space-y-5">
             <fieldset>
               <legend className={labelClass}>Fuel type</legend>
               <div
@@ -322,41 +325,41 @@ export function RunningCostsCalculator() {
         </div>
 
         {/* Right: results */}
-        <div className="bg-white p-5 md:p-6">
+        <div className="bg-white py-5 md:p-6">
           <h2 className="text-[18px] font-bold tracking-tight text-navy md:text-[20px]">
             Estimated running costs
           </h2>
 
-          <div className="mt-5 grid grid-cols-2 gap-3">
-            <div className="rounded-[12px] bg-surface-soft px-3 py-5 text-center">
-              <p className="text-[34px] font-extrabold leading-none tracking-tight text-navy tabular-nums md:text-[36px]">
+          <div className="mt-4 grid grid-cols-2 gap-2.5 md:mt-5 md:gap-3">
+            <div className="rounded-[10px] bg-surface-soft px-2.5 py-3.5 text-center md:rounded-[12px] md:px-3 md:py-5">
+              <p className="text-[28px] font-extrabold leading-none tracking-tight text-navy tabular-nums md:text-[36px]">
                 {formatGbp(Math.round(results.monthly))}
               </p>
-              <p className="mt-2 text-[15px] font-medium text-navy/65">
+              <p className="mt-1.5 text-[14px] font-medium text-navy/65 md:mt-2 md:text-[15px]">
                 / month
               </p>
             </div>
-            <div className="rounded-[12px] bg-navy px-3 py-5 text-center">
-              <p className="text-[34px] font-extrabold leading-none tracking-tight text-white tabular-nums md:text-[36px]">
+            <div className="rounded-[10px] bg-navy px-2.5 py-3.5 text-center md:rounded-[12px] md:px-3 md:py-5">
+              <p className="text-[28px] font-extrabold leading-none tracking-tight text-white tabular-nums md:text-[36px]">
                 {formatGbp(Math.round(results.total))}
               </p>
-              <p className="mt-2 text-[15px] font-medium text-white/80">
+              <p className="mt-1.5 text-[14px] font-medium text-white/80 md:mt-2 md:text-[15px]">
                 / year
               </p>
             </div>
           </div>
 
-          <p className="mt-4 text-center text-[16px] font-semibold text-navy">
+          <p className="mt-3 text-center text-[15px] font-semibold text-navy md:mt-4 md:text-[16px]">
             {formatPerMile(results.perMile)} per mile
           </p>
 
-          <dl className="mt-6 space-y-0 border-t border-border">
+          <dl className="mt-4 space-y-0 border-t border-border md:mt-6">
             {results.breakdown.map((row) => {
               const Icon = BREAKDOWN_ICONS[row.key] ?? FileText;
               return (
                 <div
                   key={row.key}
-                  className="flex items-center justify-between gap-3 border-b border-border py-3.5 text-[15px] md:text-[16px]"
+                  className="flex items-center justify-between gap-3 border-b border-border py-2.5 text-[15px] md:py-3.5 md:text-[16px]"
                 >
                   <dt className="flex min-w-0 items-center gap-2.5 text-navy">
                     <Icon

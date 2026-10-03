@@ -8,8 +8,18 @@ export const DEFAULT_ANNUAL_MILEAGE = 8000;
  * Central UK fuel price assumption (£/litre).
  * Keep this in one place - do not duplicate in UI components.
  * Update periodically; not a live market feed.
+ * Current assumption: 172.5p/litre.
  */
-export const DEFAULT_FUEL_PRICE_PER_LITRE_GBP = 1.45;
+export const DEFAULT_FUEL_PRICE_PER_LITRE_GBP = 1.725;
+
+/** Display fuel price as pence/litre (e.g. 172.5p). */
+export function formatFuelPricePencePerLitre(
+  gbp: number = DEFAULT_FUEL_PRICE_PER_LITRE_GBP,
+): string {
+  const pence = Math.round(gbp * 1000) / 10;
+  const label = Number.isInteger(pence) ? String(pence) : pence.toFixed(1);
+  return `${label}p`;
+}
 
 export function calculateAnnualFuelCost({
   annualMileage,

@@ -21,19 +21,19 @@ const featureIcons = [
 export function HeroFeatureStrip({ className }: { className?: string }) {
   return (
     <div className={className}>
-      <ul className="-mt-1 flex flex-nowrap items-center justify-center gap-x-3 gap-y-2 md:flex-wrap md:justify-start md:gap-x-6 md:gap-y-3 lg:gap-x-5">
+      <ul className="-mt-1.5 flex flex-nowrap items-center justify-center gap-x-2.5 gap-y-2 md:-mt-1 md:flex-wrap md:justify-start md:gap-x-6 md:gap-y-3 lg:gap-x-5">
         {featureIcons.map((item) => {
           const Icon = item.icon;
           return (
             <li
               key={item.label}
               className={cn(
-                "flex shrink-0 items-center gap-1.5 whitespace-nowrap text-[15px] font-semibold text-navy/85 md:gap-2 md:text-[15px] lg:text-[14px]",
+                "flex shrink-0 items-center gap-1 whitespace-nowrap text-[13.5px] font-semibold text-navy/85 md:gap-2 md:text-[15px] lg:text-[14px]",
                 item.mobileOnlyHide && "max-md:hidden",
               )}
             >
               <Icon
-                className="h-[17px] w-[17px] shrink-0 text-navy/70 md:h-[18px] md:w-[18px] lg:h-[17px] lg:w-[17px]"
+                className="h-[15px] w-[15px] shrink-0 text-navy/70 md:h-[18px] md:w-[18px] lg:h-[17px] lg:w-[17px]"
                 strokeWidth={1.75}
                 aria-hidden
               />
@@ -42,7 +42,7 @@ export function HeroFeatureStrip({ className }: { className?: string }) {
           );
         })}
       </ul>
-      <p className="support-copy mt-3 pb-1 text-center md:text-left">
+      <p className="mt-2.5 pb-1 text-center text-[13.5px] leading-[1.55] text-muted md:mt-3 md:text-left md:text-[0.9375rem]">
         Simple. Reliable. Built for UK drivers.
       </p>
     </div>

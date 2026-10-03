@@ -21,6 +21,7 @@ import {
   isValidRegistrationFormat,
   normalizeRegistration,
 } from "@/lib/vehicle/registration";
+import { formatVehicleText } from "@/lib/vehicle/display-text";
 import { resolveImageFieldsForVehicle } from "@/lib/vehicle/images";
 import { calculateBuyerScore } from "@/lib/vehicle/score";
 
@@ -53,6 +54,27 @@ function mapMotStatus(
     }
   }
   return { status: "Unknown", expiryDate: expiry ?? null };
+}
+
+function mapFirstMotStatus(
+  dueDate: string,
+): VehicleRecord["summary"]["motStatus"] {
+  const due = new Date(dueDate).getTime();
+  if (Number.isNaN(due)) return { status: "Unknown", expiryDate: null };
+  return {
+    status: due >= Date.now() ? "First MOT due" : "No MOT",
+    expiryDate: dueDate,
+  };
+}
+
+const DVLA_REJECTION_RETRY_MS = 60 * 60 * 1000;
+let dvlaKeyRejectedAt: number | null = null;
+
+/** Skips DVLA for a while after it rejects the key, as long as DVSA can still serve the report. */
+function shouldCallDvla(): boolean {
+  if (!isDvlaConfigured()) return false;
+  if (dvlaKeyRejectedAt === null || !isDvsaConfigured()) return true;
+  return Date.now() - dvlaKeyRejectedAt >= DVLA_REJECTION_RETRY_MS;
 }
 
 function yearFromDate(value?: string | null): number | null {
@@ -103,10 +125,32 @@ export async function lookupVehicle(
     let engineCapacity: number | null = null;
     let firstRegistrationDate: string | null = null;
     let hasOutstandingRecall = false;
+    let recallDataAvailable = false;
+    let firstMotDueDate: string | null = null;
     const sources: VehicleRecord["dataQuality"]["sources"] = [];
 
-    if (isDvlaConfigured()) {
-      const dvla = await fetchDvlaVehicle(registration);
+    let dvla: Awaited<ReturnType<typeof fetchDvlaVehicle>> | null = null;
+    if (shouldCallDvla()) {
+      try {
+        dvla = await fetchDvlaVehicle(registration);
+      } catch (err) {
+        if (!(err instanceof DvlaApiError) || !isDvsaConfigured()) throw err;
+        if (err.status === 401 || err.status === 403) {
+          dvlaKeyRejectedAt = Date.now();
+          console.warn(
+            "DVLA rejected the configured API key. Using DVSA only and retrying DVLA in 1 hour.",
+            { status: err.status },
+          );
+        } else {
+          console.warn("DVLA lookup failed, continuing with DVSA only.", {
+            code: err.code,
+            status: err.status,
+          });
+        }
+      }
+    }
+
+    if (dvla) {
       detailsPart = mapDvlaToDetails(dvla);
       make = detailsPart.details.make;
       colour = detailsPart.details.colour ?? null;
@@ -140,10 +184,17 @@ export async function lookupVehicle(
         yearFromDate(dvsa.manufactureDate) ??
         yearFromDate(dvsa.registrationDate) ??
         yearFromDate(dvsa.firstUsedDate);
-      hasOutstandingRecall =
-        (dvsa.hasOutstandingRecall ?? "").toLowerCase() === "yes";
+      const recallFlag = (dvsa.hasOutstandingRecall ?? "").toLowerCase();
+      hasOutstandingRecall = recallFlag === "yes";
+      recallDataAvailable = recallFlag === "yes" || recallFlag === "no";
+      if (motTests.length === 0) firstMotDueDate = dvsa.motTestDueDate ?? null;
       sources.push("DVSA");
     }
+
+    make = formatVehicleText(make);
+    model = formatVehicleText(model);
+    colour = formatVehicleText(colour);
+    fuelType = formatVehicleText(fuelType);
 
     if (!detailsPart && motTests.length === 0 && make === "Unknown") {
       return {
@@ -178,6 +229,7 @@ export async function lookupVehicle(
       )[0];
 
     const recalls = {
+      dataAvailable: recallDataAvailable,
       hasOpenRecalls: hasOutstandingRecall,
       count: hasOutstandingRecall ? 1 : 0,
       items: hasOutstandingRecall
@@ -196,10 +248,12 @@ export async function lookupVehicle(
     };
 
     const tax = detailsPart?.tax ?? { status: "Unknown" as const };
-    const motStatus = mapMotStatus(
-      detailsPart?.motExpiryDate ?? latestPass?.expiryDate,
-      detailsPart?.motStatusRaw,
-    );
+    const motStatus = firstMotDueDate
+      ? mapFirstMotStatus(firstMotDueDate)
+      : mapMotStatus(
+          detailsPart?.motExpiryDate ?? latestPass?.expiryDate,
+          detailsPart?.motStatusRaw,
+        );
 
     const buyerScore = calculateBuyerScore({
       yearOfManufacture: year,
@@ -263,7 +317,9 @@ export async function lookupVehicle(
         engineCapacity,
         yearOfManufacture: year,
         monthOfFirstRegistration:
-          detailsPart?.details.monthOfFirstRegistration ?? null,
+          detailsPart?.details.monthOfFirstRegistration ??
+          firstRegistrationDate?.match(/^\d{4}-\d{2}/)?.[0] ??
+          null,
         co2Emissions: detailsPart?.details.co2Emissions ?? null,
         euroStatus: detailsPart?.details.euroStatus ?? null,
         transmission: detailsPart?.details.transmission ?? null,

@@ -1,11 +1,11 @@
 "use client";
 
 import { createContext, useContext, useState } from "react";
-import type { DvlaVehicleResponse } from "@/lib/api/dvla";
+import type { VehicleRecord } from "@/types/vehicle";
 
 type DvlaLookupContextValue = {
-  vehicle: DvlaVehicleResponse | null;
-  setVehicle: (vehicle: DvlaVehicleResponse | null) => void;
+  vehicle: VehicleRecord | null;
+  setVehicle: (vehicle: VehicleRecord | null) => void;
 };
 
 const DvlaLookupContext = createContext<DvlaLookupContextValue | null>(null);
@@ -15,7 +15,7 @@ export function DvlaLookupProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [vehicle, setVehicle] = useState<DvlaVehicleResponse | null>(null);
+  const [vehicle, setVehicle] = useState<VehicleRecord | null>(null);
 
   return (
     <DvlaLookupContext.Provider value={{ vehicle, setVehicle }}>

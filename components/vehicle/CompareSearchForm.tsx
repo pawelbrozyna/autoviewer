@@ -11,8 +11,8 @@ import {
 } from "@/lib/vehicle/registration";
 
 export function CompareSearchForm({
-  defaultLeft = "AB12 CDE",
-  defaultRight = "CD34 EFG",
+  defaultLeft = "",
+  defaultRight = "",
 }: {
   defaultLeft?: string;
   defaultRight?: string;
