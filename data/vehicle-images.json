@@ -1,8 +1,8 @@
 {
-  "library": "AutoViewer vehicle image library v4",
-  "count": 500,
+  "library": "AutoViewer vehicle image library v5",
+  "count": 600,
   "format": "webp",
-  "selectionBasis": "Prioritised for UK used-vehicle and vehicle-parc relevance. Positions 1-300 cover common UK cars; 301-340 vans and light commercial vehicles; 341-370 motorcycles; 371-400 scooters; 401-450 pickups, larger/older commercial vans and van-based MPVs; 451-500 add high-priority UK used-car gaps, current EVs/hybrids and premium used models. This is a practical image-bucket catalogue, not an exact sales ranking.",
+  "selectionBasis": "Prioritised for UK used-vehicle and vehicle-parc relevance. Positions 1-300 cover common UK cars; 301-340 vans and light commercial vehicles; 341-370 motorcycles; 371-400 scooters; 401-450 pickups, larger/older commercial vans and van-based MPVs; 451-500 add high-priority UK used-car gaps, current EVs/hybrids and premium used models; 501-600 fill UK everyday-road gaps (2005-2020 hatchbacks, MPVs, budget family cars and small crossovers). This is a practical image-bucket catalogue, not an exact sales ranking.",
   "imageStandard": {
     "format": "webp",
     "size": "1000x750",
@@ -5022,6 +5022,1006 @@
       "yearTo": 2022,
       "bodyType": "suv",
       "filename": "land-rover-range-rover-velar-l560-2017-2022.webp"
+    },
+    {
+      "priority": 501,
+      "make": "Dacia",
+      "model": "Logan",
+      "generation": "MCV II",
+      "yearFrom": 2013,
+      "yearTo": 2020,
+      "bodyType": "estate",
+      "filename": "dacia-logan-mcv-ii-2013-2020.webp"
+    },
+    {
+      "priority": 502,
+      "make": "Dacia",
+      "model": "Lodgy",
+      "generation": "I",
+      "yearFrom": 2013,
+      "yearTo": 2021,
+      "bodyType": "mpv",
+      "filename": "dacia-lodgy-i-2013-2021.webp"
+    },
+    {
+      "priority": 503,
+      "make": "Toyota",
+      "model": "Auris",
+      "generation": "E150",
+      "yearFrom": 2007,
+      "yearTo": 2009,
+      "bodyType": "hatchback",
+      "filename": "toyota-auris-e150-2007-2009.webp"
+    },
+    {
+      "priority": 504,
+      "make": "Toyota",
+      "model": "Auris",
+      "generation": "E150 facelift",
+      "yearFrom": 2010,
+      "yearTo": 2012,
+      "bodyType": "hatchback",
+      "filename": "toyota-auris-e150-facelift-2010-2012.webp"
+    },
+    {
+      "priority": 505,
+      "make": "Vauxhall",
+      "model": "Crossland",
+      "generation": "A facelift",
+      "yearFrom": 2021,
+      "yearTo": 2024,
+      "bodyType": "crossover",
+      "filename": "vauxhall-crossland-a-facelift-2021-2024.webp"
+    },
+    {
+      "priority": 506,
+      "make": "Vauxhall",
+      "model": "Zafira",
+      "generation": "B",
+      "yearFrom": 2005,
+      "yearTo": 2014,
+      "bodyType": "mpv",
+      "filename": "vauxhall-zafira-b-2005-2014.webp"
+    },
+    {
+      "priority": 507,
+      "make": "Vauxhall",
+      "model": "Meriva",
+      "generation": "A facelift",
+      "yearFrom": 2006,
+      "yearTo": 2010,
+      "bodyType": "mpv",
+      "filename": "vauxhall-meriva-a-facelift-2006-2010.webp"
+    },
+    {
+      "priority": 508,
+      "make": "Vauxhall",
+      "model": "Meriva",
+      "generation": "B",
+      "yearFrom": 2010,
+      "yearTo": 2014,
+      "bodyType": "mpv",
+      "filename": "vauxhall-meriva-b-2010-2014.webp"
+    },
+    {
+      "priority": 509,
+      "make": "Vauxhall",
+      "model": "Agila",
+      "generation": "B",
+      "yearFrom": 2008,
+      "yearTo": 2014,
+      "bodyType": "hatchback",
+      "filename": "vauxhall-agila-b-2008-2014.webp"
+    },
+    {
+      "priority": 510,
+      "make": "Vauxhall",
+      "model": "Viva",
+      "generation": "Mk3",
+      "yearFrom": 2015,
+      "yearTo": 2019,
+      "bodyType": "hatchback",
+      "filename": "vauxhall-viva-mk3-2015-2019.webp"
+    },
+    {
+      "priority": 511,
+      "make": "Nissan",
+      "model": "Note",
+      "generation": "E11",
+      "yearFrom": 2006,
+      "yearTo": 2013,
+      "bodyType": "mpv-hatchback",
+      "filename": "nissan-note-e11-2006-2013.webp"
+    },
+    {
+      "priority": 512,
+      "make": "Nissan",
+      "model": "Pixo",
+      "generation": "UA0",
+      "yearFrom": 2009,
+      "yearTo": 2013,
+      "bodyType": "hatchback",
+      "filename": "nissan-pixo-ua0-2009-2013.webp"
+    },
+    {
+      "priority": 513,
+      "make": "Hyundai",
+      "model": "i10",
+      "generation": "PA",
+      "yearFrom": 2008,
+      "yearTo": 2013,
+      "bodyType": "hatchback",
+      "filename": "hyundai-i10-pa-2008-2013.webp"
+    },
+    {
+      "priority": 514,
+      "make": "Hyundai",
+      "model": "i20",
+      "generation": "PB",
+      "yearFrom": 2009,
+      "yearTo": 2014,
+      "bodyType": "hatchback",
+      "filename": "hyundai-i20-pb-2009-2014.webp"
+    },
+    {
+      "priority": 515,
+      "make": "Hyundai",
+      "model": "i20",
+      "generation": "GB",
+      "yearFrom": 2015,
+      "yearTo": 2018,
+      "bodyType": "hatchback",
+      "filename": "hyundai-i20-gb-2015-2018.webp"
+    },
+    {
+      "priority": 516,
+      "make": "Hyundai",
+      "model": "i30",
+      "generation": "FD",
+      "yearFrom": 2007,
+      "yearTo": 2012,
+      "bodyType": "hatchback-estate",
+      "filename": "hyundai-i30-fd-2007-2012.webp"
+    },
+    {
+      "priority": 517,
+      "make": "Hyundai",
+      "model": "i30",
+      "generation": "GD",
+      "yearFrom": 2012,
+      "yearTo": 2015,
+      "bodyType": "hatchback-estate",
+      "filename": "hyundai-i30-gd-2012-2015.webp"
+    },
+    {
+      "priority": 518,
+      "make": "Hyundai",
+      "model": "ix20",
+      "generation": "JC",
+      "yearFrom": 2010,
+      "yearTo": 2019,
+      "bodyType": "mpv",
+      "filename": "hyundai-ix20-jc-2010-2019.webp"
+    },
+    {
+      "priority": 519,
+      "make": "Hyundai",
+      "model": "ix35",
+      "generation": "LM",
+      "yearFrom": 2010,
+      "yearTo": 2015,
+      "bodyType": "suv",
+      "filename": "hyundai-ix35-lm-2010-2015.webp"
+    },
+    {
+      "priority": 520,
+      "make": "Kia",
+      "model": "Ceed",
+      "generation": "ED",
+      "yearFrom": 2007,
+      "yearTo": 2012,
+      "bodyType": "hatchback-estate",
+      "filename": "kia-ceed-ed-2007-2012.webp"
+    },
+    {
+      "priority": 521,
+      "make": "Kia",
+      "model": "Ceed",
+      "generation": "JD",
+      "yearFrom": 2012,
+      "yearTo": 2015,
+      "bodyType": "hatchback-estate",
+      "filename": "kia-ceed-jd-2012-2015.webp"
+    },
+    {
+      "priority": 522,
+      "make": "Kia",
+      "model": "Rio",
+      "generation": "JB",
+      "yearFrom": 2005,
+      "yearTo": 2011,
+      "bodyType": "hatchback",
+      "filename": "kia-rio-jb-2005-2011.webp"
+    },
+    {
+      "priority": 523,
+      "make": "Kia",
+      "model": "Rio",
+      "generation": "UB",
+      "yearFrom": 2011,
+      "yearTo": 2017,
+      "bodyType": "hatchback",
+      "filename": "kia-rio-ub-2011-2017.webp"
+    },
+    {
+      "priority": 524,
+      "make": "Kia",
+      "model": "Venga",
+      "generation": "YN",
+      "yearFrom": 2010,
+      "yearTo": 2019,
+      "bodyType": "mpv",
+      "filename": "kia-venga-yn-2010-2019.webp"
+    },
+    {
+      "priority": 525,
+      "make": "Kia",
+      "model": "Soul",
+      "generation": "AM",
+      "yearFrom": 2009,
+      "yearTo": 2013,
+      "bodyType": "crossover",
+      "filename": "kia-soul-am-2009-2013.webp"
+    },
+    {
+      "priority": 526,
+      "make": "Kia",
+      "model": "Soul",
+      "generation": "PS",
+      "yearFrom": 2014,
+      "yearTo": 2019,
+      "bodyType": "crossover",
+      "filename": "kia-soul-ps-2014-2019.webp"
+    },
+    {
+      "priority": 527,
+      "make": "Kia",
+      "model": "Carens",
+      "generation": "UN",
+      "yearFrom": 2006,
+      "yearTo": 2013,
+      "bodyType": "mpv",
+      "filename": "kia-carens-un-2006-2013.webp"
+    },
+    {
+      "priority": 528,
+      "make": "Kia",
+      "model": "Carens",
+      "generation": "RP",
+      "yearFrom": 2013,
+      "yearTo": 2019,
+      "bodyType": "mpv",
+      "filename": "kia-carens-rp-2013-2019.webp"
+    },
+    {
+      "priority": 529,
+      "make": "Peugeot",
+      "model": "206",
+      "generation": "Mk1 facelift",
+      "yearFrom": 2003,
+      "yearTo": 2009,
+      "bodyType": "hatchback",
+      "filename": "peugeot-206-mk1-facelift-2003-2009.webp"
+    },
+    {
+      "priority": 530,
+      "make": "Peugeot",
+      "model": "307",
+      "generation": "facelift",
+      "yearFrom": 2005,
+      "yearTo": 2008,
+      "bodyType": "hatchback-estate",
+      "filename": "peugeot-307-facelift-2005-2008.webp"
+    },
+    {
+      "priority": 531,
+      "make": "Peugeot",
+      "model": "308",
+      "generation": "T7",
+      "yearFrom": 2007,
+      "yearTo": 2011,
+      "bodyType": "hatchback-estate",
+      "filename": "peugeot-308-t7-2007-2011.webp"
+    },
+    {
+      "priority": 532,
+      "make": "Peugeot",
+      "model": "308",
+      "generation": "T7 facelift",
+      "yearFrom": 2011,
+      "yearTo": 2013,
+      "bodyType": "hatchback-estate",
+      "filename": "peugeot-308-t7-facelift-2011-2013.webp"
+    },
+    {
+      "priority": 533,
+      "make": "Peugeot",
+      "model": "308",
+      "generation": "T9",
+      "yearFrom": 2014,
+      "yearTo": 2017,
+      "bodyType": "hatchback-estate",
+      "filename": "peugeot-308-t9-2014-2017.webp"
+    },
+    {
+      "priority": 534,
+      "make": "Peugeot",
+      "model": "3008",
+      "generation": "Mk1",
+      "yearFrom": 2009,
+      "yearTo": 2016,
+      "bodyType": "crossover",
+      "filename": "peugeot-3008-mk1-2009-2016.webp"
+    },
+    {
+      "priority": 535,
+      "make": "Peugeot",
+      "model": "5008",
+      "generation": "Mk1",
+      "yearFrom": 2010,
+      "yearTo": 2017,
+      "bodyType": "mpv",
+      "filename": "peugeot-5008-mk1-2010-2017.webp"
+    },
+    {
+      "priority": 536,
+      "make": "Citroen",
+      "model": "C2",
+      "generation": "Mk1",
+      "yearFrom": 2003,
+      "yearTo": 2009,
+      "bodyType": "hatchback",
+      "filename": "citroen-c2-mk1-2003-2009.webp"
+    },
+    {
+      "priority": 537,
+      "make": "Citroen",
+      "model": "C3",
+      "generation": "Mk1 facelift",
+      "yearFrom": 2005,
+      "yearTo": 2009,
+      "bodyType": "hatchback",
+      "filename": "citroen-c3-mk1-facelift-2005-2009.webp"
+    },
+    {
+      "priority": 538,
+      "make": "Citroen",
+      "model": "C3",
+      "generation": "Mk2",
+      "yearFrom": 2010,
+      "yearTo": 2016,
+      "bodyType": "hatchback",
+      "filename": "citroen-c3-mk2-2010-2016.webp"
+    },
+    {
+      "priority": 539,
+      "make": "Citroen",
+      "model": "C4",
+      "generation": "Mk1",
+      "yearFrom": 2004,
+      "yearTo": 2010,
+      "bodyType": "hatchback",
+      "filename": "citroen-c4-mk1-2004-2010.webp"
+    },
+    {
+      "priority": 540,
+      "make": "Citroen",
+      "model": "C4",
+      "generation": "Mk2",
+      "yearFrom": 2010,
+      "yearTo": 2018,
+      "bodyType": "hatchback",
+      "filename": "citroen-c4-mk2-2010-2018.webp"
+    },
+    {
+      "priority": 541,
+      "make": "Citroen",
+      "model": "C4 Picasso",
+      "generation": "Mk1",
+      "yearFrom": 2007,
+      "yearTo": 2013,
+      "bodyType": "mpv",
+      "filename": "citroen-c4-picasso-mk1-2007-2013.webp"
+    },
+    {
+      "priority": 542,
+      "make": "Citroen",
+      "model": "C4 Picasso",
+      "generation": "Mk2",
+      "yearFrom": 2013,
+      "yearTo": 2018,
+      "bodyType": "mpv",
+      "filename": "citroen-c4-picasso-mk2-2013-2018.webp"
+    },
+    {
+      "priority": 543,
+      "make": "Renault",
+      "model": "Modus",
+      "generation": "Mk1",
+      "yearFrom": 2004,
+      "yearTo": 2012,
+      "bodyType": "mpv",
+      "filename": "renault-modus-mk1-2004-2012.webp"
+    },
+    {
+      "priority": 544,
+      "make": "Renault",
+      "model": "Scenic",
+      "generation": "II",
+      "yearFrom": 2003,
+      "yearTo": 2009,
+      "bodyType": "mpv",
+      "filename": "renault-scenic-ii-2003-2009.webp"
+    },
+    {
+      "priority": 545,
+      "make": "Renault",
+      "model": "Scenic",
+      "generation": "III",
+      "yearFrom": 2009,
+      "yearTo": 2016,
+      "bodyType": "mpv",
+      "filename": "renault-scenic-iii-2009-2016.webp"
+    },
+    {
+      "priority": 546,
+      "make": "Renault",
+      "model": "Twingo",
+      "generation": "II",
+      "yearFrom": 2007,
+      "yearTo": 2014,
+      "bodyType": "hatchback",
+      "filename": "renault-twingo-ii-2007-2014.webp"
+    },
+    {
+      "priority": 547,
+      "make": "Renault",
+      "model": "Laguna",
+      "generation": "III",
+      "yearFrom": 2007,
+      "yearTo": 2015,
+      "bodyType": "hatchback-estate",
+      "filename": "renault-laguna-iii-2007-2015.webp"
+    },
+    {
+      "priority": 548,
+      "make": "Skoda",
+      "model": "Roomster",
+      "generation": "Mk1",
+      "yearFrom": 2006,
+      "yearTo": 2015,
+      "bodyType": "mpv",
+      "filename": "skoda-roomster-mk1-2006-2015.webp"
+    },
+    {
+      "priority": 549,
+      "make": "Skoda",
+      "model": "Rapid",
+      "generation": "Mk1",
+      "yearFrom": 2012,
+      "yearTo": 2019,
+      "bodyType": "hatchback",
+      "filename": "skoda-rapid-mk1-2012-2019.webp"
+    },
+    {
+      "priority": 550,
+      "make": "Skoda",
+      "model": "Citigo",
+      "generation": "Mk1",
+      "yearFrom": 2012,
+      "yearTo": 2020,
+      "bodyType": "hatchback",
+      "filename": "skoda-citigo-mk1-2012-2020.webp"
+    },
+    {
+      "priority": 551,
+      "make": "SEAT",
+      "model": "Altea",
+      "generation": "Mk1",
+      "yearFrom": 2004,
+      "yearTo": 2015,
+      "bodyType": "mpv",
+      "filename": "seat-altea-mk1-2004-2015.webp"
+    },
+    {
+      "priority": 552,
+      "make": "SEAT",
+      "model": "Toledo",
+      "generation": "Mk4",
+      "yearFrom": 2012,
+      "yearTo": 2019,
+      "bodyType": "hatchback",
+      "filename": "seat-toledo-mk4-2012-2019.webp"
+    },
+    {
+      "priority": 553,
+      "make": "Mazda",
+      "model": "Mazda2",
+      "generation": "DE",
+      "yearFrom": 2007,
+      "yearTo": 2015,
+      "bodyType": "hatchback",
+      "filename": "mazda-mazda2-de-2007-2015.webp"
+    },
+    {
+      "priority": 554,
+      "make": "Mazda",
+      "model": "Mazda3",
+      "generation": "BK",
+      "yearFrom": 2004,
+      "yearTo": 2009,
+      "bodyType": "hatchback",
+      "filename": "mazda-mazda3-bk-2004-2009.webp"
+    },
+    {
+      "priority": 555,
+      "make": "Mazda",
+      "model": "Mazda3",
+      "generation": "BL",
+      "yearFrom": 2009,
+      "yearTo": 2013,
+      "bodyType": "hatchback",
+      "filename": "mazda-mazda3-bl-2009-2013.webp"
+    },
+    {
+      "priority": 556,
+      "make": "Mazda",
+      "model": "Mazda5",
+      "generation": "CR",
+      "yearFrom": 2005,
+      "yearTo": 2010,
+      "bodyType": "mpv",
+      "filename": "mazda-mazda5-cr-2005-2010.webp"
+    },
+    {
+      "priority": 557,
+      "make": "Mazda",
+      "model": "Mazda5",
+      "generation": "CW",
+      "yearFrom": 2010,
+      "yearTo": 2015,
+      "bodyType": "mpv",
+      "filename": "mazda-mazda5-cw-2010-2015.webp"
+    },
+    {
+      "priority": 558,
+      "make": "Honda",
+      "model": "FR-V",
+      "generation": "Mk1",
+      "yearFrom": 2004,
+      "yearTo": 2009,
+      "bodyType": "mpv",
+      "filename": "honda-fr-v-mk1-2004-2009.webp"
+    },
+    {
+      "priority": 559,
+      "make": "Honda",
+      "model": "Accord",
+      "generation": "Mk8",
+      "yearFrom": 2008,
+      "yearTo": 2015,
+      "bodyType": "saloon-estate",
+      "filename": "honda-accord-mk8-2008-2015.webp"
+    },
+    {
+      "priority": 560,
+      "make": "Honda",
+      "model": "CR-V",
+      "generation": "Mk3",
+      "yearFrom": 2007,
+      "yearTo": 2012,
+      "bodyType": "suv",
+      "filename": "honda-cr-v-mk3-2007-2012.webp"
+    },
+    {
+      "priority": 561,
+      "make": "Honda",
+      "model": "CR-V",
+      "generation": "Mk4",
+      "yearFrom": 2012,
+      "yearTo": 2015,
+      "bodyType": "suv",
+      "filename": "honda-cr-v-mk4-2012-2015.webp"
+    },
+    {
+      "priority": 562,
+      "make": "Suzuki",
+      "model": "Splash",
+      "generation": "Mk1",
+      "yearFrom": 2008,
+      "yearTo": 2015,
+      "bodyType": "hatchback",
+      "filename": "suzuki-splash-mk1-2008-2015.webp"
+    },
+    {
+      "priority": 563,
+      "make": "Suzuki",
+      "model": "SX4",
+      "generation": "Mk1",
+      "yearFrom": 2006,
+      "yearTo": 2014,
+      "bodyType": "hatchback-crossover",
+      "filename": "suzuki-sx4-mk1-2006-2014.webp"
+    },
+    {
+      "priority": 564,
+      "make": "Suzuki",
+      "model": "Alto",
+      "generation": "Mk7",
+      "yearFrom": 2009,
+      "yearTo": 2014,
+      "bodyType": "hatchback",
+      "filename": "suzuki-alto-mk7-2009-2014.webp"
+    },
+    {
+      "priority": 565,
+      "make": "Fiat",
+      "model": "Grande Punto",
+      "generation": "199",
+      "yearFrom": 2006,
+      "yearTo": 2009,
+      "bodyType": "hatchback",
+      "filename": "fiat-grande-punto-199-2006-2009.webp"
+    },
+    {
+      "priority": 566,
+      "make": "Fiat",
+      "model": "Punto",
+      "generation": "199 facelift",
+      "yearFrom": 2012,
+      "yearTo": 2018,
+      "bodyType": "hatchback",
+      "filename": "fiat-punto-199-facelift-2012-2018.webp"
+    },
+    {
+      "priority": 567,
+      "make": "Fiat",
+      "model": "Qubo",
+      "generation": "Mk1",
+      "yearFrom": 2008,
+      "yearTo": 2019,
+      "bodyType": "mpv",
+      "filename": "fiat-qubo-mk1-2008-2019.webp"
+    },
+    {
+      "priority": 568,
+      "make": "Ford",
+      "model": "B-Max",
+      "generation": "Mk1",
+      "yearFrom": 2012,
+      "yearTo": 2017,
+      "bodyType": "mpv",
+      "filename": "ford-b-max-mk1-2012-2017.webp"
+    },
+    {
+      "priority": 569,
+      "make": "Ford",
+      "model": "C-Max",
+      "generation": "Mk1 facelift",
+      "yearFrom": 2007,
+      "yearTo": 2010,
+      "bodyType": "mpv",
+      "filename": "ford-c-max-mk1-facelift-2007-2010.webp"
+    },
+    {
+      "priority": 570,
+      "make": "Ford",
+      "model": "C-Max",
+      "generation": "Mk2",
+      "yearFrom": 2010,
+      "yearTo": 2015,
+      "bodyType": "mpv",
+      "filename": "ford-c-max-mk2-2010-2015.webp"
+    },
+    {
+      "priority": 571,
+      "make": "Ford",
+      "model": "C-Max",
+      "generation": "Mk2 facelift",
+      "yearFrom": 2015,
+      "yearTo": 2019,
+      "bodyType": "mpv",
+      "filename": "ford-c-max-mk2-facelift-2015-2019.webp"
+    },
+    {
+      "priority": 572,
+      "make": "Ford",
+      "model": "Fusion",
+      "generation": "facelift",
+      "yearFrom": 2005,
+      "yearTo": 2012,
+      "bodyType": "mpv-hatchback",
+      "filename": "ford-fusion-facelift-2005-2012.webp"
+    },
+    {
+      "priority": 573,
+      "make": "Ford",
+      "model": "Ka",
+      "generation": "Mk2",
+      "yearFrom": 2008,
+      "yearTo": 2016,
+      "bodyType": "hatchback",
+      "filename": "ford-ka-mk2-2008-2016.webp"
+    },
+    {
+      "priority": 574,
+      "make": "Ford",
+      "model": "Kuga",
+      "generation": "Mk1",
+      "yearFrom": 2008,
+      "yearTo": 2012,
+      "bodyType": "suv",
+      "filename": "ford-kuga-mk1-2008-2012.webp"
+    },
+    {
+      "priority": 575,
+      "make": "Ford",
+      "model": "Galaxy",
+      "generation": "Mk2",
+      "yearFrom": 2006,
+      "yearTo": 2015,
+      "bodyType": "mpv",
+      "filename": "ford-galaxy-mk2-2006-2015.webp"
+    },
+    {
+      "priority": 576,
+      "make": "Ford",
+      "model": "S-Max",
+      "generation": "Mk1",
+      "yearFrom": 2006,
+      "yearTo": 2015,
+      "bodyType": "mpv",
+      "filename": "ford-s-max-mk1-2006-2015.webp"
+    },
+    {
+      "priority": 577,
+      "make": "Ford",
+      "model": "EcoSport",
+      "generation": "Mk2",
+      "yearFrom": 2014,
+      "yearTo": 2017,
+      "bodyType": "crossover",
+      "filename": "ford-ecosport-mk2-2014-2017.webp"
+    },
+    {
+      "priority": 578,
+      "make": "Citroen",
+      "model": "C1",
+      "generation": "Mk1",
+      "yearFrom": 2005,
+      "yearTo": 2014,
+      "bodyType": "hatchback",
+      "filename": "citroen-c1-mk1-2005-2014.webp"
+    },
+    {
+      "priority": 579,
+      "make": "Citroen",
+      "model": "C1",
+      "generation": "Mk2",
+      "yearFrom": 2014,
+      "yearTo": 2022,
+      "bodyType": "hatchback",
+      "filename": "citroen-c1-mk2-2014-2022.webp"
+    },
+    {
+      "priority": 580,
+      "make": "Citroen",
+      "model": "C3 Picasso",
+      "generation": "Mk1",
+      "yearFrom": 2009,
+      "yearTo": 2017,
+      "bodyType": "mpv",
+      "filename": "citroen-c3-picasso-mk1-2009-2017.webp"
+    },
+    {
+      "priority": 581,
+      "make": "Citroen",
+      "model": "DS3",
+      "generation": "Mk1",
+      "yearFrom": 2010,
+      "yearTo": 2016,
+      "bodyType": "hatchback",
+      "filename": "citroen-ds3-mk1-2010-2016.webp"
+    },
+    {
+      "priority": 582,
+      "make": "Suzuki",
+      "model": "Swift",
+      "generation": "Mk2",
+      "yearFrom": 2005,
+      "yearTo": 2010,
+      "bodyType": "hatchback",
+      "filename": "suzuki-swift-mk2-2005-2010.webp"
+    },
+    {
+      "priority": 583,
+      "make": "Suzuki",
+      "model": "Swift",
+      "generation": "Mk3",
+      "yearFrom": 2010,
+      "yearTo": 2017,
+      "bodyType": "hatchback",
+      "filename": "suzuki-swift-mk3-2010-2017.webp"
+    },
+    {
+      "priority": 584,
+      "make": "Fiat",
+      "model": "500",
+      "generation": "312",
+      "yearFrom": 2007,
+      "yearTo": 2015,
+      "bodyType": "hatchback",
+      "filename": "fiat-500-312-2007-2015.webp"
+    },
+    {
+      "priority": 585,
+      "make": "Fiat",
+      "model": "Panda",
+      "generation": "Mk2",
+      "yearFrom": 2004,
+      "yearTo": 2012,
+      "bodyType": "hatchback",
+      "filename": "fiat-panda-mk2-2004-2012.webp"
+    },
+    {
+      "priority": 586,
+      "make": "Vauxhall",
+      "model": "Vectra",
+      "generation": "C facelift",
+      "yearFrom": 2005,
+      "yearTo": 2008,
+      "bodyType": "hatchback-estate",
+      "filename": "vauxhall-vectra-c-facelift-2005-2008.webp"
+    },
+    {
+      "priority": 587,
+      "make": "Vauxhall",
+      "model": "Insignia",
+      "generation": "A",
+      "yearFrom": 2008,
+      "yearTo": 2013,
+      "bodyType": "hatchback-estate",
+      "filename": "vauxhall-insignia-a-2008-2013.webp"
+    },
+    {
+      "priority": 588,
+      "make": "Renault",
+      "model": "Clio",
+      "generation": "III",
+      "yearFrom": 2005,
+      "yearTo": 2009,
+      "bodyType": "hatchback",
+      "filename": "renault-clio-iii-2005-2009.webp"
+    },
+    {
+      "priority": 589,
+      "make": "Renault",
+      "model": "Megane",
+      "generation": "II",
+      "yearFrom": 2002,
+      "yearTo": 2008,
+      "bodyType": "hatchback",
+      "filename": "renault-megane-ii-2002-2008.webp"
+    },
+    {
+      "priority": 590,
+      "make": "Renault",
+      "model": "Megane",
+      "generation": "III",
+      "yearFrom": 2008,
+      "yearTo": 2012,
+      "bodyType": "hatchback-estate",
+      "filename": "renault-megane-iii-2008-2012.webp"
+    },
+    {
+      "priority": 591,
+      "make": "Toyota",
+      "model": "Verso",
+      "generation": "AR20",
+      "yearFrom": 2009,
+      "yearTo": 2018,
+      "bodyType": "mpv",
+      "filename": "toyota-verso-ar20-2009-2018.webp"
+    },
+    {
+      "priority": 592,
+      "make": "Toyota",
+      "model": "RAV4",
+      "generation": "XA30",
+      "yearFrom": 2006,
+      "yearTo": 2012,
+      "bodyType": "suv",
+      "filename": "toyota-rav4-xa30-2006-2012.webp"
+    },
+    {
+      "priority": 593,
+      "make": "Toyota",
+      "model": "Corolla",
+      "generation": "E120",
+      "yearFrom": 2002,
+      "yearTo": 2007,
+      "bodyType": "hatchback",
+      "filename": "toyota-corolla-e120-2002-2007.webp"
+    },
+    {
+      "priority": 594,
+      "make": "Hyundai",
+      "model": "Getz",
+      "generation": "facelift",
+      "yearFrom": 2005,
+      "yearTo": 2009,
+      "bodyType": "hatchback",
+      "filename": "hyundai-getz-facelift-2005-2009.webp"
+    },
+    {
+      "priority": 595,
+      "make": "Kia",
+      "model": "Picanto",
+      "generation": "SA",
+      "yearFrom": 2004,
+      "yearTo": 2011,
+      "bodyType": "hatchback",
+      "filename": "kia-picanto-sa-2004-2011.webp"
+    },
+    {
+      "priority": 596,
+      "make": "Honda",
+      "model": "Jazz",
+      "generation": "Mk1",
+      "yearFrom": 2002,
+      "yearTo": 2008,
+      "bodyType": "hatchback",
+      "filename": "honda-jazz-mk1-2002-2008.webp"
+    },
+    {
+      "priority": 597,
+      "make": "Peugeot",
+      "model": "107",
+      "generation": "Mk1",
+      "yearFrom": 2005,
+      "yearTo": 2009,
+      "bodyType": "hatchback",
+      "filename": "peugeot-107-mk1-2005-2009.webp"
+    },
+    {
+      "priority": 598,
+      "make": "Dacia",
+      "model": "Sandero",
+      "generation": "II",
+      "yearFrom": 2013,
+      "yearTo": 2016,
+      "bodyType": "hatchback",
+      "filename": "dacia-sandero-ii-2013-2016.webp"
+    },
+    {
+      "priority": 599,
+      "make": "Skoda",
+      "model": "Yeti",
+      "generation": "Mk1",
+      "yearFrom": 2009,
+      "yearTo": 2013,
+      "bodyType": "crossover",
+      "filename": "skoda-yeti-mk1-2009-2013.webp"
+    },
+    {
+      "priority": 600,
+      "make": "Volkswagen",
+      "model": "Touran",
+      "generation": "Mk1 facelift",
+      "yearFrom": 2006,
+      "yearTo": 2010,
+      "bodyType": "mpv",
+      "filename": "volkswagen-touran-mk1-facelift-2006-2010.webp"
     }
   ]
 }

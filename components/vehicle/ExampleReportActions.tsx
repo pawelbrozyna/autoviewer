@@ -9,6 +9,8 @@ import type { VehicleRecord } from "@/types/vehicle";
 export const reportActionButtonClass =
   "inline-flex min-h-11 items-center justify-center gap-2 rounded-[9px] border border-border bg-white px-3.5 text-[14px] font-semibold text-navy transition hover:border-navy/30 hover:bg-surface-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60";
 
+const reportSecondaryActionClass = `${reportActionButtonClass} max-md:border-blue max-md:text-blue max-md:hover:bg-blue/5`;
+
 export function ExampleReportActions({
   vehicle,
   ownersLabel,
@@ -153,7 +155,7 @@ export function ExampleReportActions({
       <div className="grid grid-cols-1 gap-2 sm:flex sm:flex-wrap">
         <button
           type="button"
-          className={reportActionButtonClass}
+          className={reportSecondaryActionClass}
           onClick={downloadPdf}
           disabled={downloading}
         >
@@ -167,7 +169,7 @@ export function ExampleReportActions({
         <button
           ref={emailTriggerRef}
           type="button"
-          className={reportActionButtonClass}
+          className={reportSecondaryActionClass}
           onClick={() => {
             setEmailStatus("idle");
             setEmailError("");

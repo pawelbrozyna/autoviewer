@@ -71,7 +71,85 @@ const MAKE_ALIASES: Record<string, string> = {
   "kg mobility": "kgm",
 };
 
+/**
+ * Catalogue models that are one vehicle sold under several names (DVSA often drops
+ * the suffix). Members match each other and share year ranges.
+ */
+const MODEL_FAMILIES: Record<string, string[][]> = {
+  vauxhall: [
+    ["Crossland", "Crossland X"],
+    ["Grandland", "Grandland X"],
+  ],
+  fiat: [["Grande Punto", "Punto Evo", "Punto"]],
+};
+
+/**
+ * Inputs that belong to a specific catalogue model. When that model is missing the
+ * result is a placeholder, never a shorter same-make prefix ("C4 Picasso" is not "C4").
+ */
+const STRICT_MODEL_ALIASES: Record<
+  string,
+  Array<{
+    pattern: RegExp;
+    model: string | ((match: RegExpMatchArray) => string);
+  }>
+> = {
+  citroen: [
+    {
+      pattern: /^(grand )?c4 (grand )?(picasso|spacetourer)\b/,
+      model: "C4 Picasso",
+    },
+    { pattern: /^c3 picasso\b/, model: "C3 Picasso" },
+  ],
+  ford: [{ pattern: /^grand c max\b/, model: "C-Max" }],
+  renault: [
+    { pattern: /^grand scenic\b/, model: "Scenic" },
+    { pattern: /^grand modus\b/, model: "Modus" },
+  ],
+  suzuki: [{ pattern: /^sx4 s cross\b/, model: "S-Cross" }],
+  kia: [{ pattern: /^pro cee ?d\b/, model: "Ceed" }],
+  mazda: [{ pattern: /^([235])\b/, model: (match) => `Mazda${match[1]}` }],
+};
+
 const libraryEntries = (vehicleImagesLibrary.vehicles ?? []) as VehicleImageEntry[];
+
+function modelFamily(makeKey: string, model: string): string[] | null {
+  const modelKey = normalizeKey(model);
+  return (
+    MODEL_FAMILIES[makeKey]?.find((family) =>
+      family.some((member) => normalizeKey(member) === modelKey),
+    ) ?? null
+  );
+}
+
+function strictModelAlias(makeKey: string, modelKey: string): string | null {
+  for (const { pattern, model } of STRICT_MODEL_ALIASES[makeKey] ?? []) {
+    const match = modelKey.match(pattern);
+    if (match) return typeof model === "string" ? model : model(match);
+  }
+  return null;
+}
+
+function familyModelAlias(
+  makeKey: string,
+  modelKey: string,
+  candidates: string[],
+): string | null {
+  for (const family of MODEL_FAMILIES[makeKey] ?? []) {
+    const named = family
+      .filter((member) => {
+        const memberKey = normalizeKey(member);
+        return modelKey === memberKey || modelKey.startsWith(`${memberKey} `);
+      })
+      .sort((a, b) => normalizeKey(b).length - normalizeKey(a).length);
+    if (named.length === 0) continue;
+    const present =
+      named.find((member) => candidates.includes(member)) ??
+      family.find((member) => candidates.includes(member));
+    if (present) return present;
+  }
+  return null;
+}
 
 function normalizeKey(value: string): string {
   return value
@@ -232,8 +310,18 @@ function matchModelKey(
   modelKey: string,
   candidates: string[],
 ): ModelMatch[] {
+  const makeKey = canonicalizeMake(make);
+  const strict = strictModelAlias(makeKey, modelKey);
+  if (strict) {
+    return candidates.includes(strict)
+      ? [{ model: strict, method: "alias", score: 99 }]
+      : [];
+  }
+
   const modelCompact = compactKey(modelKey);
-  const alias = knownModelAlias(canonicalizeMake(make), modelKey, candidates);
+  const alias =
+    knownModelAlias(makeKey, modelKey, candidates) ??
+    familyModelAlias(makeKey, modelKey, candidates);
 
   const matches: ModelMatch[] = [];
   for (const candidate of candidates) {
@@ -372,11 +460,13 @@ function entriesForModel(
   entries: VehicleImageEntry[],
 ): VehicleImageEntry[] {
   const makeKey = canonicalizeMake(make);
-  const modelKey = normalizeKey(catalogModel);
+  const modelKeys = new Set(
+    (modelFamily(makeKey, catalogModel) ?? [catalogModel]).map(normalizeKey),
+  );
   return entries.filter(
     (entry) =>
       canonicalizeMake(entry.make) === makeKey &&
-      normalizeKey(entry.model) === modelKey,
+      modelKeys.has(normalizeKey(entry.model)),
   );
 }
 

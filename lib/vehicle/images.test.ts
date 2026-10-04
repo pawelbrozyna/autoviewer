@@ -3,6 +3,8 @@
  * Run: npx tsx lib/vehicle/images.test.ts
  */
 import assert from "node:assert/strict";
+import { readdirSync } from "node:fs";
+import { join } from "node:path";
 import vehicleImagesLibrary from "@/data/vehicle-images.json";
 import {
   matchCatalogModel,
@@ -444,6 +446,147 @@ run("unknown model uses placeholder, not another brand model", () => {
   assert.equal(result.match, "placeholder");
   assert.equal(result.src, null);
   assert.equal(result.isRepresentative, false);
+});
+
+run("Crossland and Grandland resolve across X / non-X naming", () => {
+  const crossland = resolveVehicleImage({
+    make: "VAUXHALL",
+    model: "CROSSLAND",
+    year: 2020,
+  });
+  assert.equal(crossland.match, "exact");
+  assert.equal(crossland.src, "/cars/vauxhall-crossland-x-a-2017-2021.webp");
+  assert.equal(matchCatalogModel("Vauxhall", "Crossland X SE"), "Crossland X");
+
+  const grandland = resolveVehicleImage({
+    make: "VAUXHALL",
+    model: "GRANDLAND",
+    year: 2019,
+  });
+  assert.equal(grandland.match, "exact");
+  assert.equal(grandland.src, "/cars/vauxhall-grandland-x-a-2018-2021.webp");
+});
+
+run("Crossland X 2020 still resolves when the Crossland facelift exists", () => {
+  const facelift = resolveVehicleImage({
+    make: "VAUXHALL",
+    model: "CROSSLAND",
+    year: 2022,
+  });
+  assert.equal(
+    facelift.src,
+    "/cars/vauxhall-crossland-a-facelift-2021-2024.webp",
+  );
+  const xNamed = resolveVehicleImage({
+    make: "VAUXHALL",
+    model: "CROSSLAND X ELITE",
+    year: 2020,
+  });
+  assert.equal(xNamed.src, "/cars/vauxhall-crossland-x-a-2017-2021.webp");
+});
+
+run("live case: 2007 Toyota Auris resolves E150", () => {
+  const result = resolveVehicleImage({
+    make: "TOYOTA",
+    model: "AURIS",
+    year: 2007,
+  });
+  assert.equal(result.match, "exact");
+  assert.equal(result.src, "/cars/toyota-auris-e150-2007-2009.webp");
+});
+
+run("live case: 2016 Dacia Logan and Logan MCV resolve MCV II", () => {
+  for (const model of ["LOGAN", "LOGAN MCV", "LOGAN MCV LAUREATE DCI"]) {
+    const result = resolveVehicleImage({ make: "DACIA", model, year: 2016 });
+    assert.equal(result.match, "exact", model);
+    assert.equal(result.src, "/cars/dacia-logan-mcv-ii-2013-2020.webp", model);
+  }
+});
+
+run("distinct models never fall back to a shorter same-make prefix", () => {
+  for (const model of ["C4 PICASSO", "GRAND C4 PICASSO", "C4 GRAND PICASSO"]) {
+    const result = resolveVehicleImage({ make: "CITROEN", model, year: 2015 });
+    assert.equal(
+      result.src,
+      "/cars/citroen-c4-picasso-mk2-2013-2018.webp",
+      model,
+    );
+  }
+  const c3Picasso = resolveVehicleImage({
+    make: "CITROEN",
+    model: "C3 PICASSO",
+    year: 2012,
+  });
+  assert.equal(c3Picasso.src, "/cars/citroen-c3-picasso-mk1-2009-2017.webp");
+  assert.equal(matchCatalogModel("Suzuki", "SX4 S-CROSS SZ-T"), "S-Cross");
+  assert.equal(matchCatalogModel("Suzuki", "SX4 SZ4"), "SX4");
+  assert.equal(matchCatalogModel("Ford", "GRAND C-MAX"), "C-Max");
+  assert.equal(matchCatalogModel("Ford", "KA"), "Ka");
+  assert.equal(matchCatalogModel("Ford", "KA+"), "Ka+");
+  assert.equal(matchCatalogModel("Kia", "SOUL"), "Soul");
+  assert.equal(matchCatalogModel("Kia", "SOUL EV"), "Soul EV");
+  assert.equal(matchCatalogModel("Kia", "CEE'D"), "Ceed");
+});
+
+run("Mazda numeric DVSA models map to MazdaN", () => {
+  const result = resolveVehicleImage({ make: "MAZDA", model: "2", year: 2018 });
+  assert.equal(result.src, "/cars/mazda-mazda2-dj-2015-2026.webp");
+  assert.equal(matchCatalogModel("Mazda", "3 SPORT NAV"), "Mazda3");
+  const mazda5 = resolveVehicleImage({ make: "MAZDA", model: "5", year: 2012 });
+  assert.equal(mazda5.src, "/cars/mazda-mazda5-cw-2010-2015.webp");
+});
+
+run("every catalogue record has its WebP file and no file is orphaned", () => {
+  const files = new Set(readdirSync(join(process.cwd(), "public", "cars")));
+  const missing = vehicles.filter((v) => !files.has(v.filename));
+  assert.deepEqual(
+    missing.map((v) => v.filename),
+    [],
+    "catalogue filenames missing from public/cars",
+  );
+  const referenced = new Set(vehicles.map((v) => v.filename));
+  assert.deepEqual(
+    [...files].filter((file) => !referenced.has(file)),
+    [],
+    "public/cars files not referenced by the catalogue",
+  );
+});
+
+run("catalogue filenames follow the slug and year convention", () => {
+  const keys = new Set<string>();
+  for (const v of vehicles) {
+    assert.match(v.filename, /^[a-z0-9-]+\.webp$/, v.filename);
+    assert.ok(
+      v.filename.endsWith(`-${v.yearFrom}-${v.yearTo}.webp`),
+      v.filename,
+    );
+    const key = `${v.make}|${v.model}|${v.generation}`.toLowerCase();
+    assert.ok(!keys.has(key), `duplicate make/model/generation: ${key}`);
+    keys.add(key);
+  }
+});
+
+run("every record is reachable by make, model and a year in its range", () => {
+  const unreachable: string[] = [];
+  for (const v of vehicles) {
+    let reached = false;
+    for (let year = v.yearFrom; year <= v.yearTo && !reached; year++) {
+      for (const firstRegistrationDate of [undefined, `${year}-02-01`, `${year}-10-01`]) {
+        const result = resolveVehicleImage({
+          make: v.make,
+          model: v.model,
+          year,
+          firstRegistrationDate,
+        });
+        if (result.filename === v.filename) {
+          reached = true;
+          break;
+        }
+      }
+    }
+    if (!reached) unreachable.push(v.filename);
+  }
+  assert.deepEqual(unreachable, []);
 });
 
 run("demo records use expected WebP resolver paths", () => {
