@@ -9,7 +9,8 @@ import type { VehicleRecord } from "@/types/vehicle";
 export const reportActionButtonClass =
   "inline-flex min-h-11 items-center justify-center gap-2 rounded-[9px] border border-border bg-white px-3.5 text-[14px] font-semibold text-navy transition hover:border-navy/30 hover:bg-surface-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60";
 
-const reportSecondaryActionClass = `${reportActionButtonClass} max-md:border-blue max-md:text-blue max-md:hover:bg-blue/5`;
+const reportTileClass = `${reportActionButtonClass} max-md:min-h-[90px] max-md:flex-col max-md:gap-1.5 max-md:px-1 max-md:text-[13px] max-md:leading-tight`;
+const reportTileIconClass = "h-4 w-4 max-md:h-5 max-md:w-5 max-md:text-blue";
 
 export function ExampleReportActions({
   vehicle,
@@ -152,39 +153,42 @@ export function ExampleReportActions({
 
   return (
     <>
-      <div className="grid grid-cols-1 gap-2 sm:flex sm:flex-wrap">
+      <div className="grid grid-cols-3 gap-2 md:flex md:flex-wrap">
         <button
           type="button"
-          className={reportSecondaryActionClass}
+          className={reportTileClass}
           onClick={downloadPdf}
           disabled={downloading}
         >
           {downloading ? (
-            <LoaderCircle className="h-4 w-4 animate-spin" aria-hidden />
+            <LoaderCircle
+              className={`${reportTileIconClass} animate-spin`}
+              aria-hidden
+            />
           ) : (
-            <Download className="h-4 w-4" aria-hidden />
+            <Download className={reportTileIconClass} aria-hidden />
           )}
           {downloading ? "Generating PDF..." : "Download PDF"}
         </button>
         <button
           ref={emailTriggerRef}
           type="button"
-          className={reportSecondaryActionClass}
+          className={reportTileClass}
           onClick={() => {
             setEmailStatus("idle");
             setEmailError("");
             setEmailOpen(true);
           }}
         >
-          <Mail className="h-4 w-4" aria-hidden />
+          <Mail className={reportTileIconClass} aria-hidden />
           Email report
         </button>
         <button
           type="button"
-          className={reportActionButtonClass}
+          className={reportTileClass}
           onClick={shareReport}
         >
-          <Share2 className="h-4 w-4" aria-hidden />
+          <Share2 className={reportTileIconClass} aria-hidden />
           Share
         </button>
       </div>
@@ -268,7 +272,7 @@ export function ExampleReportActions({
                 ) : null}
                 <button
                   type="submit"
-                  className="relative mt-4 inline-flex min-h-[49px] items-center justify-center gap-2 rounded-[10px] bg-navy px-4.5 text-[17.5px] font-semibold !text-white transition-all duration-150 hover:bg-navy-soft hover:shadow-md hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="relative mt-4 flex w-full min-h-[49px] items-center justify-center gap-2 rounded-[10px] bg-navy px-4.5 text-[17.5px] font-semibold !text-white transition-all duration-150 hover:bg-navy-soft hover:shadow-md hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
                   disabled={emailStatus === "loading"}
                 >
                   {emailStatus === "loading" ? (

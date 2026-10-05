@@ -6,7 +6,6 @@ const BLUE = "#1769e0";
 const TEXT = "#0b1b33";
 const MUTED = "#64748b";
 const BORDER = "#dfe5ee";
-const SOFT = "#f7f9fc";
 const PLATE = "#fac023";
 const FONT =
   "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
@@ -114,34 +113,28 @@ export function buildReportEmailHtml(
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#ffffff;">
 <tr>
 <td align="center" style="padding:24px 12px;">
-<!--[if mso]><table role="presentation" width="560" cellpadding="0" cellspacing="0" border="0"><tr><td><![endif]-->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:560px;width:100%;background-color:#ffffff;border:1px solid ${BORDER};border-radius:12px;">
+<!--[if mso]><table role="presentation" width="640" cellpadding="0" cellspacing="0" border="0"><tr><td><![endif]-->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:640px;width:100%;background-color:#ffffff;border:1px solid ${BORDER};border-radius:12px;">
 <tr>
-<td style="padding:24px 24px 18px;border-bottom:1px solid ${BORDER};">
-<img src="${logoUrl}" width="163" height="24" alt="AutoViewer" style="display:block;border:0;outline:none;text-decoration:none;width:163px;height:24px;font-family:${FONT};font-size:20px;font-weight:700;color:${NAVY};">
+<td align="center" style="padding:28px 24px 0;">
+<img src="${logoUrl}" width="163" height="24" alt="AutoViewer" style="display:block;margin:0 auto;border:0;outline:none;text-decoration:none;width:163px;height:24px;font-family:${FONT};font-size:20px;font-weight:700;color:${NAVY};">
 </td>
 </tr>
 <tr>
-<td style="padding:24px 24px 4px;">
+<td align="center" style="padding:22px 24px 0;text-align:center;">
 <h1 style="margin:0;font-family:${FONT};font-size:24px;line-height:30px;font-weight:700;color:${NAVY};">Your vehicle report is ready</h1>
-<p style="margin:8px 0 0;font-family:${FONT};font-size:15px;line-height:22px;color:${MUTED};">Your free AutoViewer report is available online.</p>
+<p style="margin:6px 0 0;font-family:${FONT};font-size:15px;line-height:22px;color:${MUTED};">Your free AutoViewer report is available online.</p>
 </td>
 </tr>
 <tr>
-<td style="padding:18px 24px 0;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid ${BORDER};border-radius:10px;background-color:${SOFT};">
+<td align="center" style="padding:20px 24px 0;text-align:center;">
+<table role="presentation" align="center" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;">
 <tr>
-<td style="padding:16px;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0">
-<tr>
-<td style="background-color:${PLATE};border:2px solid #000000;border-radius:5px;padding:5px 12px;font-family:${FONT};font-size:18px;line-height:22px;font-weight:700;letter-spacing:1px;color:#000000;white-space:nowrap;">${registration}</td>
+<td style="background-color:${PLATE};border:2px solid #000000;border-radius:5px;padding:5px 14px;font-family:${FONT};font-size:18px;line-height:22px;font-weight:700;letter-spacing:1px;color:#000000;white-space:nowrap;">${registration}</td>
 </tr>
 </table>
-<p style="margin:12px 0 0;font-family:${FONT};font-size:17px;line-height:24px;font-weight:700;color:${TEXT};">${vehicleName}</p>
-<p style="margin:4px 0 0;font-family:${FONT};font-size:14px;line-height:21px;color:${MUTED};">${summary}</p>
-</td>
-</tr>
-</table>
+<p style="margin:10px 0 0;font-family:${FONT};font-size:17px;line-height:24px;font-weight:700;color:${TEXT};">${vehicleName}</p>
+<p style="margin:2px 0 0;font-family:${FONT};font-size:14px;line-height:21px;color:${MUTED};">${summary}</p>
 </td>
 </tr>
 <tr>
@@ -149,20 +142,23 @@ export function buildReportEmailHtml(
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
 <tr>
 <td align="center" bgcolor="${BLUE}" style="background-color:${BLUE};border-radius:10px;">
-<a href="${url}" target="_blank" style="display:block;padding:15px 20px;font-family:${FONT};font-size:17px;line-height:22px;font-weight:700;color:#ffffff;text-decoration:none;border-radius:10px;">View your vehicle report</a>
+<a href="${url}" target="_blank" style="display:block;padding:13px 20px;font-family:${FONT};font-size:16px;line-height:22px;font-weight:700;color:#ffffff;text-decoration:none;border-radius:10px;text-align:center;">View your vehicle report</a>
 </td>
 </tr>
 </table>
 </td>
 </tr>
 <tr>
-<td style="padding:16px 24px 24px;">
-<p style="margin:0;font-family:${FONT};font-size:13px;line-height:19px;color:${MUTED};">Button not working? Copy this link into your browser:</p>
-<p style="margin:4px 0 0;font-family:${FONT};font-size:13px;line-height:19px;word-break:break-all;"><a href="${url}" target="_blank" style="color:${BLUE};text-decoration:underline;">${url}</a></p>
+<td align="center" style="padding:14px 24px 22px;text-align:center;">
+<p style="margin:0;font-family:${FONT};font-size:12px;line-height:18px;color:${MUTED};">Button not working? Copy this link into your browser:</p>
+<p style="margin:2px 0 0;font-family:${FONT};font-size:12px;line-height:18px;word-break:break-all;"><a href="${url}" target="_blank" style="color:${MUTED};text-decoration:underline;">${url}</a></p>
 </td>
 </tr>
 <tr>
-<td style="padding:16px 24px 20px;border-top:1px solid ${BORDER};">
+<td style="padding:0 24px;"><div style="height:1px;line-height:1px;font-size:1px;background-color:${BORDER};">&nbsp;</div></td>
+</tr>
+<tr>
+<td align="center" style="padding:14px 24px 20px;text-align:center;">
 <p style="margin:0;font-family:${FONT};font-size:12px;line-height:18px;color:${MUTED};">${REPORT_EMAIL_FOOTER}</p>
 ${demoNote}
 </td>
