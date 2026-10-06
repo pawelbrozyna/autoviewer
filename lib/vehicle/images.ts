@@ -61,6 +61,7 @@ const MAKE_ALIASES: Record<string, string> = {
   mercedes: "mercedes benz",
   mercedesbenz: "mercedes benz",
   "mercedes benz cars": "mercedes benz",
+  "mercedes amg": "mercedes benz",
   opel: "vauxhall",
   "vauxhall motors": "vauxhall",
   "vauxhall motors limited": "vauxhall",
@@ -69,6 +70,7 @@ const MAKE_ALIASES: Record<string, string> = {
   "volkswagen commercial vehicles": "volkswagen",
   "ssang yong": "ssangyong",
   "kg mobility": "kgm",
+  "mg motor uk": "mg",
 };
 
 /**
@@ -101,14 +103,44 @@ const STRICT_MODEL_ALIASES: Record<
     },
     { pattern: /^c3 picasso\b/, model: "C3 Picasso" },
   ],
-  ford: [{ pattern: /^grand c max\b/, model: "C-Max" }],
+  ford: [
+    { pattern: /^grand c max\b/, model: "C-Max" },
+    { pattern: /^focus c max\b/, model: "Focus C-Max" },
+  ],
   renault: [
     { pattern: /^grand scenic\b/, model: "Scenic" },
     { pattern: /^grand modus\b/, model: "Modus" },
+    { pattern: /^megane e tech\b/, model: "Megane E-Tech" },
+    { pattern: /^scenic e tech\b/, model: "Scenic E-Tech" },
   ],
   suzuki: [{ pattern: /^sx4 s cross\b/, model: "S-Cross" }],
   kia: [{ pattern: /^pro cee ?d\b/, model: "Ceed" }],
   mazda: [{ pattern: /^([235])\b/, model: (match) => `Mazda${match[1]}` }],
+  toyota: [
+    { pattern: /^corolla cross\b/, model: "Corolla Cross" },
+    { pattern: /^prius plus\b/, model: "Prius+" },
+  ],
+  volkswagen: [
+    { pattern: /^golf plus\b/, model: "Golf Plus" },
+    { pattern: /^golf sv\b/, model: "Golf SV" },
+    { pattern: /^passat cc\b/, model: "Passat CC" },
+  ],
+  bmw: [
+    {
+      pattern: /^(?:2 series|2\d{2}[a-z]{0,2})\b.*\bgran (coupe|tourer)\b/,
+      model: (match) =>
+        match[1] === "coupe" ? "2 Series Gran Coupe" : "2 Series Gran Tourer",
+    },
+  ],
+  mini: [
+    { pattern: /\bcountryman\b/, model: "Countryman" },
+    { pattern: /\bclubman\b/, model: "Clubman" },
+    { pattern: /\bpaceman\b/, model: "Paceman" },
+    { pattern: /\b(convertible|cabrio|cabriolet)\b/, model: "Convertible" },
+    { pattern: /\bcoupe\b/, model: "Coupe" },
+    { pattern: /\broadster\b/, model: "Roadster" },
+    { pattern: /^(cooper|one|electric)\b/, model: "Hatch" },
+  ],
 };
 
 const libraryEntries = (vehicleImagesLibrary.vehicles ?? []) as VehicleImageEntry[];
@@ -236,10 +268,15 @@ function knownModelAlias(
   }
 
   if (makeKey === "mercedes benz") {
-    const classMatch = modelKey.match(/^([abce])\s*\d{3}[a-z]?\b/);
+    const classMatch =
+      modelKey.match(/^([abce])\s*\d{2,3}[a-z]?\b/) ??
+      modelKey.match(/^([abce])(?: class)?(?: |$)/);
     if (classMatch) {
       const candidate = `${classMatch[1].toUpperCase()}-Class`;
       if (candidates.includes(candidate)) return candidate;
+    }
+    if (/^ml\s*\d{0,3}[a-z]?\b/.test(modelKey) && candidates.includes("M-Class")) {
+      return "M-Class";
     }
     const rangeMatch = modelKey.match(/^(gla|glc|cla)\s*\d{3}[a-z]?\b/);
     if (rangeMatch) {
@@ -257,9 +294,10 @@ function knownModelAlias(
   }
 
   if (makeKey === "mg") {
-    const electricModel = modelKey.match(/^mg\s*(4|5)(?:\s+ev)?\b/);
-    if (electricModel) {
-      const candidate = `MG${electricModel[1]} EV`;
+    const numberedModel = modelKey.match(/^(?:mg\s*)?([345])(?:\s+ev)?\b/);
+    if (numberedModel) {
+      const candidate =
+        numberedModel[1] === "3" ? "MG3" : `MG${numberedModel[1]} EV`;
       if (candidates.includes(candidate)) return candidate;
     }
   }
@@ -487,6 +525,46 @@ function pickNearestEntry(
   return ranked[0] ?? null;
 }
 
+const FACELIFT_MARKER = /\b(facelift|face lift|lci|phase \d)\b/;
+
+function isFaceliftEntry(entry: VehicleImageEntry): boolean {
+  return FACELIFT_MARKER.test(normalizeKey(entry.generation));
+}
+
+/** "Mk2 facelift" and "Mk2" share base generation "mk2". */
+function baseGeneration(entry: VehicleImageEntry): string {
+  const key = normalizeKey(entry.generation);
+  const marker = key.search(FACELIFT_MARKER);
+  return (marker === -1 ? key : key.slice(0, marker)).trim();
+}
+
+/**
+ * Entries that are provably the same generation as the vehicle year: the facelift
+ * that follows a pre-facelift year, or both sides of a gap within one generation.
+ * Anything else may be a different-looking generation, so it is never offered.
+ */
+function sameGenerationCandidates(
+  candidates: VehicleImageEntry[],
+  year: number,
+): VehicleImageEntry[] {
+  const later = candidates
+    .filter((entry) => entry.yearFrom > year)
+    .sort((a, b) => a.yearFrom - b.yearFrom);
+  const earlier = candidates
+    .filter((entry) => entry.yearTo < year)
+    .sort((a, b) => b.yearTo - a.yearTo);
+  const next = later[0];
+  const previous = earlier[0];
+  const allowed: VehicleImageEntry[] = [];
+
+  if (next && previous && baseGeneration(next) === baseGeneration(previous)) {
+    allowed.push(previous, next);
+  } else if (next && isFaceliftEntry(next)) {
+    allowed.push(next);
+  }
+  return allowed;
+}
+
 function placeholderResult(reason: string): VehicleImageResolution {
   return {
     src: GENERIC_VEHICLE_IMAGE_SRC,
@@ -695,18 +773,31 @@ export function resolveVehicleImage(
     });
   }
 
-  const nearest = pickNearestEntry(modelEntries, year);
-  if (!nearest) {
+  const closest = pickNearestEntry(modelEntries, year);
+  if (!closest) {
     return placeholderResult("No same-model generation was available.");
   }
-  const nearestDistance = yearDistance(
+  const closestDistance = yearDistance(
     year,
-    nearest.yearFrom,
-    nearest.yearTo,
+    closest.yearFrom,
+    closest.yearTo,
   );
-  if (nearestDistance > MAX_NEAREST_GENERATION_DISTANCE_YEARS) {
+  if (closestDistance > MAX_NEAREST_GENERATION_DISTANCE_YEARS) {
     return placeholderResult(
-      `The nearest same-model generation is ${nearestDistance} years away, beyond the safe ${MAX_NEAREST_GENERATION_DISTANCE_YEARS}-year fallback limit.`,
+      `The nearest same-model generation is ${closestDistance} years away, beyond the safe ${MAX_NEAREST_GENERATION_DISTANCE_YEARS}-year fallback limit.`,
+    );
+  }
+  const nearest = pickNearestEntry(
+    sameGenerationCandidates(modelEntries, year),
+    year,
+  );
+  if (
+    !nearest ||
+    yearDistance(year, nearest.yearFrom, nearest.yearTo) >
+      MAX_NEAREST_GENERATION_DISTANCE_YEARS
+  ) {
+    return placeholderResult(
+      "No catalogue image covers this year within the same generation; a different generation would be misleading.",
     );
   }
 

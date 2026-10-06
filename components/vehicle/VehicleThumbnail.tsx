@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Car } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { VehicleImageFallback } from "@/components/vehicle/VehicleImageFallback";
 
 export function VehicleThumbnail({
   label,
@@ -52,10 +52,10 @@ export function VehicleThumbnail({
         label
           ? hasImage
             ? label
-            : `Illustration for ${label}`
+            : `${label}: representative image unavailable`
           : hasImage
             ? "Vehicle"
-            : "Vehicle illustration"
+            : "Representative image unavailable"
       }
     >
       {hasImage && src ? (
@@ -81,13 +81,7 @@ export function VehicleThumbnail({
           onError={() => setFailedSrc(src)}
         />
       ) : (
-        <Car
-          className={cn(
-            "text-navy/30",
-            hero ? "h-16 w-16" : light || bare ? "h-10 w-10" : "h-12 w-12",
-          )}
-          strokeWidth={1.2}
-        />
+        <VehicleImageFallback className="absolute inset-0 p-2" />
       )}
       {showIllustrationLabel && !hasImage ? (
         <span className="absolute bottom-2 left-2 rounded bg-white/90 px-1.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-muted">

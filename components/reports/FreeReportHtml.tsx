@@ -20,6 +20,7 @@ import {
   motRowsForFreePdf,
 } from "@/lib/reports/pdf-limits";
 import { vehicleColourSwatch } from "@/components/vehicle/VehicleColour";
+import { VehicleImageFallback } from "@/components/vehicle/VehicleImageFallback";
 import type { VehicleRecord } from "@/types/vehicle";
 
 const plateFont = localFont({
@@ -511,7 +512,11 @@ export function FreeReportHtml({
                 .
               </p>
             </>
-          ) : null}
+          ) : (
+            <VehicleImageFallback
+              className="absolute inset-0 -translate-y-[9%]"
+            />
+          )}
         </div>
 
         <h3
@@ -618,14 +623,6 @@ export function FreeReportHtml({
           </div>
         </div>
 
-        {!summary.imageSrc ? (
-          <p
-            className="absolute right-0 top-1/2 -translate-y-1/2 text-muted"
-            style={{ fontSize: pt(9) }}
-          >
-            Representative image unavailable
-          </p>
-        ) : null}
       </div>
 
       <div

@@ -414,16 +414,50 @@ run("Mondeo resolves Mk5 WebP image", () => {
   assert.equal(result.src, "/cars/ford-mondeo-mk5-2014-2020.webp");
 });
 
-run("nearest same-model generation is marked representative", () => {
+run("pre-facelift year falls back to the same generation's facelift, marked representative", () => {
   const result = resolveVehicleImage({
-    make: "Volkswagen",
-    model: "Golf",
-    year: 1995,
+    make: "Toyota",
+    model: "RAV4",
+    year: 2015,
   });
   assert.equal(result.match, "nearest-generation");
   assert.equal(result.isRepresentative, true);
-  assert.equal(result.generation, "Mk4");
-  assert.equal(result.src, "/cars/volkswagen-golf-mk4-1998-2004.webp");
+  assert.equal(result.generation, "XA40 facelift");
+  assert.equal(result.src, "/cars/toyota-rav4-xa40-facelift-2016-2018.webp");
+
+  const transitCustom = resolveVehicleImage({
+    make: "FORD",
+    model: "TRANSIT CUSTOM",
+    year: 2017,
+  });
+  assert.equal(transitCustom.match, "nearest-generation");
+  assert.equal(transitCustom.generation, "Mk1 facelift");
+});
+
+run("nearest-generation fallback never crosses into a different generation", () => {
+  const cases: Array<[string, string, number]> = [
+    ["Volkswagen", "Golf", 1995],
+    ["BMW", "1 SERIES", 2008],
+    ["BMW", "3 SERIES", 2002],
+    ["BMW", "X5", 2015],
+    ["BMW", "5 SERIES", 2024],
+    ["MERCEDES-BENZ", "E 220", 2006],
+    ["FORD", "KA", 2005],
+    ["RENAULT", "CLIO", 2003],
+    ["VAUXHALL", "VIVARO", 2016],
+    ["AUDI", "A4", 2006],
+    ["SKODA", "KODIAQ", 2025],
+    ["CITROEN", "C3", 2025],
+    ["HONDA", "CR-V", 2024],
+    ["LAND ROVER", "RANGE ROVER SPORT", 2024],
+    ["MG", "ZS", 2025],
+    ["TESLA", "MODEL Y", 2025],
+  ];
+  for (const [make, model, year] of cases) {
+    const result = resolveVehicleImage({ make, model, year });
+    assert.equal(result.match, "placeholder", `${make} ${model} ${year}`);
+    assert.equal(result.src, null, `${make} ${model} ${year}`);
+  }
 });
 
 run("rejects an implausibly distant nearest-generation fallback", () => {
@@ -534,6 +568,98 @@ run("Mazda numeric DVSA models map to MazdaN", () => {
   assert.equal(matchCatalogModel("Mazda", "3 SPORT NAV"), "Mazda3");
   const mazda5 = resolveVehicleImage({ make: "MAZDA", model: "5", year: 2012 });
   assert.equal(mazda5.src, "/cars/mazda-mazda5-cw-2010-2015.webp");
+});
+
+run("Mercedes bare class letters, CLASS names, AMG strings, ML and MERCEDES-AMG", () => {
+  const expected: Array<[string, string, number, string]> = [
+    ["MERCEDES-BENZ", "C", 2007, "/cars/mercedes-benz-c-class-w204-2007-2011.webp"],
+    ["MERCEDES-BENZ", "C CLASS", 2007, "/cars/mercedes-benz-c-class-w204-2007-2011.webp"],
+    ["MERCEDES-BENZ", "A", 2016, "/cars/mercedes-a-class-w176-facelift-2015-2018.webp"],
+    ["MERCEDES-BENZ", "A CLASS", 2016, "/cars/mercedes-a-class-w176-facelift-2015-2018.webp"],
+    ["MERCEDES-BENZ", "B", 2020, "/cars/mercedes-benz-b-class-w247-2019-2026.webp"],
+    ["MERCEDES-BENZ", "B CLASS", 2020, "/cars/mercedes-benz-b-class-w247-2019-2026.webp"],
+    ["MERCEDES-BENZ", "E", 2012, "/cars/mercedes-benz-e-class-w212-2009-2013.webp"],
+    ["MERCEDES-BENZ", "E CLASS", 2012, "/cars/mercedes-benz-e-class-w212-2009-2013.webp"],
+    ["MERCEDES-BENZ", "C63 AMG", 2010, "/cars/mercedes-benz-c-class-w204-2007-2011.webp"],
+    ["MERCEDES-BENZ", "A 45 AMG", 2016, "/cars/mercedes-a-class-w176-facelift-2015-2018.webp"],
+    ["MERCEDES-BENZ", "A35", 2020, "/cars/mercedes-a-class-w177-2018-2026.webp"],
+    ["MERCEDES-BENZ", "E 63 AMG", 2015, "/cars/mercedes-e-class-w212-facelift-2013-2016.webp"],
+    ["MERCEDES-AMG", "C 63", 2017, "/cars/mercedes-c-class-w205-2014-2021.webp"],
+    ["MERCEDES-BENZ", "ML250", 2013, "/cars/mercedes-benz-m-class-w166-2012-2015.webp"],
+    ["MERCEDES-BENZ", "ML", 2013, "/cars/mercedes-benz-m-class-w166-2012-2015.webp"],
+  ];
+  for (const [make, model, year, src] of expected) {
+    assert.equal(resolveVehicleImage({ make, model, year }).src, src, `${make} ${model}`);
+  }
+  assert.equal(matchCatalogModel("MERCEDES-BENZ", "CLA 200"), "CLA");
+  assert.equal(matchCatalogModel("MERCEDES-BENZ", "GLC 220 D"), "GLC");
+});
+
+run("MINI DVSA trims map to Hatch but keep body-specific models", () => {
+  for (const model of ["COOPER", "COOPER S", "COOPER D", "COOPER SD", "ONE", "COOPER SE", "ELECTRIC"]) {
+    const result = resolveVehicleImage({ make: "MINI", model, year: 2016 });
+    assert.equal(result.src, "/cars/mini-hatch-f56-2014-2024.webp", model);
+  }
+  assert.equal(
+    resolveVehicleImage({ make: "MINI", model: "COOPER SD COUNTRYMAN", year: 2016 }).src,
+    "/cars/mini-countryman-r60-2010-2016.webp",
+  );
+  assert.equal(
+    resolveVehicleImage({ make: "MINI", model: "COOPER CLUBMAN", year: 2016 }).src,
+    "/cars/mini-clubman-f54-2015-2024.webp",
+  );
+  for (const model of ["COOPER PACEMAN", "COOPER S CONVERTIBLE", "CONVERTIBLE"]) {
+    const result = resolveVehicleImage({ make: "MINI", model, year: 2016 });
+    assert.equal(result.match, "placeholder", model);
+  }
+});
+
+run("distinct derivative models never fall through to the base model", () => {
+  const cases: Array<[string, string, number]> = [
+    ["TOYOTA", "COROLLA CROSS", 2023],
+    ["RENAULT", "MEGANE E-TECH", 2023],
+    ["RENAULT", "SCENIC E-TECH", 2024],
+    ["FORD", "FOCUS C-MAX", 2005],
+    ["VOLKSWAGEN", "GOLF PLUS", 2010],
+    ["VOLKSWAGEN", "GOLF SV", 2016],
+    ["TOYOTA", "PRIUS+", 2015],
+    ["TOYOTA", "PRIUS PLUS", 2015],
+    ["VOLKSWAGEN", "PASSAT CC", 2010],
+    ["BMW", "220I GRAN COUPE", 2021],
+    ["BMW", "2 SERIES GRAN COUPE", 2021],
+    ["BMW", "218D GRAN TOURER", 2017],
+    ["BMW", "2 SERIES GRAN TOURER", 2017],
+  ];
+  for (const [make, model, year] of cases) {
+    const result = resolveVehicleImage({ make, model, year });
+    assert.equal(result.match, "placeholder", `${make} ${model}`);
+  }
+  assert.equal(matchCatalogModel("Toyota", "COROLLA"), "Corolla");
+  assert.equal(matchCatalogModel("Volkswagen", "GOLF GTI"), "Golf");
+  assert.equal(matchCatalogModel("BMW", "220I"), "2 Series");
+});
+
+run("MG bare numbers and MG MOTOR UK make", () => {
+  assert.equal(
+    resolveVehicleImage({ make: "MG", model: "3", year: 2020 }).src,
+    "/cars/mg-mg3-mk2-facelift-2018-2024.webp",
+  );
+  assert.equal(
+    resolveVehicleImage({ make: "MG", model: "4", year: 2023 }).src,
+    "/cars/mg-mg4-ev-mk1-2022-2026.webp",
+  );
+  assert.equal(
+    resolveVehicleImage({ make: "MG", model: "5", year: 2023 }).src,
+    "/cars/mg-mg5-ev-facelift-2022-2025.webp",
+  );
+  assert.equal(
+    resolveVehicleImage({ make: "MG MOTOR UK", model: "MG4", year: 2023 }).src,
+    "/cars/mg-mg4-ev-mk1-2022-2026.webp",
+  );
+  assert.equal(
+    resolveVehicleImage({ make: "MG MOTOR UK", model: "ZS", year: 2022 }).src,
+    "/cars/mg-zs-mk1-facelift-2020-2024.webp",
+  );
 });
 
 run("every catalogue record has its WebP file and no file is orphaned", () => {
