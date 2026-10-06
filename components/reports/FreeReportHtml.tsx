@@ -2,7 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import localFont from "next/font/local";
 import { ArrowRight, Calendar, Fuel, Settings2 } from "lucide-react";
-import { FULL_REPORT_PRICE, fullReportHref } from "@/lib/full-report";
+import {
+  FULL_REPORT_CHECKOUT_PATH,
+  FULL_REPORT_PRICE,
+  fullReportHref,
+} from "@/lib/full-report";
 import { motDateLabel } from "@/lib/vehicle/mot-status";
 import { statusLabel } from "@/lib/vehicle/missing-data";
 import { checkedItems } from "@/lib/reports/checked-items";
@@ -57,36 +61,53 @@ function ReportIcon({ name, sizePt }: { name: string; sizePt: number }) {
 }
 
 function UnlockFullReportButton({
-  href,
+  registration,
+  reportId,
+  isExample,
   mobileLarge,
 }: {
-  href: string;
+  registration: string;
+  reportId: string;
+  isExample: boolean;
   mobileLarge: boolean;
 }) {
   const label = `Unlock Full Report - ${FULL_REPORT_PRICE}`;
 
-  if (!mobileLarge) {
-    return (
-      <Link
-        href={href}
-        className="inline-flex items-center rounded-[6px] bg-blue font-bold !text-white shadow-sm transition hover:bg-blue-hover"
-        style={{
-          minHeight: pt(28),
-          gap: pt(8),
-          paddingInline: pt(18),
-          fontSize: pt(10.5),
-        }}
-      >
-        <ReportIcon name="lock-white" sizePt={13} />
-        {label}
-      </Link>
-    );
-  }
-
   return (
-    <Link
-      href={href}
-      className="inline-flex min-h-12 items-center gap-2 rounded-[9px] bg-blue px-5 text-[15px] font-bold !text-white shadow-sm transition hover:bg-blue-hover md:min-h-[var(--btn-h)] md:gap-[var(--btn-gap)] md:rounded-[6px] md:px-[var(--btn-px)] md:text-[length:var(--btn-fs)]"
+    <form action={FULL_REPORT_CHECKOUT_PATH} method="post" className="contents">
+      <input type="hidden" name="source" value={isExample ? "example" : "vehicle"} />
+      {isExample ? null : (
+        <>
+          <input type="hidden" name="registration" value={registration} />
+          <input type="hidden" name="reportId" value={reportId} />
+        </>
+      )}
+      {mobileLarge ? (
+        <UnlockButtonLarge label={label} />
+      ) : (
+        <button
+          type="submit"
+          className="inline-flex cursor-pointer items-center rounded-[6px] bg-blue font-bold !text-white shadow-sm transition hover:bg-blue-hover"
+          style={{
+            minHeight: pt(28),
+            gap: pt(8),
+            paddingInline: pt(18),
+            fontSize: pt(10.5),
+          }}
+        >
+          <ReportIcon name="lock-white" sizePt={13} />
+          {label}
+        </button>
+      )}
+    </form>
+  );
+}
+
+function UnlockButtonLarge({ label }: { label: string }) {
+  return (
+    <button
+      type="submit"
+      className="inline-flex min-h-12 cursor-pointer items-center gap-2 rounded-[9px] bg-blue px-5 text-[15px] font-bold !text-white shadow-sm transition hover:bg-blue-hover md:min-h-[var(--btn-h)] md:gap-[var(--btn-gap)] md:rounded-[6px] md:px-[var(--btn-px)] md:text-[length:var(--btn-fs)]"
       style={
         {
           "--btn-h": pt(28),
@@ -106,7 +127,7 @@ function UnlockFullReportButton({
         unoptimized
       />
       {label}
-    </Link>
+    </button>
   );
 }
 
@@ -774,7 +795,12 @@ export function FreeReportHtml({
       </SectionCard>
 
       <div className="flex justify-center" style={{ marginTop: pt(16) }}>
-        <UnlockFullReportButton href={upgradeHref} mobileLarge={!isPreview} />
+        <UnlockFullReportButton
+          registration={summary.registration}
+          reportId={reportId}
+          isExample={Boolean(summary.isDemo)}
+          mobileLarge={!isPreview}
+        />
       </div>
 
       {!isPreview ? (
@@ -999,7 +1025,12 @@ export function FreeReportHtml({
           </SectionCard>
 
           <div className="flex justify-center" style={{ marginTop: pt(18) }}>
-            <UnlockFullReportButton href={upgradeHref} mobileLarge />
+            <UnlockFullReportButton
+              registration={summary.registration}
+              reportId={reportId}
+              isExample={Boolean(summary.isDemo)}
+              mobileLarge
+            />
           </div>
         </>
       ) : null}

@@ -21,7 +21,7 @@ export default function MileageCheckPage() {
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(
             webApplicationJsonLd({
-              name: "AutoViewer Mileage Check",
+              name: "AutoViewer Car Mileage Check",
               description: "UK car mileage history check from MOT readings.",
               url: absoluteUrl("/mileage-check"),
             }),
@@ -31,17 +31,19 @@ export default function MileageCheckPage() {
       <CheckerLandingPage
         toolKey="mileage-check"
         checkSource="mileage-check"
+        path="/mileage-check"
         breadcrumbs={[
           { label: "Home", href: "/" },
-          { label: "Mileage Check" },
+          { label: "Car mileage check" },
         ]}
         eyebrow="Mileage history"
         title="Car mileage check"
         description="View mileage recorded at MOT tests and look for possible inconsistencies."
         buttonLabel="Check mileage →"
         crossLink={{
-          href: "/tax-mileage",
+          href: "/car-tax-check",
           label: "Want tax status as well?",
+          linkLabel: "Car tax check",
         }}
         whatYoullSee={[
           {

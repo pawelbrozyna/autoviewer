@@ -9,7 +9,9 @@ export function ToolHero({
   buttonLabel = "Check vehicle →",
   checkSource = "unknown",
   inlineDvlaLookup = false,
+  path,
 }: {
+  path?: string;
   breadcrumbs: Array<{ label: string; href?: string }>;
   title: string;
   description: string;
@@ -22,6 +24,7 @@ export function ToolHero({
   return (
     <PageHero
       breadcrumbs={breadcrumbs}
+      path={path}
       title={title}
       description={description}
       variant="tool"

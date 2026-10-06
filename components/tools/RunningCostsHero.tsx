@@ -7,9 +7,10 @@ import { VehicleSearchForm } from "@/components/vehicle/VehicleSearchForm";
 export function RunningCostsHero() {
   return (
     <PageHero
+      path="/running-costs"
       breadcrumbs={[
         { label: "Home", href: "/" },
-        { label: "Running Costs" },
+        { label: "Car running costs calculator" },
       ]}
       title="Car running costs calculator"
       description="See what a car could really cost you each month and year."

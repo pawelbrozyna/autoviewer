@@ -32,9 +32,10 @@ export default function MotHistoryPage() {
       <CheckerLandingPage
         toolKey="mot-history"
         checkSource="mot-history"
+        path="/mot-history"
         breadcrumbs={[
           { label: "Home", href: "/" },
-          { label: "MOT History" },
+          { label: "MOT history check" },
         ]}
         eyebrow="MOT checker"
         title="MOT history check"

@@ -37,15 +37,9 @@ export function HomeHero({
             <p className="eyebrow mb-0 leading-none">Vehicle history check</p>
           </div>
           <Heading className="heading-page max-w-none md:whitespace-nowrap">
-            <span className="block text-[2.35rem] md:hidden">
-              Check a car’s
-              <br />
-              history before
-              <br />
-              you buy.
-            </span>
-            <span className="hidden md:inline">
-              Free car check for smarter buying.
+            <span className="block max-md:text-[2.35rem] md:inline">
+              Free car check
+              <br className="md:hidden" /> before you buy.
             </span>
           </Heading>
           <p className="body-copy mt-3 max-w-none md:mt-3.5 md:whitespace-nowrap lg:mt-3">

@@ -3,10 +3,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, LockKeyhole } from "lucide-react";
 import { Container } from "@/components/ui/Container";
+import { CheckoutCancelledNotice } from "@/components/vehicle/CheckoutCancelledNotice";
 import { ReportComparison } from "@/components/vehicle/ReportComparison";
 import { VehicleThumbnail } from "@/components/vehicle/VehicleThumbnail";
 import { getMockVehicle } from "@/lib/api/mock";
-import { FULL_REPORT_PRICE } from "@/lib/full-report";
+import {
+  FULL_REPORT_CHECKOUT_PATH,
+  FULL_REPORT_PRICE,
+} from "@/lib/full-report";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import {
   formatRegistrationDisplay,
@@ -24,7 +28,17 @@ export const metadata: Metadata = buildPageMetadata({
 });
 
 type PageProps = {
-  searchParams: Promise<{ registration?: string | string[] }>;
+  searchParams: Promise<{
+    registration?: string | string[];
+    checkout?: string | string[];
+  }>;
+};
+
+const checkoutMessages: Record<string, { tone: "info" | "error"; text: string }> = {
+  error: {
+    tone: "error",
+    text: "We could not start checkout. Please try again in a moment.",
+  },
 };
 
 const fullReportIncludes = [
@@ -49,11 +63,31 @@ export default async function FullReportPage({ searchParams }: PageProps) {
   const demoVehicle =
     normalized === "AV19SWF" ? getMockVehicle(normalized) : null;
   const hasImage = Boolean(demoVehicle?.summary.imageSrc);
+  const checkoutParam = Array.isArray(params.checkout)
+    ? params.checkout[0]
+    : params.checkout;
+  const checkoutMessage = checkoutParam ? checkoutMessages[checkoutParam] : undefined;
+  const purchaseCard = (
+    <PurchaseCard registration={hasRegistration ? normalized : null} />
+  );
 
   return (
     <main className="bg-surface-soft">
       <section className="border-b border-border bg-white py-5 md:py-7">
         <Container>
+          {checkoutParam === "cancelled" ? <CheckoutCancelledNotice /> : null}
+          {checkoutMessage ? (
+            <p
+              role={checkoutMessage.tone === "error" ? "alert" : "status"}
+              className={`mb-4 rounded-[9px] border px-4 py-3 text-[14px] font-semibold ${
+                checkoutMessage.tone === "error"
+                  ? "border-[#F3C7C7] bg-[#FFF5F5] text-[#9B1C1C]"
+                  : "border-border bg-surface-soft text-navy"
+              }`}
+            >
+              {checkoutMessage.text}
+            </p>
+          ) : null}
           <Link
             href={
               hasRegistration
@@ -104,9 +138,7 @@ export default async function FullReportPage({ searchParams }: PageProps) {
               ) : null}
 
               {hasImage ? (
-                <div className="mt-5 max-w-md">
-                  <PurchaseCard />
-                </div>
+                <div className="mt-5 max-w-md">{purchaseCard}</div>
               ) : null}
             </div>
 
@@ -120,7 +152,7 @@ export default async function FullReportPage({ searchParams }: PageProps) {
                 imageClassName="object-contain object-center p-0 scale-[1.06]"
               />
             ) : (
-              <PurchaseCard />
+              purchaseCard
             )}
           </div>
         </Container>
@@ -168,7 +200,7 @@ export default async function FullReportPage({ searchParams }: PageProps) {
   );
 }
 
-function PurchaseCard() {
+function PurchaseCard({ registration }: { registration: string | null }) {
   return (
     <div className="rounded-[12px] border border-[#E7D7B5] bg-[#FFF9ED] p-5">
       <div className="flex items-center gap-2">
@@ -185,13 +217,26 @@ function PurchaseCard() {
         Free vehicle reports are available now while Full Reports are being
         prepared.
       </p>
-      <button
-        type="button"
-        disabled
-        className="mt-4 inline-flex min-h-11 w-full cursor-not-allowed items-center justify-center rounded-[9px] bg-navy/55 px-4 text-[15px] font-semibold text-white"
-      >
-        Coming Soon
-      </button>
+      {registration ? (
+        <form action={FULL_REPORT_CHECKOUT_PATH} method="post" className="mt-4">
+          <input type="hidden" name="source" value="full-report" />
+          <input type="hidden" name="registration" value={registration} />
+          <button
+            type="submit"
+            className="inline-flex min-h-11 w-full cursor-pointer items-center justify-center rounded-[9px] bg-blue px-4 text-[15px] font-bold text-white shadow-sm transition hover:bg-blue-hover"
+          >
+            Unlock Full Report - {FULL_REPORT_PRICE}
+          </button>
+        </form>
+      ) : (
+        <button
+          type="button"
+          disabled
+          className="mt-4 inline-flex min-h-11 w-full cursor-not-allowed items-center justify-center rounded-[9px] bg-navy/55 px-4 text-[15px] font-semibold text-white"
+        >
+          Coming Soon
+        </button>
+      )}
     </div>
   );
 }

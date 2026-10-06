@@ -21,7 +21,7 @@ export default function RecallCheckPage() {
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(
             webApplicationJsonLd({
-              name: "AutoViewer Recall Check",
+              name: "AutoViewer Car Recall Check",
               description: "UK vehicle safety recall check by registration.",
               url: absoluteUrl("/recall-check"),
             }),
@@ -31,12 +31,13 @@ export default function RecallCheckPage() {
       <CheckerLandingPage
         toolKey="recall-check"
         checkSource="recall-check"
+        path="/recall-check"
         breadcrumbs={[
           { label: "Home", href: "/" },
-          { label: "Recall Check" },
+          { label: "Car recall check" },
         ]}
         eyebrow="Safety recalls"
-        title="Vehicle recall check"
+        title="Car recall check"
         description="See available manufacturer safety recall information linked to a UK registration."
         buttonLabel="Check recalls →"
         whatYoullSee={[

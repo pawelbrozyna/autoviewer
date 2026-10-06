@@ -1,4 +1,5 @@
 import { FreeReportHtml } from "@/components/reports/FreeReportHtml";
+import { FullReportUpsellCard } from "@/components/reports/FullReportUpsellCard";
 import { Container } from "@/components/ui/Container";
 import { ExampleReportActions } from "@/components/vehicle/ExampleReportActions";
 import { LiveReportNextSteps } from "@/components/vehicle/LiveReportNextSteps";
@@ -13,6 +14,7 @@ export function VehicleReportSection({
   ownersLabel = null,
   className = "",
   footer = null,
+  notice = null,
 }: {
   vehicle: VehicleRecord;
   eyebrow: string;
@@ -22,6 +24,7 @@ export function VehicleReportSection({
   ownersLabel?: string | null;
   className?: string;
   footer?: React.ReactNode;
+  notice?: React.ReactNode;
 }) {
   const Heading = headingLevel;
 
@@ -30,6 +33,7 @@ export function VehicleReportSection({
       className={`bg-[#F9FBFE] pt-4 pb-7 md:bg-surface-soft md:pt-5 md:pb-9 ${className}`.trim()}
     >
       <Container>
+        {notice}
         <div className="mb-4 grid gap-4 md:mb-5 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
           <div className="text-left">
             <p className="eyebrow">{eyebrow}</p>
@@ -61,10 +65,12 @@ export function LiveVehicleReportSection({
   vehicle,
   headingLevel,
   className,
+  notice,
 }: {
   vehicle: VehicleRecord;
   headingLevel?: "h1" | "h2";
   className?: string;
+  notice?: React.ReactNode;
 }) {
   return (
     <VehicleReportSection
@@ -79,7 +85,16 @@ export function LiveVehicleReportSection({
       headingLevel={headingLevel}
       ownersLabel={vehicle.summary.isDemo ? "2" : null}
       className={className}
-      footer={<LiveReportNextSteps vehicle={vehicle} />}
+      notice={notice}
+      footer={
+        <>
+          <FullReportUpsellCard
+            registration={vehicle.summary.isDemo ? null : vehicle.summary.registration}
+            className="mt-6 md:mt-8"
+          />
+          <LiveReportNextSteps vehicle={vehicle} />
+        </>
+      }
     />
   );
 }

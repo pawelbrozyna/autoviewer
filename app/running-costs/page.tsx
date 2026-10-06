@@ -5,6 +5,7 @@ import { RelatedTools } from "@/components/ui/RelatedTools";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { RunningCostsCalculator } from "@/components/tools/RunningCostsCalculator";
 import { RunningCostsHero } from "@/components/tools/RunningCostsHero";
+import { relatedToolsMap } from "@/lib/site";
 import {
   absoluteUrl,
   buildPageMetadata,
@@ -17,29 +18,6 @@ export const metadata: Metadata = buildPageMetadata({
     "Estimate UK car running costs including fuel, road tax, insurance and maintenance. See annual car costs, monthly car costs and cost per mile.",
   path: "/running-costs",
 });
-
-const relatedTools = [
-  {
-    href: "/check-a-vehicle",
-    label: "Check a Vehicle",
-    description: "MOT, mileage, tax, recalls and more in one place.",
-  },
-  {
-    href: "/compare-cars",
-    label: "Compare Cars",
-    description: "Compare two registrations side by side.",
-  },
-  {
-    href: "/tax-mileage",
-    label: "Tax & Mileage",
-    description: "Check tax status and mileage history together.",
-  },
-  {
-    href: "/mot-history",
-    label: "MOT History",
-    description: "Review past MOT results and advisories.",
-  },
-];
 
 const includedItems = [
   "Fuel",
@@ -129,7 +107,7 @@ export default function RunningCostsPage() {
 
             <div>
               <SectionHeading title="Related tools" className="mb-6" />
-              <RelatedTools tools={relatedTools} />
+              <RelatedTools tools={relatedToolsMap["running-costs"]} />
             </div>
           </div>
         </Container>

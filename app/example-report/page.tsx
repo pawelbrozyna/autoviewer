@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { HomeHero } from "@/components/home/HomeHero";
+import { FullReportUpsellCard } from "@/components/reports/FullReportUpsellCard";
 import { VehicleReportSection } from "@/components/reports/VehicleReportSection";
 import {
   DvlaLookupProvider,
   HiddenWhenLookupResult,
 } from "@/components/vehicle/DvlaLookupContext";
+import { CheckoutStatusNoticeFromUrl } from "@/components/vehicle/CheckoutCancelledNotice";
 import { DvlaLookupReport } from "@/components/vehicle/DvlaLookupReport";
 import { getMockVehicle } from "@/lib/api/mock";
 import { buildPageMetadata } from "@/lib/seo/metadata";
@@ -32,6 +34,8 @@ export default function ExampleReportPage() {
             title="Full example vehicle report"
             description="Explore a complete AutoViewer report using demonstration data."
             ownersLabel="2"
+            notice={<CheckoutStatusNoticeFromUrl />}
+            footer={<FullReportUpsellCard registration={null} className="mt-6 md:mt-8" />}
           />
         </HiddenWhenLookupResult>
       </DvlaLookupProvider>

@@ -31,17 +31,19 @@ export default function CarTaxCheckPage() {
       <CheckerLandingPage
         toolKey="car-tax-check"
         checkSource="car-tax-check"
+        path="/car-tax-check"
         breadcrumbs={[
           { label: "Home", href: "/" },
-          { label: "Car Tax Check" },
+          { label: "Car tax check" },
         ]}
         eyebrow="Tax & SORN"
         title="Car tax check"
         description="Confirm current vehicle tax (VED) or SORN status using a UK registration."
         buttonLabel="Check tax status →"
         crossLink={{
-          href: "/tax-mileage",
+          href: "/mileage-check",
           label: "Need mileage history too?",
+          linkLabel: "Car mileage check",
         }}
         whatYoullSee={[
           {

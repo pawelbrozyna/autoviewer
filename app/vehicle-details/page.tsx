@@ -21,7 +21,7 @@ export default function VehicleDetailsPage() {
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(
             webApplicationJsonLd({
-              name: "AutoViewer Vehicle Details",
+              name: "AutoViewer Car Details by Registration",
               description: "Look up UK vehicle details by registration.",
               url: absoluteUrl("/vehicle-details"),
             }),
@@ -31,12 +31,13 @@ export default function VehicleDetailsPage() {
       <CheckerLandingPage
         toolKey="vehicle-details"
         checkSource="vehicle-details"
+        path="/vehicle-details"
         breadcrumbs={[
           { label: "Home", href: "/" },
-          { label: "Vehicle Details" },
+          { label: "Car details by registration" },
         ]}
         eyebrow="Specifications"
-        title="Vehicle details by registration"
+        title="Car details by registration"
         description="Confirm make, model, fuel type, colour and other available specification details."
         buttonLabel="Look up details →"
         whatYoullSee={[

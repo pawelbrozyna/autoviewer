@@ -1,4 +1,5 @@
 import { ExampleReport } from "@/components/home/ExampleReport";
+import { FullReportUpsell } from "@/components/home/FullReportUpsell";
 import { HomeCompareSection } from "@/components/home/HomeCompareSection";
 import { HomeHero } from "@/components/home/HomeHero";
 import {
@@ -14,6 +15,7 @@ export function HomePageContent() {
       <HomeHero inlineDvlaLookup />
       <DvlaLookupReport />
       <HiddenWhenLookupResult>
+        <FullReportUpsell />
         <ExampleReport />
         <HomeCompareSection />
         <VehicleFeatureGrid />

@@ -8,6 +8,7 @@ import {
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Container } from "@/components/ui/Container";
 import { ToolHeroBackdrop, HeroMobileGradient } from "@/components/layout/ToolHeroBackdrop";
+import { breadcrumbJsonLd } from "@/lib/seo/metadata";
 import { cn } from "@/lib/utils";
 
 const featureIcons = [
@@ -62,7 +63,10 @@ export function PageHero({
   showFeatureStrip = true,
   variant = "plain",
   titleClassName,
+  path,
 }: {
+  /** Canonical path of the page. When set, BreadcrumbList schema mirrors the visible breadcrumbs. */
+  path?: string;
   breadcrumbs: Array<{ label: string; href?: string }>;
   title: string;
   description: string;
@@ -85,6 +89,21 @@ export function PageHero({
         isTool ? "bg-white" : "bg-surface-soft",
       )}
     >
+      {path ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(
+              breadcrumbJsonLd(
+                breadcrumbs.map((item) => ({
+                  name: item.label,
+                  path: item.href ?? path,
+                })),
+              ),
+            ),
+          }}
+        />
+      ) : null}
       {isTool ? <ToolHeroBackdrop /> : <HeroMobileGradient />}
       <Container className="relative">
         <div

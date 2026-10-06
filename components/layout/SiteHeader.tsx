@@ -26,7 +26,7 @@ const authEnabled = process.env.NEXT_PUBLIC_ENABLE_AUTH === "true";
 const mobileNavIcons: Record<(typeof navLinks)[number]["href"], LucideIcon> = {
   "/check-a-vehicle": Search,
   "/mot-history": ClipboardCheck,
-  "/tax-mileage": Gauge,
+  "/mileage-check": Gauge,
   "/compare-cars": ArrowLeftRight,
   "/running-costs": Calculator,
   "/guides": BookOpen,

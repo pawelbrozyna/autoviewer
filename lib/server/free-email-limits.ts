@@ -15,6 +15,9 @@ export const FREE_EMAIL_MAX_PER_REG_EMAIL = 1;
 export const FREE_EMAIL_GLOBAL_MAX_PER_DAY = 600;
 export const PAID_SYSTEM_EMAIL_RESERVED_PER_DAY = 400;
 
+/** Owner/test addresses (normalised). Bypass every free limit and are not counted. */
+const FREE_EMAIL_LIMIT_BYPASS = new Set(["pawelbrozyna@gmail.com"]);
+
 const KEY_PREFIX = "av:free-email";
 const STORE_PATH = path.join(
   process.cwd(),
@@ -259,8 +262,10 @@ export async function tryConsumeFreeReportEmail(input: {
   email: string;
   registration: string;
 }): Promise<boolean> {
-  const ip = input.ip.trim() || "unknown";
   const email = input.email.trim().toLowerCase();
+  if (FREE_EMAIL_LIMIT_BYPASS.has(email)) return true;
+
+  const ip = input.ip.trim() || "unknown";
   const registration = normalizeRegistration(input.registration);
   const regEmailKey = `${registration}|${email}`;
   const payload = { ip, email, regEmailKey };

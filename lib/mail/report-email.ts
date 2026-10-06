@@ -7,6 +7,7 @@ const TEXT = "#0b1b33";
 const MUTED = "#64748b";
 const BORDER = "#dfe5ee";
 const PLATE = "#fac023";
+const OUTER_BG = "#f3f5f8";
 const FONT =
   "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
 
@@ -93,7 +94,7 @@ export function buildReportEmailHtml(
   const url = escapeHtml(reportUrl);
   const logoUrl = escapeHtml(absoluteUrl("/autoviewer-mark-optimized.png"));
   const demoNote = vehicle.summary.isDemo
-    ? `<p style="margin:6px 0 0;font-family:${FONT};font-size:12px;line-height:18px;color:${MUTED};">This report contains demonstration data only.</p>`
+    ? `<p class="av-muted" style="margin:6px 0 0;font-family:${FONT};font-size:12px;line-height:18px;color:${MUTED};">This report contains demonstration data only.</p>`
     : "";
 
   return `<!DOCTYPE html>
@@ -107,23 +108,43 @@ export function buildReportEmailHtml(
 <meta name="supported-color-schemes" content="light">
 <title>Your vehicle report is ready</title>
 <!--[if mso]><noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript><![endif]-->
+<style>
+:root { color-scheme: light; supported-color-schemes: light; }
+body, .av-card, .av-header { background-color: #ffffff !important; }
+.av-outer { background-color: ${OUTER_BG} !important; }
+.av-navy { color: ${NAVY} !important; }
+.av-text { color: ${TEXT} !important; }
+.av-muted { color: ${MUTED} !important; }
+@media (prefers-color-scheme: dark) {
+  .av-outer { background-color: ${OUTER_BG} !important; }
+  .av-card, .av-header { background-color: #ffffff !important; }
+  .av-navy { color: ${NAVY} !important; }
+  .av-text { color: ${TEXT} !important; }
+  .av-muted { color: ${MUTED} !important; }
+}
+[data-ogsc] .av-navy { color: ${NAVY} !important; }
+[data-ogsc] .av-text { color: ${TEXT} !important; }
+[data-ogsc] .av-muted { color: ${MUTED} !important; }
+[data-ogsb] .av-outer { background-color: ${OUTER_BG} !important; }
+[data-ogsb] .av-card, [data-ogsb] .av-header { background-color: #ffffff !important; }
+</style>
 </head>
-<body style="margin:0;padding:0;background-color:#ffffff;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
-<div style="display:none;max-height:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:#ffffff;opacity:0;">Your AutoViewer report for ${registration} is ready to view online.</div>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#ffffff;">
+<body class="av-outer" bgcolor="${OUTER_BG}" style="margin:0;padding:0;background-color:${OUTER_BG};color-scheme:light;supported-color-schemes:light;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
+<div style="display:none;max-height:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:${OUTER_BG};opacity:0;">Your AutoViewer report for ${registration} is ready to view online.</div>
+<table role="presentation" class="av-outer" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="${OUTER_BG}" style="background-color:${OUTER_BG};color-scheme:light;">
 <tr>
 <td align="center" style="padding:24px 12px;">
-<!--[if mso]><table role="presentation" width="640" cellpadding="0" cellspacing="0" border="0"><tr><td><![endif]-->
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:640px;width:100%;background-color:#ffffff;border:1px solid ${BORDER};border-radius:12px;">
+<!--[if mso]><table role="presentation" width="640" cellpadding="0" cellspacing="0" border="0"><tr><td bgcolor="#ffffff"><![endif]-->
+<table role="presentation" class="av-card" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff" style="max-width:640px;width:100%;background-color:#ffffff;border:1px solid ${BORDER};border-radius:12px;border-collapse:separate;color-scheme:light;">
 <tr>
-<td align="center" style="padding:28px 24px 0;">
-<img src="${logoUrl}" width="163" height="24" alt="AutoViewer" style="display:block;margin:0 auto;border:0;outline:none;text-decoration:none;width:163px;height:24px;font-family:${FONT};font-size:20px;font-weight:700;color:${NAVY};">
+<td align="center" class="av-header" bgcolor="#ffffff" style="padding:28px 24px 0;background-color:#ffffff;background-image:linear-gradient(#ffffff,#ffffff);border-radius:12px 12px 0 0;">
+<img src="${logoUrl}" width="163" height="24" alt="AutoViewer" style="display:block;margin:0 auto;border:0;outline:none;text-decoration:none;width:163px;height:24px;background-color:#ffffff;font-family:${FONT};font-size:20px;font-weight:700;color:${NAVY};">
 </td>
 </tr>
 <tr>
 <td align="center" style="padding:22px 24px 0;text-align:center;">
-<h1 style="margin:0;font-family:${FONT};font-size:24px;line-height:30px;font-weight:700;color:${NAVY};">Your vehicle report is ready</h1>
-<p style="margin:6px 0 0;font-family:${FONT};font-size:15px;line-height:22px;color:${MUTED};">Your free AutoViewer report is available online.</p>
+<h1 class="av-navy" style="margin:0;font-family:${FONT};font-size:24px;line-height:30px;font-weight:700;color:${NAVY};">Your vehicle report is ready</h1>
+<p class="av-muted" style="margin:6px 0 0;font-family:${FONT};font-size:15px;line-height:22px;color:${MUTED};">Your free AutoViewer report is available online.</p>
 </td>
 </tr>
 <tr>
@@ -133,8 +154,8 @@ export function buildReportEmailHtml(
 <td style="background-color:${PLATE};border:2px solid #000000;border-radius:5px;padding:5px 14px;font-family:${FONT};font-size:18px;line-height:22px;font-weight:700;letter-spacing:1px;color:#000000;white-space:nowrap;">${registration}</td>
 </tr>
 </table>
-<p style="margin:10px 0 0;font-family:${FONT};font-size:17px;line-height:24px;font-weight:700;color:${TEXT};">${vehicleName}</p>
-<p style="margin:2px 0 0;font-family:${FONT};font-size:14px;line-height:21px;color:${MUTED};">${summary}</p>
+<p class="av-text" style="margin:10px 0 0;font-family:${FONT};font-size:17px;line-height:24px;font-weight:700;color:${TEXT};">${vehicleName}</p>
+<p class="av-muted" style="margin:2px 0 0;font-family:${FONT};font-size:14px;line-height:21px;color:${MUTED};">${summary}</p>
 </td>
 </tr>
 <tr>
@@ -150,8 +171,8 @@ export function buildReportEmailHtml(
 </tr>
 <tr>
 <td align="center" style="padding:14px 24px 22px;text-align:center;">
-<p style="margin:0;font-family:${FONT};font-size:12px;line-height:18px;color:${MUTED};">Button not working? Copy this link into your browser:</p>
-<p style="margin:2px 0 0;font-family:${FONT};font-size:12px;line-height:18px;word-break:break-all;"><a href="${url}" target="_blank" style="color:${MUTED};text-decoration:underline;">${url}</a></p>
+<p class="av-muted" style="margin:0;font-family:${FONT};font-size:12px;line-height:18px;color:${MUTED};">Button not working? Copy this link into your browser:</p>
+<p style="margin:2px 0 0;font-family:${FONT};font-size:12px;line-height:18px;word-break:break-all;"><a href="${url}" target="_blank" class="av-muted" style="color:${MUTED};text-decoration:underline;">${url}</a></p>
 </td>
 </tr>
 <tr>
@@ -159,7 +180,7 @@ export function buildReportEmailHtml(
 </tr>
 <tr>
 <td align="center" style="padding:14px 24px 20px;text-align:center;">
-<p style="margin:0;font-family:${FONT};font-size:12px;line-height:18px;color:${MUTED};">${REPORT_EMAIL_FOOTER}</p>
+<p class="av-muted" style="margin:0;font-family:${FONT};font-size:12px;line-height:18px;color:${MUTED};">${REPORT_EMAIL_FOOTER}</p>
 ${demoNote}
 </td>
 </tr>

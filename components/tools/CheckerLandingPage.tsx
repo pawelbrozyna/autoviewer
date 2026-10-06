@@ -26,6 +26,7 @@ export function CheckerLandingPage({
   checkSource = "unknown",
   crossLink,
   inlineDvlaLookup = false,
+  path,
 }: {
   toolKey: keyof typeof relatedToolsMap;
   breadcrumbs: Array<{ label: string; href?: string }>;
@@ -37,14 +38,16 @@ export function CheckerLandingPage({
   faqs: Array<{ question: string; answer: string }>;
   buttonLabel?: string;
   checkSource?: CheckSource;
-  crossLink?: { href: string; label: string };
+  crossLink?: { href: string; label: string; linkLabel: string };
   inlineDvlaLookup?: boolean;
+  path: string;
   /** @deprecated No longer shown in ToolHero by default */
   eyebrow?: string;
 }) {
   const hero = (
     <ToolHero
       breadcrumbs={breadcrumbs}
+      path={path}
       title={title}
       description={description}
       buttonLabel={buttonLabel}
@@ -63,7 +66,7 @@ export function CheckerLandingPage({
               href={crossLink.href}
               className="font-semibold text-blue hover:text-blue-hover"
             >
-              Tax &amp; Mileage →
+              {crossLink.linkLabel} →
             </Link>
           </p>
         ) : null}

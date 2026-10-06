@@ -1,19 +1,19 @@
 export const navLinks = [
-  { href: "/check-a-vehicle", label: "Check a Vehicle" },
+  { href: "/check-a-vehicle", label: "Car Reg Check" },
   { href: "/mot-history", label: "MOT History" },
-  { href: "/tax-mileage", label: "Tax & Mileage" },
+  { href: "/mileage-check", label: "Mileage Check" },
   { href: "/compare-cars", label: "Compare Cars" },
   { href: "/running-costs", label: "Running Costs" },
   { href: "/guides", label: "Guides" },
 ] as const;
 
 export const footerTools = [
-  { href: "/check-a-vehicle", label: "Check a Vehicle" },
-  { href: "/mot-history", label: "MOT History" },
-  { href: "/mileage-check", label: "Mileage Check" },
-  { href: "/recall-check", label: "Recall Check" },
-  { href: "/vehicle-details", label: "Vehicle Details" },
-  { href: "/tax-mileage", label: "Tax & Mileage" },
+  { href: "/check-a-vehicle", label: "Car Reg Check" },
+  { href: "/mot-history", label: "MOT History Check" },
+  { href: "/mileage-check", label: "Car Mileage Check" },
+  { href: "/car-tax-check", label: "Car Tax Check" },
+  { href: "/recall-check", label: "Car Recall Check" },
+  { href: "/vehicle-details", label: "Car Details by Registration" },
   { href: "/compare-cars", label: "Compare Cars" },
   { href: "/running-costs", label: "Running Costs" },
   { href: "/guides", label: "Guides" },
@@ -26,161 +26,101 @@ export const footerCompany = [
   { href: "/terms", label: "Terms" },
 ] as const;
 
-export const relatedToolsMap: Record<
-  string,
-  Array<{ href: string; label: string; description: string }>
-> = {
+type RelatedTool = { href: string; label: string; description: string };
+
+const related = {
+  carRegCheck: {
+    href: "/check-a-vehicle",
+    label: "Car reg check",
+    description: "MOT, tax, mileage, recalls and more in one free check.",
+  },
+  motHistory: {
+    href: "/mot-history",
+    label: "MOT history check",
+    description: "Review past MOT results and advisories.",
+  },
+  mileageCheck: {
+    href: "/mileage-check",
+    label: "Car mileage check",
+    description: "Review mileage recorded at each MOT.",
+  },
+  carTaxCheck: {
+    href: "/car-tax-check",
+    label: "Car tax check",
+    description: "Check tax and SORN status by registration.",
+  },
+  recallCheck: {
+    href: "/recall-check",
+    label: "Car recall check",
+    description: "See available safety recall information.",
+  },
+  carDetails: {
+    href: "/vehicle-details",
+    label: "Car details by registration",
+    description: "Look up make, model, fuel and year by registration.",
+  },
+  compareCars: {
+    href: "/compare-cars",
+    label: "Compare cars by registration",
+    description: "Compare two registrations side by side.",
+  },
+  runningCosts: {
+    href: "/running-costs",
+    label: "Running costs calculator",
+    description: "Estimate fuel, tax and ownership costs.",
+  },
+  motAdvisories: {
+    href: "/guides/mot-advisories-explained",
+    label: "MOT advisories explained",
+    description: "Understand advisory, major and dangerous defects.",
+  },
+  buyingChecklist: {
+    href: "/guides/used-car-buying-checklist",
+    label: "Used car buying checklist",
+    description: "What to check before you buy.",
+  },
+} satisfies Record<string, RelatedTool>;
+
+export const relatedToolsMap: Record<string, RelatedTool[]> = {
   "check-a-vehicle": [
-    {
-      href: "/mot-history",
-      label: "MOT History",
-      description: "Review past MOT results and advisories.",
-    },
-    {
-      href: "/recall-check",
-      label: "Recall Check",
-      description: "See available safety recall information.",
-    },
-    {
-      href: "/compare-cars",
-      label: "Compare Cars",
-      description: "Compare two registrations side by side.",
-    },
+    related.motHistory,
+    related.recallCheck,
+    related.compareCars,
   ],
   "mot-history": [
-    {
-      href: "/mileage-check",
-      label: "Mileage Check",
-      description: "Review mileage recorded at each MOT.",
-    },
-    {
-      href: "/check-a-vehicle",
-      label: "Full Vehicle Check",
-      description: "MOT, tax, recalls and more in one view.",
-    },
-    {
-      href: "/guides/mot-advisories-explained",
-      label: "MOT Advisories Guide",
-      description: "Understand advisory, major and dangerous defects.",
-    },
-  ],
-  "tax-mileage": [
-    {
-      href: "/car-tax-check",
-      label: "Car Tax Check",
-      description: "Focused guide to VED and SORN status.",
-    },
-    {
-      href: "/mileage-check",
-      label: "Mileage Check",
-      description: "Focused guide to MOT mileage history.",
-    },
-    {
-      href: "/mot-history",
-      label: "MOT History",
-      description: "Review full MOT results and advisories.",
-    },
-  ],
-  "car-tax-check": [
-    {
-      href: "/tax-mileage",
-      label: "Tax & Mileage",
-      description: "See tax status and mileage history together.",
-    },
-    {
-      href: "/running-costs",
-      label: "Running Costs",
-      description: "Estimate yearly ownership costs including tax.",
-    },
-    {
-      href: "/mot-history",
-      label: "MOT History",
-      description: "Check MOT status alongside tax.",
-    },
+    related.mileageCheck,
+    related.motAdvisories,
+    related.carRegCheck,
   ],
   "mileage-check": [
-    {
-      href: "/recall-check",
-      label: "Recall Check",
-      description: "See available safety recall information.",
-    },
-    {
-      href: "/mot-history",
-      label: "MOT History",
-      description: "Mileage is recorded at each MOT test.",
-    },
-    {
-      href: "/check-a-vehicle",
-      label: "Full Vehicle Check",
-      description: "Combine mileage with tax and recalls.",
-    },
+    related.motHistory,
+    related.carRegCheck,
+    related.buyingChecklist,
+    related.carTaxCheck,
+  ],
+  "car-tax-check": [
+    related.runningCosts,
+    related.motHistory,
+    related.mileageCheck,
   ],
   "recall-check": [
-    {
-      href: "/check-a-vehicle",
-      label: "Full Vehicle Check",
-      description: "See recalls with MOT and tax status.",
-    },
-    {
-      href: "/mot-history",
-      label: "MOT History",
-      description: "Review safety-related MOT defects.",
-    },
-    {
-      href: "/guides/used-car-buying-checklist",
-      label: "Buying Checklist",
-      description: "What to check before you buy.",
-    },
+    related.motHistory,
+    related.carRegCheck,
+    related.buyingChecklist,
   ],
   "vehicle-details": [
-    {
-      href: "/check-a-vehicle",
-      label: "Full Vehicle Check",
-      description: "Go beyond specs to history and status.",
-    },
-    {
-      href: "/tax-mileage",
-      label: "Tax & Mileage",
-      description: "Confirm tax status and mileage history.",
-    },
-    {
-      href: "/running-costs",
-      label: "Running Costs",
-      description: "Estimate fuel, tax and ownership costs.",
-    },
+    related.carRegCheck,
+    related.compareCars,
+    related.runningCosts,
   ],
   "compare-cars": [
-    {
-      href: "/check-a-vehicle",
-      label: "Vehicle Check",
-      description: "Deep-dive a single registration.",
-    },
-    {
-      href: "/running-costs",
-      label: "Running Costs",
-      description: "Estimate yearly costs for either car.",
-    },
-    {
-      href: "/vehicle-details",
-      label: "Vehicle Details",
-      description: "Look up make, model, fuel and year by registration.",
-    },
+    related.carRegCheck,
+    related.carDetails,
+    related.runningCosts,
   ],
   "running-costs": [
-    {
-      href: "/car-tax-check",
-      label: "Car Tax Check",
-      description: "Check tax and SORN status by registration.",
-    },
-    {
-      href: "/check-a-vehicle",
-      label: "Check a Vehicle",
-      description: "MOT, tax, recalls and more in one place.",
-    },
-    {
-      href: "/compare-cars",
-      label: "Compare Cars",
-      description: "Compare two cars before you decide.",
-    },
+    related.carTaxCheck,
+    related.compareCars,
+    related.carRegCheck,
   ],
 };

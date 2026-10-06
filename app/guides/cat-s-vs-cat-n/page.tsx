@@ -72,7 +72,7 @@ export default function CatSVsCatNPage() {
           <li>Consider a paid full history check before large purchases.</li>
           <li>
             Continue with a{" "}
-            <Link href="/check-a-vehicle">registration check</Link> for MOT, tax
+            <Link href="/check-a-vehicle">car reg check</Link> for MOT, tax
             and mileage context.
           </li>
           <li>

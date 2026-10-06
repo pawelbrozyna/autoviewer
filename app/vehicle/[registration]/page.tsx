@@ -4,6 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import { LiveVehicleReportSection } from "@/components/reports/VehicleReportSection";
 import { Container } from "@/components/ui/Container";
 import { ErrorState } from "@/components/ui/EmptyState";
+import { CheckoutCancelledNotice } from "@/components/vehicle/CheckoutCancelledNotice";
 import { getMockVehicle } from "@/lib/api/mock";
 import { lookupVehicle } from "@/lib/api/vehicle-service";
 import { buildPageMetadata } from "@/lib/seo/metadata";
@@ -15,6 +16,7 @@ import {
 
 type PageProps = {
   params: Promise<{ registration: string }>;
+  searchParams: Promise<{ checkout?: string | string[] }>;
 };
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -29,8 +31,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   });
 }
 
-export default async function VehicleResultPage({ params }: PageProps) {
+export default async function VehicleResultPage({
+  params,
+  searchParams,
+}: PageProps) {
   const { registration } = await params;
+  const { checkout } = await searchParams;
+  const checkoutCancelled =
+    (Array.isArray(checkout) ? checkout[0] : checkout) === "cancelled";
   const normalized = normalizeRegistration(registration);
 
   if (!isValidRegistrationFormat(normalized)) {
@@ -56,12 +64,18 @@ export default async function VehicleResultPage({ params }: PageProps) {
     return (
       <Container className="space-y-2.5 pb-8 pt-2 md:space-y-5 md:py-10 lg:py-9">
         <BackLink />
+        {checkoutCancelled ? <CheckoutCancelledNotice /> : null}
         <ErrorState title={result.error.message} />
       </Container>
     );
   }
 
-  return <LiveVehicleReportSection vehicle={result.data} />;
+  return (
+    <LiveVehicleReportSection
+      vehicle={result.data}
+      notice={checkoutCancelled ? <CheckoutCancelledNotice /> : null}
+    />
+  );
 }
 
 function BackLink() {

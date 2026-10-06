@@ -12,7 +12,6 @@ const INDEXABLE_ROUTES = [
   "/mot-history",
   "/mileage-check",
   "/car-tax-check",
-  "/tax-mileage",
   "/recall-check",
   "/vehicle-details",
   "/compare-cars",

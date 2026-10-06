@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 const popularLinks = [
-  { href: "/check-a-vehicle", label: "Check a vehicle" },
+  { href: "/check-a-vehicle", label: "Car reg check" },
   { href: "/mot-history", label: "MOT history check" },
   { href: "/mileage-check", label: "Mileage check" },
   { href: "/compare-cars", label: "Compare cars" },

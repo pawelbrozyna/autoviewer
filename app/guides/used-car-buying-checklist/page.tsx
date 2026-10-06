@@ -39,7 +39,7 @@ export default function UsedCarChecklistPage() {
       >
         <p>
           Use this checklist alongside AutoViewer’s{" "}
-          <Link href="/check-a-vehicle">vehicle check</Link>. Free official-source
+          <Link href="/check-a-vehicle">free car reg check</Link>. Free official-source
           data covers a useful slice of the picture - MOT, tax, mileage readings and
           available recall indications - but it does not automatically include
           finance, stolen or write-off status.
@@ -50,7 +50,7 @@ export default function UsedCarChecklistPage() {
           <li>Confirm the registration matches the advert and V5C.</li>
           <li>Check the VIN on the car matches paperwork.</li>
           <li>
-            Run a <Link href="/check-a-vehicle">registration check</Link> before
+            Run a <Link href="/check-a-vehicle">car reg check</Link> before
             travelling to view.
           </li>
         </ul>
@@ -78,6 +78,9 @@ export default function UsedCarChecklistPage() {
           These usually require commercial vehicle-history data. AutoViewer does
           not invent this information from DVLA/DVSA sources. Ask the seller
           directly and consider a paid provenance check before transferring money.
+          If the car is a declared write-off, read{" "}
+          <Link href="/guides/cat-s-vs-cat-n">Cat S vs Cat N</Link> to understand
+          the category.
         </p>
 
         <h2>5. Service history</h2>

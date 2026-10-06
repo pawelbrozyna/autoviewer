@@ -37,7 +37,6 @@ export type CheckSource =
   | "mot-history"
   | "car-tax-check"
   | "mileage-check"
-  | "tax-mileage"
   | "recall-check"
   | "vehicle-details"
   | "about"

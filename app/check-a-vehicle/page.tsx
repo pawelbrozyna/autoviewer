@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { CheckerLandingPage } from "@/components/tools/CheckerLandingPage";
 import {
   absoluteUrl,
@@ -7,7 +8,7 @@ import {
 } from "@/lib/seo/metadata";
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "Vehicle Check by Registration - Free UK Car Check",
+  title: "Car Reg Check: Free Vehicle Check by Registration",
   description:
     "Enter a UK registration for a free vehicle check covering MOT history, tax status, mileage readings, recalls and key vehicle details.",
   path: "/check-a-vehicle",
@@ -21,9 +22,9 @@ export default function CheckAVehiclePage() {
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(
             webApplicationJsonLd({
-              name: "AutoViewer Vehicle Check",
+              name: "AutoViewer Car Reg Check",
               description:
-                "Free UK vehicle check by registration for MOT, tax, mileage and more.",
+                "Free car reg check by UK registration for MOT, tax, mileage and more.",
               url: absoluteUrl("/check-a-vehicle"),
             }),
           ),
@@ -33,12 +34,13 @@ export default function CheckAVehiclePage() {
         toolKey="check-a-vehicle"
         checkSource="check-a-vehicle"
         inlineDvlaLookup
+        path="/check-a-vehicle"
         breadcrumbs={[
           { label: "Home", href: "/" },
-          { label: "Check a Vehicle" },
+          { label: "Car reg check" },
         ]}
         eyebrow="Free UK car check"
-        title="Vehicle check by registration"
+        title="Car reg check"
         description="Check MOT history, tax, mileage, recalls and vehicle details in one clear report."
         whatYoullSee={[
           {
@@ -80,7 +82,9 @@ export default function CheckAVehiclePage() {
             <p>
               This is designed for quick decisions - not endless tabs. Enter a
               registration, scan the status overview, then open the sections that
-              matter for your purchase.
+              matter for your purchase. If a seller mentions a write-off, our guide
+              to <Link href="/guides/cat-s-vs-cat-n">Cat S vs Cat N</Link> explains
+              what the categories mean.
             </p>
             <p>
               Vehicle information may be sourced from official UK government

@@ -14,6 +14,7 @@
     "pdf:stress-test": "npx tsx lib/reports/stress/run.ts",
     "pdf:sample-preview": "npx tsx scripts/generate-sample-report-preview.ts",
     "test:mail": "node --conditions=react-server --import tsx lib/mail/messages.test.ts",
+    "test:email-limits": "node --conditions=react-server --import tsx lib/server/free-email-limits.test.ts",
     "test:dvsa": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/dvsa-mot-test.ts",
     "test:live-lookup": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/live-lookup-test.ts",
     "email:preview": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/report-email-preview.ts"
@@ -27,7 +28,8 @@
     "pdf-lib": "^1.17.1",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "server-only": "^0.0.1"
+    "server-only": "^0.0.1",
+    "stripe": "^23.0.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",

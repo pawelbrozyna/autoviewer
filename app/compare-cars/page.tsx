@@ -53,9 +53,10 @@ export default async function CompareCarsPage({
         }}
       />
       <PageHero
+        path="/compare-cars"
         breadcrumbs={[
           { label: "Home", href: "/" },
-          { label: "Compare Cars" },
+          { label: "Compare cars by registration" },
         ]}
         title="Compare cars by registration"
         description="See key information, spot differences and make a more confident decision."

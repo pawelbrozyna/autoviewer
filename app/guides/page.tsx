@@ -37,6 +37,7 @@ export default function GuidesIndexPage() {
   return (
     <>
       <PageHero
+        path="/guides"
         breadcrumbs={[
           { label: "Home", href: "/" },
           { label: "Guides" },
