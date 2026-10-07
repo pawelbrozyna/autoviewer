@@ -8,6 +8,10 @@ const MUTED = "#64748b";
 const BORDER = "#dfe5ee";
 const PLATE = "#fac023";
 const OUTER_BG = "#f3f5f8";
+const CARD_BORDER = "#c5cdd9";
+/** Dark-mode clients that recolour bgcolor leave background-image alone, so the card stays white. */
+const CARD_BG =
+  "background-color:#ffffff;background-image:linear-gradient(#ffffff,#ffffff);";
 const FONT =
   "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
 
@@ -135,20 +139,20 @@ body, .av-card, .av-header { background-color: #ffffff !important; }
 <tr>
 <td align="center" style="padding:24px 12px;">
 <!--[if mso]><table role="presentation" width="640" cellpadding="0" cellspacing="0" border="0"><tr><td bgcolor="#ffffff"><![endif]-->
-<table role="presentation" class="av-card" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff" style="max-width:640px;width:100%;background-color:#ffffff;border:1px solid ${BORDER};border-radius:12px;border-collapse:separate;color-scheme:light;">
+<table role="presentation" class="av-card" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff" style="max-width:640px;width:100%;${CARD_BG}border:1px solid ${CARD_BORDER};border-radius:12px;border-collapse:separate;box-shadow:0 1px 2px rgba(7,26,61,0.08);color-scheme:light;">
 <tr>
 <td align="center" class="av-header" bgcolor="#ffffff" style="padding:28px 24px 0;background-color:#ffffff;background-image:linear-gradient(#ffffff,#ffffff);border-radius:12px 12px 0 0;">
 <img src="${logoUrl}" width="163" height="24" alt="AutoViewer" style="display:block;margin:0 auto;border:0;outline:none;text-decoration:none;width:163px;height:24px;background-color:#ffffff;font-family:${FONT};font-size:20px;font-weight:700;color:${NAVY};">
 </td>
 </tr>
 <tr>
-<td align="center" style="padding:22px 24px 0;text-align:center;">
+<td align="center" class="av-card" bgcolor="#ffffff" style="padding:22px 24px 0;text-align:center;${CARD_BG}">
 <h1 class="av-navy" style="margin:0;font-family:${FONT};font-size:24px;line-height:30px;font-weight:700;color:${NAVY};">Your vehicle report is ready</h1>
 <p class="av-muted" style="margin:6px 0 0;font-family:${FONT};font-size:15px;line-height:22px;color:${MUTED};">Your free AutoViewer report is available online.</p>
 </td>
 </tr>
 <tr>
-<td align="center" style="padding:20px 24px 0;text-align:center;">
+<td align="center" class="av-card" bgcolor="#ffffff" style="padding:20px 24px 0;text-align:center;${CARD_BG}">
 <table role="presentation" align="center" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;">
 <tr>
 <td style="background-color:${PLATE};border:2px solid #000000;border-radius:5px;padding:5px 14px;font-family:${FONT};font-size:18px;line-height:22px;font-weight:700;letter-spacing:1px;color:#000000;white-space:nowrap;">${registration}</td>
@@ -159,7 +163,7 @@ body, .av-card, .av-header { background-color: #ffffff !important; }
 </td>
 </tr>
 <tr>
-<td style="padding:22px 24px 0;">
+<td class="av-card" bgcolor="#ffffff" style="padding:22px 24px 0;${CARD_BG}">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
 <tr>
 <td align="center" bgcolor="${BLUE}" style="background-color:${BLUE};border-radius:10px;">
@@ -170,16 +174,16 @@ body, .av-card, .av-header { background-color: #ffffff !important; }
 </td>
 </tr>
 <tr>
-<td align="center" style="padding:14px 24px 22px;text-align:center;">
+<td align="center" class="av-card" bgcolor="#ffffff" style="padding:14px 24px 22px;text-align:center;${CARD_BG}">
 <p class="av-muted" style="margin:0;font-family:${FONT};font-size:12px;line-height:18px;color:${MUTED};">Button not working? Copy this link into your browser:</p>
 <p style="margin:2px 0 0;font-family:${FONT};font-size:12px;line-height:18px;word-break:break-all;"><a href="${url}" target="_blank" class="av-muted" style="color:${MUTED};text-decoration:underline;">${url}</a></p>
 </td>
 </tr>
 <tr>
-<td style="padding:0 24px;"><div style="height:1px;line-height:1px;font-size:1px;background-color:${BORDER};">&nbsp;</div></td>
+<td class="av-card" bgcolor="#ffffff" style="padding:0 24px;${CARD_BG}"><div style="height:1px;line-height:1px;font-size:1px;background-color:${BORDER};">&nbsp;</div></td>
 </tr>
 <tr>
-<td align="center" style="padding:14px 24px 20px;text-align:center;">
+<td align="center" class="av-card" bgcolor="#ffffff" style="padding:14px 24px 20px;text-align:center;${CARD_BG}border-radius:0 0 12px 12px;">
 <p class="av-muted" style="margin:0;font-family:${FONT};font-size:12px;line-height:18px;color:${MUTED};">${REPORT_EMAIL_FOOTER}</p>
 ${demoNote}
 </td>
