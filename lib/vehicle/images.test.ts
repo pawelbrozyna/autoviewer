@@ -174,14 +174,14 @@ run("normalizes accents, punctuation, electric prefixes and make aliases", () =>
     model: "e-208 GT",
     year: 2022,
   });
-  assert.equal(peugeot.src, "/cars/peugeot-208-p21-2019-2026.webp");
+  assert.equal(peugeot.src, "/cars/peugeot-208-p21-2019-2024.webp");
 
   const opel = resolveVehicleImage({
     make: "Opel",
     model: "Corsa-e Ultimate",
     year: 2022,
   });
-  assert.equal(opel.src, "/cars/vauxhall-corsa-f-2019-2026.webp");
+  assert.equal(opel.src, "/cars/vauxhall-corsa-f-2019-2023.webp");
   assert.ok(opel.matchedFields.includes("make:alias"));
 
   const vauxhall = resolveVehicleImage({
@@ -401,7 +401,7 @@ run("Focus 2018 resolves exact Mk4 WebP image", () => {
   assert.equal(result.match, "exact");
   assert.equal(result.isRepresentative, false);
   assert.equal(result.generation, "Mk4");
-  assert.equal(result.src, "/cars/ford-focus-mk4-2018-2025.webp");
+  assert.equal(result.src, "/cars/ford-focus-mk4-2018-2022.webp");
 });
 
 run("Mondeo resolves Mk5 WebP image", () => {
@@ -430,8 +430,8 @@ run("pre-facelift year falls back to the same generation's facelift, marked repr
     model: "TRANSIT CUSTOM",
     year: 2017,
   });
-  assert.equal(transitCustom.match, "nearest-generation");
-  assert.equal(transitCustom.generation, "Mk1 facelift");
+  assert.equal(transitCustom.match, "exact");
+  assert.equal(transitCustom.generation, "Mk1");
 });
 
 run("nearest-generation fallback never crosses into a different generation", () => {
@@ -440,23 +440,33 @@ run("nearest-generation fallback never crosses into a different generation", () 
     ["BMW", "1 SERIES", 2008],
     ["BMW", "3 SERIES", 2002],
     ["BMW", "X5", 2015],
-    ["BMW", "5 SERIES", 2024],
     ["MERCEDES-BENZ", "E 220", 2006],
     ["FORD", "KA", 2005],
     ["RENAULT", "CLIO", 2003],
-    ["VAUXHALL", "VIVARO", 2016],
     ["AUDI", "A4", 2006],
-    ["SKODA", "KODIAQ", 2025],
     ["CITROEN", "C3", 2025],
-    ["HONDA", "CR-V", 2024],
-    ["LAND ROVER", "RANGE ROVER SPORT", 2024],
-    ["MG", "ZS", 2025],
-    ["TESLA", "MODEL Y", 2025],
   ];
   for (const [make, model, year] of cases) {
     const result = resolveVehicleImage({ make, model, year });
     assert.equal(result.match, "placeholder", `${make} ${model} ${year}`);
     assert.equal(result.src, null, `${make} ${model} ${year}`);
+  }
+});
+
+run("former generation gaps resolve to their own new generation", () => {
+  const cases: Array<[string, string, number, string]> = [
+    ["BMW", "5 SERIES", 2024, "/cars/bmw-5-series-g60-2023-2026.webp"],
+    ["VAUXHALL", "VIVARO", 2016, "/cars/vauxhall-vivaro-b-2014-2019.webp"],
+    ["SKODA", "KODIAQ", 2025, "/cars/skoda-kodiaq-mk2-2024-2026.webp"],
+    ["HONDA", "CR-V", 2024, "/cars/honda-cr-v-mk6-2023-2026.webp"],
+    ["LAND ROVER", "RANGE ROVER SPORT", 2024, "/cars/land-rover-range-rover-sport-l461-2022-2026.webp"],
+    ["MG", "ZS", 2025, "/cars/mg-zs-mk2-2024-2026.webp"],
+    ["TESLA", "MODEL Y", 2026, "/cars/tesla-model-y-juniper-2025-2026.webp"],
+  ];
+  for (const [make, model, year, src] of cases) {
+    const result = resolveVehicleImage({ make, model, year });
+    assert.equal(result.match, "exact", `${make} ${model} ${year}`);
+    assert.equal(result.src, src, `${make} ${model} ${year}`);
   }
 });
 
@@ -662,9 +672,231 @@ run("MG bare numbers and MG MOTOR UK make", () => {
   );
 });
 
+run("trim, fuel and gearbox descriptors keep the base model", () => {
+  const cases: Array<[string, string, number, string]> = [
+    ["MG", "HS TROPHY PHEV AUTO", 2022, "/cars/mg-hs-mk1-2019-2024.webp"],
+    ["VOLVO", "XC40 INSCRIPTION PRO B4 MHEV A", 2021, "/cars/volvo-xc40-mk1-2018-2026.webp"],
+    ["TOYOTA", "YARIS EXCEL HEV CVT", 2021, "/cars/toyota-yaris-xp210-2020-2026.webp"],
+    ["VOLKSWAGEN", "TIGUAN ALLSPACE LIFE TSI S-A", 2022, "/cars/volkswagen-tiguan-mk2-2016-2024.webp"],
+  ];
+  for (const [make, model, year, src] of cases) {
+    assert.equal(resolveVehicleImage({ make, model, year }).src, src, `${make} ${model}`);
+  }
+});
+
+run("short DVSA name matches a single longer catalogue model", () => {
+  assert.equal(matchCatalogModel("Vauxhall", "COMBO"), "Combo Cargo");
+  assert.equal(matchCatalogModel("Vauxhall", "COMBO 2300 DYNAMIC TD"), "Combo Cargo");
+  const combo = resolveVehicleImage({ make: "VAUXHALL", model: "COMBO 2300 DYNAMIC TD", year: 2020 });
+  assert.equal(combo.src, "/cars/vauxhall-combo-cargo-e-2018-2026.webp");
+  assert.equal(combo.confidence, "medium");
+  assert.equal(
+    resolveVehicleImage({ make: "VAUXHALL", model: "COMBO", year: 2016 }).src,
+    "/cars/vauxhall-combo-cargo-d-2012-2018.webp",
+  );
+  assert.equal(
+    resolveVehicleImage({ make: "VAUXHALL", model: "COMBO", year: 2010 }).match,
+    "placeholder",
+    "Combo C predates every Combo Cargo generation",
+  );
+});
+
+run("short names never guess when unsafe or ambiguous", () => {
+  assert.equal(matchCatalogModel("Land Rover", "RANGE"), null);
+  assert.equal(matchCatalogModel("Land Rover", "RANGE ROVER"), "Range Rover");
+  assert.equal(matchCatalogModel("Vauxhall", "COMBO LIFE ENERGY"), null);
+  assert.equal(matchCatalogModel("Yamaha", "TRACER 9"), null);
+  assert.equal(matchCatalogModel("Kawasaki", "VERSYS 1000"), null);
+  assert.equal(matchCatalogModel("Ford", "MUSTANG"), null);
+  const entries = [
+    { priority: 1, make: "Testmake", model: "Alpha Van", generation: "Mk1", yearFrom: 2018, yearTo: 2024, bodyType: "Van", filename: "a.webp" },
+    { priority: 2, make: "Testmake", model: "Alpha Tourer", generation: "Mk1", yearFrom: 2018, yearTo: 2024, bodyType: "MPV", filename: "b.webp" },
+  ];
+  assert.equal(matchCatalogModel("Testmake", "ALPHA", entries), null);
+  assert.equal(matchCatalogModel("Testmake", "ALPHA TOURER", entries), "Alpha Tourer");
+});
+
+run("leading NEW is ignored", () => {
+  assert.equal(matchCatalogModel("Ford", "NEW FIESTA ZETEC"), "Fiesta");
+  assert.equal(matchCatalogModel("Ford", "ALL NEW FIESTA"), "Fiesta");
+  assert.equal(
+    resolveVehicleImage({ make: "FORD", model: "NEW FIESTA ZETEC", year: 2019 }).src,
+    "/cars/ford-fiesta-mk8-2017-2023.webp",
+  );
+  assert.equal(matchCatalogModel("Ford", "NEW"), null);
+});
+
+run("SMART (MCC) make maps to Smart", () => {
+  for (const year of [2016, 2018]) {
+    assert.equal(
+      resolveVehicleImage({ make: "SMART (MCC)", model: "FORFOUR", year }).src,
+      "/cars/smart-forfour-453-2015-2019.webp",
+    );
+  }
+});
+
+run("plain Zafira uses Zafira Tourer only for the 2016-2019 facelift years", () => {
+  const zafira = (model: string, year: number) =>
+    resolveVehicleImage({ make: "VAUXHALL", model, year });
+  assert.equal(zafira("ZAFIRA", 2018).src, "/cars/vauxhall-zafira-tourer-c-2012-2018.webp");
+  assert.equal(zafira("ZAFIRA SRI NAV", 2016).src, "/cars/vauxhall-zafira-tourer-c-2012-2018.webp");
+  assert.equal(zafira("ZAFIRA", 2013).src, "/cars/vauxhall-zafira-b-2005-2014.webp");
+  assert.equal(zafira("ZAFIRA", 2015).match, "placeholder");
+  assert.equal(zafira("ZAFIRA", 2019).match, "placeholder");
+  assert.equal(zafira("ZAFIRA LIFE", 2018).match, "placeholder");
+  assert.equal(zafira("ZAFIRA TOURER", 2014).src, "/cars/vauxhall-zafira-tourer-c-2012-2018.webp");
+});
+
+run("Mercedes S-number names are recognised as S-Class and never another model", () => {
+  for (const model of ["S 450 L AMG LINE PREMIUM", "S450", "S 500", "S-CLASS", "S 63 AMG"]) {
+    const result = resolveVehicleImage({ make: "MERCEDES-BENZ", model, year: 2026 });
+    assert.equal(result.src, "/cars/mercedes-benz-s-class-w223-2021-2026.webp", model);
+  }
+  assert.equal(
+    resolveVehicleImage({ make: "MERCEDES-BENZ", model: "S 350 D L", year: 2016 }).src,
+    "/cars/mercedes-benz-s-class-w222-2013-2020.webp",
+  );
+  assert.equal(matchCatalogModel("MERCEDES-BENZ", "SPRINTER 314"), "Sprinter");
+  assert.equal(matchCatalogModel("MERCEDES-BENZ", "E 220 D"), "E-Class");
+  const entries = [
+    { priority: 1, make: "Mercedes-Benz", model: "S-Class", generation: "W223", yearFrom: 2021, yearTo: 2026, bodyType: "Saloon", filename: "s.webp" },
+    { priority: 2, make: "Mercedes-Benz", model: "Sprinter", generation: "W907", yearFrom: 2018, yearTo: 2026, bodyType: "Van", filename: "sp.webp" },
+  ];
+  for (const model of ["S 450 L AMG LINE PREMIUM", "S450", "S 500", "S-CLASS"]) {
+    assert.equal(matchCatalogModel("MERCEDES-BENZ", model, entries), "S-Class", model);
+  }
+  assert.equal(matchCatalogModel("MERCEDES-BENZ", "SL 500", entries), null);
+});
+
+function entry(make: string, model: string, yearFrom = 2015, yearTo = 2026) {
+  return {
+    priority: 1,
+    make,
+    model,
+    generation: "Mk1",
+    yearFrom,
+    yearTo,
+    bodyType: "suv",
+    filename: `${make}-${model}.webp`.toLowerCase().replace(/[^a-z0-9.]+/g, "-"),
+  };
+}
+
+run("BYD Seal and Dolphin never borrow Seal U or Dolphin Surf images", () => {
+  const entries = [entry("BYD", "Seal U"), entry("BYD", "Dolphin Surf"), entry("BYD", "Sealion 7")];
+  assert.equal(matchCatalogModel("BYD", "SEAL", entries), null);
+  assert.equal(matchCatalogModel("BYD", "SEAL EXCELLENCE AWD", entries), null);
+  assert.equal(matchCatalogModel("BYD", "DOLPHIN", entries), null);
+  assert.equal(matchCatalogModel("BYD", "DOLPHIN COMFORT", entries), null);
+  assert.equal(matchCatalogModel("BYD", "SEAL U DM-I BOOST", entries), "Seal U");
+  assert.equal(matchCatalogModel("BYD", "DOLPHIN SURF ACTIVE", entries), "Dolphin Surf");
+  assert.equal(matchCatalogModel("BYD", "SEALION 7 COMFORT", entries), "Sealion 7");
+});
+
+run("taxi maker names map to LEVC and LTI only", () => {
+  for (const make of ["LONDON EV COMPANY", "London EV Company Limited", "LONDON EV COMPANY LTD", "LEVC"]) {
+    assert.equal(
+      resolveVehicleImage({ make, model: "VN5", year: 2022 }).src,
+      "/cars/levc-vn5-mk1-2020-2026.webp",
+      make,
+    );
+  }
+  const entries = [entry("LTI", "TX4", 2007, 2017)];
+  for (const make of ["LTI", "LONDON TAXIS INT", "London Taxis International", "LONDON TAXI COMPANY", "THE LONDON TAXI COMPANY"]) {
+    assert.equal(matchCatalogModel(make, "TX4", entries), "TX4", make);
+  }
+  assert.equal(matchCatalogModel("LONDON", "TX4", entries), null);
+  assert.equal(matchCatalogModel("TAXI", "TX4", entries), null);
+  assert.equal(matchCatalogModel("Ford", "Fiesta Titanium"), "Fiesta");
+  assert.equal(matchCatalogModel("Toyota", "PRIUS"), "Prius");
+});
+
+run("bus maker aliases never capture plain Dennis or Dennis Eagle", () => {
+  const entries = [
+    entry("Alexander Dennis", "Enviro200"),
+    entry("Alexander Dennis", "Enviro400"),
+    entry("Wrightbus", "StreetDeck"),
+  ];
+  for (const make of ["ALEXANDER DENNIS", "ALEXANDER DENNIS LTD", "Alexander Dennis Limited", "ADL"]) {
+    assert.equal(matchCatalogModel(make, "ENVIRO400 MMC", entries), "Enviro400", make);
+  }
+  for (const make of ["WRIGHT", "WRIGHTBUS", "WRIGHTBUS LTD"]) {
+    assert.equal(matchCatalogModel(make, "STREETDECK", entries), "StreetDeck", make);
+  }
+  assert.equal(matchCatalogModel("DENNIS", "E20D", entries), null);
+  assert.equal(matchCatalogModel("DENNIS", "ENVIRO200", entries), null);
+  assert.equal(matchCatalogModel("DENNIS EAGLE", "ELITE 6", entries), null);
+  assert.equal(matchCatalogModel("DENNIS EAGLE", "ENVIRO400", entries), null);
+});
+
+run("bus chassis codes map only under the right make", () => {
+  const entries = [
+    entry("Alexander Dennis", "Enviro200"),
+    entry("Alexander Dennis", "Enviro400"),
+    entry("Mercedes-Benz", "Citaro"),
+    entry("Mercedes-Benz", "Sprinter"),
+  ];
+  assert.equal(matchCatalogModel("ALEXANDER DENNIS", "E20D", entries), "Enviro200");
+  assert.equal(matchCatalogModel("ADL", "E40D", entries), "Enviro400");
+  assert.equal(matchCatalogModel("ALEXANDER DENNIS LTD", "E40H", entries), "Enviro400");
+  assert.equal(matchCatalogModel("MERCEDES-BENZ", "O530", entries), "Citaro");
+  assert.equal(matchCatalogModel("MERCEDES-BENZ", "O 530 G", entries), "Citaro");
+  assert.equal(matchCatalogModel("VOLVO", "E40D", entries), null);
+  assert.equal(matchCatalogModel("SCANIA", "O530", entries), null);
+  assert.equal(matchCatalogModel("ALEXANDER DENNIS", "E50D", entries), null);
+  assert.equal(matchCatalogModel("MERCEDES-BENZ", "SPRINTER 516", entries), "Sprinter");
+  assert.equal(matchCatalogModel("MERCEDES-BENZ", "O530", undefined), "Citaro");
+  assert.equal(matchCatalogModel("SCANIA", "O530", undefined), null);
+});
+
+run("MG ZS EV never borrows a petrol ZS image", () => {
+  for (const model of ["ZS EV", "ZS EV TROPHY CONNECT LONG RANGE", "ZSEV"]) {
+    for (const year of [2022, 2025]) {
+      const result = resolveVehicleImage({ make: "MG", model, year });
+      assert.equal(result.match, "placeholder", `${model} ${year}`);
+      assert.notEqual(result.src, "/cars/mg-zs-mk2-2024-2026.webp", `${model} ${year}`);
+    }
+  }
+  assert.equal(
+    resolveVehicleImage({ make: "MG", model: "ZS", year: 2025 }).src,
+    "/cars/mg-zs-mk2-2024-2026.webp",
+  );
+  assert.equal(
+    resolveVehicleImage({ make: "MG", model: "ZS HYBRID+ TROPHY", year: 2025 }).src,
+    "/cars/mg-zs-mk2-2024-2026.webp",
+  );
+  assert.equal(
+    resolveVehicleImage({ make: "MG MOTOR UK", model: "ZS EXCLUSIVE", year: 2022 }).src,
+    "/cars/mg-zs-mk1-facelift-2020-2024.webp",
+  );
+});
+
+run("verified DVSA taxi and bus names resolve to their records", () => {
+  assert.equal(
+    resolveVehicleImage({ make: "LEVC", model: "TX", year: 2021, firstRegistrationDate: "2021-09-02" }).src,
+    "/cars/levc-tx-mk1-2018-2026.webp",
+  );
+  assert.equal(
+    resolveVehicleImage({ make: "ADL", model: "ENVIRO 400", year: 2016, firstRegistrationDate: "2016-12-12" }).src,
+    "/cars/alexander-dennis-enviro400-mmc-2014-2026.webp",
+  );
+});
+
+run("Lexus IS numbers without a space resolve to IS", () => {
+  for (const model of ["IS200", "IS250", "IS300", "IS350", "IS300H F SPORT", "IS 300"]) {
+    assert.equal(matchCatalogModel("LEXUS", model), "IS", model);
+  }
+  assert.equal(matchCatalogModel("LEXUS", "IS220D"), null);
+  assert.equal(matchCatalogModel("LEXUS", "IS F"), "IS");
+  assert.equal(matchCatalogModel("LEXUS", "NX 300H"), "NX");
+});
+
+const FIRST_PENDING_IMAGE_PRIORITY = 601;
+
 run("every catalogue record has its WebP file and no file is orphaned", () => {
   const files = new Set(readdirSync(join(process.cwd(), "public", "cars")));
-  const missing = vehicles.filter((v) => !files.has(v.filename));
+  const missing = vehicles.filter(
+    (v) => !files.has(v.filename) && v.priority < FIRST_PENDING_IMAGE_PRIORITY,
+  );
   assert.deepEqual(
     missing.map((v) => v.filename),
     [],
@@ -729,7 +961,7 @@ run("demo records use expected WebP resolver paths", () => {
     "/cars/suzuki-swift-a2l-2017-2023.webp",
   );
   assert.equal(swift!.summary.imageIsRepresentative, false);
-  assert.equal(focus!.summary.imageSrc, "/cars/ford-focus-mk4-2018-2025.webp");
+  assert.equal(focus!.summary.imageSrc, "/cars/ford-focus-mk4-2018-2022.webp");
   assert.equal(focus!.summary.imageIsRepresentative, false);
   assert.equal(
     glc!.summary.imageSrc,

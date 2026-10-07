@@ -71,6 +71,19 @@ const MAKE_ALIASES: Record<string, string> = {
   "ssang yong": "ssangyong",
   "kg mobility": "kgm",
   "mg motor uk": "mg",
+  "smart mcc": "smart",
+  "london ev company": "levc",
+  "london ev company limited": "levc",
+  "london ev company ltd": "levc",
+  "london taxis int": "lti",
+  "london taxis international": "lti",
+  "london taxi company": "lti",
+  "the london taxi company": "lti",
+  "alexander dennis ltd": "alexander dennis",
+  "alexander dennis limited": "alexander dennis",
+  adl: "alexander dennis",
+  wright: "wrightbus",
+  "wrightbus ltd": "wrightbus",
 };
 
 /**
@@ -141,7 +154,37 @@ const STRICT_MODEL_ALIASES: Record<
     { pattern: /\broadster\b/, model: "Roadster" },
     { pattern: /^(cooper|one|electric)\b/, model: "Hatch" },
   ],
+  "mercedes benz": [
+    { pattern: /^s(?:\s*\d{2,3}[a-z]?| class)?(?: |$)/, model: "S-Class" },
+  ],
+  mg: [{ pattern: /^zs\s*ev\b/, model: "ZS EV" }],
 };
+
+/**
+ * Names whose catalogue model depends on the year. The 2016-2019 Zafira Tourer
+ * facelift was sold as plain "Zafira"; earlier plain "Zafira" is the Zafira B.
+ */
+const YEAR_MODEL_ALIASES: Record<
+  string,
+  Array<{ pattern: RegExp; fromYear: number; toYear: number; model: string }>
+> = {
+  vauxhall: [
+    {
+      pattern: /^zafira(?! (?:tourer|life|e life)\b)(?: |$)/,
+      fromYear: 2016,
+      toYear: 2019,
+      model: "Zafira Tourer",
+    },
+  ],
+};
+
+/** Short names that are a different vehicle from the longer catalogue model they prefix. */
+const STANDALONE_SHORT_MODELS: Record<string, string[]> = {
+  ford: ["mustang"],
+  byd: ["seal", "dolphin"],
+};
+
+const LEADING_GENERIC_WORDS = /^(?:all )?new (?=\S)/;
 
 const libraryEntries = (vehicleImagesLibrary.vehicles ?? []) as VehicleImageEntry[];
 
@@ -154,7 +197,22 @@ function modelFamily(makeKey: string, model: string): string[] | null {
   );
 }
 
-function strictModelAlias(makeKey: string, modelKey: string): string | null {
+function strictModelAlias(
+  makeKey: string,
+  modelKey: string,
+  year?: number | null,
+): string | null {
+  if (year != null) {
+    for (const alias of YEAR_MODEL_ALIASES[makeKey] ?? []) {
+      if (
+        year >= alias.fromYear &&
+        year <= alias.toYear &&
+        alias.pattern.test(modelKey)
+      ) {
+        return alias.model;
+      }
+    }
+  }
   for (const { pattern, model } of STRICT_MODEL_ALIASES[makeKey] ?? []) {
     const match = modelKey.match(pattern);
     if (match) return typeof model === "string" ? model : model(match);
@@ -250,7 +308,13 @@ function catalogModelsForMake(
 
 type ModelMatch = {
   model: string;
-  method: "exact" | "prefix" | "compact" | "alias" | "electric-prefix";
+  method:
+    | "exact"
+    | "prefix"
+    | "compact"
+    | "alias"
+    | "electric-prefix"
+    | "reverse-prefix";
   score: number;
 };
 
@@ -278,11 +342,27 @@ function knownModelAlias(
     if (/^ml\s*\d{0,3}[a-z]?\b/.test(modelKey) && candidates.includes("M-Class")) {
       return "M-Class";
     }
+    if (/^o\s*530\b/.test(modelKey) && candidates.includes("Citaro")) {
+      return "Citaro";
+    }
     const rangeMatch = modelKey.match(/^(gla|glc|cla)\s*\d{3}[a-z]?\b/);
     if (rangeMatch) {
       const candidate = rangeMatch[1].toUpperCase();
       if (candidates.includes(candidate)) return candidate;
     }
+  }
+
+  if (makeKey === "lexus" && /^is\s*(?:200|250|300|350)[a-z]?\b/.test(modelKey)) {
+    if (candidates.includes("IS")) return "IS";
+  }
+
+  if (makeKey === "alexander dennis") {
+    const candidate = /^e20d\b/.test(modelKey)
+      ? "Enviro200"
+      : /^e40[dh]\b/.test(modelKey)
+        ? "Enviro400"
+        : null;
+    if (candidate && candidates.includes(candidate)) return candidate;
   }
 
   if (makeKey === "land rover" && modelKey.startsWith("r rover ")) {
@@ -318,19 +398,31 @@ function findCatalogModel(
   model: string,
   derivative: string,
   entries: VehicleImageEntry[],
+  year?: number | null,
 ): ModelMatch | null {
   const candidates = catalogModelsForMake(make, entries);
   if (candidates.length === 0) return null;
 
   const rawText = [model, derivative].filter(Boolean).join(" ");
   // Make aliases can also be model prefixes ("Range Rover Sport"), so try the unstripped text too.
+  const strippedKey = stripLeadingMake(rawText, make);
   const modelKeys = [
-    ...new Set([stripLeadingMake(rawText, make), normalizeKey(rawText)]),
+    ...new Set([
+      strippedKey,
+      normalizeKey(rawText),
+      strippedKey.replace(LEADING_GENERIC_WORDS, ""),
+    ]),
   ].filter(Boolean);
 
   const matches: ModelMatch[] = [];
   for (const modelKey of modelKeys) {
-    matches.push(...matchModelKey(make, modelKey, candidates));
+    matches.push(...matchModelKey(make, modelKey, candidates, year));
+  }
+  if (matches.length === 0) {
+    for (const modelKey of modelKeys) {
+      const reverse = reversePrefixMatch(make, modelKey, candidates, year);
+      if (reverse) return reverse;
+    }
   }
 
   return (
@@ -347,9 +439,10 @@ function matchModelKey(
   make: string,
   modelKey: string,
   candidates: string[],
+  year?: number | null,
 ): ModelMatch[] {
   const makeKey = canonicalizeMake(make);
-  const strict = strictModelAlias(makeKey, modelKey);
+  const strict = strictModelAlias(makeKey, modelKey, year);
   if (strict) {
     return candidates.includes(strict)
       ? [{ model: strict, method: "alias", score: 99 }]
@@ -392,6 +485,35 @@ function matchModelKey(
     if (match) matches.push(match);
   }
   return matches;
+}
+
+/**
+ * DVSA name shorter than the catalogue name ("COMBO" for "Combo Cargo"). Only used
+ * when nothing else matched, exactly one catalogue model extends the base word, and
+ * neither side carries a number that could denote a different model ("Tracer 9").
+ */
+function reversePrefixMatch(
+  make: string,
+  modelKey: string,
+  candidates: string[],
+  year?: number | null,
+): ModelMatch | null {
+  const makeKey = canonicalizeMake(make);
+  if (strictModelAlias(makeKey, modelKey, year)) return null;
+
+  const [base, next] = modelKey.split(" ");
+  if (!base || !/^[a-z]{3,}$/.test(base)) return null;
+  if (next && !/^\d/.test(next)) return null;
+  if (STANDALONE_SHORT_MODELS[makeKey]?.includes(base)) return null;
+
+  const extending = candidates.filter((candidate) =>
+    normalizeKey(candidate).startsWith(`${base} `),
+  );
+  if (extending.length !== 1) return null;
+  const suffix = normalizeKey(extending[0]).slice(base.length + 1);
+  if (/\d/.test(suffix)) return null;
+
+  return { model: extending[0], method: "reverse-prefix", score: 80 };
 }
 
 function parseRegistrationDate(value?: string | null): {
@@ -645,6 +767,7 @@ export function resolveVehicleImage(
     model,
     derivative,
     libraryEntries,
+    year,
   );
   if (!modelMatch) {
     return placeholderResult(
@@ -698,7 +821,10 @@ export function resolveVehicleImage(
   if (exact.length === 1) {
     return toResolution(exact[0], "exact", {
       confidence:
-        modelMatch.method === "compact" ? "medium" : "high",
+        modelMatch.method === "compact" ||
+        modelMatch.method === "reverse-prefix"
+          ? "medium"
+          : "high",
       reason: "Matched make, model and year to one catalogue generation.",
       matchedFields: [...matchedFields, "year:single-range"],
       fallbackUsed: false,
