@@ -114,14 +114,14 @@ export function buildReportEmailHtml(
 <!--[if mso]><noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript><![endif]-->
 <style>
 :root { color-scheme: light; supported-color-schemes: light; }
-body, .av-card, .av-header { background-color: #ffffff !important; }
+body, .av-card, .av-header, .av-logo { background-color: #ffffff !important; }
 .av-outer { background-color: ${OUTER_BG} !important; }
 .av-navy { color: ${NAVY} !important; }
 .av-text { color: ${TEXT} !important; }
 .av-muted { color: ${MUTED} !important; }
 @media (prefers-color-scheme: dark) {
   .av-outer { background-color: ${OUTER_BG} !important; }
-  .av-card, .av-header { background-color: #ffffff !important; }
+  .av-card, .av-header, .av-logo { background-color: #ffffff !important; }
   .av-navy { color: ${NAVY} !important; }
   .av-text { color: ${TEXT} !important; }
   .av-muted { color: ${MUTED} !important; }
@@ -130,7 +130,7 @@ body, .av-card, .av-header { background-color: #ffffff !important; }
 [data-ogsc] .av-text { color: ${TEXT} !important; }
 [data-ogsc] .av-muted { color: ${MUTED} !important; }
 [data-ogsb] .av-outer { background-color: ${OUTER_BG} !important; }
-[data-ogsb] .av-card, [data-ogsb] .av-header { background-color: #ffffff !important; }
+[data-ogsb] .av-card, [data-ogsb] .av-header, [data-ogsb] .av-logo { background-color: #ffffff !important; }
 </style>
 </head>
 <body class="av-outer" bgcolor="${OUTER_BG}" style="margin:0;padding:0;background-color:${OUTER_BG};color-scheme:light;supported-color-schemes:light;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
@@ -141,12 +141,18 @@ body, .av-card, .av-header { background-color: #ffffff !important; }
 <!--[if mso]><table role="presentation" width="640" cellpadding="0" cellspacing="0" border="0"><tr><td bgcolor="#ffffff"><![endif]-->
 <table role="presentation" class="av-card" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff" style="max-width:640px;width:100%;${CARD_BG}border:1px solid ${CARD_BORDER};border-radius:12px;border-collapse:separate;box-shadow:0 1px 2px rgba(7,26,61,0.08);color-scheme:light;">
 <tr>
-<td align="center" class="av-header" bgcolor="#ffffff" style="padding:28px 24px 0;background-color:#ffffff;background-image:linear-gradient(#ffffff,#ffffff);border-radius:12px 12px 0 0;">
+<td align="center" class="av-header" bgcolor="#ffffff" style="padding:17px 24px 0;background-color:#ffffff;background-image:linear-gradient(#ffffff,#ffffff);border-radius:12px 12px 0 0;">
+<table role="presentation" align="center" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;border-collapse:separate;">
+<tr>
+<td class="av-logo" bgcolor="#ffffff" style="padding:10px 18px;${CARD_BG}border:1px solid #e6eaf0;border-radius:9px;">
 <img src="${logoUrl}" width="163" height="24" alt="AutoViewer" style="display:block;margin:0 auto;border:0;outline:none;text-decoration:none;width:163px;height:24px;background-color:#ffffff;font-family:${FONT};font-size:20px;font-weight:700;color:${NAVY};">
 </td>
 </tr>
+</table>
+</td>
+</tr>
 <tr>
-<td align="center" class="av-card" bgcolor="#ffffff" style="padding:22px 24px 0;text-align:center;${CARD_BG}">
+<td align="center" class="av-card" bgcolor="#ffffff" style="padding:11px 24px 0;text-align:center;${CARD_BG}">
 <h1 class="av-navy" style="margin:0;font-family:${FONT};font-size:24px;line-height:30px;font-weight:700;color:${NAVY};">Your vehicle report is ready</h1>
 <p class="av-muted" style="margin:6px 0 0;font-family:${FONT};font-size:15px;line-height:22px;color:${MUTED};">Your free AutoViewer report is available online.</p>
 </td>
