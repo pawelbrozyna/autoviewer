@@ -72,10 +72,7 @@ export function VehicleSearchForm({
       reserveErrorSpace
       onSubmitValid={handleLookup}
       onChange={() => {
-        if (inlineDvlaLookup) {
-          setError(null);
-          dvlaLookup?.setVehicle(null);
-        }
+        if (error) setError(null);
       }}
     />
   );

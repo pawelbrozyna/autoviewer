@@ -24,7 +24,12 @@ import { absoluteUrl } from "@/lib/seo/metadata";
 import { motDateLabel } from "@/lib/vehicle/mot-status";
 import { statusLabel } from "@/lib/vehicle/missing-data";
 import { checkedItems } from "@/lib/reports/checked-items";
-import { drawIllustrativeImageCaption, drawVehicleSpecBlock } from "@/lib/reports/pdf-vehicle-specs";
+import {
+  drawIllustrativeImageCaption,
+  drawVariantRow,
+  drawVehicleSpecBlock,
+} from "@/lib/reports/pdf-vehicle-specs";
+import { reportVehicleTitle } from "@/lib/vehicle/report-title";
 import type { MotTest, VehicleRecord } from "@/types/vehicle";
 
 const PAGE_WIDTH = 595.28;
@@ -806,13 +811,7 @@ export async function generateVehicleReportPdf(
     });
   }
 
-  const vehicleTitle = [
-    summary.year,
-    summary.make,
-    summary.model,
-  ]
-    .filter(Boolean)
-    .join(" ");
+  const { title: vehicleTitle, variant: modelVariant } = reportVehicleTitle(summary);
   // Drawn after the image so the title sits on top; one line across the hero.
   const titleSize = 17;
   const titleMaxWidth = PAGE_WIDTH - MARGIN - 12 - 20;
@@ -1245,7 +1244,7 @@ export async function generateVehicleReportPdf(
     color: NAVY,
   });
   page2.drawText(
-    fitText(`${summary.year ?? ""} ${summary.make} ${summary.model}`, regular, 6.8, 112),
+    fitText(vehicleTitle, regular, 6.8, 112),
     {
       x: PAGE_WIDTH - MARGIN - 122,
       y: 728,
@@ -1682,8 +1681,12 @@ export async function generateVehicleReportPdf(
   );
   const specHeaderHeight = 26;
   const specRowHeight = 26;
+  const variantRowHeight = modelVariant ? specRowHeight : 0;
   const advisoryBottom =
-    advisoryTop - (specHeaderHeight + Math.max(1, specificationRows) * specRowHeight);
+    advisoryTop -
+    (specHeaderHeight +
+      variantRowHeight +
+      Math.max(1, specificationRows) * specRowHeight);
   const advisoryHeight = advisoryTop - advisoryBottom;
   drawSection(page2, MARGIN, advisoryBottom, CONTENT_WIDTH, advisoryHeight, {
     fill: WHITE,
@@ -1697,7 +1700,18 @@ export async function generateVehicleReportPdf(
     color: NAVY,
   });
   const specColumnWidth = CONTENT_WIDTH / 2;
-  const specContentTop = advisoryTop - specHeaderHeight;
+  if (modelVariant) {
+    drawVariantRow(page2, {
+      x: MARGIN,
+      width: CONTENT_WIDTH,
+      top: advisoryTop - specHeaderHeight,
+      height: variantRowHeight,
+      variant: modelVariant,
+      regular,
+      bold,
+    });
+  }
+  const specContentTop = advisoryTop - specHeaderHeight - variantRowHeight;
   specifications.slice(0, FREE_SPEC_LIMIT).forEach(([label, value], index) => {
     const column = index % 2;
     const row = Math.floor(index / 2);
@@ -1708,7 +1722,7 @@ export async function generateVehicleReportPdf(
         page2,
         MARGIN + specColumnWidth,
         advisoryBottom,
-        advisoryHeight - specHeaderHeight,
+        advisoryHeight - specHeaderHeight - variantRowHeight,
       );
     }
     if (column === 0 && row > 0) {

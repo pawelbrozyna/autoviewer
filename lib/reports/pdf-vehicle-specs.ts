@@ -4,6 +4,7 @@ import { vehicleColourSwatch } from "@/components/vehicle/VehicleColour";
 const NAVY = rgb(0.027, 0.106, 0.227);
 const MUTED = rgb(0.37, 0.43, 0.51);
 const BORDER = rgb(0.8, 0.83, 0.86);
+const INNER_LINE = rgb(0.86, 0.88, 0.91);
 
 function hexToPdfRgb(hex: string) {
   const raw = hex.replace("#", "").trim();
@@ -175,6 +176,48 @@ export function drawVehicleSpecBlock(
 
   drawColumn(leftItems, leftX, leftWidth);
   drawColumn(rightItems, rightX, rightWidth);
+}
+
+/** Full-width "Variant / derivative" row at the top of the specification section. */
+export function drawVariantRow(
+  page: PDFPage,
+  input: {
+    x: number;
+    width: number;
+    top: number;
+    height: number;
+    variant: string;
+    regular: PDFFont;
+    bold: PDFFont;
+  },
+) {
+  const { x, width, top, height, variant, regular, bold } = input;
+  const label = "Variant / derivative";
+  const labelSize = 8.4;
+  const valueSize = 8.9;
+  const centerY = top - height / 2;
+  page.drawText(label, {
+    x: x + 12,
+    y: centerY - labelSize * 0.35,
+    size: labelSize,
+    font: regular,
+    color: MUTED,
+  });
+  const labelWidth = regular.widthOfTextAtSize(label, labelSize);
+  const value = fitText(variant, bold, valueSize, width - labelWidth - 48);
+  page.drawText(value, {
+    x: x + width - 12 - bold.widthOfTextAtSize(value, valueSize),
+    y: centerY - valueSize * 0.35,
+    size: valueSize,
+    font: bold,
+    color: NAVY,
+  });
+  page.drawLine({
+    start: { x, y: top - height },
+    end: { x: x + width, y: top - height },
+    thickness: 0.5,
+    color: INNER_LINE,
+  });
 }
 
 /** Small caption centred under the vehicle image in free/full PDFs. */

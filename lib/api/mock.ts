@@ -1,6 +1,7 @@
 import type { VehicleRecord } from "@/types/vehicle";
 import { formatRegistrationDisplay, normalizeRegistration } from "@/lib/vehicle/registration";
 import { resolveImageFieldsForVehicle } from "@/lib/vehicle/images";
+import { modelTitleFields } from "@/lib/vehicle/model-title";
 import { calculateBuyerScore } from "@/lib/vehicle/score";
 
 function withResolvedImage(
@@ -25,6 +26,7 @@ function withResolvedImage(
       imageMatchReason: image.imageMatchReason,
       imageFallbackUsed: image.imageFallbackUsed,
       imageMatchAmbiguous: image.imageMatchAmbiguous,
+      ...modelTitleFields(record.summary.make, record.summary.model),
     },
   };
 }

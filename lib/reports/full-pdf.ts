@@ -8,7 +8,12 @@ import {
 } from "pdf-lib";
 import fontkit from "@pdf-lib/fontkit";
 import type { ReportIconName, VehicleReportPdfOptions } from "@/lib/reports/pdf";
-import { drawIllustrativeImageCaption, drawVehicleSpecBlock } from "@/lib/reports/pdf-vehicle-specs";
+import {
+  drawIllustrativeImageCaption,
+  drawVariantRow,
+  drawVehicleSpecBlock,
+} from "@/lib/reports/pdf-vehicle-specs";
+import { reportVehicleTitle } from "@/lib/vehicle/report-title";
 import { motDateLabel } from "@/lib/vehicle/mot-status";
 import { DATA_NOT_AVAILABLE, statusLabel } from "@/lib/vehicle/missing-data";
 import {
@@ -435,9 +440,7 @@ export async function generateFullReportPdf(
     });
   }
 
-  const vehicleTitle = [summary.year, summary.make, summary.model]
-    .filter(Boolean)
-    .join(" ");
+  const { title: vehicleTitle, variant: modelVariant } = reportVehicleTitle(summary);
   const titleSize = 17;
   page1.drawText(fitText(vehicleTitle, bold, titleSize, PAGE_WIDTH - MARGIN - 32), {
     x: MARGIN + 12,
@@ -710,7 +713,9 @@ export async function generateFullReportPdf(
   const specHeaderHeight = 26;
   const specRowHeight = 26;
   const specificationRows = Math.ceil(Math.min(specs.length, PAID_SPEC_LIMIT) / 2);
-  const specHeight = specHeaderHeight + Math.max(1, specificationRows) * specRowHeight;
+  const variantRowHeight = modelVariant ? specRowHeight : 0;
+  const specHeight =
+    specHeaderHeight + variantRowHeight + Math.max(1, specificationRows) * specRowHeight;
   const specTop = factsY - 12;
   const specBottom = specTop - specHeight;
   drawSection(page1, MARGIN, specBottom, CONTENT_WIDTH, specHeight, WHITE, specHeaderHeight);
@@ -722,7 +727,18 @@ export async function generateFullReportPdf(
     color: NAVY,
   });
   const specColumnWidth = CONTENT_WIDTH / 2;
-  const specContentTop = specTop - specHeaderHeight;
+  if (modelVariant) {
+    drawVariantRow(page1, {
+      x: MARGIN,
+      width: CONTENT_WIDTH,
+      top: specTop - specHeaderHeight,
+      height: variantRowHeight,
+      variant: modelVariant,
+      regular,
+      bold,
+    });
+  }
+  const specContentTop = specTop - specHeaderHeight - variantRowHeight;
   specs.slice(0, PAID_SPEC_LIMIT).forEach(([label, value], index) => {
     const column = index % 2;
     const row = Math.floor(index / 2);
@@ -733,7 +749,7 @@ export async function generateFullReportPdf(
         page1,
         MARGIN + specColumnWidth,
         specBottom,
-        specHeight - specHeaderHeight,
+        specHeight - specHeaderHeight - variantRowHeight,
       );
     }
     if (column === 0 && row > 0) {
@@ -764,7 +780,7 @@ export async function generateFullReportPdf(
 
   const FLOW_BOTTOM = 56;
   const FLOW_GAP = 14;
-  const vehicleLabel = `${summary.year ?? ""} ${summary.make} ${summary.model}`.trim();
+  const vehicleLabel = vehicleTitle;
 
   type Flow = {
     page: PDFPage;

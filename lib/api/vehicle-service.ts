@@ -23,6 +23,7 @@ import {
 } from "@/lib/vehicle/registration";
 import { formatVehicleText } from "@/lib/vehicle/display-text";
 import { resolveImageFieldsForVehicle } from "@/lib/vehicle/images";
+import { modelTitleFields } from "@/lib/vehicle/model-title";
 import { calculateBuyerScore } from "@/lib/vehicle/score";
 
 function isMockModeEnabled(): boolean {
@@ -307,6 +308,7 @@ export async function lookupVehicle(
         imageMatchReason: image.imageMatchReason,
         imageFallbackUsed: image.imageFallbackUsed,
         imageMatchAmbiguous: image.imageMatchAmbiguous,
+        ...modelTitleFields(make, model || detailsPart?.details.model || "Vehicle"),
       },
       details: {
         registration,

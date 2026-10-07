@@ -1,4 +1,5 @@
 import { calculateBuyerScore } from "@/lib/vehicle/score";
+import { modelTitleFields } from "@/lib/vehicle/model-title";
 import {
   formatRegistrationDisplay,
   normalizeRegistration,
@@ -124,6 +125,7 @@ function record(input: {
     recalls,
     isDemo: true,
     imageSrc: input.imageSrc ?? null,
+    ...modelTitleFields(input.make, input.model),
   };
   const details: VehicleDetails = {
     registration,

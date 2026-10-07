@@ -113,6 +113,10 @@ export interface VehicleSummary {
   imageFallbackUsed?: boolean;
   /** True when multiple generations remained plausible. */
   imageMatchAmbiguous?: boolean;
+  /** Clean model for report headings, e.g. "S-Class". Falls back to `model` when absent. */
+  modelTitle?: string;
+  /** Trim, engine or gearbox text split from `model`, e.g. "2300 Dynamic TD". */
+  modelVariant?: string | null;
 }
 
 export interface VehicleRecord {

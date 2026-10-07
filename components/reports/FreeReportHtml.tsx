@@ -21,6 +21,7 @@ import {
 } from "@/lib/reports/pdf-limits";
 import { vehicleColourSwatch } from "@/components/vehicle/VehicleColour";
 import { VehicleImageFallback } from "@/components/vehicle/VehicleImageFallback";
+import { reportVehicleTitle } from "@/lib/vehicle/report-title";
 import type { VehicleRecord } from "@/types/vehicle";
 
 const plateFont = localFont({
@@ -247,9 +248,7 @@ export function FreeReportHtml({
   const upgradeHref = fullReportHref(summary.registration);
   const needsAttention =
     summary.recalls.dataAvailable !== false && summary.recalls.hasOpenRecalls;
-  const vehicleTitle = [summary.year, summary.make, summary.model]
-    .filter(Boolean)
-    .join(" ");
+  const { title: vehicleTitle, variant } = reportVehicleTitle(summary);
   const colourValue = summary.colour?.trim() || details.colour?.trim() || null;
   const fuelValue = summary.fuelType?.trim() || details.fuelType?.trim() || null;
   const transmissionValue =
@@ -491,7 +490,7 @@ export function FreeReportHtml({
             <>
               <Image
                 src={summary.imageSrc}
-                alt={`${summary.make} ${summary.model}`}
+                alt={vehicleTitle}
                 fill
                 sizes="(max-width: 768px) 58vw, 500px"
                 className="origin-center translate-y-[-8%] scale-90 object-contain object-center"
@@ -991,6 +990,26 @@ export function FreeReportHtml({
           </div>
 
           <SectionCard title="Vehicle specification">
+            {variant ? (
+              <div
+                className="flex items-center justify-between gap-3 border-b border-border"
+                style={{ minHeight: pt(24), paddingInline: pt(12) }}
+              >
+                <span
+                  className="shrink-0 whitespace-nowrap text-muted"
+                  style={{ fontSize: pt(8.4) }}
+                >
+                  Variant / derivative
+                </span>
+                <span
+                  className="min-w-0 truncate text-right font-bold text-navy"
+                  style={{ fontSize: pt(8.8) }}
+                  title={variant}
+                >
+                  {variant}
+                </span>
+              </div>
+            ) : null}
             <div className="grid grid-cols-2">
               {specifications.slice(0, FREE_SPEC_LIMIT).map(([label, value], index) => {
                 const row = Math.floor(index / 2);
