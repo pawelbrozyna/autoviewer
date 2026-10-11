@@ -1,8 +1,8 @@
 {
-  "library": "AutoViewer vehicle image library v6",
-  "count": 666,
+  "library": "AutoViewer vehicle image library v7",
+  "count": 678,
   "format": "webp",
-  "selectionBasis": "Prioritised for UK used-vehicle and vehicle-parc relevance. Positions 1-300 cover common UK cars; 301-340 vans and light commercial vehicles; 341-370 motorcycles; 371-400 scooters; 401-450 pickups, larger/older commercial vans and van-based MPVs; 451-500 add high-priority UK used-car gaps, current EVs/hybrids and premium used models; 501-600 fill UK everyday-road gaps (2005-2020 hatchbacks, MPVs, budget family cars and small crossovers). 601-666 add current generations and facelifts of top sellers, new brands (BYD, Jaecoo, Omoda), London taxis, older common vans, used-car gaps and common UK buses. This is a practical image-bucket catalogue, not an exact sales ranking.",
+  "selectionBasis": "Prioritised for UK used-vehicle and vehicle-parc relevance. Positions 1-300 cover common UK cars; 301-340 vans and light commercial vehicles; 341-370 motorcycles; 371-400 scooters; 401-450 pickups, larger/older commercial vans and van-based MPVs; 451-500 add high-priority UK used-car gaps, current EVs/hybrids and premium used models; 501-600 fill UK everyday-road gaps (2005-2020 hatchbacks, MPVs, budget family cars and small crossovers). 601-666 add current generations and facelifts of top sellers, new brands (BYD, Jaecoo, Omoda), London taxis, older common vans, used-car gaps and common UK buses. 667-678 fill real-lookup gaps and adjacent generations (Rifter, Partner Tepee, Fabia Mk1, Infiniti Q30, Smart #1, EQE saloon and SUV, Actros trucks, GB Kite Electroliner, BYD BD11 and B12). This is a practical image-bucket catalogue, not an exact sales ranking.",
   "imageStandard": {
     "format": "webp",
     "size": "1000x750",
@@ -6682,6 +6682,126 @@
       "yearTo": 2020,
       "bodyType": "bus-single-deck",
       "filename": "optare-solo-sr-2012-2020.webp"
+    },
+    {
+      "priority": 667,
+      "make": "Peugeot",
+      "model": "Rifter",
+      "generation": "K9",
+      "yearFrom": 2018,
+      "yearTo": 2026,
+      "bodyType": "mpv",
+      "filename": "peugeot-rifter-k9-2018-2026.webp"
+    },
+    {
+      "priority": 668,
+      "make": "Peugeot",
+      "model": "Partner Tepee",
+      "generation": "II",
+      "yearFrom": 2008,
+      "yearTo": 2018,
+      "bodyType": "mpv",
+      "filename": "peugeot-partner-tepee-ii-2008-2018.webp"
+    },
+    {
+      "priority": 669,
+      "make": "Skoda",
+      "model": "Fabia",
+      "generation": "Mk1 (6Y)",
+      "yearFrom": 1999,
+      "yearTo": 2007,
+      "bodyType": "hatchback-estate",
+      "filename": "skoda-fabia-mk1-1999-2007.webp"
+    },
+    {
+      "priority": 670,
+      "make": "Infiniti",
+      "model": "Q30",
+      "generation": "H15",
+      "yearFrom": 2015,
+      "yearTo": 2019,
+      "bodyType": "hatchback",
+      "filename": "infiniti-q30-2015-2019.webp"
+    },
+    {
+      "priority": 671,
+      "make": "Smart",
+      "model": "#1",
+      "generation": "HX11",
+      "yearFrom": 2022,
+      "yearTo": 2026,
+      "bodyType": "suv",
+      "filename": "smart-1-hx11-2022-2026.webp"
+    },
+    {
+      "priority": 672,
+      "make": "Mercedes-Benz",
+      "model": "EQE",
+      "generation": "V295",
+      "yearFrom": 2022,
+      "yearTo": 2026,
+      "bodyType": "saloon",
+      "filename": "mercedes-benz-eqe-v295-2022-2026.webp"
+    },
+    {
+      "priority": 673,
+      "make": "Mercedes-Benz",
+      "model": "EQE SUV",
+      "generation": "X294",
+      "yearFrom": 2023,
+      "yearTo": 2026,
+      "bodyType": "suv",
+      "filename": "mercedes-benz-eqe-suv-x294-2023-2026.webp"
+    },
+    {
+      "priority": 674,
+      "make": "Mercedes-Benz",
+      "model": "Actros",
+      "generation": "MP4/MP5",
+      "yearFrom": 2011,
+      "yearTo": 2026,
+      "bodyType": "truck",
+      "filename": "mercedes-benz-actros-mp4-mp5-2011-2026.webp"
+    },
+    {
+      "priority": 675,
+      "make": "Mercedes-Benz",
+      "model": "Actros",
+      "generation": "MP2/MP3",
+      "yearFrom": 2003,
+      "yearTo": 2011,
+      "bodyType": "truck",
+      "filename": "mercedes-benz-actros-mp2-mp3-2003-2011.webp"
+    },
+    {
+      "priority": 676,
+      "make": "Wrightbus",
+      "model": "GB Kite Electroliner",
+      "generation": "Mk1",
+      "yearFrom": 2021,
+      "yearTo": 2026,
+      "bodyType": "bus-single-deck",
+      "filename": "wrightbus-gb-kite-electroliner-2021-2026.webp"
+    },
+    {
+      "priority": 677,
+      "make": "BYD",
+      "model": "BD11",
+      "generation": "Mk1",
+      "yearFrom": 2024,
+      "yearTo": 2026,
+      "bodyType": "bus-double-deck",
+      "filename": "byd-bd11-2024-2026.webp"
+    },
+    {
+      "priority": 678,
+      "make": "BYD",
+      "model": "B12",
+      "generation": "Mk1",
+      "yearFrom": 2024,
+      "yearTo": 2026,
+      "bodyType": "bus-single-deck",
+      "filename": "byd-b12-2024-2026.webp"
     }
   ]
 }

@@ -150,13 +150,15 @@ function SpecFact({
   label,
   value,
   icon,
+  noTruncate = false,
 }: {
   label: string;
   value: string;
   icon: React.ReactNode;
+  noTruncate?: boolean;
 }) {
   return (
-    <div className="min-w-0">
+    <div className={noTruncate ? "min-w-0" : "min-w-0 [contain:inline-size]"}>
       <p
         className="leading-none text-muted"
         style={{ fontSize: pt(7.8) }}
@@ -169,7 +171,7 @@ function SpecFact({
       >
         {icon}
         <p
-          className="min-w-0 truncate font-bold leading-none text-navy"
+          className={`font-bold leading-none text-navy ${noTruncate ? "whitespace-nowrap" : "min-w-0 truncate"}`}
           style={{ fontSize: pt(10.5) }}
           title={value}
         >
@@ -567,7 +569,7 @@ export function FreeReportHtml({
             style={{
               marginTop: pt(12),
               columnGap: pt(12),
-              gridTemplateColumns: "minmax(0, 0.88fr) minmax(0, 1.2fr)",
+              gridTemplateColumns: "minmax(min-content, 0.88fr) minmax(0, 1.2fr)",
             }}
           >
             <div
@@ -593,6 +595,7 @@ export function FreeReportHtml({
               <SpecFact
                 label="First registered"
                 value={firstRegisteredValue}
+                noTruncate
                 icon={
                   <Calendar
                     className="shrink-0 text-navy/75"

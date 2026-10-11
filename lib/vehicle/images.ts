@@ -156,8 +156,11 @@ const STRICT_MODEL_ALIASES: Record<
   ],
   "mercedes benz": [
     { pattern: /^s(?:\s*\d{2,3}[a-z]?| class)?(?: |$)/, model: "S-Class" },
+    { pattern: /^eqe\b.*\bsuv\b/, model: "EQE SUV" },
   ],
   mg: [{ pattern: /^zs\s*ev\b/, model: "ZS EV" }],
+  infiniti: [{ pattern: /^qx\s*30\b/, model: "Q30" }],
+  peugeot: [{ pattern: /^partner tepee\b/, model: "Partner Tepee" }],
 };
 
 /**
@@ -176,6 +179,14 @@ const YEAR_MODEL_ALIASES: Record<
       model: "Zafira Tourer",
     },
   ],
+};
+
+/**
+ * Catalogue models whose name alone does not identify the body. The image is only used
+ * when the source model text states that body; otherwise the result is a placeholder.
+ */
+const BODY_CONFIRMATION_REQUIRED: Record<string, Record<string, RegExp>> = {
+  "mercedes benz": { EQE: /\bsaloon\b/ },
 };
 
 /** Short names that are a different vehicle from the longer catalogue model they prefix. */
@@ -333,8 +344,8 @@ function knownModelAlias(
 
   if (makeKey === "mercedes benz") {
     const classMatch =
-      modelKey.match(/^([abce])\s*\d{2,3}[a-z]?\b/) ??
-      modelKey.match(/^([abce])(?: class)?(?: |$)/);
+      modelKey.match(/^([abcev])\s*\d{2,3}[a-z]?\b/) ??
+      modelKey.match(/^([abcev])(?: class)?(?: |$)/);
     if (classMatch) {
       const candidate = `${classMatch[1].toUpperCase()}-Class`;
       if (candidates.includes(candidate)) return candidate;
@@ -772,6 +783,13 @@ export function resolveVehicleImage(
   if (!modelMatch) {
     return placeholderResult(
       `No catalogue model matched ${make} ${model}`.trim(),
+    );
+  }
+  const bodyPattern =
+    BODY_CONFIRMATION_REQUIRED[canonicalizeMake(make)]?.[modelMatch.model];
+  if (bodyPattern && !bodyPattern.test(normalizeKey(`${model} ${derivative}`))) {
+    return placeholderResult(
+      `${make} ${model} does not state its body type; ${modelMatch.model} images differ by body.`,
     );
   }
 

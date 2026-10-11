@@ -881,6 +881,72 @@ run("verified DVSA taxi and bus names resolve to their records", () => {
   );
 });
 
+run("ambiguous Electroliner and BYD eBus names stay on the placeholder", () => {
+  for (const [make, model, year, date] of [
+    ["WRIGHTBUS", "Electroliner", 2023, "2023-09-15"],
+    ["WRIGHTBUS", "ELECTROLINER", 2024, "2024-01-17"],
+    ["BYD", "BYD EBUS", 2025, "2025-09-22"],
+    ["BYD", "BYD ebus", 2025, "2025-12-04"],
+    ["BYD", "EBUS", 2026, "2026-01-12"],
+  ] as const) {
+    const result = resolveVehicleImage({ make, model, year, firstRegistrationDate: date });
+    assert.equal(result.src, null, `${make} ${model}`);
+    assert.equal(result.fallbackUsed, true, `${make} ${model}`);
+  }
+  assert.equal(
+    resolveVehicleImage({ make: "WRIGHTBUS", model: "GB Kite Electroliner", year: 2023 }).src,
+    "/cars/wrightbus-gb-kite-electroliner-2021-2026.webp",
+  );
+  assert.equal(
+    resolveVehicleImage({ make: "WRIGHTBUS", model: "STREETDECK ELECTROLINER", year: 2023 }).src,
+    "/cars/wrightbus-streetdeck-mk1-2014-2026.webp",
+  );
+  assert.equal(matchCatalogModel("BYD", "BD11"), "BD11");
+  assert.equal(matchCatalogModel("BYD", "B12"), "B12");
+});
+
+run("today's real-lookup gaps resolve to their new records", () => {
+  const cases: Array<[string, string, number, string, string]> = [
+    ["PEUGEOT", "RIFTER HORIZON RS PLUS AUTO", 2023, "2023-04-19", "peugeot-rifter-k9-2018-2026.webp"],
+    ["PEUGEOT", "E-RIFTER ALLURE", 2022, "2022-05-01", "peugeot-rifter-k9-2018-2026.webp"],
+    ["PEUGEOT", "PARTNER TEPEE OUTDOOR HDI", 2012, "2012-05-01", "peugeot-partner-tepee-ii-2008-2018.webp"],
+    ["PEUGEOT", "PARTNER 850 S L1 HDI", 2012, "2012-05-01", "peugeot-partner-ii-2008-2018.webp"],
+    ["SKODA", "FABIA", 2002, "2002-09-10", "skoda-fabia-mk1-1999-2007.webp"],
+    ["INFINITI", "Q30", 2017, "2017-07-31", "infiniti-q30-2015-2019.webp"],
+    ["INFINITI", "QX30 PREMIUM TECH", 2017, "2017-03-01", "infiniti-q30-2015-2019.webp"],
+    ["SMART", "1 BRABUS EV 4X4", 2023, "2023-10-21", "smart-1-hx11-2022-2026.webp"],
+    ["SMART", "#1 PREMIUM", 2024, "2024-03-01", "smart-1-hx11-2022-2026.webp"],
+    ["MERCEDES-BENZ", "EQE 300 SALOON AMG LINE", 2024, "2024-02-21", "mercedes-benz-eqe-v295-2022-2026.webp"],
+    ["MERCEDES-BENZ", "EQE 350 4MATIC SUV AMG LINE", 2024, "2024-02-21", "mercedes-benz-eqe-suv-x294-2023-2026.webp"],
+    ["MERCEDES-BENZ", "EQE SUV 350 4MATIC", 2024, "2024-02-21", "mercedes-benz-eqe-suv-x294-2023-2026.webp"],
+    ["MERCEDES", "ACTROS", 2024, "2024-11-07", "mercedes-benz-actros-mp4-mp5-2011-2026.webp"],
+    ["MERCEDES-BENZ", "ACTROS 2544", 2006, "2006-05-01", "mercedes-benz-actros-mp2-mp3-2003-2011.webp"],
+    ["MERCEDES-BENZ", "V 300 SPORT D AUTO", 2019, "2019-11-26", "mercedes-benz-v-class-w447-facelift-2019-2024.webp"],
+  ];
+  for (const [make, model, year, firstRegistrationDate, filename] of cases) {
+    assert.equal(
+      resolveVehicleImage({ make, model, year, firstRegistrationDate }).filename,
+      filename,
+      `${make} ${model}`,
+    );
+  }
+  assert.equal(matchCatalogModel("MERCEDES-BENZ", "EQE 300 AMG LINE"), "EQE");
+  assert.equal(matchCatalogModel("MERCEDES-BENZ", "VITO 116 CDI"), "Vito");
+});
+
+run("EQE without a stated body never guesses saloon or SUV", () => {
+  for (const model of ["EQE 300 EXCLUSIVE LUXURY", "EQE", "EQE 350 4MATIC AMG LINE"]) {
+    const result = resolveVehicleImage({
+      make: "MERCEDES-BENZ",
+      model,
+      year: 2024,
+      firstRegistrationDate: "2024-02-21",
+    });
+    assert.equal(result.src, null, model);
+    assert.equal(result.fallbackUsed, true, model);
+  }
+});
+
 run("Lexus IS numbers without a space resolve to IS", () => {
   for (const model of ["IS200", "IS250", "IS300", "IS350", "IS300H F SPORT", "IS 300"]) {
     assert.equal(matchCatalogModel("LEXUS", model), "IS", model);
@@ -890,7 +956,7 @@ run("Lexus IS numbers without a space resolve to IS", () => {
   assert.equal(matchCatalogModel("LEXUS", "NX 300H"), "NX");
 });
 
-const FIRST_PENDING_IMAGE_PRIORITY = 601;
+const FIRST_PENDING_IMAGE_PRIORITY = 677;
 
 run("every catalogue record has its WebP file and no file is orphaned", () => {
   const files = new Set(readdirSync(join(process.cwd(), "public", "cars")));
@@ -924,6 +990,10 @@ run("catalogue filenames follow the slug and year convention", () => {
   }
 });
 
+const BODY_STATED_MODEL_INPUT: Record<string, string> = {
+  "mercedes-benz-eqe-v295-2022-2026.webp": "EQE SALOON",
+};
+
 run("every record is reachable by make, model and a year in its range", () => {
   const unreachable: string[] = [];
   for (const v of vehicles) {
@@ -932,7 +1002,7 @@ run("every record is reachable by make, model and a year in its range", () => {
       for (const firstRegistrationDate of [undefined, `${year}-02-01`, `${year}-10-01`]) {
         const result = resolveVehicleImage({
           make: v.make,
-          model: v.model,
+          model: BODY_STATED_MODEL_INPUT[v.filename] ?? v.model,
           year,
           firstRegistrationDate,
         });
