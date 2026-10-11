@@ -1019,9 +1019,8 @@ export function FreeReportHtml({
                   Variant / derivative
                 </span>
                 <span
-                  className="min-w-0 truncate text-right font-bold text-navy"
-                  style={{ fontSize: pt(8.8) }}
-                  title={variant}
+                  className="min-w-0 flex-1 text-left font-bold text-navy [overflow-wrap:anywhere]"
+                  style={{ fontSize: pt(8.8), paddingBlock: pt(4) }}
                 >
                   {variant}
                 </span>

@@ -956,7 +956,7 @@ run("Lexus IS numbers without a space resolve to IS", () => {
   assert.equal(matchCatalogModel("LEXUS", "NX 300H"), "NX");
 });
 
-const FIRST_PENDING_IMAGE_PRIORITY = 677;
+const FIRST_PENDING_IMAGE_PRIORITY = 678;
 
 run("every catalogue record has its WebP file and no file is orphaned", () => {
   const files = new Set(readdirSync(join(process.cwd(), "public", "cars")));

@@ -24,6 +24,7 @@ import {
 import { formatVehicleText } from "@/lib/vehicle/display-text";
 import { resolveImageFieldsForVehicle } from "@/lib/vehicle/images";
 import { modelTitleFields } from "@/lib/vehicle/model-title";
+import { resolveTflBusImageFields } from "@/lib/vehicle/tfl-bus-fleet";
 import { calculateBuyerScore } from "@/lib/vehicle/score";
 
 /** Demo records must never answer a real lookup in production. */
@@ -265,16 +266,18 @@ export async function lookupVehicle(
       recalls,
     });
 
-    const image = resolveImageFieldsForVehicle({
-      registration,
-      make,
-      model: model || detailsPart?.details.model || "Vehicle",
-      year,
-      firstRegistrationDate,
-      fuelType,
-      engineCapacity,
-      wheelplan: detailsPart?.details.wheelplan,
-    });
+    const image =
+      resolveTflBusImageFields(registration) ??
+      resolveImageFieldsForVehicle({
+        registration,
+        make,
+        model: model || detailsPart?.details.model || "Vehicle",
+        year,
+        firstRegistrationDate,
+        fuelType,
+        engineCapacity,
+        wheelplan: detailsPart?.details.wheelplan,
+      });
     if (image.imageMatchAmbiguous) {
       console.warn("Ambiguous vehicle image match.", {
         registration,
