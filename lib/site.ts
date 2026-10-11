@@ -8,12 +8,11 @@ export const navLinks = [
 ] as const;
 
 export const footerTools = [
-  { href: "/check-a-vehicle", label: "Car Reg Check" },
-  { href: "/mot-history", label: "MOT History Check" },
-  { href: "/mileage-check", label: "Car Mileage Check" },
-  { href: "/car-tax-check", label: "Car Tax Check" },
-  { href: "/recall-check", label: "Car Recall Check" },
-  { href: "/vehicle-details", label: "Car Details by Registration" },
+  { href: "/check-a-vehicle", label: "Registration Check" },
+  { href: "/mot-history", label: "MOT History" },
+  { href: "/mileage-check", label: "Mileage Check" },
+  { href: "/car-tax-check", label: "Tax Check" },
+  { href: "/recall-check", label: "Recall Check" },
   { href: "/compare-cars", label: "Compare Cars" },
   { href: "/running-costs", label: "Running Costs" },
   { href: "/guides", label: "Guides" },

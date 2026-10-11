@@ -67,7 +67,7 @@ export function VehicleFeatureGrid() {
             label: "Free car reg check →",
           }}
         />
-        <div className="grid gap-2.5 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-4">
+        <div className="grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-4">
           {features.map((feature) => {
             const Icon = feature.icon;
             return (
@@ -83,13 +83,13 @@ export function VehicleFeatureGrid() {
                   <h3 className="heading-card group-hover:text-blue">
                     {feature.title}
                   </h3>
-                  <p className="support-copy mt-0.5 lg:mt-1">{feature.description}</p>
+                  <p className="support-copy mt-1">{feature.description}</p>
                 </div>
               </Link>
             );
           })}
         </div>
-        <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-border pt-4 text-[15px] md:mt-6">
+        <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2.5 border-t border-border pt-4 text-[15px] md:mt-6">
           <span className="font-semibold text-navy">Buying guides:</span>
           {guides.map((guide) => (
             <Link

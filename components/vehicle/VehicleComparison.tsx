@@ -721,7 +721,7 @@ function DesktopCompareHero({
     <div className="overflow-hidden rounded-[14px] border border-border bg-white shadow-[var(--shadow-card)]">
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border px-3 py-2 lg:px-4">
         <div className="flex flex-wrap items-center gap-2.5">
-          <p className="text-[12px] font-semibold uppercase tracking-[0.08em] text-navy">
+          <p className="text-[14px] font-bold uppercase tracking-[0.08em] text-navy md:text-[13px]">
             {demo ? "Example comparison" : "Comparison"}
           </p>
           {demo ? <StatusBadge tone="info">Demo data</StatusBadge> : null}

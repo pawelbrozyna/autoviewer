@@ -105,11 +105,17 @@ textarea {
 }
 
 .eyebrow {
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--color-muted);
+}
+
+@media (min-width: 768px) {
+  .eyebrow {
+    font-size: 0.8125rem;
+  }
 }
 
 .card-surface {

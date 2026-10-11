@@ -6,6 +6,11 @@ export const FULL_REPORT_CURRENCY = "gbp";
 export const FULL_REPORT_PRODUCT_NAME = "AutoViewer Full Vehicle Report";
 export const FULL_REPORT_CHECKOUT_PATH = "/api/checkout/full-report";
 
+export const DATA_AVAILABILITY_NOTE =
+  "Data availability: Some vehicle information may not be recorded or available from our data sources.";
+export const CHECKOUT_DATA_AVAILABILITY_NOTE =
+  "Data availability varies by vehicle. Some information may not be available for every registration.";
+
 export const CHECKOUT_SOURCES = ["vehicle", "example", "full-report", "home"] as const;
 export type CheckoutSource = (typeof CHECKOUT_SOURCES)[number];
 

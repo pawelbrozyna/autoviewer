@@ -1,4 +1,4 @@
-import type { MotTest, VehicleRecord } from "@/types/vehicle";
+import type { MotDefectType, MotTest, VehicleRecord } from "@/types/vehicle";
 
 export const FREE_PDF_PAGE_LIMIT = 2;
 export const FREE_MOT_LIMIT = 6;
@@ -93,12 +93,33 @@ export function collectAdvisories(vehicle: VehicleRecord) {
         new Date(b.completedDate).getTime() -
         new Date(a.completedDate).getTime(),
     )
-    .flatMap((test) =>
-      test.defects.map((defect) => ({
+    .flatMap((test) => {
+      const described = test.defects.flatMap((defect) =>
+        defect.text
+          ? [
+              {
+                date: test.completedDate,
+                type: defect.type,
+                text: defect.text,
+                dangerous: defect.dangerous,
+              },
+            ]
+          : [],
+      );
+      const undescribedCounts = new Map<MotDefectType, number>();
+      for (const defect of test.defects) {
+        if (defect.text) continue;
+        undescribedCounts.set(
+          defect.type,
+          (undescribedCounts.get(defect.type) ?? 0) + 1,
+        );
+      }
+      const countOnly = [...undescribedCounts].map(([type, count]) => ({
         date: test.completedDate,
-        type: defect.type,
-        text: defect.text,
-        dangerous: defect.dangerous,
-      })),
-    );
+        type,
+        text: `${count} item${count === 1 ? "" : "s"} recorded`,
+        dangerous: false,
+      }));
+      return [...described, ...countOnly];
+    });
 }

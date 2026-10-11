@@ -7,7 +7,11 @@ import {
   Users,
   type LucideIcon,
 } from "lucide-react";
-import { FULL_REPORT_CHECKOUT_PATH, FULL_REPORT_PRICE } from "@/lib/full-report";
+import {
+  CHECKOUT_DATA_AVAILABILITY_NOTE,
+  FULL_REPORT_CHECKOUT_PATH,
+  FULL_REPORT_PRICE,
+} from "@/lib/full-report";
 
 const benefits: Array<{ label: string; icon: LucideIcon }> = [
   { label: "Outstanding finance", icon: BadgePoundSterling },
@@ -112,6 +116,9 @@ export function FullReportUpsellCard({
             </button>
           </form>
         </div>
+        <p className="relative z-10 col-span-2 mt-1.5 text-[12px] leading-snug text-[#3b4a63] md:col-span-1 md:col-start-1 md:mt-2 lg:mt-1.5">
+          {CHECKOUT_DATA_AVAILABILITY_NOTE}
+        </p>
       </div>
     </section>
   );

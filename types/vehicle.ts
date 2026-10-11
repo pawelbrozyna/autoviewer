@@ -16,7 +16,8 @@ export type TaxStatusValue =
 
 export interface MotDefect {
   type: MotDefectType;
-  text: string;
+  /** Exactly as returned by DVSA. Null when DVSA gave no description. */
+  text: string | null;
   dangerous?: boolean;
 }
 

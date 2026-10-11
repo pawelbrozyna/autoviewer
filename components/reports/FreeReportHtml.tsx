@@ -3,6 +3,8 @@ import Link from "next/link";
 import localFont from "next/font/local";
 import { ArrowRight, Calendar, Fuel, Settings2 } from "lucide-react";
 import {
+  CHECKOUT_DATA_AVAILABILITY_NOTE,
+  DATA_AVAILABILITY_NOTE,
   FULL_REPORT_CHECKOUT_PATH,
   FULL_REPORT_PRICE,
   fullReportHref,
@@ -102,6 +104,17 @@ function UnlockFullReportButton({
         </button>
       )}
     </form>
+  );
+}
+
+function CheckoutDataNote() {
+  return (
+    <p
+      className="max-w-full text-center leading-snug text-muted"
+      style={{ marginTop: pt(6), fontSize: pt(6.5) }}
+    >
+      {CHECKOUT_DATA_AVAILABILITY_NOTE}
+    </p>
   );
 }
 
@@ -790,13 +803,14 @@ export function FreeReportHtml({
         </div>
       </SectionCard>
 
-      <div className="flex justify-center" style={{ marginTop: pt(16) }}>
+      <div className="flex flex-col items-center" style={{ marginTop: pt(16) }}>
         <UnlockFullReportButton
           registration={summary.registration}
           reportId={reportId}
           isExample={Boolean(summary.isDemo)}
           mobileLarge={!isPreview}
         />
+        {isPreview ? <CheckoutDataNote /> : null}
       </div>
 
       {!isPreview ? (
@@ -1039,8 +1053,14 @@ export function FreeReportHtml({
               })}
             </div>
           </SectionCard>
+          <p
+            className="leading-snug text-muted"
+            style={{ marginTop: pt(6), paddingInline: pt(2), fontSize: pt(7.5) }}
+          >
+            {DATA_AVAILABILITY_NOTE}
+          </p>
 
-          <div className="flex justify-center" style={{ marginTop: pt(18) }}>
+          <div className="flex flex-col items-center" style={{ marginTop: pt(18) }}>
             <UnlockFullReportButton
               registration={summary.registration}
               reportId={reportId}
@@ -1070,8 +1090,9 @@ export function FreeReportHtml({
             Vehicle history checks you can trust.
           </p>
         </div>
-        <p className="hidden text-center sm:block">
-          Summary report only. Confirm important details before buying.
+        <p className="text-center">
+          Summary report only. Data availability varies by vehicle. Confirm
+          important details before buying.
         </p>
         {isPreview ? <p className="shrink-0">Page 1 of 2</p> : <span />}
       </footer>

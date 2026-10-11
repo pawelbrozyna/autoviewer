@@ -353,14 +353,18 @@ function drawFooter(
     font: regular,
     color: MUTED,
   });
-  const disclaimer =
-    "Summary report only. Confirm important details before buying.";
-  page.drawText(disclaimer, {
-    x: (PAGE_WIDTH - regular.widthOfTextAtSize(disclaimer, 6.5)) / 2,
-    y: 25,
-    size: 6.5,
-    font: regular,
-    color: MUTED,
+  const disclaimerLines = [
+    "Summary report only. Some vehicle information may not be recorded",
+    "or available from our data sources. Confirm important details before buying.",
+  ];
+  disclaimerLines.forEach((line, index) => {
+    page.drawText(line, {
+      x: (PAGE_WIDTH - regular.widthOfTextAtSize(line, 6.5)) / 2,
+      y: 25 - index * 11,
+      size: 6.5,
+      font: regular,
+      color: MUTED,
+    });
   });
   const pageLabel = `Page ${pageNumber} of ${pageCount}`;
   page.drawText(pageLabel, {

@@ -586,7 +586,7 @@ export function VehicleComparisonMobile({
       </p>
 
       <div className="rounded-[12px] border border-border bg-white px-3 py-2.5">
-        <p className="text-[12px] font-semibold uppercase tracking-[0.06em] text-[#64748B]">
+        <p className="text-[14px] font-bold uppercase tracking-[0.06em] text-[#64748B]">
           Quick summary
         </p>
         <ul className="mt-1.5 space-y-1.5 text-[14px] leading-snug text-[#012046]">

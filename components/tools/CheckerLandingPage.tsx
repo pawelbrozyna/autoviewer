@@ -94,7 +94,7 @@ export function CheckerLandingPage({
                 key={item.step}
                 className="rounded-[12px] border border-border bg-surface-soft p-5"
               >
-                <div className="mb-2 text-[12px] font-semibold uppercase tracking-wide text-blue md:text-[13px]">
+                <div className="mb-2 text-[14px] font-bold uppercase tracking-wide text-blue md:text-[13px]">
                   Step {index + 1}
                 </div>
                 <h3 className="heading-card">{item.step}</h3>

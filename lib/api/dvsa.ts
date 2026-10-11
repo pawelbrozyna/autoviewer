@@ -43,7 +43,7 @@ export function mapDvsaMotTests(tests: DvsaMotTest[] = []): MotTest[] {
 
     const defects: MotDefect[] = (t.defects ?? []).map((d) => ({
       type: mapDefectType(d.type),
-      text: d.text ?? "Defect recorded",
+      text: d.text?.trim() || null,
       dangerous: Boolean(d.dangerous),
     }));
 

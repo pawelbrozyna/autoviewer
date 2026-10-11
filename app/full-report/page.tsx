@@ -8,6 +8,7 @@ import { ReportComparison } from "@/components/vehicle/ReportComparison";
 import { VehicleThumbnail } from "@/components/vehicle/VehicleThumbnail";
 import { getMockVehicle } from "@/lib/api/mock";
 import {
+  CHECKOUT_DATA_AVAILABILITY_NOTE,
   FULL_REPORT_CHECKOUT_PATH,
   FULL_REPORT_PRICE,
 } from "@/lib/full-report";
@@ -227,6 +228,9 @@ function PurchaseCard({ registration }: { registration: string | null }) {
           >
             Unlock Full Report - {FULL_REPORT_PRICE}
           </button>
+          <p className="mt-2 text-center text-[12px] leading-snug text-muted">
+            {CHECKOUT_DATA_AVAILABILITY_NOTE}
+          </p>
         </form>
       ) : (
         <button

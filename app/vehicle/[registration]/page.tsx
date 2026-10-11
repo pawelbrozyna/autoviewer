@@ -5,7 +5,6 @@ import { LiveVehicleReportSection } from "@/components/reports/VehicleReportSect
 import { Container } from "@/components/ui/Container";
 import { ErrorState } from "@/components/ui/EmptyState";
 import { CheckoutCancelledNotice } from "@/components/vehicle/CheckoutCancelledNotice";
-import { getMockVehicle } from "@/lib/api/mock";
 import { lookupVehicle } from "@/lib/api/vehicle-service";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import {
@@ -52,13 +51,7 @@ export default async function VehicleResultPage({
     );
   }
 
-  const requestedResult = await lookupVehicle(normalized);
-  const result =
-    requestedResult.ok &&
-    requestedResult.data.summary.isDemo &&
-    requestedResult.data.summary.registration === "CD34EFG"
-      ? { ok: true as const, data: getMockVehicle("AV19SWF")! }
-      : requestedResult;
+  const result = await lookupVehicle(normalized);
 
   if (!result.ok) {
     return (

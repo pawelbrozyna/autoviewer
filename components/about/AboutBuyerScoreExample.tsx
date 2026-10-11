@@ -12,7 +12,7 @@ export function AboutBuyerScoreExample() {
         </span>
       </div>
 
-      <p className="text-[12px] font-semibold uppercase tracking-[0.07em] text-muted md:text-[13px]">
+      <p className="text-[14px] font-bold uppercase tracking-[0.07em] text-muted md:text-[13px]">
         Buyer score
       </p>
       <div className="mt-1 flex flex-wrap items-baseline gap-2">

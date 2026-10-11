@@ -26,10 +26,12 @@ import { resolveImageFieldsForVehicle } from "@/lib/vehicle/images";
 import { modelTitleFields } from "@/lib/vehicle/model-title";
 import { calculateBuyerScore } from "@/lib/vehicle/score";
 
+/** Demo records must never answer a real lookup in production. */
 function isMockModeEnabled(): boolean {
-  if (process.env.USE_MOCK_DATA === "true") return true;
-  if (process.env.USE_MOCK_DATA === "false") return false;
-  return !(isDvlaConfigured() || isDvsaConfigured());
+  return (
+    process.env.USE_MOCK_DATA === "true" &&
+    process.env.NODE_ENV !== "production"
+  );
 }
 
 function mapMotStatus(
