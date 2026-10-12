@@ -1009,8 +1009,8 @@ export function FreeReportHtml({
           <SectionCard title="Vehicle specification">
             {variant ? (
               <div
-                className="flex items-center justify-between gap-3 border-b border-border"
-                style={{ minHeight: pt(24), paddingInline: pt(12) }}
+                className="flex items-baseline justify-between gap-3 border-b border-border"
+                style={{ minHeight: pt(24), paddingInline: pt(12), paddingBlock: pt(5) }}
               >
                 <span
                   className="shrink-0 whitespace-nowrap text-muted"
@@ -1020,7 +1020,7 @@ export function FreeReportHtml({
                 </span>
                 <span
                   className="min-w-0 flex-1 text-left font-bold text-navy [overflow-wrap:anywhere]"
-                  style={{ fontSize: pt(8.8), paddingBlock: pt(4) }}
+                  style={{ fontSize: pt(8.8) }}
                 >
                   {variant}
                 </span>
