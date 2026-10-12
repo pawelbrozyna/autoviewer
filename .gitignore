@@ -24,7 +24,8 @@
 *.pem
 
 # local server-side rate-limit counters
-/data/
+/data/*
+!/data/tfl-bus-fleet.json
 
 # debug
 npm-debug.log*
