@@ -26,6 +26,11 @@ import { resolveImageFieldsForVehicle } from "@/lib/vehicle/images";
 import { modelTitleFields } from "@/lib/vehicle/model-title";
 import { resolveTflBusImageFields } from "@/lib/vehicle/tfl-bus-fleet";
 import { calculateBuyerScore } from "@/lib/vehicle/score";
+import {
+  resolveVehicleYear,
+  rewriteVehicleDateYear,
+  yearFromVehicleDate,
+} from "@/lib/vehicle/year";
 
 /** Demo records must never answer a real lookup in production. */
 function isMockModeEnabled(): boolean {
@@ -81,13 +86,6 @@ function shouldCallDvla(): boolean {
   return Date.now() - dvlaKeyRejectedAt >= DVLA_REJECTION_RETRY_MS;
 }
 
-function yearFromDate(value?: string | null): number | null {
-  const match = value?.match(/^(\d{4})/);
-  if (!match) return null;
-  const year = Number.parseInt(match[1], 10);
-  return Number.isInteger(year) ? year : null;
-}
-
 export async function lookupVehicle(
   registrationInput: string,
 ): Promise<VehicleLookupResult> {
@@ -128,6 +126,9 @@ export async function lookupVehicle(
     let year: number | null = null;
     let engineCapacity: number | null = null;
     let firstRegistrationDate: string | null = null;
+    let manufactureDate: string | null = null;
+    let dvsaRegistrationDate: string | null = null;
+    let firstUsedDate: string | null = null;
     let hasOutstandingRecall = false;
     let recallDataAvailable = false;
     let firstMotDueDate: string | null = null;
@@ -179,15 +180,11 @@ export async function lookupVehicle(
             ? Number.parseInt(dvsa.engineSize, 10)
             : dvsa.engineSize;
       }
+      manufactureDate = dvsa.manufactureDate ?? null;
+      dvsaRegistrationDate = dvsa.registrationDate ?? null;
+      firstUsedDate = dvsa.firstUsedDate ?? null;
       firstRegistrationDate =
-        dvsa.registrationDate ||
-        dvsa.firstUsedDate ||
-        firstRegistrationDate;
-      year =
-        year ??
-        yearFromDate(dvsa.manufactureDate) ??
-        yearFromDate(dvsa.registrationDate) ??
-        yearFromDate(dvsa.firstUsedDate);
+        dvsaRegistrationDate || firstUsedDate || firstRegistrationDate;
       const recallFlag = (dvsa.hasOutstandingRecall ?? "").toLowerCase();
       hasOutstandingRecall = recallFlag === "yes";
       recallDataAvailable = recallFlag === "yes" || recallFlag === "no";
@@ -259,6 +256,47 @@ export async function lookupVehicle(
           detailsPart?.motStatusRaw,
         );
 
+    const yearEvidence = {
+      registration,
+      dates: [
+        detailsPart?.details.monthOfFirstRegistration,
+        manufactureDate,
+        dvsaRegistrationDate,
+        firstUsedDate,
+        firstRegistrationDate,
+      ],
+      corroboratingYears: [
+        year,
+        yearFromVehicleDate(manufactureDate),
+        yearFromVehicleDate(dvsaRegistrationDate),
+        yearFromVehicleDate(firstUsedDate),
+      ],
+    };
+    const resolvedYear = resolveVehicleYear(
+      [
+        year,
+        yearFromVehicleDate(manufactureDate),
+        yearFromVehicleDate(dvsaRegistrationDate),
+        yearFromVehicleDate(firstUsedDate),
+      ],
+      yearEvidence,
+    );
+    if (resolvedYear.rawYear != null && resolvedYear.year !== resolvedYear.rawYear) {
+      console.warn("Normalised an invalid vehicle year.", {
+        registration,
+        rawYear: resolvedYear.rawYear,
+        year: resolvedYear.year,
+      });
+    }
+    year = resolvedYear.year;
+    firstRegistrationDate = rewriteVehicleDateYear(firstRegistrationDate, yearEvidence);
+    const monthOfFirstRegistration =
+      rewriteVehicleDateYear(detailsPart?.details.monthOfFirstRegistration, yearEvidence)?.match(
+        /^\d{4}-\d{2}/,
+      )?.[0] ??
+      firstRegistrationDate?.match(/^\d{4}-\d{2}/)?.[0] ??
+      null;
+
     const buyerScore = calculateBuyerScore({
       yearOfManufacture: year,
       motTests,
@@ -323,10 +361,7 @@ export async function lookupVehicle(
         fuelType,
         engineCapacity,
         yearOfManufacture: year,
-        monthOfFirstRegistration:
-          detailsPart?.details.monthOfFirstRegistration ??
-          firstRegistrationDate?.match(/^\d{4}-\d{2}/)?.[0] ??
-          null,
+        monthOfFirstRegistration,
         co2Emissions: detailsPart?.details.co2Emissions ?? null,
         euroStatus: detailsPart?.details.euroStatus ?? null,
         transmission: detailsPart?.details.transmission ?? null,

@@ -1,4 +1,9 @@
 import vehicleImagesLibrary from "@/data/vehicle-images.json";
+import {
+  isPlausibleVehicleYear,
+  normalizeVehicleYear,
+  rewriteVehicleDateYear,
+} from "@/lib/vehicle/year";
 
 export type VehicleImageMatchKind = "exact" | "nearest-generation" | "placeholder";
 export type VehicleImageConfidence = "high" | "medium" | "low";
@@ -797,11 +802,22 @@ export function resolveVehicleImage(
   const make = input.make?.trim() ?? "";
   const model = input.model?.trim() ?? "";
   const derivative = input.derivative?.trim() ?? "";
-  const registrationDate = parseRegistrationDate(input.firstRegistrationDate);
+  const normalisedYear = normalizeVehicleYear({
+    year: input.year,
+    registration: input.registration,
+    dates: [input.firstRegistrationDate],
+  });
+  const registrationDate = parseRegistrationDate(
+    rewriteVehicleDateYear(input.firstRegistrationDate, {
+      registration: input.registration,
+      corroboratingYears: [input.year, normalisedYear.year],
+    }),
+  );
   const year =
-    input.year != null && Number.isFinite(input.year)
-      ? Math.round(input.year)
-      : registrationDate.year;
+    normalisedYear.year ??
+    (registrationDate.year != null && isPlausibleVehicleYear(registrationDate.year)
+      ? registrationDate.year
+      : null);
 
   if (!make) {
     return placeholderResult("Make is unavailable; make-only fallback is unsafe.");
