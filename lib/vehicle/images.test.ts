@@ -39,12 +39,22 @@ run("catalogue count matches vehicles.length", () => {
   assert.equal(vehicleImagesLibrary.count, vehicles.length);
 });
 
+// Records that intentionally share another record's image: priority -> image owner priority.
+const SHARED_IMAGE_RECORDS: Record<number, number> = { 728: 726, 729: 727 };
+
 run("all catalogue filenames are unique WebP paths", () => {
-  const filenames = vehicles.map((v) => v.filename);
-  for (const filename of filenames) {
+  for (const { filename } of vehicles) {
     assert.match(filename, /\.webp$/i, `expected .webp: ${filename}`);
     assert.doesNotMatch(filename, /\.png$/i, `unexpected .png: ${filename}`);
   }
+  for (const [priority, ownerPriority] of Object.entries(SHARED_IMAGE_RECORDS)) {
+    const record = vehicles.find((v) => v.priority === Number(priority));
+    const owner = vehicles.find((v) => v.priority === ownerPriority);
+    assert.equal(record?.filename, owner?.filename, `record ${priority} shares image ${ownerPriority}`);
+  }
+  const filenames = vehicles
+    .filter((v) => !(v.priority in SHARED_IMAGE_RECORDS))
+    .map((v) => v.filename);
   assert.equal(new Set(filenames).size, filenames.length);
 });
 
@@ -956,13 +966,155 @@ run("Lexus IS numbers without a space resolve to IS", () => {
   assert.equal(matchCatalogModel("LEXUS", "NX 300H"), "NX");
 });
 
-const FIRST_PENDING_IMAGE_PRIORITY = 678;
+run("690-746 families resolve from typical DVSA model strings", () => {
+  const cases: Array<[string, string, number, string, string]> = [
+    ["JAGUAR", "X-TYPE SE", 2004, "2004-05-01", "jaguar-x-type-saloon-2001-2009.webp"],
+    ["JAGUAR", "X TYPE V6 SPORT AWD", 2003, "2003-03-01", "jaguar-x-type-saloon-2001-2009.webp"],
+    ["JAGUAR", "X-TYPE SE ESTATE", 2006, "2006-05-01", "jaguar-x-type-estate-2004-2009.webp"],
+    ["JAGUAR", "X-TYPE S", 2008, "2008-10-01", "jaguar-x-type-facelift-2007-2009.webp"],
+    ["SAAB", "93 S", 2000, "2000-05-01", "saab-9-3-gen1-1998-2002.webp"],
+    ["SAAB", "9-3 VECTOR SPORT TID", 2005, "2005-05-01", "saab-9-3-gen2-2002-2007.webp"],
+    ["SAAB", "9-3 AERO", 2009, "2009-05-01", "saab-9-3-gen2-facelift-2008-2011.webp"],
+    ["SAAB", "9-3 VECTOR SPORTWAGON", 2007, "2007-05-01", "saab-9-3-sportwagon-2005-2011.webp"],
+    ["SAAB", "9-3 LINEAR SPORT WAGON TID", 2009, "2009-05-01", "saab-9-3-sportwagon-2005-2011.webp"],
+    ["CITROEN", "XSARA LX", 1999, "1999-05-01", "citroen-xsara-1997-2000.webp"],
+    ["CITROEN", "XSARA DESIRE", 2002, "2002-05-01", "citroen-xsara-facelift-2000-2004.webp"],
+    ["CITROEN", "XSARA LX ESTATE", 2001, "2001-05-01", "citroen-xsara-estate-1998-2004.webp"],
+    ["CITROEN", "XSARA PICASSO DESIRE", 2006, "2006-05-01", "citroen-xsara-picasso-2000-2010.webp"],
+    ["HONDA", "STEPWGN", 1999, "1999-05-01", "honda-stepwgn-rf1-1996-2001.webp"],
+    ["HONDA", "STEP WGN", 2003, "2003-05-01", "honda-stepwgn-rf3-2001-2005.webp"],
+    ["HONDA", "STEPWAGON", 2007, "2007-05-01", "honda-stepwgn-rg-2005-2009.webp"],
+    ["HONDA", "STEP WGN SPADA", 2012, "2012-05-01", "honda-stepwgn-rk-2009-2015.webp"],
+    ["HONDA", "STEP WAGON", 2018, "2018-05-01", "honda-stepwgn-rp-2015-2022.webp"],
+    ["HONDA", "STEPWGN SPADA", 2024, "2024-05-01", "honda-stepwgn-rp6-2022-2026.webp"],
+    ["YADEA", "G5S", 2023, "2023-05-01", "yadea-g5s.webp"],
+    ["YADEA", "C1S", 2022, "2022-05-01", "yadea-c1s.webp"],
+    ["DAF", "LF 45.180", 2004, "2004-05-01", "daf-lf-2001-2006.webp"],
+    ["DAF", "LF 55.220", 2010, "2010-05-01", "daf-lf-2006-2013.webp"],
+    ["DAF", "LF 180 FA", 2017, "2017-05-01", "daf-lf-euro6-2013-2021.webp"],
+    ["DAF TRUCKS", "LF230", 2022, "2022-05-01", "daf-lf-2021-2023.webp"],
+    ["DAF", "CF 450 FT", 2016, "2016-05-01", "daf-cf-euro6-2013-2021.webp"],
+    ["DAF", "XF 460 FT", 2015, "2015-05-01", "daf-xf-euro6-2013-2017.webp"],
+    ["DAF", "XF 480", 2019, "2019-05-01", "daf-xf-2017-2021.webp"],
+    ["DAF", "XF 480 FT", 2023, "2023-05-01", "daf-xf-2021-2026.webp"],
+    ["DAF", "XG+ 530", 2023, "2023-05-01", "daf-xg-2021-2026.webp"],
+    ["DAF", "XD 450", 2024, "2024-05-01", "daf-xd-2022-2026.webp"],
+    ["SCANIA", "P 280", 2010, "2010-05-01", "scania-p-series-2004-2016.webp"],
+    ["SCANIA", "P280 DB", 2019, "2019-05-01", "scania-p-series-2016-2026.webp"],
+    ["SCANIA", "G 410", 2014, "2014-05-01", "scania-g-series-2007-2016.webp"],
+    ["SCANIA", "G410", 2020, "2020-05-01", "scania-g-series-2016-2026.webp"],
+    ["SCANIA", "R 450", 2012, "2012-05-01", "scania-r-series-2004-2016.webp"],
+    ["SCANIA", "R450", 2020, "2020-05-01", "scania-r-series-2016-2026.webp"],
+    ["SCANIA", "S 500", 2021, "2021-05-01", "scania-s-series-2016-2026.webp"],
+    ["MAN", "TGL 8.180", 2010, "2010-05-01", "man-tgl-2005-2020.webp"],
+    ["MAN", "TGL 12.220 4X2 BL", 2022, "2022-05-01", "man-tgl-2020-2026.webp"],
+    ["MAN", "TGM 18.290", 2015, "2015-05-01", "man-tgl-2005-2020.webp"],
+    ["MAN", "TGM 18.290", 2021, "2021-05-01", "man-tgl-2020-2026.webp"],
+    ["MAN", "TGS 26.440", 2012, "2012-05-01", "man-tgs-2007-2020.webp"],
+    ["MAN", "TGS 26.470", 2022, "2022-05-01", "man-tgs-2020-2026.webp"],
+    ["MAN", "TGX 18.510", 2023, "2023-05-01", "man-tgx-2020-2026.webp"],
+    ["VOLVO", "FL 240", 2010, "2010-05-01", "volvo-fl-2006-2013.webp"],
+    ["VOLVO", "FL", 2016, "2016-05-01", "volvo-fl-2013-2026.webp"],
+    ["VOLVO", "FE 280", 2017, "2017-05-01", "volvo-fe-2013-2026.webp"],
+    ["VOLVO", "FM 330", 2022, "2022-05-01", "volvo-fm-2020-2026.webp"],
+    ["VOLVO", "FH 460", 2015, "2015-05-01", "volvo-fh-2012-2020.webp"],
+    ["VOLVO TRUCKS", "FH13 500", 2023, "2023-05-01", "volvo-fh-2020-2026.webp"],
+    ["IVECO", "EUROCARGO ML75E16", 2018, "2018-05-01", "iveco-eurocargo-2015-2026.webp"],
+    ["IVECO", "STRALIS AS440S46", 2016, "2016-05-01", "iveco-stralis-2012-2019.webp"],
+    ["IVECO", "S-WAY", 2021, "2021-05-01", "iveco-s-way-2019-2026.webp"],
+    ["RENAULT TRUCKS", "D WIDE", 2018, "2018-05-01", "renault-trucks-d-2013-2026.webp"],
+    ["RENAULT TRUCKS", "T 480", 2016, "2016-05-01", "renault-trucks-t-2013-2026.webp"],
+    ["RENAULT TRUCKS", "T 480", 2023, "2023-05-01", "renault-trucks-t-2013-2026.webp"],
+    ["RENAULT TRUCKS", "T HIGH EVOLUTION", 2023, "2023-05-01", "renault-trucks-t-evolution-2021-2026.webp"],
+    ["MERCEDES-BENZ", "ATEGO 1218", 2016, "2016-05-01", "mercedes-benz-atego-2013-2026.webp"],
+    ["MERCEDES", "AROCS 3240", 2018, "2018-05-01", "mercedes-benz-arocs-2013-2026.webp"],
+  ];
+  for (const [make, model, year, firstRegistrationDate, filename] of cases) {
+    assert.equal(
+      resolveVehicleImage({ make, model, year, firstRegistrationDate }).filename,
+      filename,
+      `${make} ${model} ${year}`,
+    );
+  }
+});
+
+run("MAN trucks pick the exact model and generation, with TGM reusing TGL images", () => {
+  const cases: Array<[string, string, number, number, string]> = [
+    ["MAN", "TGL 7.150", 2006, 726, "man-tgl-2005-2020.webp"],
+    ["MAN", "TGL 12.250", 2019, 726, "man-tgl-2005-2020.webp"],
+    ["MAN", "TGL 12.220", 2024, 727, "man-tgl-2020-2026.webp"],
+    ["MAN", "TGM 15.250", 2008, 728, "man-tgl-2005-2020.webp"],
+    ["MAN TRUCK AND BUS", "TGM 18.320", 2019, 728, "man-tgl-2005-2020.webp"],
+    ["MAN", "TGM 26.320", 2023, 729, "man-tgl-2020-2026.webp"],
+    ["MAN", "TGS 18.400", 2009, 730, "man-tgs-2007-2020.webp"],
+    ["MAN", "TGS 26.470", 2024, 731, "man-tgs-2020-2026.webp"],
+    ["MAN", "TGX 18.470", 2022, 732, "man-tgx-2020-2026.webp"],
+  ];
+  for (const [make, model, year, priority, filename] of cases) {
+    const result = resolveVehicleImage({ make, model, year, firstRegistrationDate: `${year}-05-01` });
+    assert.equal(result.filename, filename, `${make} ${model} ${year}`);
+    assert.equal(result.record?.priority, priority, `${make} ${model} ${year}`);
+    assert.equal(result.record?.bodyType, "truck", `${make} ${model} ${year}`);
+  }
+
+  for (const [model, year] of [["TGE 3.140", 2019], ["TGE 5.180", 2025]] as const) {
+    const result = resolveVehicleImage({ make: "MAN", model, year });
+    assert.equal(result.record?.bodyType, "van", `MAN ${model} ${year}`);
+    assert.ok(!/^man-tg[lmsx]-/.test(result.filename ?? ""), `MAN ${model} ${year}`);
+  }
+
+  const manFiles = vehicles.filter((v) => v.make === "MAN").map((v) => v.filename);
+  assert.ok(!manFiles.some((f) => f.startsWith("man-tgm-")));
+});
+
+run("690-746 families never guess unsupported generations, bodies or makes", () => {
+  const cases: Array<[string, string, number]> = [
+    ["SAAB", "9-3 VECTOR CONVERTIBLE", 2006],
+    ["SAAB", "9-3X", 2010],
+    ["SAAB", "9-3 X", 2010],
+    ["DAF", "CF 85.460", 2012],
+    ["DAF", "XF 105.460", 2013],
+    ["DAF", "CF 450", 2009],
+    ["SCANIA", "R 420", 2001],
+    ["SCANIA", "N230UD", 2015],
+    ["SCANIA", "PRT", 2015],
+    ["MAN", "TGX 18.440", 2015],
+    ["MAN", "TGA 18.410", 2005],
+    ["VOLVO", "FMX 460", 2018],
+    ["VOLVO", "FM 460", 2016],
+    ["VOLVO", "FH 460", 2009],
+    ["IVECO", "EUROCARGO", 2010],
+    ["IVECO", "ML75E16", 2018],
+    ["RENAULT", "T 480", 2016],
+    ["RENAULT TRUCKS", "C 460", 2016],
+    ["RENAULT TRUCKS", "PREMIUM 380", 2010],
+    ["MERCEDES-BENZ", "ATEGO 1223", 2008],
+    ["MERCEDES-BENZ", "AXOR 1840", 2010],
+    ["FORD", "LF", 2015],
+    ["TOYOTA", "S 500", 2018],
+  ];
+  for (const [make, model, year] of cases) {
+    const result = resolveVehicleImage({ make, model, year });
+    assert.equal(result.src, null, `${make} ${model} ${year}`);
+  }
+  assert.equal(
+    resolveVehicleImage({ make: "MAN", model: "TGE 3.180", year: 2020 }).filename,
+    "man-tge-mk1-2017-2024.webp",
+  );
+  assert.equal(
+    resolveVehicleImage({ make: "VOLVO", model: "XC60 R-DESIGN", year: 2019 }).filename,
+    "volvo-xc60-mk2-2017-2026.webp",
+  );
+  assert.equal(
+    resolveVehicleImage({ make: "MERCEDES-BENZ", model: "ACTROS 2545", year: 2018 }).filename,
+    "mercedes-benz-actros-mp4-mp5-2011-2026.webp",
+  );
+  assert.equal(matchCatalogModel("CITROEN", "C4 PICASSO VTR"), "C4 Picasso");
+});
 
 run("every catalogue record has its WebP file and no file is orphaned", () => {
   const files = new Set(readdirSync(join(process.cwd(), "public", "cars")));
-  const missing = vehicles.filter(
-    (v) => !files.has(v.filename) && v.priority < FIRST_PENDING_IMAGE_PRIORITY,
-  );
+  const missing = vehicles.filter((v) => !files.has(v.filename));
   assert.deepEqual(
     missing.map((v) => v.filename),
     [],
@@ -976,12 +1128,15 @@ run("every catalogue record has its WebP file and no file is orphaned", () => {
   );
 });
 
+const FILENAMES_WITHOUT_YEARS = new Set(["yadea-g5s.webp", "yadea-c1s.webp"]);
+
 run("catalogue filenames follow the slug and year convention", () => {
   const keys = new Set<string>();
   for (const v of vehicles) {
     assert.match(v.filename, /^[a-z0-9-]+\.webp$/, v.filename);
     assert.ok(
-      v.filename.endsWith(`-${v.yearFrom}-${v.yearTo}.webp`),
+      FILENAMES_WITHOUT_YEARS.has(v.filename) ||
+        v.filename.endsWith(`-${v.yearFrom}-${v.yearTo}.webp`),
       v.filename,
     );
     const key = `${v.make}|${v.model}|${v.generation}`.toLowerCase();

@@ -1,8 +1,8 @@
 {
-  "library": "AutoViewer vehicle image library v8",
-  "count": 689,
+  "library": "AutoViewer vehicle image library v9",
+  "count": 746,
   "format": "webp",
-  "selectionBasis": "Prioritised for UK used-vehicle and vehicle-parc relevance. Positions 1-300 cover common UK cars; 301-340 vans and light commercial vehicles; 341-370 motorcycles; 371-400 scooters; 401-450 pickups, larger/older commercial vans and van-based MPVs; 451-500 add high-priority UK used-car gaps, current EVs/hybrids and premium used models; 501-600 fill UK everyday-road gaps (2005-2020 hatchbacks, MPVs, budget family cars and small crossovers). 601-666 add current generations and facelifts of top sellers, new brands (BYD, Jaecoo, Omoda), London taxis, older common vans, used-car gaps and common UK buses. 667-678 fill real-lookup gaps and adjacent generations (Rifter, Partner Tepee, Fabia Mk1, Infiniti Q30, Smart #1, EQE saloon and SUV, Actros trucks, GB Kite Electroliner, BYD BD11 and B12). 679-689 add common London bus bodies (New Routemaster, Gemini 2 and 3, Enviro400 City, Enviro200 Mk1, MCV, StreetLite, MetroDecker EV, Enviro100EV, Enviro400EV). This is a practical image-bucket catalogue, not an exact sales ranking.",
+  "selectionBasis": "Prioritised for UK used-vehicle and vehicle-parc relevance. Positions 1-300 cover common UK cars; 301-340 vans and light commercial vehicles; 341-370 motorcycles; 371-400 scooters; 401-450 pickups, larger/older commercial vans and van-based MPVs; 451-500 add high-priority UK used-car gaps, current EVs/hybrids and premium used models; 501-600 fill UK everyday-road gaps (2005-2020 hatchbacks, MPVs, budget family cars and small crossovers). 601-666 add current generations and facelifts of top sellers, new brands (BYD, Jaecoo, Omoda), London taxis, older common vans, used-car gaps and common UK buses. 667-678 fill real-lookup gaps and adjacent generations (Rifter, Partner Tepee, Fabia Mk1, Infiniti Q30, Smart #1, EQE saloon and SUV, Actros trucks, GB Kite Electroliner, BYD BD11 and B12). 679-689 add common London bus bodies (New Routemaster, Gemini 2 and 3, Enviro400 City, Enviro200 Mk1, MCV, StreetLite, MetroDecker EV, Enviro100EV, Enviro400EV). 690-746 add older UK cars (Jaguar X-Type, Saab 9-3, Citroen Xsara), Honda Stepwgn imports, Yadea scooters and common UK trucks (DAF, Scania, MAN, Volvo, Iveco, Renault Trucks, Mercedes-Benz Atego and Arocs). This is a practical image-bucket catalogue, not an exact sales ranking.",
   "imageStandard": {
     "format": "webp",
     "size": "1000x750",
@@ -6912,6 +6912,576 @@
       "yearTo": 2026,
       "bodyType": "bus-double-deck",
       "filename": "alexander-dennis-enviro400ev-2025-2026.webp"
+    },
+    {
+      "priority": 690,
+      "make": "Jaguar",
+      "model": "X-Type",
+      "generation": "X400",
+      "yearFrom": 2001,
+      "yearTo": 2009,
+      "bodyType": "saloon",
+      "filename": "jaguar-x-type-saloon-2001-2009.webp"
+    },
+    {
+      "priority": 691,
+      "make": "Jaguar",
+      "model": "X-Type Estate",
+      "generation": "X400",
+      "yearFrom": 2004,
+      "yearTo": 2009,
+      "bodyType": "estate",
+      "filename": "jaguar-x-type-estate-2004-2009.webp"
+    },
+    {
+      "priority": 692,
+      "make": "Jaguar",
+      "model": "X-Type",
+      "generation": "X400 facelift",
+      "yearFrom": 2007,
+      "yearTo": 2009,
+      "bodyType": "saloon",
+      "filename": "jaguar-x-type-facelift-2007-2009.webp"
+    },
+    {
+      "priority": 693,
+      "make": "Saab",
+      "model": "9-3",
+      "generation": "Gen 1",
+      "yearFrom": 1998,
+      "yearTo": 2002,
+      "bodyType": "hatchback",
+      "filename": "saab-9-3-gen1-1998-2002.webp"
+    },
+    {
+      "priority": 694,
+      "make": "Saab",
+      "model": "9-3",
+      "generation": "Gen 2",
+      "yearFrom": 2002,
+      "yearTo": 2007,
+      "bodyType": "saloon",
+      "filename": "saab-9-3-gen2-2002-2007.webp"
+    },
+    {
+      "priority": 695,
+      "make": "Saab",
+      "model": "9-3",
+      "generation": "Gen 2 facelift",
+      "yearFrom": 2008,
+      "yearTo": 2011,
+      "bodyType": "saloon",
+      "filename": "saab-9-3-gen2-facelift-2008-2011.webp"
+    },
+    {
+      "priority": 696,
+      "make": "Saab",
+      "model": "9-3 SportWagon",
+      "generation": "Gen 2",
+      "yearFrom": 2005,
+      "yearTo": 2011,
+      "bodyType": "estate",
+      "filename": "saab-9-3-sportwagon-2005-2011.webp"
+    },
+    {
+      "priority": 697,
+      "make": "Citroen",
+      "model": "Xsara",
+      "generation": "Mk1",
+      "yearFrom": 1997,
+      "yearTo": 2000,
+      "bodyType": "hatchback",
+      "filename": "citroen-xsara-1997-2000.webp"
+    },
+    {
+      "priority": 698,
+      "make": "Citroen",
+      "model": "Xsara",
+      "generation": "Mk1 facelift",
+      "yearFrom": 2000,
+      "yearTo": 2004,
+      "bodyType": "hatchback",
+      "filename": "citroen-xsara-facelift-2000-2004.webp"
+    },
+    {
+      "priority": 699,
+      "make": "Citroen",
+      "model": "Xsara Estate",
+      "generation": "Mk1",
+      "yearFrom": 1998,
+      "yearTo": 2004,
+      "bodyType": "estate",
+      "filename": "citroen-xsara-estate-1998-2004.webp"
+    },
+    {
+      "priority": 700,
+      "make": "Citroen",
+      "model": "Xsara Picasso",
+      "generation": "Mk1",
+      "yearFrom": 2000,
+      "yearTo": 2010,
+      "bodyType": "mpv",
+      "filename": "citroen-xsara-picasso-2000-2010.webp"
+    },
+    {
+      "priority": 701,
+      "make": "Honda",
+      "model": "Stepwgn",
+      "generation": "RF1/RF2",
+      "yearFrom": 1996,
+      "yearTo": 2001,
+      "bodyType": "mpv",
+      "filename": "honda-stepwgn-rf1-1996-2001.webp"
+    },
+    {
+      "priority": 702,
+      "make": "Honda",
+      "model": "Stepwgn",
+      "generation": "RF3-RF8",
+      "yearFrom": 2001,
+      "yearTo": 2005,
+      "bodyType": "mpv",
+      "filename": "honda-stepwgn-rf3-2001-2005.webp"
+    },
+    {
+      "priority": 703,
+      "make": "Honda",
+      "model": "Stepwgn",
+      "generation": "RG",
+      "yearFrom": 2005,
+      "yearTo": 2009,
+      "bodyType": "mpv",
+      "filename": "honda-stepwgn-rg-2005-2009.webp"
+    },
+    {
+      "priority": 704,
+      "make": "Honda",
+      "model": "Stepwgn",
+      "generation": "RK",
+      "yearFrom": 2009,
+      "yearTo": 2015,
+      "bodyType": "mpv",
+      "filename": "honda-stepwgn-rk-2009-2015.webp"
+    },
+    {
+      "priority": 705,
+      "make": "Honda",
+      "model": "Stepwgn",
+      "generation": "RP",
+      "yearFrom": 2015,
+      "yearTo": 2022,
+      "bodyType": "mpv",
+      "filename": "honda-stepwgn-rp-2015-2022.webp"
+    },
+    {
+      "priority": 706,
+      "make": "Honda",
+      "model": "Stepwgn",
+      "generation": "RP6/RP7/RP8",
+      "yearFrom": 2022,
+      "yearTo": 2026,
+      "bodyType": "mpv",
+      "filename": "honda-stepwgn-rp6-2022-2026.webp"
+    },
+    {
+      "priority": 707,
+      "make": "Yadea",
+      "model": "G5S",
+      "generation": "Mk1",
+      "yearFrom": 2021,
+      "yearTo": 2026,
+      "bodyType": "scooter",
+      "filename": "yadea-g5s.webp"
+    },
+    {
+      "priority": 708,
+      "make": "Yadea",
+      "model": "C1S",
+      "generation": "Mk1",
+      "yearFrom": 2020,
+      "yearTo": 2026,
+      "bodyType": "scooter",
+      "filename": "yadea-c1s.webp"
+    },
+    {
+      "priority": 709,
+      "make": "DAF",
+      "model": "LF",
+      "generation": "Mk1",
+      "yearFrom": 2001,
+      "yearTo": 2006,
+      "bodyType": "truck",
+      "filename": "daf-lf-2001-2006.webp"
+    },
+    {
+      "priority": 710,
+      "make": "DAF",
+      "model": "LF",
+      "generation": "Mk1 facelift",
+      "yearFrom": 2006,
+      "yearTo": 2013,
+      "bodyType": "truck",
+      "filename": "daf-lf-2006-2013.webp"
+    },
+    {
+      "priority": 711,
+      "make": "DAF",
+      "model": "LF",
+      "generation": "Euro 6",
+      "yearFrom": 2013,
+      "yearTo": 2021,
+      "bodyType": "truck",
+      "filename": "daf-lf-euro6-2013-2021.webp"
+    },
+    {
+      "priority": 712,
+      "make": "DAF",
+      "model": "LF",
+      "generation": "Euro 6 facelift",
+      "yearFrom": 2021,
+      "yearTo": 2023,
+      "bodyType": "truck",
+      "filename": "daf-lf-2021-2023.webp"
+    },
+    {
+      "priority": 713,
+      "make": "DAF",
+      "model": "CF",
+      "generation": "Euro 6",
+      "yearFrom": 2013,
+      "yearTo": 2021,
+      "bodyType": "truck",
+      "filename": "daf-cf-euro6-2013-2021.webp"
+    },
+    {
+      "priority": 714,
+      "make": "DAF",
+      "model": "XF",
+      "generation": "Euro 6",
+      "yearFrom": 2013,
+      "yearTo": 2017,
+      "bodyType": "truck",
+      "filename": "daf-xf-euro6-2013-2017.webp"
+    },
+    {
+      "priority": 715,
+      "make": "DAF",
+      "model": "XF",
+      "generation": "Euro 6 facelift",
+      "yearFrom": 2017,
+      "yearTo": 2021,
+      "bodyType": "truck",
+      "filename": "daf-xf-2017-2021.webp"
+    },
+    {
+      "priority": 716,
+      "make": "DAF",
+      "model": "XF",
+      "generation": "New Generation",
+      "yearFrom": 2021,
+      "yearTo": 2026,
+      "bodyType": "truck",
+      "filename": "daf-xf-2021-2026.webp"
+    },
+    {
+      "priority": 717,
+      "make": "DAF",
+      "model": "XG",
+      "generation": "Mk1",
+      "yearFrom": 2021,
+      "yearTo": 2026,
+      "bodyType": "truck",
+      "filename": "daf-xg-2021-2026.webp"
+    },
+    {
+      "priority": 718,
+      "make": "DAF",
+      "model": "XD",
+      "generation": "Mk1",
+      "yearFrom": 2022,
+      "yearTo": 2026,
+      "bodyType": "truck",
+      "filename": "daf-xd-2022-2026.webp"
+    },
+    {
+      "priority": 719,
+      "make": "Scania",
+      "model": "P-Series",
+      "generation": "PGR",
+      "yearFrom": 2004,
+      "yearTo": 2016,
+      "bodyType": "truck",
+      "filename": "scania-p-series-2004-2016.webp"
+    },
+    {
+      "priority": 720,
+      "make": "Scania",
+      "model": "P-Series",
+      "generation": "NTG",
+      "yearFrom": 2016,
+      "yearTo": 2026,
+      "bodyType": "truck",
+      "filename": "scania-p-series-2016-2026.webp"
+    },
+    {
+      "priority": 721,
+      "make": "Scania",
+      "model": "G-Series",
+      "generation": "PGR",
+      "yearFrom": 2007,
+      "yearTo": 2016,
+      "bodyType": "truck",
+      "filename": "scania-g-series-2007-2016.webp"
+    },
+    {
+      "priority": 722,
+      "make": "Scania",
+      "model": "G-Series",
+      "generation": "NTG",
+      "yearFrom": 2016,
+      "yearTo": 2026,
+      "bodyType": "truck",
+      "filename": "scania-g-series-2016-2026.webp"
+    },
+    {
+      "priority": 723,
+      "make": "Scania",
+      "model": "R-Series",
+      "generation": "PGR",
+      "yearFrom": 2004,
+      "yearTo": 2016,
+      "bodyType": "truck",
+      "filename": "scania-r-series-2004-2016.webp"
+    },
+    {
+      "priority": 724,
+      "make": "Scania",
+      "model": "R-Series",
+      "generation": "NTG",
+      "yearFrom": 2016,
+      "yearTo": 2026,
+      "bodyType": "truck",
+      "filename": "scania-r-series-2016-2026.webp"
+    },
+    {
+      "priority": 725,
+      "make": "Scania",
+      "model": "S-Series",
+      "generation": "NTG",
+      "yearFrom": 2016,
+      "yearTo": 2026,
+      "bodyType": "truck",
+      "filename": "scania-s-series-2016-2026.webp"
+    },
+    {
+      "priority": 726,
+      "make": "MAN",
+      "model": "TGL",
+      "generation": "Mk1",
+      "yearFrom": 2005,
+      "yearTo": 2020,
+      "bodyType": "truck",
+      "filename": "man-tgl-2005-2020.webp"
+    },
+    {
+      "priority": 727,
+      "make": "MAN",
+      "model": "TGL",
+      "generation": "New Generation",
+      "yearFrom": 2020,
+      "yearTo": 2026,
+      "bodyType": "truck",
+      "filename": "man-tgl-2020-2026.webp"
+    },
+    {
+      "priority": 728,
+      "make": "MAN",
+      "model": "TGM",
+      "generation": "Mk1",
+      "yearFrom": 2005,
+      "yearTo": 2020,
+      "bodyType": "truck",
+      "filename": "man-tgl-2005-2020.webp"
+    },
+    {
+      "priority": 729,
+      "make": "MAN",
+      "model": "TGM",
+      "generation": "New Generation",
+      "yearFrom": 2020,
+      "yearTo": 2026,
+      "bodyType": "truck",
+      "filename": "man-tgl-2020-2026.webp"
+    },
+    {
+      "priority": 730,
+      "make": "MAN",
+      "model": "TGS",
+      "generation": "Mk1",
+      "yearFrom": 2007,
+      "yearTo": 2020,
+      "bodyType": "truck",
+      "filename": "man-tgs-2007-2020.webp"
+    },
+    {
+      "priority": 731,
+      "make": "MAN",
+      "model": "TGS",
+      "generation": "New Generation",
+      "yearFrom": 2020,
+      "yearTo": 2026,
+      "bodyType": "truck",
+      "filename": "man-tgs-2020-2026.webp"
+    },
+    {
+      "priority": 732,
+      "make": "MAN",
+      "model": "TGX",
+      "generation": "New Generation",
+      "yearFrom": 2020,
+      "yearTo": 2026,
+      "bodyType": "truck",
+      "filename": "man-tgx-2020-2026.webp"
+    },
+    {
+      "priority": 733,
+      "make": "Volvo",
+      "model": "FL",
+      "generation": "Mk2",
+      "yearFrom": 2006,
+      "yearTo": 2013,
+      "bodyType": "truck",
+      "filename": "volvo-fl-2006-2013.webp"
+    },
+    {
+      "priority": 734,
+      "make": "Volvo",
+      "model": "FL",
+      "generation": "Mk3",
+      "yearFrom": 2013,
+      "yearTo": 2026,
+      "bodyType": "truck",
+      "filename": "volvo-fl-2013-2026.webp"
+    },
+    {
+      "priority": 735,
+      "make": "Volvo",
+      "model": "FE",
+      "generation": "Mk2",
+      "yearFrom": 2013,
+      "yearTo": 2026,
+      "bodyType": "truck",
+      "filename": "volvo-fe-2013-2026.webp"
+    },
+    {
+      "priority": 736,
+      "make": "Volvo",
+      "model": "FM",
+      "generation": "Gen 5",
+      "yearFrom": 2020,
+      "yearTo": 2026,
+      "bodyType": "truck",
+      "filename": "volvo-fm-2020-2026.webp"
+    },
+    {
+      "priority": 737,
+      "make": "Volvo",
+      "model": "FH",
+      "generation": "Gen 4",
+      "yearFrom": 2012,
+      "yearTo": 2020,
+      "bodyType": "truck",
+      "filename": "volvo-fh-2012-2020.webp"
+    },
+    {
+      "priority": 738,
+      "make": "Volvo",
+      "model": "FH",
+      "generation": "Gen 5",
+      "yearFrom": 2020,
+      "yearTo": 2026,
+      "bodyType": "truck",
+      "filename": "volvo-fh-2020-2026.webp"
+    },
+    {
+      "priority": 739,
+      "make": "Iveco",
+      "model": "Eurocargo",
+      "generation": "Mk3",
+      "yearFrom": 2015,
+      "yearTo": 2026,
+      "bodyType": "truck",
+      "filename": "iveco-eurocargo-2015-2026.webp"
+    },
+    {
+      "priority": 740,
+      "make": "Iveco",
+      "model": "Stralis",
+      "generation": "Hi-Way",
+      "yearFrom": 2012,
+      "yearTo": 2019,
+      "bodyType": "truck",
+      "filename": "iveco-stralis-2012-2019.webp"
+    },
+    {
+      "priority": 741,
+      "make": "Iveco",
+      "model": "S-Way",
+      "generation": "Mk1",
+      "yearFrom": 2019,
+      "yearTo": 2026,
+      "bodyType": "truck",
+      "filename": "iveco-s-way-2019-2026.webp"
+    },
+    {
+      "priority": 742,
+      "make": "Renault Trucks",
+      "model": "D",
+      "generation": "Mk1",
+      "yearFrom": 2013,
+      "yearTo": 2026,
+      "bodyType": "truck",
+      "filename": "renault-trucks-d-2013-2026.webp"
+    },
+    {
+      "priority": 743,
+      "make": "Renault Trucks",
+      "model": "T",
+      "generation": "Mk1",
+      "yearFrom": 2013,
+      "yearTo": 2026,
+      "bodyType": "truck",
+      "filename": "renault-trucks-t-2013-2026.webp"
+    },
+    {
+      "priority": 744,
+      "make": "Renault Trucks",
+      "model": "T Evolution",
+      "generation": "Mk1",
+      "yearFrom": 2021,
+      "yearTo": 2026,
+      "bodyType": "truck",
+      "filename": "renault-trucks-t-evolution-2021-2026.webp"
+    },
+    {
+      "priority": 745,
+      "make": "Mercedes-Benz",
+      "model": "Atego",
+      "generation": "Mk3",
+      "yearFrom": 2013,
+      "yearTo": 2026,
+      "bodyType": "truck",
+      "filename": "mercedes-benz-atego-2013-2026.webp"
+    },
+    {
+      "priority": 746,
+      "make": "Mercedes-Benz",
+      "model": "Arocs",
+      "generation": "Mk1",
+      "yearFrom": 2013,
+      "yearTo": 2026,
+      "bodyType": "truck",
+      "filename": "mercedes-benz-arocs-2013-2026.webp"
     }
   ]
 }

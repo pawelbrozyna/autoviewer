@@ -84,6 +84,10 @@ const MAKE_ALIASES: Record<string, string> = {
   adl: "alexander dennis",
   wright: "wrightbus",
   "wrightbus ltd": "wrightbus",
+  "daf trucks": "daf",
+  "man truck and bus": "man",
+  "volvo trucks": "volvo",
+  "renault truck": "renault trucks",
 };
 
 /**
@@ -115,6 +119,41 @@ const STRICT_MODEL_ALIASES: Record<
       model: "C4 Picasso",
     },
     { pattern: /^c3 picasso\b/, model: "C3 Picasso" },
+    { pattern: /^xsara picasso\b/, model: "Xsara Picasso" },
+    { pattern: /^xsara\b.*\bestate\b/, model: "Xsara Estate" },
+  ],
+  jaguar: [{ pattern: /^x\s*type\b.*\b(?:estate|sportwagon|wagon)\b/, model: "X-Type Estate" }],
+  saab: [
+    // No convertible or 9-3X image: these stay on the placeholder.
+    { pattern: /^9\s*3\s*x\b/, model: "9-3X" },
+    { pattern: /^9\s*3\b.*\b(?:convertible|cabriolet|cabrio)\b/, model: "9-3 Convertible" },
+    { pattern: /^9\s*3\b.*\b(?:sportwagon|sport wagon|sport estate|estate)\b/, model: "9-3 SportWagon" },
+    { pattern: /^9\s*3\b/, model: "9-3" },
+  ],
+  honda: [{ pattern: /^step\s*(?:wgn|wagon)\b/, model: "Stepwgn" }],
+  yadea: [
+    { pattern: /^g\s*5\s*s\b/, model: "G5S" },
+    { pattern: /^c\s*1\s*s\b/, model: "C1S" },
+  ],
+  daf: [
+    // Older XF105 and CF65/75/85 cabs look different from the Euro 6 images.
+    { pattern: /^xf\s*105\b/, model: "XF105" },
+    { pattern: /^cf\s*(?:65|75|85)\b/, model: "CF Euro 5" },
+    { pattern: /^(lf|cf|xf|xg|xd)(?=\s|\d|$)/, model: (match) => match[1].toUpperCase() },
+  ],
+  scania: [
+    {
+      pattern: /^([pgrs])(?:\s*\d{3}\b|\s+series\b)?(?=\s|$)/,
+      model: (match) => `${match[1].toUpperCase()}-Series`,
+    },
+  ],
+  man: [{ pattern: /^tg\s*([lmsx])(?=\s|\d|$)/, model: (match) => `TG${match[1].toUpperCase()}` }],
+  volvo: [
+    { pattern: /^f([hlem])(?:\s*1[26])?(?=\s|\d|$)/, model: (match) => `F${match[1].toUpperCase()}` },
+  ],
+  "renault trucks": [
+    { pattern: /^t\b.*\bevolution\b/, model: "T Evolution" },
+    { pattern: /^([dt])(?=\s|\d|$)/, model: (match) => match[1].toUpperCase() },
   ],
   ford: [
     { pattern: /^grand c max\b/, model: "C-Max" },
