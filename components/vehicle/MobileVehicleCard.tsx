@@ -116,6 +116,38 @@ function frameForImage(img: HTMLImageElement): ImageFrame | null {
   };
 }
 
+/** Longest the card waits for the image framing before opening with the plain 4:3 frame. */
+const IMAGE_FRAME_WAIT_MS = 600;
+
+/**
+ * Loads and measures the card image ahead of opening, so the card renders at its final
+ * size in its first frame. Preloads on mobile viewports, or on demand when `force` is set.
+ */
+function useImageFrame(src: string | null, force: boolean) {
+  const [state, setState] = useState<{ src: string; frame: ImageFrame | null } | null>(null);
+
+  useEffect(() => {
+    if (!src) return;
+    if (!force && !window.matchMedia("(max-width: 767px)").matches) return;
+    let cancelled = false;
+    const img = new window.Image();
+    const settle = (frame: ImageFrame | null) => {
+      if (!cancelled) setState({ src, frame });
+    };
+    img.onload = () => settle(frameForImage(img));
+    img.onerror = () => settle(null);
+    img.src = src;
+    return () => {
+      cancelled = true;
+      img.onload = null;
+      img.onerror = null;
+    };
+  }, [src, force]);
+
+  const current = state?.src === src ? state : null;
+  return { settled: !src || current !== null, frame: current?.frame ?? null };
+}
+
 /**
  * Mobile-only side tab that opens the Vehicle Card. Place it inside a positioned,
  * horizontally centred wrapper: the tab offsets itself to sit flush with the viewport's
@@ -123,8 +155,32 @@ function frameForImage(img: HTMLImageElement): ImageFrame | null {
  */
 export function MobileVehicleCard({ vehicle }: { vehicle: VehicleRecord }) {
   const [open, setOpen] = useState(false);
+  const [pendingOpen, setPendingOpen] = useState(false);
+  const [openFrame, setOpenFrame] = useState<ImageFrame | null>(null);
   const tabRef = useRef<HTMLButtonElement>(null);
   const card = useMemo(() => (open ? buildVehicleCardData(vehicle) : null), [open, vehicle]);
+  const image = useImageFrame(vehicle.summary.imageSrc ?? null, pendingOpen);
+
+  const openCard = useCallback((frame: ImageFrame | null) => {
+    setPendingOpen(false);
+    setOpenFrame(frame);
+    setOpen(true);
+  }, []);
+
+  useEffect(() => {
+    if (!pendingOpen) return;
+    if (image.settled) {
+      openCard(image.frame);
+      return;
+    }
+    const timer = window.setTimeout(() => openCard(null), IMAGE_FRAME_WAIT_MS);
+    return () => window.clearTimeout(timer);
+  }, [pendingOpen, image.settled, image.frame, openCard]);
+
+  function requestOpen() {
+    if (image.settled) openCard(image.frame);
+    else setPendingOpen(true);
+  }
 
   const close = useCallback(() => {
     setOpen(false);
@@ -146,7 +202,7 @@ export function MobileVehicleCard({ vehicle }: { vehicle: VehicleRecord }) {
       <button
         ref={tabRef}
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={requestOpen}
         aria-haspopup="dialog"
         aria-expanded={open}
         aria-label="Open vehicle card"
@@ -163,6 +219,7 @@ export function MobileVehicleCard({ vehicle }: { vehicle: VehicleRecord }) {
             <VehicleCardDialog
               vehicle={vehicle}
               card={card}
+              imageFrame={openFrame}
               onClose={close}
               onViewReport={viewReport}
             />,
@@ -176,12 +233,14 @@ export function MobileVehicleCard({ vehicle }: { vehicle: VehicleRecord }) {
 function VehicleCardDialog({
   vehicle,
   card,
+  imageFrame,
   onClose,
   onViewReport,
   onDownloadImage,
 }: {
   vehicle: VehicleRecord;
   card: VehicleCardData;
+  imageFrame: ImageFrame | null;
   onClose: () => void;
   onViewReport: () => void;
   /** Wired once a 1080x1350 card image renderer exists; until then the button is disabled. */
@@ -246,7 +305,7 @@ function VehicleCardDialog({
         role="dialog"
         aria-modal="true"
         aria-labelledby="vehicle-card-title"
-        className="relative flex max-h-[92vh] w-full max-w-[420px] flex-col overflow-y-auto overscroll-contain rounded-[24px] border-[1.5px] border-[#bfd2ec] bg-white shadow-[0_0_0_4px_rgba(255,255,255,0.3),0_24px_60px_rgba(7,26,61,0.35)]"
+        className="relative flex max-h-[92svh] w-full max-w-[420px] flex-col overflow-y-auto overscroll-contain rounded-[24px] border-[1.5px] border-[#bfd2ec] bg-white shadow-[0_0_0_4px_rgba(255,255,255,0.3),0_24px_60px_rgba(7,26,61,0.35)]"
       >
         <div className="flex shrink-0 items-center justify-between px-4 pt-2.5">
           <span className="relative block h-[21px] w-[100px]">
@@ -270,7 +329,7 @@ function VehicleCardDialog({
           </button>
         </div>
 
-        <VehicleCardImage src={card.imageSrc} alt={card.imageAlt} />
+        <VehicleCardImage src={card.imageSrc} alt={card.imageAlt} frame={imageFrame} />
 
         <p className="px-5 text-center text-[11px] leading-snug text-muted">
           <span className="block">{VEHICLE_CARD_DISCLAIMER}</span>
@@ -363,8 +422,15 @@ function VehicleCardDialog({
 }
 
 /** Tightly framed catalogue image: trims empty margin above and below, never the vehicle. */
-function VehicleCardImage({ src, alt }: { src: string | null; alt: string }) {
-  const [frame, setFrame] = useState<ImageFrame | null>(null);
+function VehicleCardImage({
+  src,
+  alt,
+  frame,
+}: {
+  src: string | null;
+  alt: string;
+  frame: ImageFrame | null;
+}) {
   const [loaded, setLoaded] = useState(false);
 
   if (!src) {
@@ -385,10 +451,7 @@ function VehicleCardImage({ src, alt }: { src: string | null; alt: string }) {
         fill
         sizes="(max-width: 767px) 100vw, 420px"
         priority
-        onLoad={(event) => {
-          setFrame(frameForImage(event.currentTarget));
-          setLoaded(true);
-        }}
+        onLoad={() => setLoaded(true)}
         className={`transition-opacity duration-150 ${frame ? "object-cover" : "object-contain"} ${
           loaded ? "opacity-100" : "opacity-0"
         }`}
