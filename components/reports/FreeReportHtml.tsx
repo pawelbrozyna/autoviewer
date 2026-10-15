@@ -447,8 +447,8 @@ export function FreeReportHtml({
       aria-label="AutoViewer free vehicle report"
     >
       <header
-        className="flex items-start justify-between gap-4 border-b-[1.4px] border-blue"
-        style={{ paddingBottom: pt(10) }}
+        className="flex items-start justify-between gap-4 border-b-[1.4px] border-blue max-md:relative max-md:z-20 max-md:[--header-lift:4px]"
+        style={{ paddingBottom: `calc(${pt(10)} - var(--header-lift, 0px))` }}
       >
         <div className="min-w-0">
           <p
@@ -502,7 +502,7 @@ export function FreeReportHtml({
         className="relative overflow-visible"
         style={{ marginTop: pt(10), minHeight: pt(184) }}
       >
-        <div className="absolute inset-y-0 right-0 w-[55%]">
+        <div className="absolute inset-y-0 right-0 w-[55%] max-md:-translate-x-1.5">
           {summary.imageSrc ? (
             <>
               <Image
@@ -510,11 +510,11 @@ export function FreeReportHtml({
                 alt={vehicleTitle}
                 fill
                 sizes="(max-width: 768px) 58vw, 500px"
-                className="origin-center translate-y-[-8%] scale-90 object-contain object-center"
+                className="origin-center translate-y-[-8%] scale-90 object-contain object-center max-md:scale-[1.035]"
                 priority
               />
               <p
-                className="absolute inset-x-0 z-30 px-1 text-center text-muted"
+                className="absolute inset-x-0 z-30 px-1 text-center text-muted max-md:translate-x-1.5 max-md:translate-y-1 max-md:pr-0 max-md:text-right"
                 style={{
                   bottom: pt(34),
                   fontSize: pt(7),
@@ -530,7 +530,7 @@ export function FreeReportHtml({
             </>
           ) : (
             <VehicleImageFallback
-              className="absolute inset-0 -translate-y-[9%]"
+              className="absolute inset-0 -translate-y-[8%] scale-90 max-md:scale-[1.035]"
             />
           )}
         </div>

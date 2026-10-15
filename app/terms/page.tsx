@@ -26,7 +26,7 @@ export default function TermsPage() {
         </h1>
 
         <div className="prose-av mt-4 md:mt-5">
-          <p>Last updated: 12 September 2026</p>
+          <p>Last updated: 15 October 2026</p>
           <h2>Service</h2>
           <p>
             AutoViewer provides tools to help users review vehicle-related
@@ -43,6 +43,27 @@ export default function TermsPage() {
             Information on AutoViewer is for general guidance. It is not a
             mechanical inspection, valuation, insurance quote or legal advice.
             Always inspect a vehicle and verify important claims before purchase.
+          </p>
+          <h2>Representative vehicle images</h2>
+          <p>
+            Vehicle images shown on AutoViewer are illustrative and may not
+            depict the exact vehicle searched. AutoViewer selects the closest
+            suitable image available in its pre-generated image library using
+            the vehicle information available from its data sources.
+          </p>
+          <p>
+            Images are created in advance and are not generated or recoloured
+            for each search. The vehicle shown may therefore differ in
+            generation, body style, derivative, specification, equipment or
+            colour. Where a registered colour is shown separately, this comes
+            from the available vehicle data and may differ from the colour shown
+            in the image.
+          </p>
+          <p>
+            If the available data is not sufficient to select a suitable image
+            confidently, AutoViewer may show a generic placeholder instead.
+            Representative images should not be used to verify a vehicle&apos;s
+            exact identity, specification, condition or appearance.
           </p>
           <h2>Acceptable use</h2>
           <ul>

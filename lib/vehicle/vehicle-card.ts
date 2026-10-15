@@ -5,7 +5,6 @@ export type VehicleCardStatKey =
   | "fuel"
   | "engine"
   | "transmission"
-  | "power"
   | "mileage"
   | "firstRegistered"
   | "co2"
@@ -37,8 +36,6 @@ export type VehicleCardData = {
   imageSrc: string | null;
   imageAlt: string;
   disclaimer: string;
-  /** "90 bhp · 1.2L · Manual", only when power, engine size and gearbox are all known. */
-  performanceLine: string | null;
   /** Up to nine facts in priority order. */
   stats: VehicleCardStat[];
   isDemo: boolean;
@@ -92,14 +89,12 @@ export function buildVehicleCardData(vehicle: VehicleRecord): VehicleCardData {
   const taxStatus = summary.tax.status;
   const hasEngine = engineCapacity != null && engineCapacity > 0;
   const transmission = (summary.transmission || details.transmission)?.trim() || null;
-  const power = summary.powerBhp != null && summary.powerBhp > 0 ? `${summary.powerBhp} bhp` : null;
 
   // Body type and drive type sit between MOT and tax in priority once a source provides them.
   const stats = [
     stat("fuel", "Fuel", summary.fuelType || details.fuelType),
     stat("engine", "Engine", hasEngine ? `${engineCapacity.toLocaleString("en-GB")} cc` : null),
     stat("transmission", "Gearbox", transmission),
-    stat("power", "Power", power),
     stat("mileage", "Mileage", latestMileage(vehicle)),
     stat("firstRegistered", "Registered", formatShortMonthYear(details.monthOfFirstRegistration)),
     stat("co2", "CO₂", details.co2Emissions != null ? `${details.co2Emissions} g/km` : null),
@@ -111,11 +106,6 @@ export function buildVehicleCardData(vehicle: VehicleRecord): VehicleCardData {
     .filter((item): item is VehicleCardStat => item !== null)
     .slice(0, VEHICLE_CARD_MAX_STATS);
 
-  const performanceLine =
-    power && hasEngine && transmission
-      ? `${power} · ${(engineCapacity / 1000).toFixed(1)}L · ${transmission}`
-      : null;
-
   return {
     registration: summary.displayRegistration,
     title,
@@ -126,7 +116,6 @@ export function buildVehicleCardData(vehicle: VehicleRecord): VehicleCardData {
     disclaimer: colour
       ? `${VEHICLE_CARD_DISCLAIMER} Registered colour: ${colour}`
       : VEHICLE_CARD_DISCLAIMER,
-    performanceLine,
     stats,
     isDemo: summary.isDemo,
   };

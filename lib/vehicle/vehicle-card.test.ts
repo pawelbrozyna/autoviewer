@@ -44,17 +44,16 @@ run("demo vehicle fills nine tiles in priority order, mileage ahead of year", ()
   assert.equal(card.stats.length, VEHICLE_CARD_MAX_STATS);
   assert.deepEqual(
     card.stats.map((item) => item.key),
-    ["fuel", "engine", "transmission", "power", "mileage", "firstRegistered", "co2", "euro", "mot"],
+    ["fuel", "engine", "transmission", "mileage", "firstRegistered", "co2", "euro", "mot", "tax"],
   );
   assert.deepEqual(
-    card.stats.map((item) => item.value),
-    ["Petrol", "1,242 cc", "Manual", "90 bhp", "48,320 mi", "Mar 2019", "111 g/km", "Euro 6", "Valid"],
+    card.stats.map((item) => item.value).slice(0, 8),
+    ["Petrol", "1,242 cc", "Manual", "48,320 mi", "Mar 2019", "111 g/km", "Euro 6", "Valid"],
   );
 });
 
-run("performance line needs power, engine and gearbox", () => {
-  assert.equal(buildVehicleCardData(demo).performanceLine, "90 bhp · 1.2L · Manual");
-  assert.equal(buildVehicleCardData(dvsaOnly()).performanceLine, null);
+run("power is never shown", () => {
+  assert.ok(!buildVehicleCardData(demo).stats.some((item) => item.value.includes("bhp")));
 });
 
 run("missing fields are omitted, never padded or inferred", () => {

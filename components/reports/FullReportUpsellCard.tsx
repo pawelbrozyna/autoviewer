@@ -96,10 +96,7 @@ export function FullReportUpsellCard({
           />
         </div>
 
-        <div className="relative z-10 col-span-2 mt-2.5 flex items-center justify-between gap-4 border-t border-white/80 pt-2.5 md:col-span-1 md:col-start-1 md:mt-4 md:justify-start md:gap-6 md:pt-3.5 lg:mt-2 lg:pt-2">
-          <p className="text-[28px] font-extrabold leading-none tracking-tight text-navy">
-            {FULL_REPORT_PRICE}
-          </p>
+        <div className="relative z-10 col-span-2 mt-2.5 flex items-center justify-start gap-4 border-t border-white/80 pt-2.5 md:col-span-1 md:col-start-1 md:mt-4 md:justify-start md:gap-6 md:pt-3.5 lg:mt-2 lg:pt-2">
           <form action={FULL_REPORT_CHECKOUT_PATH} method="post">
             <input type="hidden" name="source" value={registration ? "vehicle" : genericSource} />
             {registration ? (
@@ -115,6 +112,9 @@ export function FullReportUpsellCard({
               Buy Full Report
             </button>
           </form>
+          <p className="text-[28px] font-extrabold leading-none tracking-tight text-navy">
+            {FULL_REPORT_PRICE}
+          </p>
         </div>
         <p className="relative z-10 col-span-2 mt-1.5 text-[12px] leading-snug text-[#3b4a63] md:col-span-1 md:col-start-1 md:mt-2 lg:mt-1.5">
           {CHECKOUT_DATA_AVAILABILITY_NOTE}

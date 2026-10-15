@@ -21,7 +21,6 @@ import {
   Share2,
   ShieldCheck,
   X,
-  Zap,
   type LucideIcon,
 } from "lucide-react";
 import { shareVehicleReport } from "@/lib/reports/share";
@@ -32,6 +31,7 @@ import {
   type VehicleCardStat,
   type VehicleCardStatKey,
 } from "@/lib/vehicle/vehicle-card";
+import { renderVehicleCardImage } from "@/lib/vehicle/vehicle-card-image";
 import { VehicleImageFallback } from "@/components/vehicle/VehicleImageFallback";
 import type { VehicleRecord } from "@/types/vehicle";
 
@@ -39,7 +39,6 @@ const STAT_ICONS: Record<VehicleCardStatKey, LucideIcon> = {
   fuel: Fuel,
   engine: Cog,
   transmission: Settings2,
-  power: Zap,
   mileage: Gauge,
   firstRegistered: CalendarDays,
   co2: Leaf,
@@ -236,19 +235,17 @@ function VehicleCardDialog({
   imageFrame,
   onClose,
   onViewReport,
-  onDownloadImage,
 }: {
   vehicle: VehicleRecord;
   card: VehicleCardData;
   imageFrame: ImageFrame | null;
   onClose: () => void;
   onViewReport: () => void;
-  /** Wired once a 1080x1350 card image renderer exists; until then the button is disabled. */
-  onDownloadImage?: () => void;
 }) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const [shareStatus, setShareStatus] = useState("");
+  const [downloading, setDownloading] = useState(false);
 
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
@@ -290,6 +287,27 @@ function VehicleCardDialog({
     const outcome = await shareVehicleReport(vehicle);
     if (outcome === "copied") setShareStatus("Link copied");
     else if (outcome === "failed") setShareStatus("Unable to share");
+  }
+
+  async function downloadImage() {
+    if (downloading || !dialogRef.current) return;
+    setDownloading(true);
+    const blob = await renderVehicleCardImage({
+      card,
+      frame: imageFrame,
+      icons: collectStatIcons(dialogRef.current),
+      fontFamily: getComputedStyle(dialogRef.current).fontFamily,
+    }).catch(() => null);
+    setDownloading(false);
+    if (!blob) return;
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `autoviewer-${card.registration.replace(/\s+/g, "").toLowerCase()}-vehicle-card.png`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 10_000);
   }
 
   return (
@@ -348,13 +366,8 @@ function VehicleCardDialog({
             {card.title}
           </h2>
           {card.variant ? (
-            <p className="mt-0.5 text-[14px] font-medium leading-snug text-[#53627a] [overflow-wrap:anywhere]">
+            <p className="mt-1 text-[14px] font-medium leading-snug text-[#53627a] [overflow-wrap:anywhere]">
               {card.variant}
-            </p>
-          ) : null}
-          {card.performanceLine ? (
-            <p className="mt-0.5 text-[12px] font-semibold leading-snug tracking-[0.01em] text-blue">
-              {card.performanceLine}
             </p>
           ) : null}
         </div>
@@ -362,7 +375,7 @@ function VehicleCardDialog({
         {card.stats.length > 0 ? (
           <dl
             aria-label="Vehicle facts"
-            className="mx-3 mt-2.5 grid grid-cols-3 gap-1.5"
+            className="mx-3 mt-2 grid grid-cols-3 gap-1.5"
           >
             {card.stats.map((item) => (
               <StatTile key={item.key} item={item} />
@@ -370,11 +383,11 @@ function VehicleCardDialog({
           </dl>
         ) : null}
 
-        <div className="px-3 pb-3 pt-2.5">
+        <div className="px-3 pb-3 pt-2">
           <button
             type="button"
             onClick={onViewReport}
-            className="flex min-h-[52px] w-full items-center gap-3 rounded-[14px] bg-blue px-4 text-left text-white shadow-[0_8px_18px_rgba(23,105,224,0.3)] transition hover:bg-blue-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue focus-visible:ring-offset-2"
+            className="flex min-h-[46px] w-full items-center gap-3 rounded-[14px] bg-blue px-4 text-left text-white shadow-[0_8px_18px_rgba(23,105,224,0.3)] transition hover:bg-blue-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue focus-visible:ring-offset-2"
           >
             <FileText className="h-5 w-5 shrink-0" aria-hidden />
             <span className="min-w-0 flex-1">
@@ -389,23 +402,20 @@ function VehicleCardDialog({
             <button
               type="button"
               onClick={share}
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[12px] border border-[#cfdcee] bg-white px-3 text-[14px] font-semibold text-blue transition hover:bg-surface-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
+              className="inline-flex min-h-10 items-center justify-center gap-2 rounded-[12px] border border-[#cfdcee] bg-white px-3 text-[14px] font-semibold text-blue transition hover:bg-surface-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue"
             >
               <Share2 className="h-4 w-4" aria-hidden />
               Share
             </button>
             <button
               type="button"
-              onClick={onDownloadImage}
-              disabled={!onDownloadImage}
-              title={onDownloadImage ? undefined : "Coming soon"}
-              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[12px] border border-[#cfdcee] bg-white px-2 text-[14px] font-semibold text-blue transition hover:bg-surface-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue disabled:cursor-not-allowed disabled:border-[#e2e8f0] disabled:text-muted disabled:hover:bg-white"
+              onClick={downloadImage}
+              disabled={downloading}
+              aria-busy={downloading}
+              className="inline-flex min-h-10 items-center justify-center gap-2 rounded-[12px] border border-[#cfdcee] bg-white px-2 text-[14px] font-semibold text-blue transition hover:bg-surface-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue disabled:cursor-wait disabled:opacity-70"
             >
               <Download className="h-4 w-4 shrink-0" aria-hidden />
-              <span className="whitespace-nowrap">
-                Download image
-                {onDownloadImage ? null : <span className="sr-only"> (coming soon)</span>}
-              </span>
+              <span className="whitespace-nowrap">{downloading ? "Creating…" : "Download image"}</span>
             </button>
           </div>
           <p
@@ -435,7 +445,7 @@ function VehicleCardImage({
 
   if (!src) {
     return (
-      <div className="relative mx-3 mt-2 aspect-[16/9] shrink-0">
+      <div className="relative mx-[6%] mt-1 aspect-[4/3] shrink-0">
         <VehicleImageFallback className="absolute inset-0" />
       </div>
     );
@@ -444,7 +454,7 @@ function VehicleCardImage({
   const style: CSSProperties = { aspectRatio: frame ? String(frame.aspect) : "4 / 3" };
 
   return (
-    <div className="relative mx-[7%] mt-1 shrink-0 overflow-hidden" style={style}>
+    <div className="relative mx-[6%] mt-1 shrink-0 overflow-hidden" style={style}>
       <Image
         src={src}
         alt={alt}
@@ -461,29 +471,44 @@ function VehicleCardImage({
   );
 }
 
+/** Tile icon SVG markup from the rendered card, with colours inlined for the exported image. */
+function collectStatIcons(root: HTMLElement): Partial<Record<VehicleCardStatKey, string>> {
+  const icons: Partial<Record<VehicleCardStatKey, string>> = {};
+  root.querySelectorAll<HTMLElement>("[data-stat-key]").forEach((tile) => {
+    const svg = tile.querySelector("svg");
+    if (!svg) return;
+    const key = tile.dataset.statKey as VehicleCardStatKey;
+    const clone = svg.cloneNode(true) as SVGElement;
+    clone.removeAttribute("class");
+    clone.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+    clone.setAttribute("width", "96");
+    clone.setAttribute("height", "96");
+    icons[key] = new XMLSerializer().serializeToString(clone).replaceAll("currentColor", "#1769e0");
+  });
+  return icons;
+}
+
 function StatTile({ item }: { item: VehicleCardStat }) {
   const Icon = STAT_ICONS[item.key];
-  const performance = item.key === "power";
   const motValid = item.key === "mot" && item.value === "Valid";
   return (
-    <div className="relative flex min-h-[66px] min-w-0 flex-col justify-between gap-1 overflow-hidden rounded-[12px] border border-[#dde7f3] bg-[#f4f8fd] px-2 pb-1.5 pt-2 min-[375px]:min-h-[70px] min-[375px]:px-2.5 min-[414px]:min-h-[74px]">
+    <div
+      data-stat-key={item.key}
+      className="relative flex min-h-[48px] min-w-0 items-center gap-1.5 overflow-hidden rounded-[12px] border border-[#dde7f3] bg-[#f4f8fd] px-2 py-1.5 min-[375px]:min-h-[52px] min-[375px]:gap-2"
+    >
       <span
-        className={`absolute left-2 top-0 h-[2px] rounded-b-full min-[375px]:left-2.5 ${
-          performance ? "w-6 bg-blue" : "w-4 bg-blue/35"
-        }`}
+        className="absolute left-2 top-0 h-[2px] w-4 rounded-b-full bg-blue/35 min-[375px]:left-2.5"
         aria-hidden
       />
       {motValid ? (
         <span
-          className="absolute right-2 top-2 h-2 w-2 rounded-full bg-emerald-500 ring-[3px] ring-emerald-500/20"
+          className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-emerald-500 ring-[3px] ring-emerald-500/20"
           aria-hidden
         />
       ) : null}
       <Icon
-        className={`h-[18px] w-[18px] shrink-0 text-blue min-[375px]:h-5 min-[375px]:w-5 ${
-          performance ? "fill-blue/20" : ""
-        }`}
-        strokeWidth={performance ? 2.4 : 2}
+        className="h-4 w-4 shrink-0 text-blue min-[375px]:h-[18px] min-[375px]:w-[18px]"
+        strokeWidth={2}
         aria-hidden
       />
       <div className="min-w-0">
@@ -492,7 +517,7 @@ function StatTile({ item }: { item: VehicleCardStat }) {
         </dt>
         <dd
           title={item.value}
-          className="line-clamp-2 text-[13px] font-extrabold leading-[1.15] tracking-tight text-navy [overflow-wrap:anywhere] min-[375px]:text-[14.5px]"
+          className="line-clamp-2 text-[12.5px] font-extrabold leading-[1.15] tracking-tight text-navy [overflow-wrap:anywhere] min-[375px]:text-[13.5px]"
         >
           {item.value}
         </dd>
