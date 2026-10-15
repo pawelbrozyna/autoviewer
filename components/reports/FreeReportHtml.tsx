@@ -455,7 +455,9 @@ export function FreeReportHtml({
             className="font-extrabold leading-none tracking-tight"
             style={{ fontSize: pt(22) }}
           >
-            Auto<span className="text-blue">Viewer</span>
+            <Link href="/" aria-label="AutoViewer home">
+              Auto<span className="text-blue">Viewer</span>
+            </Link>
           </p>
           <div
             className="flex flex-wrap items-center gap-2 leading-none"

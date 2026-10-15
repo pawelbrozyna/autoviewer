@@ -192,7 +192,7 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-white/95 backdrop-blur-sm">
       <Container className="flex h-[58px] items-center justify-between gap-4 md:h-[68px] lg:h-[62px] lg:gap-3">
-        <BrandLogo size="header" />
+        <BrandLogo size="header" onNavigate={closeMenu} />
 
         <nav
           className="hidden items-center gap-1 lg:flex xl:gap-1"

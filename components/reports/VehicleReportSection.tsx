@@ -3,6 +3,7 @@ import { FullReportUpsellCard } from "@/components/reports/FullReportUpsellCard"
 import { Container } from "@/components/ui/Container";
 import { ExampleReportActions } from "@/components/vehicle/ExampleReportActions";
 import { LiveReportNextSteps } from "@/components/vehicle/LiveReportNextSteps";
+import { MobileVehicleCard } from "@/components/vehicle/MobileVehicleCard";
 import type { VehicleRecord } from "@/types/vehicle";
 
 export function VehicleReportSection({
@@ -34,8 +35,9 @@ export function VehicleReportSection({
     >
       <Container>
         {notice}
-        <div className="mb-4 grid gap-4 md:mb-5 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
-          <div className="text-left">
+        <div className="relative mb-4 grid gap-4 md:mb-5 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
+          <MobileVehicleCard vehicle={vehicle} />
+          <div className="text-left max-md:max-w-[min(80%,calc(100%-74px))]">
             <p className="eyebrow">{eyebrow}</p>
             <Heading className="heading-section mt-2 md:whitespace-nowrap">
               {title}

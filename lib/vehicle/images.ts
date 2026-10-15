@@ -67,6 +67,8 @@ const MAKE_ALIASES: Record<string, string> = {
   mercedesbenz: "mercedes benz",
   "mercedes benz cars": "mercedes benz",
   "mercedes amg": "mercedes benz",
+  "mercedes maybach": "mercedes benz",
+  maybach: "mercedes benz",
   opel: "vauxhall",
   "vauxhall motors": "vauxhall",
   "vauxhall motors limited": "vauxhall",
@@ -172,10 +174,40 @@ const STRICT_MODEL_ALIASES: Record<
   ],
   suzuki: [{ pattern: /^sx4 s cross\b/, model: "S-Cross" }],
   kia: [{ pattern: /^pro cee ?d\b/, model: "Ceed" }],
-  mazda: [{ pattern: /^([235])\b/, model: (match) => `Mazda${match[1]}` }],
+  mazda: [
+    { pattern: /^([235])\b/, model: (match) => `Mazda${match[1]}` },
+    { pattern: /^rx\s*7\b/, model: "RX-7" },
+    { pattern: /^rx\s*8\b/, model: "RX-8" },
+  ],
   toyota: [
     { pattern: /^corolla cross\b/, model: "Corolla Cross" },
     { pattern: /^prius plus\b/, model: "Prius+" },
+    { pattern: /^(?:gr\s*)?supra\b/, model: "Supra" },
+    // Only explicit AE86 signals: a plain 1983-1987 Corolla is usually a front-drive E80.
+    { pattern: /^(?:(?:corolla|sprinter)\s+)?(?:ae\s*86|levin|trueno)\b/, model: "AE86" },
+  ],
+  lexus: [
+    // No SC430 image: it stays on the placeholder.
+    { pattern: /^sc\s*430\b/, model: "SC430" },
+    { pattern: /^sc\s*(?:300|400)\b/, model: "SC" },
+  ],
+  nissan: [{ pattern: /^gt\s*r\b/, model: "GT-R" }],
+  "rolls royce": [
+    // No Drophead or Phantom Coupe image: these stay on the placeholder.
+    { pattern: /^phantom\b.*\b(?:drophead|coupe|convertible)\b/, model: "Phantom Drophead Coupe" },
+  ],
+  bentley: [
+    { pattern: /^continental flying spur\b/, model: "Flying Spur" },
+    // No GTC image, and a bare or older "Continental" may be another body or model.
+    { pattern: /^continental\b.*\b(?:gtc|convertible|cabriolet|cabrio)\b/, model: "Continental GTC" },
+    { pattern: /^continental gt\b/, model: "Continental GT" },
+    { pattern: /^continental(?: |$)/, model: "Continental" },
+  ],
+  "aston martin": [{ pattern: /^v(?:8|12)\s+vantage\b/, model: "Vantage" }],
+  ferrari: [{ pattern: /^(?:f\s*)?430\b/, model: "F430" }],
+  mclaren: [
+    { pattern: /^(?:mp4\s*)?12\s*c\b/, model: "12C" },
+    { pattern: /^(?:540\s*c|570\s*(?:s|gt)|600\s*lt)\b/, model: "570S" },
   ],
   volkswagen: [
     { pattern: /^golf plus\b/, model: "Golf Plus" },
@@ -188,6 +220,10 @@ const STRICT_MODEL_ALIASES: Record<
       model: (match) =>
         match[1] === "coupe" ? "2 Series Gran Coupe" : "2 Series Gran Tourer",
     },
+    {
+      pattern: /^(?:6 series|6\d{2}[a-z]{0,2})\b.*\b(?:gt|gran turismo)\b/,
+      model: "6 Series GT",
+    },
   ],
   mini: [
     { pattern: /\bcountryman\b/, model: "Countryman" },
@@ -199,6 +235,7 @@ const STRICT_MODEL_ALIASES: Record<
     { pattern: /^(cooper|one|electric)\b/, model: "Hatch" },
   ],
   "mercedes benz": [
+    { pattern: /^(?:maybach\s+)?gls\b/, model: "GLS" },
     { pattern: /^s(?:\s*\d{2,3}[a-z]?| class)?(?: |$)/, model: "S-Class" },
     { pattern: /^eqe\b.*\bsuv\b/, model: "EQE SUV" },
   ],
@@ -221,6 +258,20 @@ const YEAR_MODEL_ALIASES: Record<
       fromYear: 2016,
       toYear: 2019,
       model: "Zafira Tourer",
+    },
+  ],
+  volkswagen: [
+    // Pre-T7 Multivan and Caravelle share the Transporter body; earlier years have no image.
+    { pattern: /^multivan\b/, fromYear: 2010, toYear: 2021, model: "Transporter" },
+    { pattern: /^caravelle\b/, fromYear: 2010, toYear: 2026, model: "Transporter" },
+  ],
+  bmw: [
+    // The only F-generation image is the 4-door Gran Coupe; a stated coupe or convertible stays on the placeholder.
+    {
+      pattern: /^(?:6 series|6\d{2}[a-z]{0,2})\b(?!.*\bgran coupe\b).*\b(?:coupe|convertible|cabrio|cabriolet)\b/,
+      fromYear: 2011,
+      toYear: 2018,
+      model: "6 Series F12/F13",
     },
   ],
 };
@@ -379,7 +430,7 @@ function knownModelAlias(
   candidates: string[],
 ): string | null {
   if (makeKey === "bmw") {
-    const match = modelKey.match(/^([1-5])\s*\d{2}[a-z]?\b/);
+    const match = modelKey.match(/^([1-6])\s*\d{2}[a-z]?\b/);
     if (match) {
       const candidate = `${match[1]} Series`;
       if (candidates.includes(candidate)) return candidate;
@@ -940,7 +991,10 @@ export function resolveVehicleImage(
     const newer = [...exact].sort(
       (a, b) => b.yearFrom - a.yearFrom || a.priority - b.priority,
     )[0];
-    if (registrationDate.month != null) {
+    // A first registration years after manufacture (typically an import) says nothing about the generation.
+    const registrationNearBuild =
+      registrationDate.year != null && Math.abs(registrationDate.year - year) <= 1;
+    if (registrationDate.month != null && registrationNearBuild) {
       const month = registrationDate.month;
       const hasStrongTimingSignal = month <= 4 || month >= 9;
       const chosen = month <= 4 ? older : newer;

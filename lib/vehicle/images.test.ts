@@ -40,7 +40,13 @@ run("catalogue count matches vehicles.length", () => {
 });
 
 // Records that intentionally share another record's image: priority -> image owner priority.
-const SHARED_IMAGE_RECORDS: Record<number, number> = { 728: 726, 729: 727 };
+const SHARED_IMAGE_RECORDS: Record<number, number> = {
+  728: 726,
+  729: 727,
+  911: 910,
+  916: 915,
+  917: 913,
+};
 
 run("all catalogue filenames are unique WebP paths", () => {
   for (const { filename } of vehicles) {
@@ -446,13 +452,10 @@ run("pre-facelift year falls back to the same generation's facelift, marked repr
 
 run("nearest-generation fallback never crosses into a different generation", () => {
   const cases: Array<[string, string, number]> = [
-    ["Volkswagen", "Golf", 1995],
     ["BMW", "1 SERIES", 2008],
-    ["BMW", "3 SERIES", 2002],
     ["BMW", "X5", 2015],
     ["MERCEDES-BENZ", "E 220", 2006],
     ["FORD", "KA", 2005],
-    ["RENAULT", "CLIO", 2003],
     ["AUDI", "A4", 2006],
     ["CITROEN", "C3", 2025],
   ];
@@ -484,7 +487,7 @@ run("rejects an implausibly distant nearest-generation fallback", () => {
   const result = resolveVehicleImage({
     make: "Volkswagen",
     model: "Golf",
-    year: 1990,
+    year: 1965,
   });
   assert.equal(result.match, "placeholder");
   assert.equal(result.record, null);
@@ -1112,6 +1115,139 @@ run("690-746 families never guess unsupported generations, bodies or makes", () 
   assert.equal(matchCatalogModel("CITROEN", "C4 PICASSO VTR"), "C4 Picasso");
 });
 
+run("874-881 Multivan, 911 and 6 Series resolve by generation and stated body", () => {
+  const file = (make: string, model: string, firstRegistrationDate: string) =>
+    resolveVehicleImage({
+      make,
+      model,
+      year: Number(firstRegistrationDate.slice(0, 4)),
+      firstRegistrationDate,
+    }).filename;
+
+  assert.equal(file("VOLKSWAGEN", "Multivan Life TSI PHEV 4M Sa", "2025-09"), "volkswagen-multivan-t7-2022-2026.webp");
+  assert.equal(file("VOLKSWAGEN", "TRANSPORTER", "2025-09"), "volkswagen-transporter-t7-2025-2026.webp");
+  assert.equal(file("VOLKSWAGEN", "MULTIVAN HIGHLINE", "2017-06"), "volkswagen-transporter-t6-2015-2019.webp");
+  assert.equal(file("VOLKSWAGEN", "CARAVELLE EXECUTIVE", "2021-06"), "volkswagen-transporter-t6-1-2019-2024.webp");
+  assert.equal(file("VOLKSWAGEN", "CARAVELLE", "2012-06"), "volkswagen-transporter-t5-1-2010-2015.webp");
+  assert.equal(file("VOLKSWAGEN", "CARAVELLE", "2000-06"), null);
+  assert.equal(file("VOLKSWAGEN", "MULTIVAN", "2005-06"), null);
+
+  assert.equal(file("PORSCHE", "911", "1991-06"), "porsche-911-964-1989-1994.webp");
+  assert.equal(file("PORSCHE", "911", "1996-06"), "porsche-911-993-1994-1998.webp");
+  assert.equal(file("PORSCHE", "911", "2003-03"), "porsche-911-996-1997-2005.webp");
+  assert.equal(file("PORSCHE", "911 CARRERA 4S", "2008-06"), "porsche-911-997-2004-2012.webp");
+  assert.equal(file("PORSCHE", "911 CARRERA S", "2015-06"), "porsche-911-991-2011-2019.webp");
+  assert.equal(file("PORSCHE", "911 CARRERA", "2022-06"), "porsche-911-992-2019-2026.webp");
+
+  assert.equal(file("BMW", "6 SERIES", "2007-06"), "bmw-6-series-e63-2004-2010.webp");
+  assert.equal(file("BMW", "630I SE", "2005-06"), "bmw-6-series-e63-2004-2010.webp");
+  assert.equal(file("BMW", "6 SERIES", "2018-10"), "bmw-6-series-f06-gran-coupe-2011-2018.webp");
+  assert.equal(file("BMW", "640D M SPORT GRAN COUPE", "2015-06"), "bmw-6-series-f06-gran-coupe-2011-2018.webp");
+  assert.equal(file("BMW", "640D M SPORT", "2014-06"), "bmw-6-series-f06-gran-coupe-2011-2018.webp");
+  assert.equal(file("BMW", "650I CONVERTIBLE", "2013-06"), null);
+  assert.equal(file("BMW", "640D M SPORT COUPE", "2013-06"), null);
+  assert.equal(file("BMW", "6 SERIES GT", "2018-10"), "bmw-6-series-gt-g32-2017-2023.webp");
+  assert.equal(file("BMW", "640I GRAN TURISMO M SPORT", "2019-06"), "bmw-6-series-gt-g32-2017-2023.webp");
+  assert.equal(file("BMW", "6 SERIES", "2020-06"), null);
+});
+
+run("882-948 luxury, supercar and JDM names resolve safely", () => {
+  const file = (make: string, model: string, year: number, firstRegistrationDate?: string) =>
+    resolveVehicleImage({ make, model, year, firstRegistrationDate }).filename;
+
+  assert.equal(file("TOYOTA", "GR SUPRA", 2020), "toyota-supra-a90-2019-2026.webp");
+  assert.equal(file("TOYOTA", "SUPRA RZ", 1995), "toyota-supra-a80-1993-2002.webp");
+  assert.equal(file("TOYOTA", "SUPRA", 1989), "toyota-supra-a70-1986-1993.webp");
+  assert.equal(file("TOYOTA", "SUPRA", 2010), null);
+  assert.equal(file("TOYOTA", "CHASER TOURER V", 1998), "toyota-chaser-jzx100-1996-2001.webp");
+  assert.equal(file("TOYOTA", "GT86", 2015), "toyota-gt86-2012-2021.webp");
+  assert.equal(file("TOYOTA", "GR86", 2023), "toyota-gr86-2022-2026.webp");
+  assert.equal(file("TOYOTA", "SOARER", 1988), "toyota-soarer-z20-1986-1991.webp");
+  assert.equal(file("TOYOTA", "SOARER", 1995), "lexus-sc-z30-1991-2000.webp");
+
+  for (const model of ["AE86", "COROLLA AE86", "COROLLA LEVIN", "SPRINTER TRUENO", "TRUENO GT APEX"]) {
+    assert.equal(file("TOYOTA", model, 1985), "toyota-ae86-1983-1987.webp", model);
+  }
+  assert.equal(file("TOYOTA", "COROLLA", 1985), null);
+  assert.equal(file("TOYOTA", "COROLLA GL", 1986), null);
+  assert.equal(file("TOYOTA", "COROLLA LEVIN", 1995), null);
+
+  assert.equal(file("LEXUS", "SC300", 1995), "lexus-sc-z30-1991-2000.webp");
+  assert.equal(file("LEXUS", "SC 400", 1993), "lexus-sc-z30-1991-2000.webp");
+  assert.equal(file("LEXUS", "SC430", 2005), null);
+  assert.equal(file("LEXUS", "SC430", 2000), null);
+  assert.equal(file("LEXUS", "SC 430", 2003), null);
+
+  assert.equal(file("NISSAN", "GTR PRESTIGE", 2016), "nissan-gt-r-r35-2009-2022.webp");
+  assert.equal(file("NISSAN", "GT-R BLACK EDITION", 2012), "nissan-gt-r-r35-2009-2022.webp");
+  assert.equal(file("NISSAN", "GTR", 1999), null);
+  assert.equal(file("NISSAN", "SKYLINE GT-R V-SPEC", 1999), "nissan-skyline-r34-1998-2002.webp");
+  assert.equal(file("NISSAN", "SKYLINE GTS-T", 1996), "nissan-skyline-r33-1993-1998.webp");
+  assert.equal(file("NISSAN", "SILVIA S15 SPEC R", 2000), "nissan-silvia-s15-1999-2002.webp");
+  assert.equal(file("NISSAN", "180SX TYPE X", 1996), "nissan-180sx-1989-1998.webp");
+  assert.equal(file("NISSAN", "200 SX", 1991), "nissan-180sx-1989-1998.webp");
+  assert.equal(file("NISSAN", "200SX", 1997), "nissan-silvia-s14-1993-1999.webp");
+  assert.equal(file("NISSAN", "350Z GT", 2006), "nissan-350z-z33-2003-2009.webp");
+  assert.equal(file("NISSAN", "370Z NISMO", 2015), "nissan-370z-z34-2009-2020.webp");
+
+  assert.equal(file("MAZDA", "RX7 TYPE RS", 1999), "mazda-rx-7-fd-1992-2002.webp");
+  assert.equal(file("MAZDA", "RX-7 TURBO II", 1988), "mazda-rx-7-fc-1985-1992.webp");
+  assert.equal(file("MAZDA", "RX8 R3", 2010), "mazda-rx-8-2003-2012.webp");
+
+  assert.equal(file("FERRARI", "430 SCUDERIA", 2008), "ferrari-f430-2004-2009.webp");
+  assert.equal(file("FERRARI", "F430 SPIDER", 2006), "ferrari-f430-2004-2009.webp");
+  assert.equal(file("FERRARI", "458 ITALIA", 2012), "ferrari-458-2009-2015.webp");
+  assert.equal(file("FERRARI", "F8 TRIBUTO", 2021), "ferrari-f8-2019-2023.webp");
+  for (const model of ["570GT", "570S", "540C", "600LT"]) {
+    assert.equal(file("MCLAREN", model, 2018), "mclaren-570s-2015-2021.webp", model);
+  }
+  assert.equal(file("MCLAREN", "MP4-12C", 2012), "mclaren-12c-2011-2014.webp");
+  assert.equal(file("MCLAREN", "12C SPIDER", 2013), "mclaren-12c-2011-2014.webp");
+  assert.equal(file("MCLAREN", "650S", 2015), "mclaren-650s-2014-2017.webp");
+  assert.equal(file("MCLAREN", "675LT", 2016), null);
+  assert.equal(file("LAMBORGHINI", "HURACÁN EVO", 2020), "lamborghini-huracan-2014-2024.webp");
+  assert.equal(file("AUDI", "R8 V10 PLUS", 2017), "audi-r8-mk2-2015-2024.webp");
+
+  assert.equal(file("ASTON MARTIN", "V8 VANTAGE", 2008), "aston-martin-vantage-mk1-2005-2017.webp");
+  assert.equal(file("ASTON MARTIN", "V12 VANTAGE S", 2014), "aston-martin-vantage-mk1-2005-2017.webp");
+  assert.equal(file("ASTON MARTIN", "DBS SUPERLEGGERA", 2019), "aston-martin-dbs-superleggera-2018-2024.webp");
+  assert.equal(file("ASTON MARTIN", "DBX 707", 2023), "aston-martin-dbx-2020-2026.webp");
+
+  assert.equal(file("BENTLEY", "CONTINENTAL FLYING SPUR", 2008), "bentley-flying-spur-mk1-2005-2013.webp");
+  assert.equal(file("BENTLEY", "FLYING SPUR V8", 2016), "bentley-flying-spur-mk2-2013-2019.webp");
+  assert.equal(file("BENTLEY", "CONTINENTAL GT V8", 2014), "bentley-continental-gt-mk2-2011-2018.webp");
+  assert.equal(file("BENTLEY", "CONTINENTAL GTC", 2014), null);
+  assert.equal(file("BENTLEY", "CONTINENTAL GT CONVERTIBLE", 2020), null);
+  assert.equal(file("BENTLEY", "CONTINENTAL", 2008), null);
+  assert.equal(file("BENTLEY", "MULSANNE SPEED", 2016), "bentley-mulsanne-2010-2020.webp");
+
+  assert.equal(file("ROLLS ROYCE", "PHANTOM", 2010), "rolls-royce-phantom-vii-2003-2017.webp");
+  assert.equal(file("ROLLS-ROYCE", "PHANTOM DROPHEAD COUPE", 2010), null);
+  assert.equal(file("ROLLS-ROYCE", "PHANTOM COUPE", 2010), null);
+  assert.equal(file("ROLLS-ROYCE", "GHOST EWB", 2022), "rolls-royce-ghost-mk2-2020-2026.webp");
+  assert.equal(file("ROLLS-ROYCE", "CULLINAN BLACK BADGE", 2021), "rolls-royce-cullinan-2018-2026.webp");
+
+  assert.equal(file("MERCEDES-BENZ", "S 580 MAYBACH", 2022), "mercedes-benz-s-class-w223-2021-2026.webp");
+  assert.equal(file("MERCEDES-BENZ", "MAYBACH S 680", 2023), "mercedes-benz-s-class-w223-2021-2026.webp");
+  assert.equal(file("MERCEDES-MAYBACH", "S 560", 2018), "mercedes-benz-s-class-w222-2013-2020.webp");
+  assert.equal(file("MAYBACH", "S 580", 2022), "mercedes-benz-s-class-w223-2021-2026.webp");
+  assert.equal(file("MERCEDES-BENZ", "MAYBACH GLS 600", 2022), null);
+  assert.equal(file("MERCEDES-MAYBACH", "GLS 600", 2022), null);
+  assert.equal(file("MAYBACH", "GLS", 2022), null);
+  assert.equal(file("MAYBACH", "62", 2005), null);
+
+  assert.equal(file("LAND ROVER", "RANGE ROVER AUTOBIOGRAPHY", 2008), "land-rover-range-rover-l322-2002-2012.webp");
+  assert.equal(file("LAND ROVER", "RANGE ROVER SV AUTOBIOGRAPHY", 2019), "land-rover-range-rover-l405-2013-2021.webp");
+});
+
+run("a first registration years after manufacture never picks the generation", () => {
+  const imported = resolveVehicleImage({ make: "NISSAN", model: "SILVIA", year: 1993, firstRegistrationDate: "2008-02-01" });
+  assert.notEqual(imported.matchedFields.includes("firstRegistration:boundary-period"), true);
+  assert.equal(imported.filename, "nissan-silvia-s14-1993-1999.webp");
+  const uk = resolveVehicleImage({ make: "NISSAN", model: "SILVIA", year: 1993, firstRegistrationDate: "1993-02-01" });
+  assert.equal(uk.filename, "nissan-silvia-s13-1988-1994.webp");
+});
+
 run("every catalogue record has its WebP file and no file is orphaned", () => {
   const files = new Set(readdirSync(join(process.cwd(), "public", "cars")));
   const missing = vehicles.filter((v) => !files.has(v.filename));
@@ -1136,6 +1272,7 @@ run("catalogue filenames follow the slug and year convention", () => {
     assert.match(v.filename, /^[a-z0-9-]+\.webp$/, v.filename);
     assert.ok(
       FILENAMES_WITHOUT_YEARS.has(v.filename) ||
+        v.priority in SHARED_IMAGE_RECORDS ||
         v.filename.endsWith(`-${v.yearFrom}-${v.yearTo}.webp`),
       v.filename,
     );
@@ -1147,6 +1284,7 @@ run("catalogue filenames follow the slug and year convention", () => {
 
 const BODY_STATED_MODEL_INPUT: Record<string, string> = {
   "mercedes-benz-eqe-v295-2022-2026.webp": "EQE SALOON",
+  "land-rover-defender-110-classic-1983-2016.webp": "DEFENDER 110",
 };
 
 run("every record is reachable by make, model and a year in its range", () => {

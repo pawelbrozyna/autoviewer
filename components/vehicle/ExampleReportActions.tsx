@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Download, LoaderCircle, Mail, Share2, X } from "lucide-react";
 import { downloadVehicleReportPdf } from "@/lib/reports/pdf";
-import { registrationToSlug } from "@/lib/vehicle/registration";
+import { shareVehicleReport } from "@/lib/reports/share";
 import type { VehicleRecord } from "@/types/vehicle";
 
 export const reportActionButtonClass =
@@ -77,40 +77,11 @@ export function ExampleReportActions({
   }
 
   async function shareReport() {
-    const url = isDemo
-      ? `${window.location.origin}/example-report`
-      : `${window.location.origin}/vehicle/${registrationToSlug(vehicle.summary.registration)}`;
     setShareStatus("");
-
-    try {
-      if (navigator.share) {
-        await navigator.share(
-          isDemo
-            ? {
-                title: "AutoViewer Example Report",
-                text: "Explore a complete AutoViewer demonstration vehicle report.",
-                url,
-              }
-            : {
-                title: `AutoViewer Vehicle Report - ${vehicle.summary.displayRegistration}`,
-                text: `View the AutoViewer vehicle report for ${vehicle.summary.displayRegistration}.`,
-                url,
-              },
-        );
-        setShareStatus("Report shared");
-      } else {
-        await navigator.clipboard.writeText(url);
-        setShareStatus("Link copied");
-      }
-    } catch (error) {
-      if (error instanceof DOMException && error.name === "AbortError") return;
-      try {
-        await navigator.clipboard.writeText(url);
-        setShareStatus("Link copied");
-      } catch {
-        setShareStatus("Unable to share");
-      }
-    }
+    const outcome = await shareVehicleReport(vehicle);
+    if (outcome === "shared") setShareStatus("Report shared");
+    else if (outcome === "copied") setShareStatus("Link copied");
+    else if (outcome === "failed") setShareStatus("Unable to share");
   }
 
   async function emailReport(event: React.FormEvent<HTMLFormElement>) {
