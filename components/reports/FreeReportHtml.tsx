@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import localFont from "next/font/local";
 import { ArrowRight, Calendar, Fuel, Settings2 } from "lucide-react";
 import {
   CHECKOUT_DATA_AVAILABILITY_NOTE,
@@ -21,16 +20,12 @@ import {
   mileageRowsForPdf,
   motRowsForFreePdf,
 } from "@/lib/reports/pdf-limits";
+import { HomeLink } from "@/components/layout/HomeLink";
 import { vehicleColourSwatch } from "@/components/vehicle/VehicleColour";
 import { VehicleImageFallback } from "@/components/vehicle/VehicleImageFallback";
+import { plateFont } from "@/components/vehicle/plate-font";
 import { reportVehicleTitle } from "@/lib/vehicle/report-title";
 import type { VehicleRecord } from "@/types/vehicle";
-
-const plateFont = localFont({
-  src: "../../public/fonts/BarlowCondensed-SemiBold.ttf",
-  weight: "600",
-  display: "swap",
-});
 
 /** Convert PDF points to container-width units (A4 content width = 595pt). */
 function pt(value: number) {
@@ -455,9 +450,9 @@ export function FreeReportHtml({
             className="font-extrabold leading-none tracking-tight"
             style={{ fontSize: pt(22) }}
           >
-            <Link href="/" aria-label="AutoViewer home">
+            <HomeLink aria-label="AutoViewer home">
               Auto<span className="text-blue">Viewer</span>
-            </Link>
+            </HomeLink>
           </p>
           <div
             className="flex flex-wrap items-center gap-2 leading-none"

@@ -9,7 +9,8 @@ import {
 import fontkit from "@pdf-lib/fontkit";
 import type { ReportIconName, VehicleReportPdfOptions } from "@/lib/reports/pdf";
 import {
-  drawIllustrativeImageCaption,
+  HERO_HEADER_RULE_Y,
+  drawHeroVehicleImage,
   drawVariantRow,
   drawVehicleSpecBlock,
 } from "@/lib/reports/pdf-vehicle-specs";
@@ -416,34 +417,22 @@ export async function generateFullReportPdf(
       color: MUTED,
     });
   });
-  page1.drawLine({
-    start: { x: MARGIN, y: 765 },
-    end: { x: PAGE_WIDTH - MARGIN, y: 765 },
-    thickness: 0.65,
-    color: BLUE,
-  });
-
   const colourValue = summary.colour?.trim() || details.colour?.trim() || null;
   if (options.imagePng) {
     const image = await pdf.embedPng(options.imagePng);
-    const dimensions = image.scaleToFit(275.5, 142.5);
-    const imageX = 552 - dimensions.width;
-    const imageY = 594 + (150 - dimensions.height) / 2;
-    page1.drawImage(image, {
-      x: imageX,
-      y: imageY,
-      width: dimensions.width,
-      height: dimensions.height,
-    });
-    drawIllustrativeImageCaption(page1, {
-      imageX,
-      imageWidth: dimensions.width,
-      y: Math.max(582, imageY - 11),
+    drawHeroVehicleImage(page1, image, {
+      rightX: PAGE_WIDTH - MARGIN,
       regular,
       bold,
       colour: colourValue,
     });
   }
+  page1.drawLine({
+    start: { x: MARGIN, y: HERO_HEADER_RULE_Y },
+    end: { x: PAGE_WIDTH - MARGIN, y: HERO_HEADER_RULE_Y },
+    thickness: 0.65,
+    color: BLUE,
+  });
 
   const { title: vehicleTitle, variant: modelVariant } = reportVehicleTitle(summary);
   const titleSize = 17;

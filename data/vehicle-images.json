@@ -1,8 +1,8 @@
 {
   "library": "AutoViewer vehicle image library v12",
-  "count": 948,
+  "count": 1013,
   "format": "webp",
-  "selectionBasis": "Prioritised for UK used-vehicle and vehicle-parc relevance. Positions 1-300 cover common UK cars; 301-340 vans and light commercial vehicles; 341-370 motorcycles; 371-400 scooters; 401-450 pickups, larger/older commercial vans and van-based MPVs; 451-500 add high-priority UK used-car gaps, current EVs/hybrids and premium used models; 501-600 fill UK everyday-road gaps (2005-2020 hatchbacks, MPVs, budget family cars and small crossovers). 601-666 add current generations and facelifts of top sellers, new brands (BYD, Jaecoo, Omoda), London taxis, older common vans, used-car gaps and common UK buses. 667-678 fill real-lookup gaps and adjacent generations (Rifter, Partner Tepee, Fabia Mk1, Infiniti Q30, Smart #1, EQE saloon and SUV, Actros trucks, GB Kite Electroliner, BYD BD11 and B12). 679-689 add common London bus bodies (New Routemaster, Gemini 2 and 3, Enviro400 City, Enviro200 Mk1, MCV, StreetLite, MetroDecker EV, Enviro100EV, Enviro400EV). 690-746 add older UK cars (Jaguar X-Type, Saab 9-3, Citroen Xsara), Honda Stepwgn imports, Yadea scooters and common UK trucks (DAF, Scania, MAN, Volvo, Iveco, Renault Trucks, Mercedes-Benz Atego and Arocs). 747-873 add classic and modern-classic generations (British classics, older Ford, Vauxhall, Land Rover, VW, BMW, Mercedes-Benz and Porsche, French and Italian classics, Japanese modern classics). 874-881 add the Volkswagen Multivan T7, Porsche 911 996-992 and BMW 6 Series E63/E64, F06 Gran Coupe and 6 Series GT G32. 882-948 add luxury, supercar, JDM import and drift coverage (Rolls-Royce, Bentley, Aston Martin, Range Rover L322, Toyota, Lexus SC, Nissan, Mazda RX, Lamborghini, Ferrari, McLaren, Audi R8); 911, 916 and 917 share the images of 910, 915 and 913. This is a practical image-bucket catalogue, not an exact sales ranking.",
+  "selectionBasis": "Prioritised for UK used-vehicle and vehicle-parc relevance. Positions 1-300 cover common UK cars; 301-340 vans and light commercial vehicles; 341-370 motorcycles; 371-400 scooters; 401-450 pickups, larger/older commercial vans and van-based MPVs; 451-500 add high-priority UK used-car gaps, current EVs/hybrids and premium used models; 501-600 fill UK everyday-road gaps (2005-2020 hatchbacks, MPVs, budget family cars and small crossovers). 601-666 add current generations and facelifts of top sellers, new brands (BYD, Jaecoo, Omoda), London taxis, older common vans, used-car gaps and common UK buses. 667-678 fill real-lookup gaps and adjacent generations (Rifter, Partner Tepee, Fabia Mk1, Infiniti Q30, Smart #1, EQE saloon and SUV, Actros trucks, GB Kite Electroliner, BYD BD11 and B12). 679-689 add common London bus bodies (New Routemaster, Gemini 2 and 3, Enviro400 City, Enviro200 Mk1, MCV, StreetLite, MetroDecker EV, Enviro100EV, Enviro400EV). 690-746 add older UK cars (Jaguar X-Type, Saab 9-3, Citroen Xsara), Honda Stepwgn imports, Yadea scooters and common UK trucks (DAF, Scania, MAN, Volvo, Iveco, Renault Trucks, Mercedes-Benz Atego and Arocs). 747-873 add classic and modern-classic generations (British classics, older Ford, Vauxhall, Land Rover, VW, BMW, Mercedes-Benz and Porsche, French and Italian classics, Japanese modern classics). 874-881 add the Volkswagen Multivan T7, Porsche 911 996-992 and BMW 6 Series E63/E64, F06 Gran Coupe and 6 Series GT G32. 882-948 add luxury, supercar, JDM import and drift coverage (Rolls-Royce, Bentley, Aston Martin, Range Rover L322, Toyota, Lexus SC, Nissan, Mazda RX, Lamborghini, Ferrari, McLaren, Audi R8); 911, 916 and 917 share the images of 910, 915 and 913. 949-958 fill real-lookup gaps: Kia Sorento BL, XM, MQ4 and MQ4 facelift, Volkswagen Sharan Mk1 and Mk2, DAF XB, Volvo V50 and Suzuki Grand Vitara Mk1 and Mk2; 188 covers the whole Sorento UM 2015-2020 because the 2018 facelift looks almost the same. 959-1008 fill older and adjacent generations of common UK cars and vans found in real lookups (VW Transporter T5, Ford Transit Mk6, BMW E87/E60/E84/F15, Audi B7/C6/8R/8U/8J, Mercedes-Benz W169/W203/W211/W246/W167, Sprinter T1N, Vito W639, Discovery L319, Range Rover Sport L320, Astra G, Zafira A, Combo C, Vivaro A, Trafic II, Ducato X250, Dispatch II, Mondeo Mk3, Ka Mk1, Mustang S550, Jaguar XF X250/X260, Navara D40, L200 Series 4, Passat B5, Touran 1T3, Prius XW20, Yaris XP10, XC90 Mk1, V70 Mk3, MG ZS EV facelift, HR-V Mk3, CUPRA Leon, Santa Fe TM, Sportage KM, Tucson JM, Mazda6 GJ, MX-5 NC, 508 Mk1). 1009-1013 add street-test finds: Toyota Estima XR50, Dacia Spring facelift, Volkswagen ID. Buzz Cargo, Toyota Avensis T25 and Nissan Serena C26. pendingVehicles lists catalogued generations whose image is not generated yet; the matcher resolves them to the placeholder until each record moves into vehicles with its file. This is a practical image-bucket catalogue, not an exact sales ranking.",
   "imageStandard": {
     "format": "webp",
     "size": "1000x750",
@@ -1897,8 +1897,8 @@
       "priority": 188,
       "make": "Kia",
       "model": "Sorento",
-      "generation": "UM facelift",
-      "yearFrom": 2018,
+      "generation": "UM",
+      "yearFrom": 2015,
       "yearTo": 2020,
       "bodyType": "suv",
       "filename": "kia-sorento-um-facelift-2018-2020.webp"
@@ -9502,6 +9502,657 @@
       "yearTo": 2017,
       "bodyType": "coupe",
       "filename": "mclaren-650s-2014-2017.webp"
+    },
+    {
+      "priority": 949,
+      "make": "Kia",
+      "model": "Sorento",
+      "generation": "BL",
+      "yearFrom": 2002,
+      "yearTo": 2009,
+      "bodyType": "suv",
+      "filename": "kia-sorento-bl-2002-2009.webp"
+    },
+    {
+      "priority": 950,
+      "make": "Kia",
+      "model": "Sorento",
+      "generation": "XM",
+      "yearFrom": 2009,
+      "yearTo": 2015,
+      "bodyType": "suv",
+      "filename": "kia-sorento-xm-2009-2015.webp"
+    },
+    {
+      "priority": 951,
+      "make": "Kia",
+      "model": "Sorento",
+      "generation": "MQ4",
+      "yearFrom": 2020,
+      "yearTo": 2024,
+      "bodyType": "suv",
+      "filename": "kia-sorento-mq4-2020-2024.webp"
+    },
+    {
+      "priority": 952,
+      "make": "Kia",
+      "model": "Sorento",
+      "generation": "MQ4 facelift",
+      "yearFrom": 2024,
+      "yearTo": 2026,
+      "bodyType": "suv",
+      "filename": "kia-sorento-mq4-facelift-2024-2026.webp"
+    },
+    {
+      "priority": 953,
+      "make": "Volkswagen",
+      "model": "Sharan",
+      "generation": "Mk1",
+      "yearFrom": 1995,
+      "yearTo": 2010,
+      "bodyType": "mpv",
+      "filename": "volkswagen-sharan-mk1-1995-2010.webp"
+    },
+    {
+      "priority": 954,
+      "make": "Volkswagen",
+      "model": "Sharan",
+      "generation": "Mk2",
+      "yearFrom": 2010,
+      "yearTo": 2022,
+      "bodyType": "mpv",
+      "filename": "volkswagen-sharan-mk2-2010-2022.webp"
+    },
+    {
+      "priority": 955,
+      "make": "DAF",
+      "model": "XB",
+      "generation": "Mk1",
+      "yearFrom": 2023,
+      "yearTo": 2026,
+      "bodyType": "truck",
+      "filename": "daf-xb-2023-2026.webp"
+    },
+    {
+      "priority": 956,
+      "make": "Volvo",
+      "model": "V50",
+      "generation": "Mk1",
+      "yearFrom": 2004,
+      "yearTo": 2012,
+      "bodyType": "estate",
+      "filename": "volvo-v50-2004-2012.webp"
+    },
+    {
+      "priority": 957,
+      "make": "Suzuki",
+      "model": "Grand Vitara",
+      "generation": "Mk1",
+      "yearFrom": 1998,
+      "yearTo": 2005,
+      "bodyType": "suv",
+      "filename": "suzuki-grand-vitara-mk1-1998-2005.webp"
+    },
+    {
+      "priority": 958,
+      "make": "Suzuki",
+      "model": "Grand Vitara",
+      "generation": "Mk2",
+      "yearFrom": 2005,
+      "yearTo": 2015,
+      "bodyType": "suv",
+      "filename": "suzuki-grand-vitara-mk2-2005-2015.webp"
+    },
+    {
+      "priority": 959,
+      "make": "Volkswagen",
+      "model": "Transporter",
+      "generation": "T5",
+      "yearFrom": 2003,
+      "yearTo": 2009,
+      "bodyType": "van",
+      "filename": "volkswagen-transporter-t5-2003-2009.webp"
+    },
+    {
+      "priority": 960,
+      "make": "BMW",
+      "model": "1 Series",
+      "generation": "E87",
+      "yearFrom": 2004,
+      "yearTo": 2011,
+      "bodyType": "hatchback",
+      "filename": "bmw-1-series-e87-2004-2011.webp"
+    },
+    {
+      "priority": 961,
+      "make": "Vauxhall",
+      "model": "Vivaro",
+      "generation": "A",
+      "yearFrom": 2001,
+      "yearTo": 2014,
+      "bodyType": "van",
+      "filename": "vauxhall-vivaro-a-2001-2014.webp"
+    },
+    {
+      "priority": 962,
+      "make": "Audi",
+      "model": "A4",
+      "generation": "B7",
+      "yearFrom": 2005,
+      "yearTo": 2008,
+      "bodyType": "saloon-estate",
+      "filename": "audi-a4-b7-2005-2008.webp"
+    },
+    {
+      "priority": 963,
+      "make": "Audi",
+      "model": "Q5",
+      "generation": "8R",
+      "yearFrom": 2008,
+      "yearTo": 2016,
+      "bodyType": "suv",
+      "filename": "audi-q5-8r-2008-2016.webp"
+    },
+    {
+      "priority": 964,
+      "make": "BMW",
+      "model": "5 Series",
+      "generation": "E60",
+      "yearFrom": 2003,
+      "yearTo": 2010,
+      "bodyType": "saloon-estate",
+      "filename": "bmw-5-series-e60-2003-2010.webp"
+    },
+    {
+      "priority": 965,
+      "make": "Audi",
+      "model": "Q3",
+      "generation": "8U",
+      "yearFrom": 2011,
+      "yearTo": 2018,
+      "bodyType": "suv",
+      "filename": "audi-q3-8u-2011-2018.webp"
+    },
+    {
+      "priority": 966,
+      "make": "Mercedes-Benz",
+      "model": "C-Class",
+      "generation": "W203",
+      "yearFrom": 2000,
+      "yearTo": 2007,
+      "bodyType": "saloon-estate",
+      "filename": "mercedes-benz-c-class-w203-2000-2007.webp"
+    },
+    {
+      "priority": 967,
+      "make": "Land Rover",
+      "model": "Discovery",
+      "generation": "L319",
+      "yearFrom": 2004,
+      "yearTo": 2016,
+      "bodyType": "suv",
+      "filename": "land-rover-discovery-l319-2004-2016.webp"
+    },
+    {
+      "priority": 968,
+      "make": "Land Rover",
+      "model": "Range Rover Sport",
+      "generation": "L320",
+      "yearFrom": 2005,
+      "yearTo": 2013,
+      "bodyType": "suv",
+      "filename": "land-rover-range-rover-sport-l320-2005-2013.webp"
+    },
+    {
+      "priority": 969,
+      "make": "Vauxhall",
+      "model": "Astra",
+      "generation": "G",
+      "yearFrom": 1998,
+      "yearTo": 2004,
+      "bodyType": "hatchback-estate",
+      "filename": "vauxhall-astra-g-1998-2004.webp"
+    },
+    {
+      "priority": 970,
+      "make": "Renault",
+      "model": "Trafic",
+      "generation": "II",
+      "yearFrom": 2001,
+      "yearTo": 2014,
+      "bodyType": "van",
+      "filename": "renault-trafic-ii-2001-2014.webp"
+    },
+    {
+      "priority": 971,
+      "make": "Mercedes-Benz",
+      "model": "E-Class",
+      "generation": "W211",
+      "yearFrom": 2002,
+      "yearTo": 2009,
+      "bodyType": "saloon-estate",
+      "filename": "mercedes-benz-e-class-w211-2002-2009.webp"
+    },
+    {
+      "priority": 972,
+      "make": "MINI",
+      "model": "Hatch",
+      "generation": "R50/R53",
+      "yearFrom": 2001,
+      "yearTo": 2006,
+      "bodyType": "hatchback",
+      "filename": "mini-hatch-r50-2001-2006.webp"
+    },
+    {
+      "priority": 973,
+      "make": "Vauxhall",
+      "model": "Zafira",
+      "generation": "A",
+      "yearFrom": 1999,
+      "yearTo": 2005,
+      "bodyType": "mpv",
+      "filename": "vauxhall-zafira-a-1999-2005.webp"
+    },
+    {
+      "priority": 974,
+      "make": "Ford",
+      "model": "Mondeo",
+      "generation": "Mk3",
+      "yearFrom": 2000,
+      "yearTo": 2007,
+      "bodyType": "hatchback-saloon-estate",
+      "filename": "ford-mondeo-mk3-2000-2007.webp"
+    },
+    {
+      "priority": 975,
+      "make": "Mercedes-Benz",
+      "model": "Sprinter",
+      "generation": "T1N",
+      "yearFrom": 2000,
+      "yearTo": 2006,
+      "bodyType": "van",
+      "filename": "mercedes-benz-sprinter-t1n-2000-2006.webp"
+    },
+    {
+      "priority": 976,
+      "make": "Fiat",
+      "model": "Ducato",
+      "generation": "X250",
+      "yearFrom": 2006,
+      "yearTo": 2014,
+      "bodyType": "van",
+      "filename": "fiat-ducato-x250-2006-2014.webp"
+    },
+    {
+      "priority": 977,
+      "make": "BMW",
+      "model": "X5",
+      "generation": "F15",
+      "yearFrom": 2013,
+      "yearTo": 2018,
+      "bodyType": "suv",
+      "filename": "bmw-x5-f15-2013-2018.webp"
+    },
+    {
+      "priority": 978,
+      "make": "Audi",
+      "model": "A6",
+      "generation": "C6",
+      "yearFrom": 2004,
+      "yearTo": 2011,
+      "bodyType": "saloon-estate",
+      "filename": "audi-a6-c6-2004-2011.webp"
+    },
+    {
+      "priority": 979,
+      "make": "Jaguar",
+      "model": "XF",
+      "generation": "X250",
+      "yearFrom": 2008,
+      "yearTo": 2015,
+      "bodyType": "saloon-estate",
+      "filename": "jaguar-xf-x250-2008-2015.webp"
+    },
+    {
+      "priority": 980,
+      "make": "Nissan",
+      "model": "Navara",
+      "generation": "D40",
+      "yearFrom": 2005,
+      "yearTo": 2015,
+      "bodyType": "pickup",
+      "filename": "nissan-navara-d40-2005-2015.webp"
+    },
+    {
+      "priority": 981,
+      "make": "Mitsubishi",
+      "model": "L200",
+      "generation": "Series 4",
+      "yearFrom": 2006,
+      "yearTo": 2015,
+      "bodyType": "pickup",
+      "filename": "mitsubishi-l200-series-4-2006-2015.webp"
+    },
+    {
+      "priority": 982,
+      "make": "Volkswagen",
+      "model": "Passat",
+      "generation": "B5/B5.5",
+      "yearFrom": 1997,
+      "yearTo": 2005,
+      "bodyType": "saloon-estate",
+      "filename": "volkswagen-passat-b5-1997-2005.webp"
+    },
+    {
+      "priority": 983,
+      "make": "Ford",
+      "model": "Ka",
+      "generation": "Mk1",
+      "yearFrom": 1996,
+      "yearTo": 2008,
+      "bodyType": "hatchback",
+      "filename": "ford-ka-mk1-1996-2008.webp"
+    },
+    {
+      "priority": 984,
+      "make": "Toyota",
+      "model": "Prius",
+      "generation": "XW20",
+      "yearFrom": 2004,
+      "yearTo": 2009,
+      "bodyType": "hatchback",
+      "filename": "toyota-prius-xw20-2004-2009.webp"
+    },
+    {
+      "priority": 985,
+      "make": "BMW",
+      "model": "X1",
+      "generation": "E84",
+      "yearFrom": 2009,
+      "yearTo": 2015,
+      "bodyType": "suv",
+      "filename": "bmw-x1-e84-2009-2015.webp"
+    },
+    {
+      "priority": 986,
+      "make": "Mercedes-Benz",
+      "model": "Vito",
+      "generation": "W639",
+      "yearFrom": 2003,
+      "yearTo": 2010,
+      "bodyType": "van",
+      "filename": "mercedes-benz-vito-w639-2003-2010.webp"
+    },
+    {
+      "priority": 987,
+      "make": "Audi",
+      "model": "TT",
+      "generation": "8J",
+      "yearFrom": 2006,
+      "yearTo": 2014,
+      "bodyType": "coupe-roadster",
+      "filename": "audi-tt-8j-2006-2014.webp"
+    },
+    {
+      "priority": 988,
+      "make": "Volvo",
+      "model": "XC90",
+      "generation": "Mk1",
+      "yearFrom": 2002,
+      "yearTo": 2014,
+      "bodyType": "suv",
+      "filename": "volvo-xc90-mk1-2002-2014.webp"
+    },
+    {
+      "priority": 989,
+      "make": "Mercedes-Benz",
+      "model": "GLE",
+      "generation": "W167",
+      "yearFrom": 2019,
+      "yearTo": 2026,
+      "bodyType": "suv",
+      "filename": "mercedes-benz-gle-w167-2019-2026.webp"
+    },
+    {
+      "priority": 990,
+      "make": "MG",
+      "model": "ZS EV",
+      "generation": "Mk1 facelift",
+      "yearFrom": 2021,
+      "yearTo": 2026,
+      "bodyType": "crossover",
+      "filename": "mg-zs-ev-facelift-2021-2026.webp"
+    },
+    {
+      "priority": 991,
+      "make": "Honda",
+      "model": "HR-V",
+      "generation": "Mk3",
+      "yearFrom": 2021,
+      "yearTo": 2026,
+      "bodyType": "crossover",
+      "filename": "honda-hr-v-mk3-2021-2026.webp"
+    },
+    {
+      "priority": 992,
+      "make": "CUPRA",
+      "model": "Leon",
+      "generation": "Mk4",
+      "yearFrom": 2020,
+      "yearTo": 2026,
+      "bodyType": "hatchback-estate",
+      "filename": "cupra-leon-mk4-2020-2026.webp"
+    },
+    {
+      "priority": 993,
+      "make": "Jaguar",
+      "model": "XF",
+      "generation": "X260",
+      "yearFrom": 2015,
+      "yearTo": 2024,
+      "bodyType": "saloon-estate",
+      "filename": "jaguar-xf-x260-2015-2024.webp"
+    },
+    {
+      "priority": 994,
+      "make": "Mercedes-Benz",
+      "model": "B-Class",
+      "generation": "W246",
+      "yearFrom": 2012,
+      "yearTo": 2018,
+      "bodyType": "mpv-hatchback",
+      "filename": "mercedes-benz-b-class-w246-2012-2018.webp"
+    },
+    {
+      "priority": 995,
+      "make": "Mercedes-Benz",
+      "model": "A-Class",
+      "generation": "W169",
+      "yearFrom": 2004,
+      "yearTo": 2012,
+      "bodyType": "hatchback",
+      "filename": "mercedes-benz-a-class-w169-2004-2012.webp"
+    },
+    {
+      "priority": 996,
+      "make": "Hyundai",
+      "model": "Santa Fe",
+      "generation": "TM",
+      "yearFrom": 2018,
+      "yearTo": 2024,
+      "bodyType": "suv",
+      "filename": "hyundai-santa-fe-tm-2018-2024.webp"
+    },
+    {
+      "priority": 997,
+      "make": "Volkswagen",
+      "model": "Touran",
+      "generation": "1T3",
+      "yearFrom": 2010,
+      "yearTo": 2015,
+      "bodyType": "mpv",
+      "filename": "volkswagen-touran-1t3-2010-2015.webp"
+    },
+    {
+      "priority": 998,
+      "make": "Citroen",
+      "model": "Dispatch",
+      "generation": "II",
+      "yearFrom": 2007,
+      "yearTo": 2016,
+      "bodyType": "van",
+      "filename": "citroen-dispatch-ii-2007-2016.webp"
+    },
+    {
+      "priority": 999,
+      "make": "Vauxhall",
+      "model": "Combo",
+      "generation": "C",
+      "yearFrom": 2001,
+      "yearTo": 2011,
+      "bodyType": "van",
+      "filename": "vauxhall-combo-c-2001-2011.webp"
+    },
+    {
+      "priority": 1000,
+      "make": "Toyota",
+      "model": "Yaris",
+      "generation": "XP10",
+      "yearFrom": 1999,
+      "yearTo": 2005,
+      "bodyType": "hatchback",
+      "filename": "toyota-yaris-xp10-1999-2005.webp"
+    },
+    {
+      "priority": 1001,
+      "make": "Kia",
+      "model": "Sportage",
+      "generation": "KM",
+      "yearFrom": 2004,
+      "yearTo": 2010,
+      "bodyType": "suv",
+      "filename": "kia-sportage-km-2004-2010.webp"
+    },
+    {
+      "priority": 1002,
+      "make": "Hyundai",
+      "model": "Tucson",
+      "generation": "JM",
+      "yearFrom": 2004,
+      "yearTo": 2010,
+      "bodyType": "suv",
+      "filename": "hyundai-tucson-jm-2004-2010.webp"
+    },
+    {
+      "priority": 1003,
+      "make": "Mazda",
+      "model": "Mazda6",
+      "generation": "GJ",
+      "yearFrom": 2013,
+      "yearTo": 2023,
+      "bodyType": "saloon-estate",
+      "filename": "mazda-mazda6-gj-2013-2023.webp"
+    },
+    {
+      "priority": 1004,
+      "make": "Peugeot",
+      "model": "508",
+      "generation": "Mk1",
+      "yearFrom": 2011,
+      "yearTo": 2018,
+      "bodyType": "saloon-estate",
+      "filename": "peugeot-508-mk1-2011-2018.webp"
+    },
+    {
+      "priority": 1005,
+      "make": "Volvo",
+      "model": "V70",
+      "generation": "Mk3",
+      "yearFrom": 2007,
+      "yearTo": 2016,
+      "bodyType": "estate",
+      "filename": "volvo-v70-mk3-2007-2016.webp"
+    },
+    {
+      "priority": 1006,
+      "make": "Mazda",
+      "model": "MX-5",
+      "generation": "NC",
+      "yearFrom": 2005,
+      "yearTo": 2015,
+      "bodyType": "roadster",
+      "filename": "mazda-mx-5-nc-2005-2015.webp"
+    },
+    {
+      "priority": 1007,
+      "make": "Ford",
+      "model": "Mustang",
+      "generation": "S550",
+      "yearFrom": 2015,
+      "yearTo": 2023,
+      "bodyType": "coupe",
+      "filename": "ford-mustang-s550-2015-2023.webp"
+    },
+    {
+      "priority": 1008,
+      "make": "Ford",
+      "model": "Transit",
+      "generation": "Mk6",
+      "yearFrom": 2000,
+      "yearTo": 2006,
+      "bodyType": "van",
+      "filename": "ford-transit-mk6-2000-2006.webp"
+    },
+    {
+      "priority": 1009,
+      "make": "Toyota",
+      "model": "Estima",
+      "generation": "XR50",
+      "yearFrom": 2006,
+      "yearTo": 2019,
+      "bodyType": "mpv",
+      "filename": "toyota-estima-2006-2019.webp"
+    },
+    {
+      "priority": 1010,
+      "make": "Dacia",
+      "model": "Spring",
+      "generation": "Mk1 facelift",
+      "yearFrom": 2024,
+      "yearTo": 2026,
+      "bodyType": "hatchback",
+      "filename": "dacia-spring-2021-2026.webp"
+    },
+    {
+      "priority": 1011,
+      "make": "Volkswagen",
+      "model": "ID. Buzz Cargo",
+      "generation": "Mk1",
+      "yearFrom": 2022,
+      "yearTo": 2026,
+      "bodyType": "van",
+      "filename": "volkswagen-id-buzz-cargo-2022-2026.webp"
+    },
+    {
+      "priority": 1012,
+      "make": "Toyota",
+      "model": "Avensis",
+      "generation": "T25",
+      "yearFrom": 2003,
+      "yearTo": 2009,
+      "bodyType": "saloon-estate",
+      "filename": "toyota-avensis-t25-2003-2009.webp"
+    },
+    {
+      "priority": 1013,
+      "make": "Nissan",
+      "model": "Serena",
+      "generation": "C26",
+      "yearFrom": 2010,
+      "yearTo": 2016,
+      "bodyType": "mpv",
+      "filename": "nissan-serena-2010-2016.webp"
     }
-  ]
+  ],
+  "pendingVehicles": []
 }

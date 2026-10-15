@@ -452,11 +452,11 @@ run("pre-facelift year falls back to the same generation's facelift, marked repr
 
 run("nearest-generation fallback never crosses into a different generation", () => {
   const cases: Array<[string, string, number]> = [
-    ["BMW", "1 SERIES", 2008],
-    ["BMW", "X5", 2015],
-    ["MERCEDES-BENZ", "E 220", 2006],
-    ["FORD", "KA", 2005],
-    ["AUDI", "A4", 2006],
+    ["BMW", "X1", 2008],
+    ["BMW", "X5", 2010],
+    ["MERCEDES-BENZ", "E 220", 1998],
+    ["FORD", "MONDEO", 1998],
+    ["AUDI", "A4", 2003],
     ["CITROEN", "C3", 2025],
   ];
   for (const [make, model, year] of cases) {
@@ -498,7 +498,7 @@ run("unknown model uses placeholder, not another brand model", () => {
   const result = resolveVehicleImage({
     make: "Ford",
     model: "Mustang",
-    year: 2018,
+    year: 2008,
   });
   assert.equal(result.match, "placeholder");
   assert.equal(result.src, null);
@@ -697,20 +697,22 @@ run("trim, fuel and gearbox descriptors keep the base model", () => {
   }
 });
 
-run("short DVSA name matches a single longer catalogue model", () => {
-  assert.equal(matchCatalogModel("Vauxhall", "COMBO"), "Combo Cargo");
-  assert.equal(matchCatalogModel("Vauxhall", "COMBO 2300 DYNAMIC TD"), "Combo Cargo");
+run("Combo and Combo Cargo share one family across C, D and E", () => {
+  assert.equal(matchCatalogModel("Vauxhall", "COMBO"), "Combo");
+  assert.equal(matchCatalogModel("Vauxhall", "COMBO CARGO 2300 L1H1"), "Combo Cargo");
   const combo = resolveVehicleImage({ make: "VAUXHALL", model: "COMBO 2300 DYNAMIC TD", year: 2020 });
   assert.equal(combo.src, "/cars/vauxhall-combo-cargo-e-2018-2026.webp");
-  assert.equal(combo.confidence, "medium");
   assert.equal(
     resolveVehicleImage({ make: "VAUXHALL", model: "COMBO", year: 2016 }).src,
     "/cars/vauxhall-combo-cargo-d-2012-2018.webp",
   );
   assert.equal(
-    resolveVehicleImage({ make: "VAUXHALL", model: "COMBO", year: 2010 }).match,
-    "placeholder",
-    "Combo C predates every Combo Cargo generation",
+    resolveVehicleImage({ make: "VAUXHALL", model: "COMBO 1700 CDTI", year: 2010 }).src,
+    "/cars/vauxhall-combo-c-2001-2011.webp",
+  );
+  assert.equal(
+    resolveVehicleImage({ make: "VAUXHALL", model: "COMBO CARGO 2000 CDTI", year: 2008 }).src,
+    "/cars/vauxhall-combo-c-2001-2011.webp",
   );
 });
 
@@ -720,7 +722,8 @@ run("short names never guess when unsafe or ambiguous", () => {
   assert.equal(matchCatalogModel("Vauxhall", "COMBO LIFE ENERGY"), null);
   assert.equal(matchCatalogModel("Yamaha", "TRACER 9"), null);
   assert.equal(matchCatalogModel("Kawasaki", "VERSYS 1000"), null);
-  assert.equal(matchCatalogModel("Ford", "MUSTANG"), null);
+  assert.equal(matchCatalogModel("Ford", "MUSTANG"), "Mustang");
+  assert.equal(matchCatalogModel("Ford", "MUSTANG MACH-E AWD"), "Mustang Mach-E");
   const entries = [
     { priority: 1, make: "Testmake", model: "Alpha Van", generation: "Mk1", yearFrom: 2018, yearTo: 2024, bodyType: "Van", filename: "a.webp" },
     { priority: 2, make: "Testmake", model: "Alpha Tourer", generation: "Mk1", yearFrom: 2018, yearTo: 2024, bodyType: "MPV", filename: "b.webp" },
@@ -865,8 +868,12 @@ run("MG ZS EV never borrows a petrol ZS image", () => {
   for (const model of ["ZS EV", "ZS EV TROPHY CONNECT LONG RANGE", "ZSEV"]) {
     for (const year of [2022, 2025]) {
       const result = resolveVehicleImage({ make: "MG", model, year });
+      assert.equal(result.src, "/cars/mg-zs-ev-facelift-2021-2026.webp", `${model} ${year}`);
+    }
+    // The open-grille pre-facelift EV has no image and never borrows the facelift.
+    for (const year of [2019, 2020]) {
+      const result = resolveVehicleImage({ make: "MG", model, year });
       assert.equal(result.match, "placeholder", `${model} ${year}`);
-      assert.notEqual(result.src, "/cars/mg-zs-mk2-2024-2026.webp", `${model} ${year}`);
     }
   }
   assert.equal(
@@ -957,6 +964,213 @@ run("EQE without a stated body never guesses saloon or SUV", () => {
     });
     assert.equal(result.src, null, model);
     assert.equal(result.fallbackUsed, true, model);
+  }
+});
+
+run("949-958 real lookups resolve Sorento, Sharan, DAF XB, V50 and Grand Vitara", () => {
+  const cases: Array<[string, string, number, string, string]> = [
+    // PN24FXW, RY54DXX, YF08RRX, GJ18CUA and EF74YHJ as returned by DVSA.
+    ["Daf", "XB210FA", 2024, "2024-08", "daf-xb-2023-2026.webp"],
+    ["Volvo", "V50", 2004, "2004-12", "volvo-v50-2004-2012.webp"],
+    ["Suzuki", "Grand Vitara", 2008, "2008-06", "suzuki-grand-vitara-mk2-2005-2015.webp"],
+    ["Volkswagen", "Sharan", 2018, "2018-03", "volkswagen-sharan-mk2-2010-2022.webp"],
+    // UK facelift sales began April 2024, so a 2025 build is always the facelift.
+    ["Kia", "Sorento 2 PHEV AWD Auto", 2025, "2025-02", "kia-sorento-mq4-facelift-2024-2026.webp"],
+    ["KIA", "SORENTO KX-2 CRDI", 2007, "2007-03-01", "kia-sorento-bl-2002-2009.webp"],
+    ["KIA", "SORENTO KX-2 CRDI", 2012, "2012-03-01", "kia-sorento-xm-2009-2015.webp"],
+    ["KIA", "SORENTO KX-2 ISG", 2016, "2016-03-01", "kia-sorento-um-facelift-2018-2020.webp"],
+    ["KIA", "SORENTO 3 ISG", 2019, "2019-03-01", "kia-sorento-um-facelift-2018-2020.webp"],
+    ["KIA", "SORENTO 3 HEV", 2022, "2022-03-01", "kia-sorento-mq4-2020-2024.webp"],
+    ["KIA", "SORENTO 3 HEV", 2024, "2024-02-01", "kia-sorento-mq4-2020-2024.webp"],
+    ["KIA", "SORENTO 3 HEV", 2024, "2024-10-01", "kia-sorento-mq4-facelift-2024-2026.webp"],
+    ["VOLKSWAGEN", "SHARAN SE TDI", 2005, "2005-03-01", "volkswagen-sharan-mk1-1995-2010.webp"],
+    ["VW", "SHARAN SE NAV TDI BLUEMOTION TECH", 2013, "2013-03-01", "volkswagen-sharan-mk2-2010-2022.webp"],
+    ["DAF TRUCKS", "XB 230 FA", 2025, "2025-03-01", "daf-xb-2023-2026.webp"],
+    ["VOLVO", "V50 SE LUX D", 2010, "2010-03-01", "volvo-v50-2004-2012.webp"],
+    ["SUZUKI", "GRAND VITARA 2.0", 2002, "2002-03-01", "suzuki-grand-vitara-mk1-1998-2005.webp"],
+    ["SUZUKI", "GRAND VITARA SZ5 DDIS", 2012, "2012-03-01", "suzuki-grand-vitara-mk2-2005-2015.webp"],
+  ];
+  for (const [make, model, year, firstRegistrationDate, filename] of cases) {
+    assert.equal(
+      resolveVehicleImage({ make, model, year, firstRegistrationDate }).filename,
+      filename,
+      `${make} ${model} ${year}`,
+    );
+  }
+
+  // WA75RFE: DVSA does not say whether this EQE is the saloon or the SUV.
+  const eqe = resolveVehicleImage({
+    make: "Mercedes-Benz",
+    model: "Eqe 350+ Sport Edition",
+    year: 2025,
+    firstRegistrationDate: "2025-09",
+  });
+  assert.equal(eqe.src, null);
+
+  assert.equal(matchCatalogModel("SUZUKI", "VITARA SZ-T"), "Vitara");
+  assert.equal(matchCatalogModel("SEAT", "ALHAMBRA SE TDI"), "Alhambra");
+  assert.equal(matchCatalogModel("VOLVO", "V40 D2"), "V40");
+  assert.equal(matchCatalogModel("DAF", "LF 45.180"), "LF");
+});
+
+run("959-1008 older generations resolve from DVSA-style names", () => {
+  const cases: Array<[string, string, string, string]> = [
+    // EG03JYX as returned by DVSA.
+    ["TOYOTA", "YARIS", "2003-07", "toyota-yaris-xp10-1999-2005.webp"],
+    ["VOLKSWAGEN", "TRANSPORTER T30 TDI", "2006-06", "volkswagen-transporter-t5-2003-2009.webp"],
+    ["BMW", "118D SE", "2008-06", "bmw-1-series-e87-2004-2011.webp"],
+    ["VAUXHALL", "VIVARO 2900 CDTI SWB", "2008-06", "vauxhall-vivaro-a-2001-2014.webp"],
+    ["AUDI", "A4 SE TDI", "2006-06", "audi-a4-b7-2005-2008.webp"],
+    ["AUDI", "Q5 SE TDI QUATTRO", "2012-06", "audi-q5-8r-2008-2016.webp"],
+    ["BMW", "520D SE", "2007-06", "bmw-5-series-e60-2003-2010.webp"],
+    ["AUDI", "Q3 S LINE TDI QUATTRO", "2014-06", "audi-q3-8u-2011-2018.webp"],
+    ["FORD", "TRANSIT 280 SWB", "2003-06", "ford-transit-mk6-2000-2006.webp"],
+    ["MERCEDES-BENZ", "C220 CDI ELEGANCE", "2004-06", "mercedes-benz-c-class-w203-2000-2007.webp"],
+    ["LAND ROVER", "DISCOVERY 3 TDV6 HSE", "2007-06", "land-rover-discovery-l319-2004-2016.webp"],
+    ["LAND ROVER", "DISCOVERY 4 SDV6 HSE", "2013-06", "land-rover-discovery-l319-2004-2016.webp"],
+    ["LAND ROVER", "RANGE ROVER SPORT TDV6 HSE", "2009-06", "land-rover-range-rover-sport-l320-2005-2013.webp"],
+    ["VAUXHALL", "ASTRA CLUB 8V", "2001-06", "vauxhall-astra-g-1998-2004.webp"],
+    ["RENAULT", "TRAFIC SL27 DCI", "2009-06", "renault-trafic-ii-2001-2014.webp"],
+    ["MERCEDES-BENZ", "E220 CDI AVANTGARDE", "2006-06", "mercedes-benz-e-class-w211-2002-2009.webp"],
+    ["MINI", "COOPER", "2004-06", "mini-hatch-r50-2001-2006.webp"],
+    ["VAUXHALL", "ZAFIRA DESIGN 16V", "2003-06", "vauxhall-zafira-a-1999-2005.webp"],
+    ["FORD", "MONDEO ZETEC", "2004-06", "ford-mondeo-mk3-2000-2007.webp"],
+    ["MERCEDES-BENZ", "SPRINTER 313 CDI MWB", "2004-06", "mercedes-benz-sprinter-t1n-2000-2006.webp"],
+    ["FIAT", "DUCATO 35 MULTIJET LWB", "2010-06", "fiat-ducato-x250-2006-2014.webp"],
+    ["BMW", "X5 XDRIVE30D SE", "2015-06", "bmw-x5-f15-2013-2018.webp"],
+    ["AUDI", "A6 SE TDI", "2008-06", "audi-a6-c6-2004-2011.webp"],
+    ["JAGUAR", "XF LUXURY V6 D", "2010-06", "jaguar-xf-x250-2008-2015.webp"],
+    ["JAGUAR", "XF R-SPORT D", "2017-06", "jaguar-xf-x260-2015-2024.webp"],
+    ["NISSAN", "NAVARA ACENTA DCI 4X4 D/C", "2010-06", "nissan-navara-d40-2005-2015.webp"],
+    ["MITSUBISHI", "L200 WARRIOR DI-D 4X4", "2010-06", "mitsubishi-l200-series-4-2006-2015.webp"],
+    ["VOLKSWAGEN", "PASSAT SE TDI", "2002-06", "volkswagen-passat-b5-1997-2005.webp"],
+    ["FORD", "KA STYLE", "2004-06", "ford-ka-mk1-1996-2008.webp"],
+    ["TOYOTA", "PRIUS T SPIRIT VVT-I", "2007-06", "toyota-prius-xw20-2004-2009.webp"],
+    ["BMW", "X1 XDRIVE20D SE", "2012-06", "bmw-x1-e84-2009-2015.webp"],
+    ["MERCEDES-BENZ", "VITO 111 CDI LONG", "2007-06", "mercedes-benz-vito-w639-2003-2010.webp"],
+    ["AUDI", "TT TFSI", "2010-06", "audi-tt-8j-2006-2014.webp"],
+    ["VOLVO", "XC90 D5 SE", "2008-06", "volvo-xc90-mk1-2002-2014.webp"],
+    ["MERCEDES-BENZ", "GLE 300 D 4MATIC AMG LINE", "2021-06", "mercedes-benz-gle-w167-2019-2026.webp"],
+    ["MERCEDES-BENZ", "GLE350D AMG LINE", "2021-06", "mercedes-benz-gle-w167-2019-2026.webp"],
+    ["MG", "ZS EV TROPHY CONNECT", "2023-06", "mg-zs-ev-facelift-2021-2026.webp"],
+    ["HONDA", "HR-V ADVANCE E:HEV", "2022-06", "honda-hr-v-mk3-2021-2026.webp"],
+    ["CUPRA", "LEON VZ2 E-HYBRID", "2022-06", "cupra-leon-mk4-2020-2026.webp"],
+    ["MERCEDES-BENZ", "B180 SPORT", "2015-06", "mercedes-benz-b-class-w246-2012-2018.webp"],
+    ["MERCEDES-BENZ", "A150 CLASSIC SE", "2007-06", "mercedes-benz-a-class-w169-2004-2012.webp"],
+    ["HYUNDAI", "SANTA FE PREMIUM CRDI", "2020-06", "hyundai-santa-fe-tm-2018-2024.webp"],
+    ["VOLKSWAGEN", "TOURAN SE TDI", "2012-06", "volkswagen-touran-1t3-2010-2015.webp"],
+    ["CITROEN", "DISPATCH 1000 L1H1 HDI", "2011-06", "citroen-dispatch-ii-2007-2016.webp"],
+    ["VAUXHALL", "COMBO 1700 CDTI", "2006-06", "vauxhall-combo-c-2001-2011.webp"],
+    ["KIA", "SPORTAGE XE CRDI", "2008-06", "kia-sportage-km-2004-2010.webp"],
+    ["HYUNDAI", "TUCSON CDX CRTD", "2007-06", "hyundai-tucson-jm-2004-2010.webp"],
+    ["MAZDA", "6 SPORT NAV D", "2016-06", "mazda-mazda6-gj-2013-2023.webp"],
+    ["MAZDA", "MAZDA6 SE-L NAV", "2019-06", "mazda-mazda6-gj-2013-2023.webp"],
+    ["PEUGEOT", "508 ACTIVE HDI", "2013-06", "peugeot-508-mk1-2011-2018.webp"],
+    ["VOLVO", "V70 SE D5", "2010-06", "volvo-v70-mk3-2007-2016.webp"],
+    ["MAZDA", "MX-5 SPORT TECH", "2010-06", "mazda-mx-5-nc-2005-2015.webp"],
+    ["FORD", "MUSTANG GT", "2018-06", "ford-mustang-s550-2015-2023.webp"],
+  ];
+  const resolve = (make: string, model: string, firstRegistrationDate: string) =>
+    resolveVehicleImage({
+      make,
+      model,
+      year: Number(firstRegistrationDate.slice(0, 4)),
+      firstRegistrationDate,
+    }).filename;
+  for (const [make, model, date, filename] of cases) {
+    assert.equal(resolve(make, model, date), filename, `${make} ${model} ${date}`);
+  }
+  const covered = new Set(cases.map(([, , , filename]) => filename));
+  const added = vehicles.filter((v) => v.priority >= 959 && v.priority <= 1008);
+  assert.equal(added.length, 50);
+  assert.deepEqual(added.filter((v) => !covered.has(v.filename)).map((v) => v.filename), []);
+});
+
+run("959-1008 leave neighbouring generations and other bodies alone", () => {
+  const cases: Array<[string, string, string, string | null]> = [
+    ["BMW", "118D SPORT", "2012-06", "bmw-1-series-f20-2011-2015.webp"],
+    ["BMW", "118D SPORT", "2011-02", "bmw-1-series-e87-2004-2011.webp"],
+    ["BMW", "118D SPORT", "2011-10", "bmw-1-series-f20-2011-2015.webp"],
+    ["TOYOTA", "YARIS T2", "2006-06", "toyota-yaris-xp90-2006-2011.webp"],
+    ["FORD", "TRANSIT 280 SWB", "2006-02", "ford-transit-mk6-2000-2006.webp"],
+    ["FORD", "TRANSIT 280 SWB", "2006-10", "ford-transit-mk7-2006-2014.webp"],
+    ["MINI", "COOPER", "2007-06", "mini-hatch-r56-2006-2013.webp"],
+    ["MERCEDES-BENZ", "VITO 113 CDI", "2011-06", "mercedes-benz-vito-w639-facelift-2010-2014.webp"],
+    ["VOLKSWAGEN", "TRANSPORTER T28 TDI", "2011-06", "volkswagen-transporter-t5-1-2010-2015.webp"],
+    ["KIA", "SPORTAGE 2 CRDI", "2012-06", "kia-sportage-sl-2010-2015.webp"],
+    ["MAZDA", "MX-5 SPORT NAV", "2016-06", "mazda-mx-5-nd-2015-2026.webp"],
+    ["MERCEDES-BENZ", "GLE 350 D 4MATIC", "2017-06", "mercedes-benz-gle-w166-2015-2019.webp"],
+    ["VAUXHALL", "COMBO 2000 L1H1 CDTI", "2015-06", "vauxhall-combo-cargo-d-2012-2018.webp"],
+    // Older generations with no image of their own stay on the placeholder.
+    ["MAZDA", "6 TS2", "2010-06", null],
+    ["VOLVO", "V70 SE D5", "2005-06", null],
+    ["HYUNDAI", "SANTA FE CDX CRTD", "2016-06", null],
+    ["FORD", "MUSTANG GT", "2012-06", null],
+    ["MITSUBISHI", "L200 4LIFE", "2004-06", null],
+    ["MG", "ZS EV EXCLUSIVE", "2020-06", null],
+    // Bodies or models the new images do not show.
+    ["BMW", "120D M SPORT COUPE", "2010-06", null],
+    ["BMW", "118I SE CONVERTIBLE", "2012-06", null],
+    ["MERCEDES-BENZ", "C180 KOMPRESSOR SE SPORTCOUPE", "2004-06", null],
+    ["MERCEDES-BENZ", "C220 CDI SPORT COUPE", "2004-06", null],
+    ["MERCEDES-BENZ", "GLE 400 D 4MATIC AMG LINE PREMIUM COUPE", "2022-06", null],
+    ["AUDI", "A4 CABRIOLET TDI SPORT", "2007-06", null],
+    ["FORD", "MUSTANG GT CONVERTIBLE", "2018-06", null],
+    ["TOYOTA", "YARIS VERSO T3", "2003-06", null],
+    ["TOYOTA", "AVENSIS VERSO T2 D-4D", "2004-06", null],
+    ["VAUXHALL", "COMBO LIFE ENERGY", "2019-06", null],
+    ["VOLKSWAGEN", "ID. BUZZ PRO", "2023-06", null],
+  ];
+  for (const [make, model, date, filename] of cases) {
+    const result = resolveVehicleImage({
+      make,
+      model,
+      year: Number(date.slice(0, 4)),
+      firstRegistrationDate: date,
+    });
+    assert.equal(result.filename, filename, `${make} ${model} ${date}`);
+  }
+});
+
+const pendingVehicles = vehicleImagesLibrary.pendingVehicles as VehicleImageRow[];
+
+run("1009-1013 street-test finds resolve to their own generation", () => {
+  const cases: Array<[string, string, string, string]> = [
+    // LK07VVL, LY25VTO, GK25JYZ, GR07FZW and T66TTP as returned by DVSA.
+    ["TOYOTA", "ESTIMA", "2007-03", "toyota-estima-2006-2019.webp"],
+    ["DACIA", "SPRING EXTREME EV", "2025-06", "dacia-spring-2021-2026.webp"],
+    ["VOLKSWAGEN", "ID BUZZ COMMERCE", "2025-03", "volkswagen-id-buzz-cargo-2022-2026.webp"],
+    ["TOYOTA", "AVENSIS", "2007-06", "toyota-avensis-t25-2003-2009.webp"],
+    ["NISSAN", "SERENA", "2015-09", "nissan-serena-2010-2016.webp"],
+  ];
+  for (const [make, model, date, filename] of cases) {
+    const result = resolveVehicleImage({
+      make,
+      model,
+      year: Number(date.slice(0, 4)),
+      firstRegistrationDate: date,
+    });
+    assert.equal(result.filename, filename, model);
+    assert.equal(result.match, "exact", model);
+  }
+  assert.equal(
+    resolveVehicleImage({ make: "TOYOTA", model: "AVENSIS T2 D-4D", year: 2012 }).filename,
+    "toyota-avensis-t27-2009-2015.webp",
+  );
+});
+
+run("pending records have no file yet and never collide with the catalogue", () => {
+  const files = new Set(readdirSync(join(process.cwd(), "public", "cars")));
+  const priorities = new Set(vehicles.map((v) => v.priority));
+  const filenames = new Set(vehicles.map((v) => v.filename));
+  const keys = new Set(vehicles.map((v) => `${v.make}|${v.model}|${v.generation}`.toLowerCase()));
+  for (const v of pendingVehicles) {
+    assert.ok(!files.has(v.filename), `${v.filename} exists: move its record into vehicles`);
+    assert.ok(!filenames.has(v.filename), v.filename);
+    assert.ok(!priorities.has(v.priority), `pending priority ${v.priority}`);
+    assert.ok(!keys.has(`${v.make}|${v.model}|${v.generation}`.toLowerCase()), v.filename);
+    assert.match(v.filename, new RegExp(`-${v.yearFrom}-${v.yearTo}\\.webp$`), v.filename);
+    priorities.add(v.priority);
   }
 });
 
@@ -1130,7 +1344,8 @@ run("874-881 Multivan, 911 and 6 Series resolve by generation and stated body", 
   assert.equal(file("VOLKSWAGEN", "CARAVELLE EXECUTIVE", "2021-06"), "volkswagen-transporter-t6-1-2019-2024.webp");
   assert.equal(file("VOLKSWAGEN", "CARAVELLE", "2012-06"), "volkswagen-transporter-t5-1-2010-2015.webp");
   assert.equal(file("VOLKSWAGEN", "CARAVELLE", "2000-06"), null);
-  assert.equal(file("VOLKSWAGEN", "MULTIVAN", "2005-06"), null);
+  assert.equal(file("VOLKSWAGEN", "MULTIVAN", "2005-06"), "volkswagen-transporter-t5-2003-2009.webp");
+  assert.equal(file("VOLKSWAGEN", "CARAVELLE", "2002-06"), null);
 
   assert.equal(file("PORSCHE", "911", "1991-06"), "porsche-911-964-1989-1994.webp");
   assert.equal(file("PORSCHE", "911", "1996-06"), "porsche-911-993-1994-1998.webp");
@@ -1265,6 +1480,12 @@ run("every catalogue record has its WebP file and no file is orphaned", () => {
 });
 
 const FILENAMES_WITHOUT_YEARS = new Set(["yadea-g5s.webp", "yadea-c1s.webp"]);
+/** Records whose range changed after their image was named: the file keeps its original years. */
+const FILENAMES_WITH_WIDENED_RANGES = new Set([
+  "kia-sorento-um-facelift-2018-2020.webp",
+  // The image is the 2024 facelift, the only Spring sold in the UK.
+  "dacia-spring-2021-2026.webp",
+]);
 
 run("catalogue filenames follow the slug and year convention", () => {
   const keys = new Set<string>();
@@ -1272,6 +1493,7 @@ run("catalogue filenames follow the slug and year convention", () => {
     assert.match(v.filename, /^[a-z0-9-]+\.webp$/, v.filename);
     assert.ok(
       FILENAMES_WITHOUT_YEARS.has(v.filename) ||
+        FILENAMES_WITH_WIDENED_RANGES.has(v.filename) ||
         v.priority in SHARED_IMAGE_RECORDS ||
         v.filename.endsWith(`-${v.yearFrom}-${v.yearTo}.webp`),
       v.filename,

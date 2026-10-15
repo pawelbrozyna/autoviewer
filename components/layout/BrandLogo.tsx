@@ -1,17 +1,15 @@
 import Image from "next/image";
-import Link from "next/link";
+import { HomeLink } from "@/components/layout/HomeLink";
 import { cn } from "@/lib/utils";
 
 /** Proportionally trimmed transparent AutoViewer wordmark. */
 export function BrandLogo({
   className,
-  href = "/",
   size = "default",
   align = "left",
   onNavigate,
 }: {
   className?: string;
-  href?: string;
   size?: "default" | "header";
   /** Image alignment inside the logo box. Use center on standalone/hero placements. */
   align?: "left" | "center";
@@ -23,8 +21,7 @@ export function BrandLogo({
       : "h-[18px] w-[87px] md:h-[23px] md:w-[109px]";
 
   return (
-    <Link
-      href={href}
+    <HomeLink
       className={cn("relative inline-block", sizeClass, className)}
       aria-label="AutoViewer home"
       onClick={onNavigate}
@@ -45,6 +42,6 @@ export function BrandLogo({
         }
         priority
       />
-    </Link>
+    </HomeLink>
   );
 }

@@ -32,7 +32,9 @@ import {
   type VehicleCardStatKey,
 } from "@/lib/vehicle/vehicle-card";
 import { renderVehicleCardImage } from "@/lib/vehicle/vehicle-card-image";
-import { VehicleImageFallback } from "@/components/vehicle/VehicleImageFallback";
+import { plateFont } from "@/components/vehicle/plate-font";
+import { knownVehicleColourSwatch } from "@/components/vehicle/VehicleColour";
+import { VEHICLE_PLACEHOLDER_SRC } from "@/components/vehicle/VehicleImageFallback";
 import type { VehicleRecord } from "@/types/vehicle";
 
 const STAT_ICONS: Record<VehicleCardStatKey, LucideIcon> = {
@@ -158,7 +160,7 @@ export function MobileVehicleCard({ vehicle }: { vehicle: VehicleRecord }) {
   const [openFrame, setOpenFrame] = useState<ImageFrame | null>(null);
   const tabRef = useRef<HTMLButtonElement>(null);
   const card = useMemo(() => (open ? buildVehicleCardData(vehicle) : null), [open, vehicle]);
-  const image = useImageFrame(vehicle.summary.imageSrc ?? null, pendingOpen);
+  const image = useImageFrame(vehicle.summary.imageSrc ?? VEHICLE_PLACEHOLDER_SRC, pendingOpen);
 
   const openCard = useCallback((frame: ImageFrame | null) => {
     setPendingOpen(false);
@@ -246,6 +248,7 @@ function VehicleCardDialog({
   const closeRef = useRef<HTMLButtonElement>(null);
   const [shareStatus, setShareStatus] = useState("");
   const [downloading, setDownloading] = useState(false);
+  const colourSwatch = knownVehicleColourSwatch(card.colour);
 
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
@@ -347,13 +350,25 @@ function VehicleCardDialog({
           </button>
         </div>
 
-        <VehicleCardImage src={card.imageSrc} alt={card.imageAlt} frame={imageFrame} />
+        <VehicleCardImage
+          src={card.imageSrc ?? VEHICLE_PLACEHOLDER_SRC}
+          alt={card.imageSrc ? card.imageAlt : "Representative image unavailable"}
+          frame={imageFrame}
+        />
 
         <p className="px-5 text-center text-[11px] leading-snug text-muted">
           <span className="block">{VEHICLE_CARD_DISCLAIMER}</span>
           {card.colour ? (
-            <span className="block">
-              Registered colour: <span className="font-bold text-navy">{card.colour}</span>
+            <span className="mt-0.5 flex items-center justify-center gap-1.5 text-[12.5px] text-[#3b4a63]">
+              Registered colour:
+              {colourSwatch ? (
+                <span
+                  className="h-3 w-3 shrink-0 rounded-full border border-slate-400/70"
+                  style={{ backgroundColor: colourSwatch }}
+                  aria-hidden
+                />
+              ) : null}
+              <span className="font-bold text-navy">{card.colour}</span>
             </span>
           ) : null}
         </p>
@@ -370,6 +385,11 @@ function VehicleCardDialog({
               {card.variant}
             </p>
           ) : null}
+          <span
+            className={`${plateFont.className} mt-1.5 inline-flex h-[24px] items-center rounded-[4px] border border-black/80 bg-[#fac023] px-2 text-[17px] font-semibold leading-none tracking-[0.04em] text-black`}
+          >
+            {card.registration}
+          </span>
         </div>
 
         {card.stats.length > 0 ? (
@@ -437,20 +457,11 @@ function VehicleCardImage({
   alt,
   frame,
 }: {
-  src: string | null;
+  src: string;
   alt: string;
   frame: ImageFrame | null;
 }) {
   const [loaded, setLoaded] = useState(false);
-
-  if (!src) {
-    return (
-      <div className="relative mx-[6%] mt-1 aspect-[4/3] shrink-0">
-        <VehicleImageFallback className="absolute inset-0" />
-      </div>
-    );
-  }
-
   const style: CSSProperties = { aspectRatio: frame ? String(frame.aspect) : "4 / 3" };
 
   return (

@@ -221,11 +221,48 @@ export function drawVariantRow(
 }
 
 /** Small caption centred under the vehicle image in free/full PDFs. */
-export function drawIllustrativeImageCaption(
+/** Blue rule under the page 1 header. Draw it after the hero image so it stays on top. */
+export const HERO_HEADER_RULE_Y = 767;
+
+/**
+ * Page 1 hero vehicle image, matching the HTML report: 15% larger than its 275.5 x 142.5
+ * box, shifted slightly left, with the colour caption right-aligned underneath.
+ */
+export function drawHeroVehicleImage(
+  page: PDFPage,
+  image: PDFImage,
+  input: {
+    rightX: number;
+    regular: PDFFont;
+    bold: PDFFont;
+    colour: string | null;
+  },
+) {
+  const base = image.scaleToFit(275.5, 142.5);
+  const width = base.width * 1.15;
+  const height = base.height * 1.15;
+  const centreX = 552 - base.width / 2 - 8;
+  const centreY = 669;
+  const imageY = centreY - height / 2;
+  page.drawImage(image, {
+    x: centreX - width / 2,
+    y: imageY,
+    width,
+    height,
+  });
+  drawIllustrativeImageCaption(page, {
+    rightX: input.rightX,
+    y: Math.max(582, imageY - 11),
+    regular: input.regular,
+    bold: input.bold,
+    colour: input.colour,
+  });
+}
+
+function drawIllustrativeImageCaption(
   page: PDFPage,
   input: {
-    imageX: number;
-    imageWidth: number;
+    rightX: number;
     y: number;
     regular: PDFFont;
     bold: PDFFont;
@@ -240,7 +277,7 @@ export function drawIllustrativeImageCaption(
     input.regular.widthOfTextAtSize(prefix, size) +
     input.bold.widthOfTextAtSize(colourText, size) +
     input.regular.widthOfTextAtSize(suffix, size);
-  let x = input.imageX + (input.imageWidth - fullWidth) / 2;
+  let x = input.rightX - fullWidth;
   page.drawText(prefix, {
     x,
     y: input.y,

@@ -22,9 +22,14 @@ const VEHICLE_COLOUR_SWATCHES: Record<string, string> = {
 
 const FALLBACK_SWATCH = "#CBD5E1";
 
-export function vehicleColourSwatch(colour?: string | null): string {
+/** Swatch for a recognised registered colour, or null when the name has no known swatch. */
+export function knownVehicleColourSwatch(colour?: string | null): string | null {
   const key = colour?.trim().toLowerCase() ?? "";
-  return VEHICLE_COLOUR_SWATCHES[key] ?? FALLBACK_SWATCH;
+  return VEHICLE_COLOUR_SWATCHES[key] ?? null;
+}
+
+export function vehicleColourSwatch(colour?: string | null): string {
+  return knownVehicleColourSwatch(colour) ?? FALLBACK_SWATCH;
 }
 
 export function VehicleColour({

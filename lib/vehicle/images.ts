@@ -105,6 +105,7 @@ const MODEL_FAMILIES: Record<string, string[][]> = {
   vauxhall: [
     ["Crossland", "Crossland X"],
     ["Grandland", "Grandland X"],
+    ["Combo", "Combo Cargo"],
   ],
   fiat: [["Grande Punto", "Punto Evo", "Punto"]],
 };
@@ -146,7 +147,7 @@ const STRICT_MODEL_ALIASES: Record<
     // Older XF105 and CF65/75/85 cabs look different from the Euro 6 images.
     { pattern: /^xf\s*105\b/, model: "XF105" },
     { pattern: /^cf\s*(?:65|75|85)\b/, model: "CF Euro 5" },
-    { pattern: /^(lf|cf|xf|xg|xd)(?=\s|\d|$)/, model: (match) => match[1].toUpperCase() },
+    { pattern: /^(lf|cf|xf|xg|xd|xb)(?=\s|\d|$)/, model: (match) => match[1].toUpperCase() },
   ],
   scania: [
     {
@@ -165,6 +166,16 @@ const STRICT_MODEL_ALIASES: Record<
   ford: [
     { pattern: /^grand c max\b/, model: "C-Max" },
     { pattern: /^focus c max\b/, model: "Focus C-Max" },
+    // No convertible image: the S550 image is the fastback.
+    { pattern: /^mustang\b(?!.*\bmach\b).*\b(?:convertible|cabrio|cabriolet)\b/, model: "Mustang Convertible" },
+  ],
+  vauxhall: [
+    // The glazed MPV is not the Combo van; it stays on the placeholder.
+    { pattern: /^combo (?:e )?life\b/, model: "Combo Life" },
+  ],
+  audi: [
+    // Only the B6/B7 A4 had a cabriolet; the image is the saloon.
+    { pattern: /^a4\b.*\b(?:cabriolet|cabrio|convertible)\b/, model: "A4 Cabriolet" },
   ],
   renault: [
     { pattern: /^grand scenic\b/, model: "Scenic" },
@@ -175,13 +186,16 @@ const STRICT_MODEL_ALIASES: Record<
   suzuki: [{ pattern: /^sx4 s cross\b/, model: "S-Cross" }],
   kia: [{ pattern: /^pro cee ?d\b/, model: "Ceed" }],
   mazda: [
-    { pattern: /^([235])\b/, model: (match) => `Mazda${match[1]}` },
+    { pattern: /^([2356])\b/, model: (match) => `Mazda${match[1]}` },
     { pattern: /^rx\s*7\b/, model: "RX-7" },
     { pattern: /^rx\s*8\b/, model: "RX-8" },
   ],
   toyota: [
     { pattern: /^corolla cross\b/, model: "Corolla Cross" },
     { pattern: /^prius plus\b/, model: "Prius+" },
+    // The Verso MPVs look nothing like the hatch and saloon images.
+    { pattern: /^yaris verso\b/, model: "Yaris Verso" },
+    { pattern: /^avensis verso\b/, model: "Avensis Verso" },
     { pattern: /^(?:gr\s*)?supra\b/, model: "Supra" },
     // Only explicit AE86 signals: a plain 1983-1987 Corolla is usually a front-drive E80.
     { pattern: /^(?:(?:corolla|sprinter)\s+)?(?:ae\s*86|levin|trueno)\b/, model: "AE86" },
@@ -213,6 +227,9 @@ const STRICT_MODEL_ALIASES: Record<
     { pattern: /^golf plus\b/, model: "Golf Plus" },
     { pattern: /^golf sv\b/, model: "Golf SV" },
     { pattern: /^passat cc\b/, model: "Passat CC" },
+    { pattern: /^id\s*buzz\b.*\b(?:cargo|commerce|commercial)\b/, model: "ID. Buzz Cargo" },
+    // No passenger ID. Buzz image: it stays on the placeholder.
+    { pattern: /^id\s*buzz\b/, model: "ID. Buzz" },
   ],
   bmw: [
     {
@@ -238,6 +255,8 @@ const STRICT_MODEL_ALIASES: Record<
     { pattern: /^(?:maybach\s+)?gls\b/, model: "GLS" },
     { pattern: /^s(?:\s*\d{2,3}[a-z]?| class)?(?: |$)/, model: "S-Class" },
     { pattern: /^eqe\b.*\bsuv\b/, model: "EQE SUV" },
+    // No GLE Coupe image: the GLE images are the SUV.
+    { pattern: /^gle\b.*\bcoupe\b/, model: "GLE Coupe" },
   ],
   mg: [{ pattern: /^zs\s*ev\b/, model: "ZS EV" }],
   infiniti: [{ pattern: /^qx\s*30\b/, model: "Q30" }],
@@ -261,11 +280,31 @@ const YEAR_MODEL_ALIASES: Record<
     },
   ],
   volkswagen: [
-    // Pre-T7 Multivan and Caravelle share the Transporter body; earlier years have no image.
-    { pattern: /^multivan\b/, fromYear: 2010, toYear: 2021, model: "Transporter" },
-    { pattern: /^caravelle\b/, fromYear: 2010, toYear: 2026, model: "Transporter" },
+    // T5-T6.1 Multivan and Caravelle share the Transporter body; the T4 years have no image.
+    { pattern: /^multivan\b/, fromYear: 2003, toYear: 2021, model: "Transporter" },
+    { pattern: /^caravelle\b/, fromYear: 2003, toYear: 2026, model: "Transporter" },
+  ],
+  mg: [
+    // The pre-facelift ZS EV has an open grille; only the facelift has an image.
+    { pattern: /^zs\s*ev\b/, fromYear: 2019, toYear: 2020, model: "ZS EV Mk1" },
+  ],
+  "mercedes benz": [
+    // The W203 Sportcoupe is a hatchback; the image is the saloon.
+    {
+      pattern: /^c(?:\s*\d{2,3}[a-z]?| class)?\b.*\b(?:sports? ?coupe|coupe)\b/,
+      fromYear: 2000,
+      toYear: 2008,
+      model: "C-Class Sportcoupe",
+    },
   ],
   bmw: [
+    // The E82 coupe and E88 convertible look different from the E87 hatch image.
+    {
+      pattern: /^(?:1 series|1\d{2}[a-z]{0,2})\b.*\b(?:coupe|convertible|cabrio|cabriolet)\b/,
+      fromYear: 2007,
+      toYear: 2014,
+      model: "1 Series E82/E88",
+    },
     // The only F-generation image is the 4-door Gran Coupe; a stated coupe or convertible stays on the placeholder.
     {
       pattern: /^(?:6 series|6\d{2}[a-z]{0,2})\b(?!.*\bgran coupe\b).*\b(?:coupe|convertible|cabrio|cabriolet)\b/,
@@ -292,7 +331,12 @@ const STANDALONE_SHORT_MODELS: Record<string, string[]> = {
 
 const LEADING_GENERIC_WORDS = /^(?:all )?new (?=\S)/;
 
-const libraryEntries = (vehicleImagesLibrary.vehicles ?? []) as VehicleImageEntry[];
+const imageEntries = (vehicleImagesLibrary.vehicles ?? []) as VehicleImageEntry[];
+/** Catalogued generations whose image is not generated yet. They match, then resolve to the placeholder. */
+const pendingEntries = new Set(
+  (vehicleImagesLibrary.pendingVehicles ?? []) as VehicleImageEntry[],
+);
+const libraryEntries = [...imageEntries, ...pendingEntries];
 
 function modelFamily(makeKey: string, model: string): string[] | null {
   const modelKey = normalizeKey(model);
@@ -451,7 +495,7 @@ function knownModelAlias(
     if (/^o\s*530\b/.test(modelKey) && candidates.includes("Citaro")) {
       return "Citaro";
     }
-    const rangeMatch = modelKey.match(/^(gla|glc|cla)\s*\d{3}[a-z]?\b/);
+    const rangeMatch = modelKey.match(/^(gla|glc|gle|cla)\s*\d{3}[a-z]?\b/);
     if (rangeMatch) {
       const candidate = rangeMatch[1].toUpperCase();
       if (candidates.includes(candidate)) return candidate;
@@ -848,6 +892,19 @@ function toResolution(
  * Never falls back to a different model from the same manufacturer.
  */
 export function resolveVehicleImage(
+  input: VehicleImageInput,
+): VehicleImageResolution {
+  const resolved = resolveCatalogueEntry(input);
+  const record = resolved.record;
+  if (record && pendingEntries.has(record)) {
+    return placeholderResult(
+      `${record.make} ${record.model} ${record.generation} is catalogued but its image is not available yet.`,
+    );
+  }
+  return resolved;
+}
+
+function resolveCatalogueEntry(
   input: VehicleImageInput,
 ): VehicleImageResolution {
   const make = input.make?.trim() ?? "";

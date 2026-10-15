@@ -1,7 +1,10 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { Fragment, createContext, useContext, useEffect, useState } from "react";
 import type { VehicleRecord } from "@/types/vehicle";
+
+/** Dispatched on window when the user asks to return to a fresh home page. */
+export const RESET_LOOKUP_EVENT = "autoviewer:reset-lookup";
 
 type DvlaLookupContextValue = {
   vehicle: VehicleRecord | null;
@@ -16,10 +19,20 @@ export function DvlaLookupProvider({
   children: React.ReactNode;
 }) {
   const [vehicle, setVehicle] = useState<VehicleRecord | null>(null);
+  const [resetKey, setResetKey] = useState(0);
+
+  useEffect(() => {
+    function reset() {
+      setVehicle(null);
+      setResetKey((key) => key + 1);
+    }
+    window.addEventListener(RESET_LOOKUP_EVENT, reset);
+    return () => window.removeEventListener(RESET_LOOKUP_EVENT, reset);
+  }, []);
 
   return (
     <DvlaLookupContext.Provider value={{ vehicle, setVehicle }}>
-      {children}
+      <Fragment key={resetKey}>{children}</Fragment>
     </DvlaLookupContext.Provider>
   );
 }
