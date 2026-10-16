@@ -25,6 +25,7 @@ import { formatVehicleText } from "@/lib/vehicle/display-text";
 import { resolveImageFieldsForVehicle } from "@/lib/vehicle/images";
 import { modelTitleFields } from "@/lib/vehicle/model-title";
 import { resolveTflBusImageFields } from "@/lib/vehicle/tfl-bus-fleet";
+import { resolveSheffieldCouncilImageFields } from "@/lib/vehicle/sheffield-council-fleet";
 import { calculateBuyerScore } from "@/lib/vehicle/score";
 import {
   resolveVehicleYear,
@@ -306,6 +307,7 @@ export async function lookupVehicle(
 
     const image =
       resolveTflBusImageFields(registration) ??
+      resolveSheffieldCouncilImageFields(registration) ??
       resolveImageFieldsForVehicle({
         registration,
         make,

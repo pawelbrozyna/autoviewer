@@ -1,8 +1,8 @@
 {
   "library": "AutoViewer vehicle image library v12",
-  "count": 1013,
+  "count": 1088,
   "format": "webp",
-  "selectionBasis": "Prioritised for UK used-vehicle and vehicle-parc relevance. Positions 1-300 cover common UK cars; 301-340 vans and light commercial vehicles; 341-370 motorcycles; 371-400 scooters; 401-450 pickups, larger/older commercial vans and van-based MPVs; 451-500 add high-priority UK used-car gaps, current EVs/hybrids and premium used models; 501-600 fill UK everyday-road gaps (2005-2020 hatchbacks, MPVs, budget family cars and small crossovers). 601-666 add current generations and facelifts of top sellers, new brands (BYD, Jaecoo, Omoda), London taxis, older common vans, used-car gaps and common UK buses. 667-678 fill real-lookup gaps and adjacent generations (Rifter, Partner Tepee, Fabia Mk1, Infiniti Q30, Smart #1, EQE saloon and SUV, Actros trucks, GB Kite Electroliner, BYD BD11 and B12). 679-689 add common London bus bodies (New Routemaster, Gemini 2 and 3, Enviro400 City, Enviro200 Mk1, MCV, StreetLite, MetroDecker EV, Enviro100EV, Enviro400EV). 690-746 add older UK cars (Jaguar X-Type, Saab 9-3, Citroen Xsara), Honda Stepwgn imports, Yadea scooters and common UK trucks (DAF, Scania, MAN, Volvo, Iveco, Renault Trucks, Mercedes-Benz Atego and Arocs). 747-873 add classic and modern-classic generations (British classics, older Ford, Vauxhall, Land Rover, VW, BMW, Mercedes-Benz and Porsche, French and Italian classics, Japanese modern classics). 874-881 add the Volkswagen Multivan T7, Porsche 911 996-992 and BMW 6 Series E63/E64, F06 Gran Coupe and 6 Series GT G32. 882-948 add luxury, supercar, JDM import and drift coverage (Rolls-Royce, Bentley, Aston Martin, Range Rover L322, Toyota, Lexus SC, Nissan, Mazda RX, Lamborghini, Ferrari, McLaren, Audi R8); 911, 916 and 917 share the images of 910, 915 and 913. 949-958 fill real-lookup gaps: Kia Sorento BL, XM, MQ4 and MQ4 facelift, Volkswagen Sharan Mk1 and Mk2, DAF XB, Volvo V50 and Suzuki Grand Vitara Mk1 and Mk2; 188 covers the whole Sorento UM 2015-2020 because the 2018 facelift looks almost the same. 959-1008 fill older and adjacent generations of common UK cars and vans found in real lookups (VW Transporter T5, Ford Transit Mk6, BMW E87/E60/E84/F15, Audi B7/C6/8R/8U/8J, Mercedes-Benz W169/W203/W211/W246/W167, Sprinter T1N, Vito W639, Discovery L319, Range Rover Sport L320, Astra G, Zafira A, Combo C, Vivaro A, Trafic II, Ducato X250, Dispatch II, Mondeo Mk3, Ka Mk1, Mustang S550, Jaguar XF X250/X260, Navara D40, L200 Series 4, Passat B5, Touran 1T3, Prius XW20, Yaris XP10, XC90 Mk1, V70 Mk3, MG ZS EV facelift, HR-V Mk3, CUPRA Leon, Santa Fe TM, Sportage KM, Tucson JM, Mazda6 GJ, MX-5 NC, 508 Mk1). 1009-1013 add street-test finds: Toyota Estima XR50, Dacia Spring facelift, Volkswagen ID. Buzz Cargo, Toyota Avensis T25 and Nissan Serena C26. pendingVehicles lists catalogued generations whose image is not generated yet; the matcher resolves them to the placeholder until each record moves into vehicles with its file. This is a practical image-bucket catalogue, not an exact sales ranking.",
+  "selectionBasis": "Prioritised for UK used-vehicle and vehicle-parc relevance. Positions 1-300 cover common UK cars; 301-340 vans and light commercial vehicles; 341-370 motorcycles; 371-400 scooters; 401-450 pickups, larger/older commercial vans and van-based MPVs; 451-500 add high-priority UK used-car gaps, current EVs/hybrids and premium used models; 501-600 fill UK everyday-road gaps (2005-2020 hatchbacks, MPVs, budget family cars and small crossovers). 601-666 add current generations and facelifts of top sellers, new brands (BYD, Jaecoo, Omoda), London taxis, older common vans, used-car gaps and common UK buses. 667-678 fill real-lookup gaps and adjacent generations (Rifter, Partner Tepee, Fabia Mk1, Infiniti Q30, Smart #1, EQE saloon and SUV, Actros trucks, GB Kite Electroliner, BYD BD11 and B12). 679-689 add common London bus bodies (New Routemaster, Gemini 2 and 3, Enviro400 City, Enviro200 Mk1, MCV, StreetLite, MetroDecker EV, Enviro100EV, Enviro400EV). 690-746 add older UK cars (Jaguar X-Type, Saab 9-3, Citroen Xsara), Honda Stepwgn imports, Yadea scooters and common UK trucks (DAF, Scania, MAN, Volvo, Iveco, Renault Trucks, Mercedes-Benz Atego and Arocs). 747-873 add classic and modern-classic generations (British classics, older Ford, Vauxhall, Land Rover, VW, BMW, Mercedes-Benz and Porsche, French and Italian classics, Japanese modern classics). 874-881 add the Volkswagen Multivan T7, Porsche 911 996-992 and BMW 6 Series E63/E64, F06 Gran Coupe and 6 Series GT G32. 882-948 add luxury, supercar, JDM import and drift coverage (Rolls-Royce, Bentley, Aston Martin, Range Rover L322, Toyota, Lexus SC, Nissan, Mazda RX, Lamborghini, Ferrari, McLaren, Audi R8); 911, 916 and 917 share the images of 910, 915 and 913. 949-958 fill real-lookup gaps: Kia Sorento BL, XM, MQ4 and MQ4 facelift, Volkswagen Sharan Mk1 and Mk2, DAF XB, Volvo V50 and Suzuki Grand Vitara Mk1 and Mk2; 188 covers the whole Sorento UM 2015-2020 because the 2018 facelift looks almost the same. 959-1008 fill older and adjacent generations of common UK cars and vans found in real lookups (VW Transporter T5, Ford Transit Mk6, BMW E87/E60/E84/F15, Audi B7/C6/8R/8U/8J, Mercedes-Benz W169/W203/W211/W246/W167, Sprinter T1N, Vito W639, Discovery L319, Range Rover Sport L320, Astra G, Zafira A, Combo C, Vivaro A, Trafic II, Ducato X250, Dispatch II, Mondeo Mk3, Ka Mk1, Mustang S550, Jaguar XF X250/X260, Navara D40, L200 Series 4, Passat B5, Touran 1T3, Prius XW20, Yaris XP10, XC90 Mk1, V70 Mk3, MG ZS EV facelift, HR-V Mk3, CUPRA Leon, Santa Fe TM, Sportage KM, Tucson JM, Mazda6 GJ, MX-5 NC, 508 Mk1). 1009-1013 add street-test finds: Toyota Estima XR50, Dacia Spring facelift, Volkswagen ID. Buzz Cargo, Toyota Avensis T25 and Nissan Serena C26. pendingVehicles lists catalogued generations whose image is not generated yet; the matcher resolves them to the placeholder until each record moves into vehicles with its file. 1014-1072 add Sheffield Council visual families (minibuses, tippers, beavertails, Lutons, crew vans, plant and equipment). pendingVehicles 1073-1088 hold London Fire Brigade specialist-body families from the LFB Fleet List March 2025 audit (pumping appliances, FRU, CSU, DIM, FIU, HDU, hose layer, resilience/OSU, turntable ladders, AWD, Zepa, GP van and marked-red minibus); these are emergency-service body records and do not replace generic van/truck images. This is a practical image-bucket catalogue, not an exact sales ranking.",
   "imageStandard": {
     "format": "webp",
     "size": "1000x750",
@@ -10152,6 +10152,756 @@
       "yearTo": 2016,
       "bodyType": "mpv",
       "filename": "nissan-serena-2010-2016.webp"
+    },
+    {
+      "priority": 1014,
+      "make": "Ford",
+      "model": "Transit Minibus",
+      "generation": "Mk8 facelift",
+      "yearFrom": 2019,
+      "yearTo": 2024,
+      "bodyType": "minibus",
+      "filename": "ford-transit-mk8-facelift-minibus-2019-2024.webp"
+    },
+    {
+      "priority": 1015,
+      "make": "Mercedes-Benz",
+      "model": "Sprinter Minibus",
+      "generation": "W907",
+      "yearFrom": 2018,
+      "yearTo": 2026,
+      "bodyType": "minibus",
+      "filename": "mercedes-benz-sprinter-w907-minibus-2018-2026.webp"
+    },
+    {
+      "priority": 1016,
+      "make": "Citroen",
+      "model": "Relay Tipper Cage",
+      "generation": "II facelift",
+      "yearFrom": 2014,
+      "yearTo": 2026,
+      "bodyType": "tipper-cage",
+      "filename": "citroen-relay-ii-facelift-tipper-cage-2014-2026.webp"
+    },
+    {
+      "priority": 1017,
+      "make": "Peugeot",
+      "model": "Boxer Tipper Cage Tail-Lift",
+      "generation": "II facelift",
+      "yearFrom": 2014,
+      "yearTo": 2026,
+      "bodyType": "tipper-cage-tail-lift",
+      "filename": "peugeot-boxer-ii-facelift-tipper-cage-tail-lift-2014-2026.webp"
+    },
+    {
+      "priority": 1018,
+      "make": "Ford",
+      "model": "Transit Minibus",
+      "generation": "Mk8",
+      "yearFrom": 2014,
+      "yearTo": 2019,
+      "bodyType": "minibus",
+      "filename": "ford-transit-mk8-minibus-2014-2019.webp"
+    },
+    {
+      "priority": 1019,
+      "make": "Citroen",
+      "model": "Nemo",
+      "generation": "Mk1",
+      "yearFrom": 2008,
+      "yearTo": 2017,
+      "bodyType": "van",
+      "filename": "citroen-nemo-mk1-2008-2017.webp"
+    },
+    {
+      "priority": 1020,
+      "make": "Citroen",
+      "model": "Relay Beavertail",
+      "generation": "II facelift",
+      "yearFrom": 2014,
+      "yearTo": 2026,
+      "bodyType": "beavertail",
+      "filename": "citroen-relay-ii-facelift-beavertail-2014-2026.webp"
+    },
+    {
+      "priority": 1021,
+      "make": "Peugeot",
+      "model": "Boxer Beavertail",
+      "generation": "II facelift",
+      "yearFrom": 2014,
+      "yearTo": 2026,
+      "bodyType": "beavertail",
+      "filename": "peugeot-boxer-ii-facelift-beavertail-2014-2026.webp"
+    },
+    {
+      "priority": 1022,
+      "make": "Mercedes-Benz",
+      "model": "Sprinter Minibus",
+      "generation": "W906 facelift",
+      "yearFrom": 2013,
+      "yearTo": 2018,
+      "bodyType": "minibus",
+      "filename": "mercedes-benz-sprinter-w906-facelift-minibus-2013-2018.webp"
+    },
+    {
+      "priority": 1023,
+      "make": "Citroen",
+      "model": "Relay Tipper",
+      "generation": "II facelift",
+      "yearFrom": 2014,
+      "yearTo": 2026,
+      "bodyType": "tipper",
+      "filename": "citroen-relay-ii-facelift-tipper-2014-2026.webp"
+    },
+    {
+      "priority": 1024,
+      "make": "Citroen",
+      "model": "Berlingo Multispace",
+      "generation": "Mk2 facelift",
+      "yearFrom": 2012,
+      "yearTo": 2018,
+      "bodyType": "passenger-mpv",
+      "filename": "citroen-berlingo-mk2-facelift-multispace-2012-2018.webp"
+    },
+    {
+      "priority": 1025,
+      "make": "Ford",
+      "model": "Transit Custom Crew Van",
+      "generation": "Mk1 facelift",
+      "yearFrom": 2018,
+      "yearTo": 2023,
+      "bodyType": "crew-van",
+      "filename": "ford-transit-custom-mk1-facelift-crew-van-2018-2023.webp"
+    },
+    {
+      "priority": 1026,
+      "make": "Citroen",
+      "model": "Relay Crew-Cab Tipper Cage",
+      "generation": "II facelift",
+      "yearFrom": 2014,
+      "yearTo": 2026,
+      "bodyType": "crew-cab-tipper-cage",
+      "filename": "citroen-relay-ii-facelift-crew-cab-tipper-cage-2014-2026.webp"
+    },
+    {
+      "priority": 1027,
+      "make": "Citroen",
+      "model": "Relay Luton",
+      "generation": "II facelift",
+      "yearFrom": 2014,
+      "yearTo": 2026,
+      "bodyType": "luton",
+      "filename": "citroen-relay-ii-facelift-luton-2014-2026.webp"
+    },
+    {
+      "priority": 1028,
+      "make": "Citroen",
+      "model": "Relay Crew-Cab Tipper",
+      "generation": "II facelift",
+      "yearFrom": 2014,
+      "yearTo": 2026,
+      "bodyType": "crew-cab-tipper",
+      "filename": "citroen-relay-ii-facelift-crew-cab-tipper-2014-2026.webp"
+    },
+    {
+      "priority": 1029,
+      "make": "Ford",
+      "model": "Transit Minibus",
+      "generation": "Mk8 facelift II",
+      "yearFrom": 2024,
+      "yearTo": 2026,
+      "bodyType": "minibus",
+      "filename": "ford-transit-mk8-facelift-ii-minibus-2024-2026.webp"
+    },
+    {
+      "priority": 1030,
+      "make": "Citroen",
+      "model": "SpaceTourer",
+      "generation": "Mk1",
+      "yearFrom": 2016,
+      "yearTo": 2026,
+      "bodyType": "mpv",
+      "filename": "citroen-spacetourer-mk1-2016-2026.webp"
+    },
+    {
+      "priority": 1031,
+      "make": "Ford",
+      "model": "Transit Connect",
+      "generation": "Mk1",
+      "yearFrom": 2002,
+      "yearTo": 2009,
+      "bodyType": "van",
+      "filename": "ford-transit-connect-mk1-2002-2009.webp"
+    },
+    {
+      "priority": 1032,
+      "make": "Peugeot",
+      "model": "Boxer Minibus",
+      "generation": "II facelift",
+      "yearFrom": 2014,
+      "yearTo": 2026,
+      "bodyType": "minibus",
+      "filename": "peugeot-boxer-ii-facelift-minibus-2014-2026.webp"
+    },
+    {
+      "priority": 1033,
+      "make": "Ford",
+      "model": "Transit Minibus",
+      "generation": "Mk7",
+      "yearFrom": 2006,
+      "yearTo": 2014,
+      "bodyType": "minibus",
+      "filename": "ford-transit-mk7-minibus-2006-2014.webp"
+    },
+    {
+      "priority": 1034,
+      "make": "Volkswagen",
+      "model": "Crafter Tipper",
+      "generation": "Mk2",
+      "yearFrom": 2017,
+      "yearTo": 2026,
+      "bodyType": "tipper",
+      "filename": "volkswagen-crafter-mk2-tipper-2017-2026.webp"
+    },
+    {
+      "priority": 1035,
+      "make": "Toyota",
+      "model": "Prius",
+      "generation": "XW60",
+      "yearFrom": 2023,
+      "yearTo": 2026,
+      "bodyType": "hatchback",
+      "filename": "toyota-prius-xw60-2023-2026.webp"
+    },
+    {
+      "priority": 1036,
+      "make": "Toyota",
+      "model": "Land Cruiser",
+      "generation": "J150",
+      "yearFrom": 2009,
+      "yearTo": 2023,
+      "bodyType": "suv",
+      "filename": "toyota-land-cruiser-j150-2009-2023.webp"
+    },
+    {
+      "priority": 1037,
+      "make": "Toyota",
+      "model": "Hilux",
+      "generation": "Mk7",
+      "yearFrom": 2005,
+      "yearTo": 2011,
+      "bodyType": "pickup",
+      "filename": "toyota-hilux-mk7-2005-2011.webp"
+    },
+    {
+      "priority": 1038,
+      "make": "Renault",
+      "model": "Trafic Crew Van",
+      "generation": "III facelift",
+      "yearFrom": 2021,
+      "yearTo": 2026,
+      "bodyType": "crew-van",
+      "filename": "renault-trafic-iii-facelift-crew-van-2021-2026.webp"
+    },
+    {
+      "priority": 1039,
+      "make": "Mercedes-Benz",
+      "model": "Sprinter Minibus",
+      "generation": "W906",
+      "yearFrom": 2006,
+      "yearTo": 2013,
+      "bodyType": "minibus",
+      "filename": "mercedes-benz-sprinter-w906-minibus-2006-2013.webp"
+    },
+    {
+      "priority": 1040,
+      "make": "Lexus",
+      "model": "GS",
+      "generation": "S190",
+      "yearFrom": 2006,
+      "yearTo": 2011,
+      "bodyType": "saloon",
+      "filename": "lexus-gs-s190-2006-2011.webp"
+    },
+    {
+      "priority": 1041,
+      "make": "Isuzu",
+      "model": "N75",
+      "generation": "N-Series 2023 beavertail",
+      "yearFrom": 2023,
+      "yearTo": 2026,
+      "bodyType": "truck-beavertail",
+      "filename": "isuzu-n75-n-series-2023-beavertail-2023-2026.webp"
+    },
+    {
+      "priority": 1042,
+      "make": "Hyundai",
+      "model": "Inster",
+      "generation": "AX1e",
+      "yearFrom": 2024,
+      "yearTo": 2026,
+      "bodyType": "crossover",
+      "filename": "hyundai-inster-ax1e-2024-2026.webp"
+    },
+    {
+      "priority": 1043,
+      "make": "Ford",
+      "model": "Transit Custom Crew Van",
+      "generation": "Mk2",
+      "yearFrom": 2023,
+      "yearTo": 2026,
+      "bodyType": "crew-van",
+      "filename": "ford-transit-custom-mk2-crew-van-2023-2026.webp"
+    },
+    {
+      "priority": 1044,
+      "make": "Ford",
+      "model": "Transit Tipper",
+      "generation": "Mk8 facelift II",
+      "yearFrom": 2024,
+      "yearTo": 2026,
+      "bodyType": "tipper",
+      "filename": "ford-transit-mk8-facelift-ii-tipper-2024-2026.webp"
+    },
+    {
+      "priority": 1045,
+      "make": "Ford",
+      "model": "Transit Tipper",
+      "generation": "Mk7",
+      "yearFrom": 2006,
+      "yearTo": 2014,
+      "bodyType": "tipper",
+      "filename": "ford-transit-mk7-tipper-2006-2014.webp"
+    },
+    {
+      "priority": 1046,
+      "make": "Fiat",
+      "model": "Ducato Luton",
+      "generation": "Series 8",
+      "yearFrom": 2021,
+      "yearTo": 2026,
+      "bodyType": "luton",
+      "filename": "fiat-ducato-series-8-luton-2021-2026.webp"
+    },
+    {
+      "priority": 1047,
+      "make": "DAF",
+      "model": "LF Beavertail",
+      "generation": "Mk1 facelift",
+      "yearFrom": 2006,
+      "yearTo": 2013,
+      "bodyType": "truck-beavertail",
+      "filename": "daf-lf-mk1-facelift-beavertail-2006-2013.webp"
+    },
+    {
+      "priority": 1048,
+      "make": "DAF",
+      "model": "LF Beavertail",
+      "generation": "Euro 6 facelift",
+      "yearFrom": 2021,
+      "yearTo": 2023,
+      "bodyType": "truck-beavertail",
+      "filename": "daf-lf-euro6-facelift-beavertail-2021-2023.webp"
+    },
+    {
+      "priority": 1049,
+      "make": "DAF",
+      "model": "LF Tipper Crane",
+      "generation": "Euro 6",
+      "yearFrom": 2013,
+      "yearTo": 2021,
+      "bodyType": "truck-tipper-crane",
+      "filename": "daf-lf-euro6-tipper-crane-2013-2021.webp"
+    },
+    {
+      "priority": 1050,
+      "make": "Citroen",
+      "model": "Dispatch Crew Van",
+      "generation": "III facelift",
+      "yearFrom": 2024,
+      "yearTo": 2026,
+      "bodyType": "crew-van",
+      "filename": "citroen-dispatch-iii-facelift-crew-van-2024-2026.webp"
+    },
+    {
+      "priority": 1051,
+      "make": "Citroen",
+      "model": "Berlingo Multispace",
+      "generation": "Mk2",
+      "yearFrom": 2008,
+      "yearTo": 2012,
+      "bodyType": "passenger-mpv",
+      "filename": "citroen-berlingo-mk2-multispace-2008-2012.webp"
+    },
+    {
+      "priority": 1052,
+      "make": "Toro",
+      "model": "LT3340",
+      "generation": "ride-on triple mower",
+      "yearFrom": 2010,
+      "yearTo": 2026,
+      "bodyType": "ride-on-mower",
+      "filename": "toro-lt3340-2010-2026.webp"
+    },
+    {
+      "priority": 1053,
+      "make": "John Deere",
+      "model": "Gator",
+      "generation": "utility vehicle",
+      "yearFrom": 2005,
+      "yearTo": 2026,
+      "bodyType": "utility-vehicle",
+      "filename": "john-deere-gator-2005-2026.webp"
+    },
+    {
+      "priority": 1054,
+      "make": "Toro",
+      "model": "LTF3000",
+      "generation": "ride-on turf mower",
+      "yearFrom": 2010,
+      "yearTo": 2026,
+      "bodyType": "ride-on-mower",
+      "filename": "toro-ltf3000-2010-2026.webp"
+    },
+    {
+      "priority": 1055,
+      "make": "New Holland",
+      "model": "T5",
+      "generation": "agricultural tractor",
+      "yearFrom": 2012,
+      "yearTo": 2026,
+      "bodyType": "tractor",
+      "filename": "new-holland-t5-2012-2026.webp"
+    },
+    {
+      "priority": 1056,
+      "make": "Shibaura",
+      "model": "SG280E",
+      "generation": "compact tractor mower",
+      "yearFrom": 2008,
+      "yearTo": 2026,
+      "bodyType": "compact-tractor",
+      "filename": "shibaura-sg280e-2008-2026.webp"
+    },
+    {
+      "priority": 1057,
+      "make": "John Deere",
+      "model": "3320",
+      "generation": "compact tractor",
+      "yearFrom": 2005,
+      "yearTo": 2014,
+      "bodyType": "compact-tractor",
+      "filename": "john-deere-3320-2005-2014.webp"
+    },
+    {
+      "priority": 1058,
+      "make": "Kubota",
+      "model": "BX231",
+      "generation": "compact tractor",
+      "yearFrom": 2010,
+      "yearTo": 2026,
+      "bodyType": "compact-tractor",
+      "filename": "kubota-bx231-2010-2026.webp"
+    },
+    {
+      "priority": 1059,
+      "make": "Ventrac",
+      "model": "Ventrac",
+      "generation": "compact articulated tractor",
+      "yearFrom": 2005,
+      "yearTo": 2026,
+      "bodyType": "compact-tractor",
+      "filename": "ventrac-compact-articulated-2005-2026.webp"
+    },
+    {
+      "priority": 1060,
+      "make": "New Holland",
+      "model": "T6",
+      "generation": "agricultural tractor",
+      "yearFrom": 2012,
+      "yearTo": 2026,
+      "bodyType": "tractor",
+      "filename": "new-holland-t6-2012-2026.webp"
+    },
+    {
+      "priority": 1061,
+      "make": "Ferris",
+      "model": "IS600",
+      "generation": "zero-turn mower",
+      "yearFrom": 2015,
+      "yearTo": 2026,
+      "bodyType": "zero-turn-mower",
+      "filename": "ferris-is600-2015-2026.webp"
+    },
+    {
+      "priority": 1062,
+      "make": "Toro",
+      "model": "Z6000",
+      "generation": "zero-turn mower",
+      "yearFrom": 2015,
+      "yearTo": 2026,
+      "bodyType": "zero-turn-mower",
+      "filename": "toro-z6000-2015-2026.webp"
+    },
+    {
+      "priority": 1063,
+      "make": "Toro",
+      "model": "LT2240",
+      "generation": "ride-on mower",
+      "yearFrom": 2010,
+      "yearTo": 2026,
+      "bodyType": "ride-on-mower",
+      "filename": "toro-lt2240-2010-2026.webp"
+    },
+    {
+      "priority": 1064,
+      "make": "Toro",
+      "model": "Reelmaster 3100-D",
+      "generation": "reel mower",
+      "yearFrom": 2005,
+      "yearTo": 2026,
+      "bodyType": "reel-mower",
+      "filename": "toro-reelmaster-3100-d-2005-2026.webp"
+    },
+    {
+      "priority": 1065,
+      "make": "Toro",
+      "model": "CT2140",
+      "generation": "ride-on turf mower",
+      "yearFrom": 2010,
+      "yearTo": 2026,
+      "bodyType": "ride-on-mower",
+      "filename": "toro-ct2140-2010-2026.webp"
+    },
+    {
+      "priority": 1066,
+      "make": "Kubota",
+      "model": "G23HD",
+      "generation": "ride-on mower",
+      "yearFrom": 2008,
+      "yearTo": 2026,
+      "bodyType": "ride-on-mower",
+      "filename": "kubota-g23hd-2008-2026.webp"
+    },
+    {
+      "priority": 1067,
+      "make": "John Deere",
+      "model": "4052R",
+      "generation": "compact utility tractor",
+      "yearFrom": 2014,
+      "yearTo": 2026,
+      "bodyType": "compact-tractor",
+      "filename": "john-deere-4052r-2014-2026.webp"
+    },
+    {
+      "priority": 1068,
+      "make": "John Deere",
+      "model": "3039",
+      "generation": "compact utility tractor",
+      "yearFrom": 2010,
+      "yearTo": 2026,
+      "bodyType": "compact-tractor",
+      "filename": "john-deere-3039-2010-2026.webp"
+    },
+    {
+      "priority": 1069,
+      "make": "JCB",
+      "model": "3CX",
+      "generation": "backhoe loader",
+      "yearFrom": 2010,
+      "yearTo": 2026,
+      "bodyType": "backhoe-loader",
+      "filename": "jcb-3cx-2010-2026.webp"
+    },
+    {
+      "priority": 1070,
+      "make": "JCB",
+      "model": "2CX",
+      "generation": "compact backhoe loader",
+      "yearFrom": 2010,
+      "yearTo": 2026,
+      "bodyType": "backhoe-loader",
+      "filename": "jcb-2cx-2010-2026.webp"
+    },
+    {
+      "priority": 1071,
+      "make": "Amazone",
+      "model": "Profi PH1500",
+      "generation": "grounds maintenance",
+      "yearFrom": 2005,
+      "yearTo": 2026,
+      "bodyType": "grounds-maintenance",
+      "filename": "amazone-profi-ph1500-2005-2026.webp"
+    },
+    {
+      "priority": 1072,
+      "make": "Amazone",
+      "model": "PH1250 4WDi Profi",
+      "generation": "grounds maintenance",
+      "yearFrom": 2005,
+      "yearTo": 2026,
+      "bodyType": "grounds-maintenance",
+      "filename": "amazone-ph1250-4wdi-profi-2005-2026.webp"
+    },
+    {
+      "priority": 1073,
+      "make": "Mercedes-Benz",
+      "model": "Atego 1325F Pumping Appliance",
+      "generation": "2007 pumping appliance",
+      "yearFrom": 2007,
+      "yearTo": 2007,
+      "bodyType": "pumping-appliance",
+      "filename": "mercedes-benz-atego-1325f-2007-pumping-appliance.webp"
+    },
+    {
+      "priority": 1074,
+      "make": "Mercedes-Benz",
+      "model": "Atego 1327F Pumping Appliance",
+      "generation": "2016-2021 pumping appliance",
+      "yearFrom": 2016,
+      "yearTo": 2021,
+      "bodyType": "pumping-appliance",
+      "filename": "mercedes-benz-atego-1327f-2016-2021-pumping-appliance.webp"
+    },
+    {
+      "priority": 1075,
+      "make": "Mercedes-Benz",
+      "model": "Atego 1527F Fire Rescue Unit",
+      "generation": "2021 fire rescue unit",
+      "yearFrom": 2021,
+      "yearTo": 2021,
+      "bodyType": "fire-rescue-unit",
+      "filename": "mercedes-benz-atego-1527f-2021-fire-rescue-unit.webp"
+    },
+    {
+      "priority": 1076,
+      "make": "Optare",
+      "model": "Switch Command Support Unit",
+      "generation": "2023 command support unit",
+      "yearFrom": 2023,
+      "yearTo": 2023,
+      "bodyType": "command-support-unit",
+      "filename": "optare-switch-2023-command-support-unit.webp"
+    },
+    {
+      "priority": 1077,
+      "make": "Iveco",
+      "model": "Daily Detection Identification Monitoring",
+      "generation": "2023 detection-identification-and-monitoring",
+      "yearFrom": 2023,
+      "yearTo": 2023,
+      "bodyType": "detection-identification-monitoring",
+      "filename": "iveco-daily-2023-detection-identification-and-monitoring.webp"
+    },
+    {
+      "priority": 1078,
+      "make": "Ford",
+      "model": "Transit Custom Fire Investigation Unit",
+      "generation": "2018 fire investigation unit",
+      "yearFrom": 2018,
+      "yearTo": 2018,
+      "bodyType": "fire-investigation-unit",
+      "filename": "ford-transit-custom-2018-fire-investigation-unit.webp"
+    },
+    {
+      "priority": 1079,
+      "make": "Scania",
+      "model": "L320 Heavy Distribution Unit",
+      "generation": "2022 heavy distribution unit",
+      "yearFrom": 2022,
+      "yearTo": 2022,
+      "bodyType": "heavy-distribution-unit",
+      "filename": "scania-l320-2022-heavy-distribution-unit.webp"
+    },
+    {
+      "priority": 1080,
+      "make": "Mercedes-Benz",
+      "model": "Atego Hose Layer",
+      "generation": "2010-2011 hose layer",
+      "yearFrom": 2010,
+      "yearTo": 2011,
+      "bodyType": "hose-layer",
+      "filename": "mercedes-benz-atego-2010-2011-hose-layer.webp"
+    },
+    {
+      "priority": 1081,
+      "make": "Mercedes-Benz",
+      "model": "Atego 1218 London Resilience Lorry",
+      "generation": "2004 london resilience lorry",
+      "yearFrom": 2004,
+      "yearTo": 2004,
+      "bodyType": "london-resilience-lorry",
+      "filename": "mercedes-benz-atego-1218-2004-london-resilience-lorry.webp"
+    },
+    {
+      "priority": 1082,
+      "make": "Mercedes-Benz",
+      "model": "Atego 1223/1224 Operational Support Unit",
+      "generation": "2007 operational support unit",
+      "yearFrom": 2007,
+      "yearTo": 2007,
+      "bodyType": "operational-support-unit",
+      "filename": "mercedes-benz-atego-1223-1224-2007-operational-support-unit.webp"
+    },
+    {
+      "priority": 1083,
+      "make": "Scania",
+      "model": "L360 32m Turntable Ladder",
+      "generation": "2020 32m turntable ladder",
+      "yearFrom": 2020,
+      "yearTo": 2020,
+      "bodyType": "turntable-ladder",
+      "filename": "scania-l360-2020-32m-turntable-ladder.webp"
+    },
+    {
+      "priority": 1084,
+      "make": "Scania",
+      "model": "P410 64m Turntable Ladder",
+      "generation": "2020-2021 64m turntable ladder",
+      "yearFrom": 2020,
+      "yearTo": 2021,
+      "bodyType": "turntable-ladder",
+      "filename": "scania-p410-2020-2021-64m-turntable-ladder.webp"
+    },
+    {
+      "priority": 1085,
+      "make": "Iveco",
+      "model": "70C18HA8 All Wheel Drive",
+      "generation": "2022 all-wheel-drive",
+      "yearFrom": 2022,
+      "yearTo": 2022,
+      "bodyType": "all-wheel-drive",
+      "filename": "iveco-70c18ha8-2022-all-wheel-drive.webp"
+    },
+    {
+      "priority": 1086,
+      "make": "Volvo",
+      "model": "FL42 Zepa",
+      "generation": "2023 zepa",
+      "yearFrom": 2023,
+      "yearTo": 2023,
+      "bodyType": "zepa",
+      "filename": "volvo-fl42-2023-zepa.webp"
+    },
+    {
+      "priority": 1087,
+      "make": "Mercedes-Benz",
+      "model": "Sprinter 416 GP Van",
+      "generation": "2018 gp van",
+      "yearFrom": 2018,
+      "yearTo": 2018,
+      "bodyType": "gp-van",
+      "filename": "mercedes-benz-sprinter-416-2018-gp-van.webp"
+    },
+    {
+      "priority": 1088,
+      "make": "Mercedes-Benz",
+      "model": "Vito 114 Marked Red Minibus",
+      "generation": "2019 marked-red minibus",
+      "yearFrom": 2019,
+      "yearTo": 2019,
+      "bodyType": "marked-red-minibus",
+      "filename": "mercedes-benz-vito-114-2019-marked-red-minibus.webp"
     }
   ],
   "pendingVehicles": []

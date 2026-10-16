@@ -1134,6 +1134,33 @@ run("959-1008 leave neighbouring generations and other bodies alone", () => {
 
 const pendingVehicles = vehicleImagesLibrary.pendingVehicles as VehicleImageRow[];
 
+const FILENAMES_WITHOUT_YEARS = new Set(["yadea-g5s.webp", "yadea-c1s.webp"]);
+/** Records whose range changed after their image was named: the file keeps its original years. */
+const FILENAMES_WITH_WIDENED_RANGES = new Set([
+  "kia-sorento-um-facelift-2018-2020.webp",
+  // The image is the 2024 facelift, the only Spring sold in the UK.
+  "dacia-spring-2021-2026.webp",
+]);
+/** LFB specialist bodies keep the year(s) then a body-role suffix after them. */
+const FILENAMES_WITH_SPECIALIST_BODY_SUFFIX = new Set([
+  "mercedes-benz-atego-1325f-2007-pumping-appliance.webp",
+  "mercedes-benz-atego-1327f-2016-2021-pumping-appliance.webp",
+  "mercedes-benz-atego-1527f-2021-fire-rescue-unit.webp",
+  "optare-switch-2023-command-support-unit.webp",
+  "iveco-daily-2023-detection-identification-and-monitoring.webp",
+  "ford-transit-custom-2018-fire-investigation-unit.webp",
+  "scania-l320-2022-heavy-distribution-unit.webp",
+  "mercedes-benz-atego-2010-2011-hose-layer.webp",
+  "mercedes-benz-atego-1218-2004-london-resilience-lorry.webp",
+  "mercedes-benz-atego-1223-1224-2007-operational-support-unit.webp",
+  "scania-l360-2020-32m-turntable-ladder.webp",
+  "scania-p410-2020-2021-64m-turntable-ladder.webp",
+  "iveco-70c18ha8-2022-all-wheel-drive.webp",
+  "volvo-fl42-2023-zepa.webp",
+  "mercedes-benz-sprinter-416-2018-gp-van.webp",
+  "mercedes-benz-vito-114-2019-marked-red-minibus.webp",
+]);
+
 run("1009-1013 street-test finds resolve to their own generation", () => {
   const cases: Array<[string, string, string, string]> = [
     // LK07VVL, LY25VTO, GK25JYZ, GR07FZW and T66TTP as returned by DVSA.
@@ -1164,12 +1191,18 @@ run("pending records have no file yet and never collide with the catalogue", () 
   const priorities = new Set(vehicles.map((v) => v.priority));
   const filenames = new Set(vehicles.map((v) => v.filename));
   const keys = new Set(vehicles.map((v) => `${v.make}|${v.model}|${v.generation}`.toLowerCase()));
+  assert.equal(pendingVehicles.length, 0);
   for (const v of pendingVehicles) {
     assert.ok(!files.has(v.filename), `${v.filename} exists: move its record into vehicles`);
     assert.ok(!filenames.has(v.filename), v.filename);
     assert.ok(!priorities.has(v.priority), `pending priority ${v.priority}`);
     assert.ok(!keys.has(`${v.make}|${v.model}|${v.generation}`.toLowerCase()), v.filename);
-    assert.match(v.filename, new RegExp(`-${v.yearFrom}-${v.yearTo}\\.webp$`), v.filename);
+    assert.match(v.filename, /^[a-z0-9-]+\.webp$/, v.filename);
+    assert.ok(
+      FILENAMES_WITH_SPECIALIST_BODY_SUFFIX.has(v.filename) ||
+        v.filename.endsWith(`-${v.yearFrom}-${v.yearTo}.webp`),
+      v.filename,
+    );
     priorities.add(v.priority);
   }
 });
@@ -1479,14 +1512,6 @@ run("every catalogue record has its WebP file and no file is orphaned", () => {
   );
 });
 
-const FILENAMES_WITHOUT_YEARS = new Set(["yadea-g5s.webp", "yadea-c1s.webp"]);
-/** Records whose range changed after their image was named: the file keeps its original years. */
-const FILENAMES_WITH_WIDENED_RANGES = new Set([
-  "kia-sorento-um-facelift-2018-2020.webp",
-  // The image is the 2024 facelift, the only Spring sold in the UK.
-  "dacia-spring-2021-2026.webp",
-]);
-
 run("catalogue filenames follow the slug and year convention", () => {
   const keys = new Set<string>();
   for (const v of vehicles) {
@@ -1494,6 +1519,7 @@ run("catalogue filenames follow the slug and year convention", () => {
     assert.ok(
       FILENAMES_WITHOUT_YEARS.has(v.filename) ||
         FILENAMES_WITH_WIDENED_RANGES.has(v.filename) ||
+        FILENAMES_WITH_SPECIALIST_BODY_SUFFIX.has(v.filename) ||
         v.priority in SHARED_IMAGE_RECORDS ||
         v.filename.endsWith(`-${v.yearFrom}-${v.yearTo}.webp`),
       v.filename,

@@ -147,7 +147,8 @@ const STRICT_MODEL_ALIASES: Record<
     // Older XF105 and CF65/75/85 cabs look different from the Euro 6 images.
     { pattern: /^xf\s*105\b/, model: "XF105" },
     { pattern: /^cf\s*(?:65|75|85)\b/, model: "CF Euro 5" },
-    { pattern: /^(lf|cf|xf|xg|xd|xb)(?=\s|\d|$)/, model: (match) => match[1].toUpperCase() },
+    // Bare range codes and numbered chassis only. "LF Beavertail" stays a distinct catalogue model.
+    { pattern: /^(lf|cf|xf|xg|xd|xb)(?=\s*\d|\s*$)/, model: (match) => match[1].toUpperCase() },
   ],
   scania: [
     {
@@ -332,11 +333,15 @@ const STANDALONE_SHORT_MODELS: Record<string, string[]> = {
 const LEADING_GENERIC_WORDS = /^(?:all )?new (?=\S)/;
 
 const imageEntries = (vehicleImagesLibrary.vehicles ?? []) as VehicleImageEntry[];
-/** Catalogued generations whose image is not generated yet. They match, then resolve to the placeholder. */
+/**
+ * Catalogued generations whose image is not generated yet.
+ * Kept for bookkeeping and promotion after images exist; not used for live matching,
+ * so specialist pending models cannot steal generic same-make matches.
+ */
 const pendingEntries = new Set(
   (vehicleImagesLibrary.pendingVehicles ?? []) as VehicleImageEntry[],
 );
-const libraryEntries = [...imageEntries, ...pendingEntries];
+const libraryEntries = imageEntries;
 
 function modelFamily(makeKey: string, model: string): string[] | null {
   const modelKey = normalizeKey(model);
@@ -592,6 +597,33 @@ function matchModelKey(
   year?: number | null,
 ): ModelMatch[] {
   const makeKey = canonicalizeMake(make);
+
+  // Year-scoped aliases can remap a plain model (Zafira → Zafira Tourer) even
+  // when that plain name also exists as its own catalogue model. A target that
+  // is not in the catalogue is an intentional dead-end (MG ZS EV 2019-2020).
+  if (year != null) {
+    for (const alias of YEAR_MODEL_ALIASES[makeKey] ?? []) {
+      if (
+        year >= alias.fromYear &&
+        year <= alias.toYear &&
+        alias.pattern.test(modelKey)
+      ) {
+        return candidates.includes(alias.model)
+          ? [{ model: alias.model, method: "alias", score: 99 }]
+          : [];
+      }
+    }
+  }
+
+  // Exact catalogue models win before strict range aliases, so specialist
+  // bodies such as "FL42 Zepa" or "P410 64m Turntable Ladder" are not remapped.
+  const exact = candidates.find(
+    (candidate) => normalizeKey(candidate) === modelKey,
+  );
+  if (exact) {
+    return [{ model: exact, method: "exact", score: 100 }];
+  }
+
   const strict = strictModelAlias(makeKey, modelKey, year);
   if (strict) {
     return candidates.includes(strict)
@@ -610,9 +642,7 @@ function matchModelKey(
     const candidateCompact = compactKey(candidate);
     let match: ModelMatch | null = null;
 
-    if (modelKey === candidateKey) {
-      match = { model: candidate, method: "exact", score: 100 };
-    } else if (modelKey.startsWith(`${candidateKey} `)) {
+    if (modelKey.startsWith(`${candidateKey} `)) {
       match = { model: candidate, method: "prefix", score: 95 };
     } else if (
       modelKey === `e ${candidateKey}` ||
