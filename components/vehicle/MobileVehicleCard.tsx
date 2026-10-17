@@ -33,7 +33,10 @@ import {
 } from "@/lib/vehicle/vehicle-card";
 import { renderVehicleCardImage } from "@/lib/vehicle/vehicle-card-image";
 import { plateFont } from "@/components/vehicle/plate-font";
-import { knownVehicleColourSwatch } from "@/components/vehicle/VehicleColour";
+import {
+  hasVehicleColourSwatch,
+  vehicleColourSwatchStyle,
+} from "@/components/vehicle/VehicleColour";
 import { VEHICLE_PLACEHOLDER_SRC } from "@/components/vehicle/VehicleImageFallback";
 import type { VehicleRecord } from "@/types/vehicle";
 
@@ -248,7 +251,7 @@ function VehicleCardDialog({
   const closeRef = useRef<HTMLButtonElement>(null);
   const [shareStatus, setShareStatus] = useState("");
   const [downloading, setDownloading] = useState(false);
-  const colourSwatch = knownVehicleColourSwatch(card.colour);
+  const showColourSwatch = hasVehicleColourSwatch(card.colour);
 
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
@@ -356,15 +359,15 @@ function VehicleCardDialog({
           frame={imageFrame}
         />
 
-        <p className="px-5 text-center text-[11px] leading-snug text-muted">
+        <p className="px-5 text-right text-[11px] leading-snug text-muted">
           <span className="block">{VEHICLE_CARD_DISCLAIMER}</span>
           {card.colour ? (
-            <span className="mt-0.5 flex items-center justify-center gap-1.5 text-[12.5px] text-[#3b4a63]">
+            <span className="mt-0.5 flex items-center justify-end gap-1.5 text-[12.5px] text-[#3b4a63]">
               Registered colour:
-              {colourSwatch ? (
+              {showColourSwatch ? (
                 <span
                   className="h-3 w-3 shrink-0 rounded-full border border-slate-400/70"
-                  style={{ backgroundColor: colourSwatch }}
+                  style={vehicleColourSwatchStyle(card.colour)}
                   aria-hidden
                 />
               ) : null}

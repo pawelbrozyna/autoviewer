@@ -1,10 +1,16 @@
 import { NextResponse } from "next/server";
-import { parseCheckoutSource, sanitizeReportId } from "@/lib/full-report";
+import {
+  isFullReportEligible,
+  parseCheckoutSource,
+  sanitizeReportId,
+} from "@/lib/full-report";
 import { createFullReportCheckoutSession } from "@/lib/server/stripe";
 import {
   isValidRegistrationFormat,
   normalizeRegistration,
+  registrationToSlug,
 } from "@/lib/vehicle/registration";
+import { resolveRegistrationVehicleCategory } from "@/lib/vehicle/vehicle-resolution";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -32,6 +38,16 @@ export async function POST(request: Request) {
 
   if (source === "vehicle" && !registration) {
     return redirectTo(request, "/full-report?checkout=error");
+  }
+
+  if (
+    registration &&
+    !isFullReportEligible(resolveRegistrationVehicleCategory(registration))
+  ) {
+    return redirectTo(
+      request,
+      `/vehicle/${registrationToSlug(registration)}`,
+    );
   }
 
   const errorPath =

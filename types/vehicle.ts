@@ -118,6 +118,12 @@ export interface VehicleSummary {
   modelTitle?: string;
   /** Trim, engine or gearbox text split from `model`, e.g. "2300 Dynamic TD". */
   modelVariant?: string | null;
+  /**
+   * Trusted local/fleet category for Full Report eligibility.
+   * Only set from exact-registration or structured fleet mappings.
+   * Defaults to "standard" when absent.
+   */
+  vehicleCategory?: "standard" | "public_service" | "specialist";
 }
 
 export interface VehicleRecord {

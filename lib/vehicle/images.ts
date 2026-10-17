@@ -227,7 +227,9 @@ const STRICT_MODEL_ALIASES: Record<
   volkswagen: [
     { pattern: /^golf plus\b/, model: "Golf Plus" },
     { pattern: /^golf sv\b/, model: "Golf SV" },
+    // Passat CC (2008-2012) before bare CC (2012-2017).
     { pattern: /^passat cc\b/, model: "Passat CC" },
+    { pattern: /^cc\b/, model: "CC" },
     { pattern: /^id\s*buzz\b.*\b(?:cargo|commerce|commercial)\b/, model: "ID. Buzz Cargo" },
     // No passenger ID. Buzz image: it stays on the placeholder.
     { pattern: /^id\s*buzz\b/, model: "ID. Buzz" },
@@ -258,10 +260,18 @@ const STRICT_MODEL_ALIASES: Record<
     { pattern: /^eqe\b.*\bsuv\b/, model: "EQE SUV" },
     // No GLE Coupe image: the GLE images are the SUV.
     { pattern: /^gle\b.*\bcoupe\b/, model: "GLE Coupe" },
+    // G580 EQ and AMG G63 before generic G-Class / G-Wagen aliases.
+    { pattern: /^g\s*580\b/, model: "G 580 EQ" },
+    { pattern: /^(?:amg\s+)?g\s*63\b/, model: "AMG G 63" },
+    {
+      pattern: /^g(?:[\s-]*(?:class|wagen))?(?=\s|$)/,
+      model: "G-Class",
+    },
   ],
   mg: [{ pattern: /^zs\s*ev\b/, model: "ZS EV" }],
   infiniti: [{ pattern: /^qx\s*30\b/, model: "Q30" }],
   peugeot: [{ pattern: /^partner tepee\b/, model: "Partner Tepee" }],
+  yamaha: [{ pattern: /^mt\s*125\b/, model: "MT-125" }],
 };
 
 /**

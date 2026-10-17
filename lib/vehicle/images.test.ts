@@ -35,6 +35,12 @@ function run(name: string, fn: () => void) {
 
 const vehicles = vehicleImagesLibrary.vehicles as VehicleImageRow[];
 
+/** Catalogued generations whose WebP is not generated yet. Exact allowlist only. */
+const PENDING_IMAGE_FILENAMES = new Set(
+  ((vehicleImagesLibrary as { pendingImageFilenames?: string[] }).pendingImageFilenames ??
+    []) as string[],
+);
+
 run("catalogue count matches vehicles.length", () => {
   assert.equal(vehicleImagesLibrary.count, vehicles.length);
 });
@@ -647,7 +653,6 @@ run("distinct derivative models never fall through to the base model", () => {
     ["VOLKSWAGEN", "GOLF SV", 2016],
     ["TOYOTA", "PRIUS+", 2015],
     ["TOYOTA", "PRIUS PLUS", 2015],
-    ["VOLKSWAGEN", "PASSAT CC", 2010],
     ["BMW", "220I GRAN COUPE", 2021],
     ["BMW", "2 SERIES GRAN COUPE", 2021],
     ["BMW", "218D GRAN TOURER", 2017],
@@ -1140,6 +1145,8 @@ const FILENAMES_WITH_WIDENED_RANGES = new Set([
   "kia-sorento-um-facelift-2018-2020.webp",
   // The image is the 2024 facelift, the only Spring sold in the UK.
   "dacia-spring-2021-2026.webp",
+  // Representative 1960 example; catalogue covers the full MF 35 run.
+  "massey-ferguson-35-1960.webp",
 ]);
 /** LFB specialist bodies keep the year(s) then a body-role suffix after them. */
 const FILENAMES_WITH_SPECIALIST_BODY_SUFFIX = new Set([
@@ -1499,11 +1506,22 @@ run("a first registration years after manufacture never picks the generation", (
 run("every catalogue record has its WebP file and no file is orphaned", () => {
   const files = new Set(readdirSync(join(process.cwd(), "public", "cars")));
   const missing = vehicles.filter((v) => !files.has(v.filename));
+  const unexpectedMissing = missing.filter((v) => !PENDING_IMAGE_FILENAMES.has(v.filename));
   assert.deepEqual(
-    missing.map((v) => v.filename),
+    unexpectedMissing.map((v) => v.filename),
     [],
     "catalogue filenames missing from public/cars",
   );
+  for (const filename of PENDING_IMAGE_FILENAMES) {
+    assert.ok(
+      vehicles.some((v) => v.filename === filename),
+      `pendingImageFilenames entry not in catalogue: ${filename}`,
+    );
+    assert.ok(
+      !files.has(filename),
+      `${filename} exists: remove it from pendingImageFilenames`,
+    );
+  }
   const referenced = new Set(vehicles.map((v) => v.filename));
   assert.deepEqual(
     [...files].filter((file) => !referenced.has(file)),
@@ -1556,6 +1574,122 @@ run("every record is reachable by make, model and a year in its range", () => {
     if (!reached) unreachable.push(v.filename);
   }
   assert.deepEqual(unreachable, []);
+});
+
+run("OV64 RYA resolves to Volkswagen CC 2012-2017", () => {
+  // OV64 RYA: typical DVSA shape for a 2014 Volkswagen CC.
+  const result = resolveVehicleImage({
+    make: "VOLKSWAGEN",
+    model: "CC",
+    year: 2014,
+    firstRegistrationDate: "2014-09-01",
+  });
+  assert.equal(result.filename, "volkswagen-cc-2012-2017.webp");
+  assert.equal(matchCatalogModel("VOLKSWAGEN", "CC"), "CC");
+  assert.equal(matchCatalogModel("VOLKSWAGEN", "PASSAT CC"), "Passat CC");
+  assert.equal(
+    resolveVehicleImage({
+      make: "VOLKSWAGEN",
+      model: "PASSAT CC",
+      year: 2010,
+      firstRegistrationDate: "2010-05-01",
+    }).filename,
+    "volkswagen-passat-cc-2008-2012.webp",
+  );
+});
+
+run("WU18 VLY resolves to Yamaha MT-125 2014-2019", () => {
+  const result = resolveVehicleImage({
+    make: "YAMAHA",
+    model: "MT 125 ABS",
+    year: 2018,
+    firstRegistrationDate: "2018-03-06",
+  });
+  assert.equal(result.filename, "yamaha-mt-125-2014-2019.webp");
+  assert.equal(matchCatalogModel("YAMAHA", "MT 125 ABS"), "MT-125");
+  assert.equal(
+    resolveVehicleImage({
+      make: "YAMAHA",
+      model: "MT-125",
+      year: 2021,
+    }).filename,
+    "yamaha-mt-125-2020-2024.webp",
+  );
+});
+
+run("G-Class generations stay split by year", () => {
+  const file = (year: number) =>
+    resolveVehicleImage({
+      make: "MERCEDES-BENZ",
+      model: "G CLASS",
+      year,
+      firstRegistrationDate: `${year}-06-01`,
+    }).filename;
+
+  assert.equal(file(2005), "mercedes-benz-g-class-w463-1990-2012.webp");
+  assert.equal(file(2015), "mercedes-benz-g-class-w463-2012-2018.webp");
+  assert.equal(file(2020), "mercedes-benz-g-class-w463a-2018-2024.webp");
+  assert.equal(file(2025), "mercedes-benz-g-class-w465-2024-2026.webp");
+
+  for (const model of ["G-CLASS", "G CLASS", "G-WAGEN", "G WAGEN", "G"]) {
+    assert.equal(matchCatalogModel("MERCEDES-BENZ", model), "G-Class", model);
+  }
+});
+
+run("AMG G63 never comes from a generic G-Class string", () => {
+  assert.equal(matchCatalogModel("MERCEDES-BENZ", "G 350 D"), "G-Class");
+  assert.equal(matchCatalogModel("MERCEDES-BENZ", "G CLASS"), "G-Class");
+  assert.equal(matchCatalogModel("MERCEDES-BENZ", "G 63"), "AMG G 63");
+  assert.equal(matchCatalogModel("MERCEDES-BENZ", "AMG G63"), "AMG G 63");
+  assert.equal(matchCatalogModel("MERCEDES-BENZ", "AMG G 63"), "AMG G 63");
+
+  assert.equal(
+    resolveVehicleImage({
+      make: "MERCEDES-BENZ",
+      model: "G 350 D",
+      year: 2020,
+    }).filename,
+    "mercedes-benz-g-class-w463a-2018-2024.webp",
+  );
+  assert.equal(
+    resolveVehicleImage({
+      make: "MERCEDES-BENZ",
+      model: "AMG G 63",
+      year: 2020,
+    }).filename,
+    "mercedes-amg-g63-w463a-2018-2024.webp",
+  );
+  assert.equal(
+    resolveVehicleImage({
+      make: "MERCEDES-BENZ",
+      model: "G 63",
+      year: 2025,
+    }).filename,
+    "mercedes-amg-g63-w465-2024-2026.webp",
+  );
+});
+
+run("G580 EQ never comes from a generic G-Class string", () => {
+  assert.equal(matchCatalogModel("MERCEDES-BENZ", "G 580"), "G 580 EQ");
+  assert.equal(matchCatalogModel("MERCEDES-BENZ", "G 580 EQ"), "G 580 EQ");
+  assert.equal(matchCatalogModel("MERCEDES-BENZ", "G CLASS"), "G-Class");
+
+  assert.equal(
+    resolveVehicleImage({
+      make: "MERCEDES-BENZ",
+      model: "G 580 EQ TECHNOLOGY",
+      year: 2025,
+    }).filename,
+    "mercedes-benz-g580-eq-2024-2026.webp",
+  );
+  assert.equal(
+    resolveVehicleImage({
+      make: "MERCEDES-BENZ",
+      model: "G CLASS",
+      year: 2025,
+    }).filename,
+    "mercedes-benz-g-class-w465-2024-2026.webp",
+  );
 });
 
 run("demo records use expected WebP resolver paths", () => {

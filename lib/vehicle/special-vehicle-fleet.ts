@@ -27,6 +27,13 @@ export type SpecialVehicleRegistration = {
   make: string;
   model: string;
   body: string;
+  /**
+   * Trusted fleet role for Full Report eligibility.
+   * public_service: fire, ambulance, council-style emergency/public fleets.
+   * specialist: agricultural / plant / other non-buyer specialist mappings.
+   * Omitted defaults to specialist (exact map is not a standard used-car plate).
+   */
+  category?: "public_service" | "specialist" | null;
   /** Catalogue priority. Null/omitted means no catalogue id mapping. */
   imageRecordId?: number | null;
   /**

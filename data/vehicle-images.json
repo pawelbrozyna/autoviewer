@@ -1,6 +1,6 @@
 {
   "library": "AutoViewer vehicle image library v12",
-  "count": 1089,
+  "count": 1099,
   "format": "webp",
   "selectionBasis": "Prioritised for UK used-vehicle and vehicle-parc relevance. Positions 1-300 cover common UK cars; 301-340 vans and light commercial vehicles; 341-370 motorcycles; 371-400 scooters; 401-450 pickups, larger/older commercial vans and van-based MPVs; 451-500 add high-priority UK used-car gaps, current EVs/hybrids and premium used models; 501-600 fill UK everyday-road gaps (2005-2020 hatchbacks, MPVs, budget family cars and small crossovers). 601-666 add current generations and facelifts of top sellers, new brands (BYD, Jaecoo, Omoda), London taxis, older common vans, used-car gaps and common UK buses. 667-678 fill real-lookup gaps and adjacent generations (Rifter, Partner Tepee, Fabia Mk1, Infiniti Q30, Smart #1, EQE saloon and SUV, Actros trucks, GB Kite Electroliner, BYD BD11 and B12). 679-689 add common London bus bodies (New Routemaster, Gemini 2 and 3, Enviro400 City, Enviro200 Mk1, MCV, StreetLite, MetroDecker EV, Enviro100EV, Enviro400EV). 690-746 add older UK cars (Jaguar X-Type, Saab 9-3, Citroen Xsara), Honda Stepwgn imports, Yadea scooters and common UK trucks (DAF, Scania, MAN, Volvo, Iveco, Renault Trucks, Mercedes-Benz Atego and Arocs). 747-873 add classic and modern-classic generations (British classics, older Ford, Vauxhall, Land Rover, VW, BMW, Mercedes-Benz and Porsche, French and Italian classics, Japanese modern classics). 874-881 add the Volkswagen Multivan T7, Porsche 911 996-992 and BMW 6 Series E63/E64, F06 Gran Coupe and 6 Series GT G32. 882-948 add luxury, supercar, JDM import and drift coverage (Rolls-Royce, Bentley, Aston Martin, Range Rover L322, Toyota, Lexus SC, Nissan, Mazda RX, Lamborghini, Ferrari, McLaren, Audi R8); 911, 916 and 917 share the images of 910, 915 and 913. 949-958 fill real-lookup gaps: Kia Sorento BL, XM, MQ4 and MQ4 facelift, Volkswagen Sharan Mk1 and Mk2, DAF XB, Volvo V50 and Suzuki Grand Vitara Mk1 and Mk2; 188 covers the whole Sorento UM 2015-2020 because the 2018 facelift looks almost the same. 959-1008 fill older and adjacent generations of common UK cars and vans found in real lookups (VW Transporter T5, Ford Transit Mk6, BMW E87/E60/E84/F15, Audi B7/C6/8R/8U/8J, Mercedes-Benz W169/W203/W211/W246/W167, Sprinter T1N, Vito W639, Discovery L319, Range Rover Sport L320, Astra G, Zafira A, Combo C, Vivaro A, Trafic II, Ducato X250, Dispatch II, Mondeo Mk3, Ka Mk1, Mustang S550, Jaguar XF X250/X260, Navara D40, L200 Series 4, Passat B5, Touran 1T3, Prius XW20, Yaris XP10, XC90 Mk1, V70 Mk3, MG ZS EV facelift, HR-V Mk3, CUPRA Leon, Santa Fe TM, Sportage KM, Tucson JM, Mazda6 GJ, MX-5 NC, 508 Mk1). 1009-1013 add street-test finds: Toyota Estima XR50, Dacia Spring facelift, Volkswagen ID. Buzz Cargo, Toyota Avensis T25 and Nissan Serena C26. pendingVehicles lists catalogued generations whose image is not generated yet; the matcher resolves them to the placeholder until each record moves into vehicles with its file. 1014-1072 add Sheffield Council visual families (minibuses, tippers, beavertails, Lutons, crew vans, plant and equipment). pendingVehicles 1073-1088 hold London Fire Brigade specialist-body families from the LFB Fleet List March 2025 audit (pumping appliances, FRU, CSU, DIM, FIU, HDU, hose layer, resilience/OSU, turntable ladders, AWD, Zepa, GP van and marked-red minibus); these are emergency-service body records and do not replace generic van/truck images. This is a practical image-bucket catalogue, not an exact sales ranking.",
   "imageStandard": {
@@ -3517,11 +3517,11 @@
       "priority": 350,
       "make": "Yamaha",
       "model": "MT-125",
-      "generation": "2020 generation",
+      "generation": "2020-2024",
       "yearFrom": 2020,
       "yearTo": 2024,
       "bodyType": "motorcycle",
-      "filename": "yamaha-mt-125-2020-generation-2020-2024.webp"
+      "filename": "yamaha-mt-125-2020-2024.webp"
     },
     {
       "priority": 351,
@@ -10911,8 +10911,109 @@
       "yearFrom": 1957,
       "yearTo": 1964,
       "bodyType": "tractor",
-      "filename": "massey-ferguson-35-1957-1964.webp"
+      "filename": "massey-ferguson-35-1960.webp"
+    },
+    {
+      "priority": 1090,
+      "make": "Volkswagen",
+      "model": "Passat CC",
+      "generation": "2008-2012",
+      "yearFrom": 2008,
+      "yearTo": 2012,
+      "bodyType": "coupe",
+      "filename": "volkswagen-passat-cc-2008-2012.webp"
+    },
+    {
+      "priority": 1091,
+      "make": "Volkswagen",
+      "model": "CC",
+      "generation": "2012-2017",
+      "yearFrom": 2012,
+      "yearTo": 2017,
+      "bodyType": "coupe",
+      "filename": "volkswagen-cc-2012-2017.webp"
+    },
+    {
+      "priority": 1092,
+      "make": "Yamaha",
+      "model": "MT-125",
+      "generation": "2014-2019",
+      "yearFrom": 2014,
+      "yearTo": 2019,
+      "bodyType": "motorcycle",
+      "filename": "yamaha-mt-125-2014-2019.webp"
+    },
+    {
+      "priority": 1093,
+      "make": "Mercedes-Benz",
+      "model": "G-Class",
+      "generation": "W463",
+      "yearFrom": 1990,
+      "yearTo": 2012,
+      "bodyType": "suv",
+      "filename": "mercedes-benz-g-class-w463-1990-2012.webp"
+    },
+    {
+      "priority": 1094,
+      "make": "Mercedes-Benz",
+      "model": "G-Class",
+      "generation": "W463 facelift",
+      "yearFrom": 2012,
+      "yearTo": 2018,
+      "bodyType": "suv",
+      "filename": "mercedes-benz-g-class-w463-2012-2018.webp"
+    },
+    {
+      "priority": 1095,
+      "make": "Mercedes-Benz",
+      "model": "G-Class",
+      "generation": "W463A",
+      "yearFrom": 2018,
+      "yearTo": 2024,
+      "bodyType": "suv",
+      "filename": "mercedes-benz-g-class-w463a-2018-2024.webp"
+    },
+    {
+      "priority": 1096,
+      "make": "Mercedes-Benz",
+      "model": "G-Class",
+      "generation": "W465",
+      "yearFrom": 2024,
+      "yearTo": 2026,
+      "bodyType": "suv",
+      "filename": "mercedes-benz-g-class-w465-2024-2026.webp"
+    },
+    {
+      "priority": 1097,
+      "make": "Mercedes-Benz",
+      "model": "AMG G 63",
+      "generation": "W463A",
+      "yearFrom": 2018,
+      "yearTo": 2024,
+      "bodyType": "suv",
+      "filename": "mercedes-amg-g63-w463a-2018-2024.webp"
+    },
+    {
+      "priority": 1098,
+      "make": "Mercedes-Benz",
+      "model": "AMG G 63",
+      "generation": "W465",
+      "yearFrom": 2024,
+      "yearTo": 2026,
+      "bodyType": "suv",
+      "filename": "mercedes-amg-g63-w465-2024-2026.webp"
+    },
+    {
+      "priority": 1099,
+      "make": "Mercedes-Benz",
+      "model": "G 580 EQ",
+      "generation": "2024-2026",
+      "yearFrom": 2024,
+      "yearTo": 2026,
+      "bodyType": "suv",
+      "filename": "mercedes-benz-g580-eq-2024-2026.webp"
     }
   ],
-  "pendingVehicles": []
+  "pendingVehicles": [],
+  "pendingImageFilenames": []
 }

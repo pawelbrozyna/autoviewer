@@ -7,10 +7,16 @@ import {
   FULL_REPORT_CHECKOUT_PATH,
   FULL_REPORT_PRICE,
   fullReportHref,
+  isFullReportEligible,
 } from "@/lib/full-report";
+import {
+  FULL_REPORT_UNAVAILABLE_BUTTON,
+  FULL_REPORT_UNAVAILABLE_REASON,
+} from "@/lib/vehicle/vehicle-category";
 import { motDateLabel } from "@/lib/vehicle/mot-status";
 import { statusLabel } from "@/lib/vehicle/missing-data";
 import { checkedItems } from "@/lib/reports/checked-items";
+import { freeReportSummary } from "@/lib/reports/report-summary";
 import {
   FREE_ADVISORY_LIMIT,
   FREE_MILEAGE_LIMIT,
@@ -21,7 +27,7 @@ import {
   motRowsForFreePdf,
 } from "@/lib/reports/pdf-limits";
 import { HomeLink } from "@/components/layout/HomeLink";
-import { vehicleColourSwatch } from "@/components/vehicle/VehicleColour";
+import { vehicleColourSwatchStyle } from "@/components/vehicle/VehicleColour";
 import { VehicleImageFallback } from "@/components/vehicle/VehicleImageFallback";
 import { plateFont } from "@/components/vehicle/plate-font";
 import { reportVehicleTitle } from "@/lib/vehicle/report-title";
@@ -64,12 +70,55 @@ function UnlockFullReportButton({
   reportId,
   isExample,
   mobileLarge,
+  eligible,
 }: {
   registration: string;
   reportId: string;
   isExample: boolean;
   mobileLarge: boolean;
+  eligible: boolean;
 }) {
+  if (!eligible) {
+    const disabledClass =
+      "inline-flex cursor-not-allowed items-center rounded-[6px] border border-[#c5cedc] bg-[#d8dee8] font-bold text-[#5a6a82] shadow-none";
+    if (mobileLarge) {
+      return (
+        <button
+          type="button"
+          disabled
+          aria-disabled="true"
+          className="inline-flex min-h-12 cursor-not-allowed items-center gap-2 rounded-[9px] border border-[#c5cedc] bg-[#d8dee8] px-5 text-[15px] font-bold text-[#5a6a82] shadow-none md:min-h-[var(--btn-h)] md:gap-[var(--btn-gap)] md:rounded-[6px] md:px-[var(--btn-px)] md:text-[length:var(--btn-fs)]"
+          style={
+            {
+              "--btn-h": pt(28),
+              "--btn-gap": pt(8),
+              "--btn-px": pt(18),
+              "--btn-fs": pt(10.5),
+            } as React.CSSProperties
+          }
+        >
+          {FULL_REPORT_UNAVAILABLE_BUTTON}
+        </button>
+      );
+    }
+    return (
+      <button
+        type="button"
+        disabled
+        aria-disabled="true"
+        className={disabledClass}
+        style={{
+          minHeight: pt(28),
+          gap: pt(8),
+          paddingInline: pt(14),
+          fontSize: pt(9.5),
+        }}
+      >
+        {FULL_REPORT_UNAVAILABLE_BUTTON}
+      </button>
+    );
+  }
+
   const label = `Unlock Full Report - ${FULL_REPORT_PRICE}`;
 
   return (
@@ -256,8 +305,8 @@ export function FreeReportHtml({
     .slice(0, 10)
     .replace(/-/g, "")}`;
   const upgradeHref = fullReportHref(summary.registration);
-  const needsAttention =
-    summary.recalls.dataAvailable !== false && summary.recalls.hasOpenRecalls;
+  const fullReportEligible = isFullReportEligible(summary.vehicleCategory);
+  const summaryState = freeReportSummary(vehicle);
   const { title: vehicleTitle, variant } = reportVehicleTitle(summary);
   const colourValue = summary.colour?.trim() || details.colour?.trim() || null;
   const fuelValue = summary.fuelType?.trim() || details.fuelType?.trim() || null;
@@ -509,7 +558,7 @@ export function FreeReportHtml({
                 priority
               />
               <p
-                className="absolute inset-x-0 z-30 px-1 text-center text-muted max-md:translate-x-1.5 max-md:translate-y-1 max-md:pr-0 max-md:text-right"
+                className="absolute inset-x-0 z-30 px-1 text-right text-muted max-md:translate-x-1.5 max-md:translate-y-1 max-md:pr-0"
                 style={{
                   bottom: pt(34),
                   fontSize: pt(7),
@@ -625,7 +674,7 @@ export function FreeReportHtml({
                     style={{
                       width: pt(10),
                       height: pt(10),
-                      backgroundColor: vehicleColourSwatch(colourValue),
+                      ...vehicleColourSwatchStyle(colourValue),
                     }}
                     aria-hidden
                   />
@@ -639,9 +688,11 @@ export function FreeReportHtml({
 
       <div
         className={`relative z-20 flex items-center rounded-[6px] border ${
-          needsAttention
+          summaryState.tone === "attention"
             ? "border-[#f5d9a8] bg-warning-bg"
-            : "border-success/25 bg-success-bg"
+            : summaryState.tone === "info"
+              ? "border-[#c5d4e8] bg-[#eef3f9]"
+              : "border-success/25 bg-success-bg"
         }`}
           style={{
             marginTop: pt(-26),
@@ -651,25 +702,18 @@ export function FreeReportHtml({
             paddingBlock: pt(5),
           }}
         >
-        <ReportIcon name={needsAttention ? "warning" : "check"} sizePt={22} />
+        <ReportIcon name={summaryState.icon} sizePt={22} />
         <div className="min-w-0">
           <p
             className={`font-bold leading-tight ${
-              needsAttention ? "text-navy" : "text-success"
+              summaryState.tone === "positive" ? "text-success" : "text-navy"
             }`}
             style={{ fontSize: pt(13) }}
           >
-            Summary:{" "}
-            {needsAttention
-              ? "Items need attention"
-              : "No immediate issues indicated"}
+            Summary: {summaryState.title}
           </p>
           <p className="text-muted" style={{ marginTop: pt(3), fontSize: pt(8.3) }}>
-            {needsAttention
-              ? "Review the available recall information below."
-              : summary.isDemo
-                ? "Based only on the free public and demonstration data shown in this report."
-                : "Based only on the free public data shown in this report."}
+            {summaryState.detail}
           </p>
         </div>
       </div>
@@ -752,36 +796,42 @@ export function FreeReportHtml({
         title="More available in Full Report"
         tone="amber"
         headerExtra={
-          <>
+          fullReportEligible ? (
+            <>
+              <span
+                className="shrink-0 font-bold uppercase tracking-[0.06em] text-warning"
+                style={{ fontSize: pt(6.5) }}
+              >
+                Coming soon
+              </span>
+              <span className="shrink-0 font-bold text-navy" style={{ fontSize: pt(13) }}>
+                {FULL_REPORT_PRICE}
+              </span>
+            </>
+          ) : (
             <span
-              className="shrink-0 font-bold uppercase tracking-[0.06em] text-warning"
+              className="shrink-0 font-bold uppercase tracking-[0.06em] text-muted"
               style={{ fontSize: pt(6.5) }}
             >
-              Coming soon
+              Not available
             </span>
-            <span className="shrink-0 font-bold text-navy" style={{ fontSize: pt(13) }}>
-              {FULL_REPORT_PRICE}
-            </span>
-          </>
+          )
         }
       >
         <div className="grid grid-cols-2">
           {lockedItems.map((item, index) => {
             const row = Math.floor(index / 2);
             const col = index % 2;
-            return (
-              <Link
-                key={item.title}
-                href={upgradeHref}
-                className={`flex items-center transition hover:bg-white/45 ${
-                  col === 0 ? "border-r border-[#f0d9a0]/70" : ""
-                } ${row > 0 ? "border-t border-[#f0d9a0]/70" : ""}`}
-                style={{
-                  minHeight: pt(29),
-                  gap: pt(8),
-                  paddingInline: pt(14),
-                }}
-              >
+            const cellClass = `flex items-center ${
+              col === 0 ? "border-r border-[#f0d9a0]/70" : ""
+            } ${row > 0 ? "border-t border-[#f0d9a0]/70" : ""}`;
+            const cellStyle = {
+              minHeight: pt(29),
+              gap: pt(8),
+              paddingInline: pt(14),
+            };
+            const content = (
+              <>
                 <ReportIcon name={item.icon} sizePt={13} />
                 <div className="min-w-0">
                   <p
@@ -797,6 +847,23 @@ export function FreeReportHtml({
                     {item.detail}
                   </p>
                 </div>
+              </>
+            );
+            if (!fullReportEligible) {
+              return (
+                <div key={item.title} className={`${cellClass} opacity-70`} style={cellStyle}>
+                  {content}
+                </div>
+              );
+            }
+            return (
+              <Link
+                key={item.title}
+                href={upgradeHref}
+                className={`${cellClass} transition hover:bg-white/45`}
+                style={cellStyle}
+              >
+                {content}
               </Link>
             );
           })}
@@ -809,8 +876,17 @@ export function FreeReportHtml({
           reportId={reportId}
           isExample={Boolean(summary.isDemo)}
           mobileLarge={!isPreview}
+          eligible={fullReportEligible}
         />
-        {isPreview ? <CheckoutDataNote /> : null}
+        {isPreview && fullReportEligible ? <CheckoutDataNote /> : null}
+        {!fullReportEligible ? (
+          <p
+            className="max-w-full text-center leading-snug text-muted"
+            style={{ marginTop: pt(6), fontSize: pt(6.5) }}
+          >
+            {FULL_REPORT_UNAVAILABLE_REASON}
+          </p>
+        ) : null}
       </div>
 
       {!isPreview ? (
@@ -1065,7 +1141,16 @@ export function FreeReportHtml({
               reportId={reportId}
               isExample={Boolean(summary.isDemo)}
               mobileLarge
+              eligible={fullReportEligible}
             />
+            {!fullReportEligible ? (
+              <p
+                className="max-w-full text-center leading-snug text-muted"
+                style={{ marginTop: pt(6), fontSize: pt(6.5) }}
+              >
+                {FULL_REPORT_UNAVAILABLE_REASON}
+              </p>
+            ) : null}
           </div>
         </>
       ) : null}

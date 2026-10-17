@@ -22,6 +22,7 @@ import {
   normalizeRegistration,
 } from "@/lib/vehicle/registration";
 import { formatVehicleText } from "@/lib/vehicle/display-text";
+import { canContinueVehicleLookup } from "@/lib/api/vehicle-lookup-gate";
 import { isMissingVehicleIdentity } from "@/lib/vehicle/special-vehicle-fleet";
 import {
   lookupLocalRegistrationKnowledge,
@@ -201,7 +202,17 @@ export async function lookupVehicle(
     colour = formatVehicleText(colour);
     fuelType = formatVehicleText(fuelType);
 
-    if (!detailsPart && motTests.length === 0 && make === "Unknown") {
+    // Local exact-registration / fleet knowledge must still produce a report when
+    // DVSA only returns UNKNOWN and DVLA/MOT data is absent.
+    const localKnowledge = lookupLocalRegistrationKnowledge(registration);
+    if (
+      !canContinueVehicleLookup({
+        hasDvlaDetails: Boolean(detailsPart),
+        motTestCount: motTests.length,
+        make,
+        hasLocalRegistrationKnowledge: Boolean(localKnowledge),
+      })
+    ) {
       return {
         ok: false,
         error: {
@@ -316,12 +327,11 @@ export async function lookupVehicle(
         : "") ||
       "Vehicle";
 
-    const local = lookupLocalRegistrationKnowledge(registration);
     const identity = mergeVehicleIdentity({
       registration,
       make,
       model: externalModel,
-      local,
+      local: localKnowledge,
     });
 
     // Image uses merged identity so local make/model can drive the generic
@@ -351,9 +361,9 @@ export async function lookupVehicle(
       "Vehicle information from official UK data sources where configured.",
       "AutoViewer is independent and not affiliated with DVLA or DVSA.",
     ];
-    if (local) {
+    if (localKnowledge) {
       notes.push(
-        `Identity fields enriched from local ${local.source} mapping where verified.`,
+        `Identity fields enriched from local ${localKnowledge.source} mapping where verified.`,
       );
     }
 
@@ -384,6 +394,7 @@ export async function lookupVehicle(
         imageMatchAmbiguous: image.imageMatchAmbiguous,
         modelTitle: identity.modelTitle,
         modelVariant: identity.modelVariant,
+        vehicleCategory: localKnowledge?.category ?? "standard",
       },
       details: {
         registration,

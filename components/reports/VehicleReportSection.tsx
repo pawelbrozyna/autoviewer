@@ -92,6 +92,7 @@ export function LiveVehicleReportSection({
         <>
           <FullReportUpsellCard
             registration={vehicle.summary.isDemo ? null : vehicle.summary.registration}
+            vehicleCategory={vehicle.summary.vehicleCategory ?? "standard"}
             className="mt-6 md:mt-8"
           />
           <LiveReportNextSteps vehicle={vehicle} />

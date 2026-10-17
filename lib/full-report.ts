@@ -1,6 +1,13 @@
 import { normalizeRegistration } from "@/lib/vehicle/registration";
+import {
+  isFullReportEligible,
+  type VehicleCategory,
+} from "@/lib/vehicle/vehicle-category";
 
 export const FULL_REPORT_PRICE = "£7.99";
+
+export type { VehicleCategory };
+export { isFullReportEligible };
 export const FULL_REPORT_AMOUNT_PENCE = 799;
 export const FULL_REPORT_CURRENCY = "gbp";
 export const FULL_REPORT_PRODUCT_NAME = "AutoViewer Full Vehicle Report";

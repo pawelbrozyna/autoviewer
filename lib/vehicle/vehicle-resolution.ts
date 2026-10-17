@@ -17,6 +17,10 @@ import {
   type VehicleImageInput,
 } from "@/lib/vehicle/images";
 import { findTflBusType, resolveTflBusImageFields } from "@/lib/vehicle/tfl-bus-fleet";
+import {
+  resolveVehicleCategory,
+  type VehicleCategory,
+} from "@/lib/vehicle/vehicle-category";
 
 /**
  * Shared vehicle resolution for reports, cards and images.
@@ -47,6 +51,8 @@ export type LocalRegistrationKnowledge = {
   imageRecordId: number | null;
   source: string;
   tier: "exact" | "fleet-tfl" | "fleet-sheffield";
+  /** Trusted category for Full Report eligibility. */
+  category: VehicleCategory;
 };
 
 export type MergedVehicleIdentity = FleetDisplayFields & {
@@ -94,6 +100,10 @@ export function lookupLocalRegistrationKnowledge(
         typeof special.imageRecordId === "number" ? special.imageRecordId : null,
       source: special.source,
       tier: "exact",
+      category: resolveVehicleCategory({
+        tier: "exact",
+        exactCategory: special.category ?? null,
+      }),
     };
   }
 
@@ -107,6 +117,7 @@ export function lookupLocalRegistrationKnowledge(
       imageRecordId: null,
       source: "Sheffield Council fleet",
       tier: "fleet-sheffield",
+      category: resolveVehicleCategory({ tier: "fleet-sheffield" }),
     };
   }
 
@@ -123,10 +134,18 @@ export function lookupLocalRegistrationKnowledge(
       imageRecordId: null,
       source: "TfL fleet data",
       tier: "fleet-tfl",
+      category: resolveVehicleCategory({ tier: "fleet-tfl" }),
     };
   }
 
   return null;
+}
+
+/** Category for a plate from trusted local/fleet knowledge only. */
+export function resolveRegistrationVehicleCategory(
+  registration: string | null | undefined,
+): VehicleCategory {
+  return lookupLocalRegistrationKnowledge(registration)?.category ?? "standard";
 }
 
 type PreferResult = {

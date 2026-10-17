@@ -104,6 +104,28 @@ run("known Sheffield tipper/crane and beavertail plates use fleet images", () =>
   );
 });
 
+run("Sheffield mower/tractor plates resolve their exact imageFilename mappings", () => {
+  const cases: Array<[string, string, string]> = [
+    ["YX70 EYF", "toro-ltf3000-2010-2026.webp", "TORO LTF3000"],
+    ["YJ07 VEU", "john-deere-3320-2005-2014.webp", "3320"],
+    ["YX21 FUT", "toro-lt3340-2010-2026.webp", "TORO LT3340"],
+    ["YX24 DZL", "amazone-profi-ph1500-2005-2026.webp", "AMAZONE PROFI -  PH1500"],
+    ["FJ23 DVX", "ventrac-compact-articulated-2005-2026.webp", "VENTRAC"],
+  ];
+  for (const [registration, filename, model] of cases) {
+    const vehicle = findSheffieldCouncilVehicle(registration);
+    assert.ok(vehicle, registration);
+    assert.equal(vehicle?.model, model, registration);
+    assert.equal(vehicle?.imageFilename, filename, registration);
+
+    const image = resolveSheffieldCouncilImageFields(registration);
+    assert.equal(image?.imageSrc, `/cars/${filename}`, registration);
+    assert.equal(image?.imageMatch, "exact", registration);
+    assert.equal(image?.imageConfidence, "high", registration);
+    assert.equal(image?.imageFallbackUsed, false, registration);
+  }
+});
+
 run("non-Sheffield registrations fall through to the normal matcher", () => {
   for (const registration of ["SA23YZK", "AB12CDE", "LV73FET", "", null, undefined]) {
     assert.equal(

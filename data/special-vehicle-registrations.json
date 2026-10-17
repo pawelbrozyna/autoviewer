@@ -6,6 +6,7 @@
       "make": "Mercedes-Benz",
       "model": "Atego 1327F",
       "body": "Pumping Appliance",
+      "category": "public_service",
       "imageRecordId": 1074,
       "source": "London Fire Brigade"
     },
@@ -14,6 +15,7 @@
       "make": "Mercedes-Benz",
       "model": "Atego 1327F",
       "body": "Pumping Appliance",
+      "category": "public_service",
       "imageRecordId": 1074,
       "source": "London Fire Brigade"
     },
@@ -22,8 +24,9 @@
       "make": "Massey Ferguson",
       "model": "35",
       "body": "Tractor",
+      "category": "specialist",
       "imageRecordId": 1089,
-      "imageFilename": "massey-ferguson-35-1957-1964.webp",
+      "imageFilename": "massey-ferguson-35-1960.webp",
       "source": "Verified registration mapping"
     }
   ]

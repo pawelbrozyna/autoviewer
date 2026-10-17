@@ -25,6 +25,10 @@ import { motDateLabel } from "@/lib/vehicle/mot-status";
 import { statusLabel } from "@/lib/vehicle/missing-data";
 import { checkedItems } from "@/lib/reports/checked-items";
 import {
+  freeReportSummary,
+  type ReportSummaryTone,
+} from "@/lib/reports/report-summary";
+import {
   HERO_HEADER_RULE_Y,
   drawHeroVehicleImage,
   drawVariantRow,
@@ -47,6 +51,8 @@ const GREEN = rgb(0.075, 0.53, 0.24);
 const GREEN_BG = rgb(0.918, 0.973, 0.929);
 const AMBER = rgb(0.82, 0.48, 0.04);
 const AMBER_BG = rgb(1, 0.973, 0.9);
+const INFO_BG = rgb(0.933, 0.953, 0.976);
+const INFO = rgb(0.09, 0.27, 0.51);
 /** Lighter body fill for amber tables; keep header at full intensity. */
 const AMBER_BODY_BG = rgb(1, 0.992, 0.978);
 const AMBER_HEADER_BG = rgb(1, 0.96, 0.84);
@@ -659,8 +665,14 @@ function drawEmbeddedIcon(
 function reportSummary(vehicle: VehicleRecord): {
   title: string;
   detail: string;
-  positive: boolean;
+  tone: ReportSummaryTone;
+  icon: "check" | "warning" | "info";
 } {
+  const categoryState = freeReportSummary(vehicle);
+  if (categoryState.tone === "info") {
+    return categoryState;
+  }
+
   const issues: string[] = [];
   if (vehicle.summary.motStatus.status === "Expired") issues.push("MOT");
   if (
@@ -676,7 +688,8 @@ function reportSummary(vehicle: VehicleRecord): {
     return {
       title: "Items need attention",
       detail: `Review the available ${issues.join(", ")} information below.`,
-      positive: false,
+      tone: "attention",
+      icon: "warning",
     };
   }
   const coreAvailable =
@@ -686,9 +699,9 @@ function reportSummary(vehicle: VehicleRecord): {
     title: coreAvailable
       ? "No immediate issues indicated"
       : "Available checks completed",
-    detail:
-      "Based only on the data shown in this report.",
-    positive: coreAvailable,
+    detail: "Based only on the data shown in this report.",
+    tone: coreAvailable ? "positive" : "attention",
+    icon: coreAvailable ? "check" : "warning",
   };
 }
 
@@ -874,20 +887,32 @@ export async function generateVehicleReportPdf(
   const summaryHeight = 46;
   const summaryCenterY = summaryY + summaryHeight / 2;
   const summaryIconSize = 23;
+  const summaryFill =
+    summaryResult.tone === "positive"
+      ? GREEN_BG
+      : summaryResult.tone === "info"
+        ? INFO_BG
+        : AMBER_BG;
+  const summaryTitleColor =
+    summaryResult.tone === "positive"
+      ? GREEN
+      : summaryResult.tone === "info"
+        ? INFO
+        : NAVY;
   drawSection(page1, MARGIN, summaryY, CONTENT_WIDTH, summaryHeight, {
-    fill: summaryResult.positive ? GREEN_BG : AMBER_BG,
+    fill: summaryFill,
   });
   page1.drawText(`Summary: ${summaryResult.title}`, {
     x: 82,
     y: textY(summaryCenterY, 13) + 5,
     size: 13,
     font: bold,
-    color: summaryResult.positive ? GREEN : NAVY,
+    color: summaryTitleColor,
   });
   const hasSummaryIcon = drawEmbeddedIcon(
     page1,
     embeddedIcons,
-    summaryResult.positive ? "check" : "warning",
+    summaryResult.icon,
     48,
     summaryCenterY - summaryIconSize / 2,
     summaryIconSize,
@@ -897,10 +922,15 @@ export async function generateVehicleReportPdf(
       x: 59.5,
       y: summaryCenterY,
       size: 11.5,
-      color: summaryResult.positive ? GREEN : AMBER,
+      color:
+        summaryResult.tone === "positive"
+          ? GREEN
+          : summaryResult.tone === "info"
+            ? INFO
+            : AMBER,
     });
   }
-  if (!hasSummaryIcon && summaryResult.positive) {
+  if (!hasSummaryIcon && summaryResult.tone === "positive") {
     page1.drawLine({
       start: { x: 54.5, y: summaryCenterY },
       end: { x: 57.5, y: summaryCenterY - 3 },
@@ -913,9 +943,17 @@ export async function generateVehicleReportPdf(
       thickness: 1.75,
       color: WHITE,
     });
-  } else if (!hasSummaryIcon) {
+  } else if (!hasSummaryIcon && summaryResult.tone === "attention") {
     page1.drawText("!", {
       x: 57,
+      y: summaryCenterY - 5,
+      size: 11,
+      font: bold,
+      color: WHITE,
+    });
+  } else if (!hasSummaryIcon) {
+    page1.drawText("i", {
+      x: 56.5,
       y: summaryCenterY - 5,
       size: 11,
       font: bold,

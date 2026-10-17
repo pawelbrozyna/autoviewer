@@ -152,7 +152,7 @@ run("6. 934 HRR uses local exact-registration identity and image", () => {
     model: "UNKNOWN",
     year: 1960,
   });
-  assert.equal(image.imageSrc, "/cars/massey-ferguson-35-1957-1964.webp");
+  assert.equal(image.imageSrc, "/cars/massey-ferguson-35-1960.webp");
   assert.equal(image.imageMatch, "exact");
   assert.equal(image.imageConfidence, "high");
   assert.equal(image.imageFallbackUsed, false);
