@@ -121,11 +121,12 @@ run("5. generic Mercedes UNKNOWN must not become a fire appliance", () => {
   assert.notEqual(viaPriority.imageSrc, `/cars/${PUMP}`);
 });
 
-run("6. 934 HRR uses local exact-registration identity", () => {
+run("6. 934 HRR uses local exact-registration identity and image", () => {
   const local = lookupLocalRegistrationKnowledge("934 HRR");
   assert.ok(local);
   assert.equal(local?.tier, "exact");
   assert.equal(local?.make, "Massey Ferguson");
+  assert.equal(local?.imageRecordId, 1089);
   assert.ok(local?.model && local.model !== "Unknown");
 
   const merged = mergeVehicleIdentity({
@@ -145,6 +146,41 @@ run("6. 934 HRR uses local exact-registration identity", () => {
   });
   assert.equal(display.make, "Massey Ferguson");
   assert.equal(display.model, local!.model);
+
+  const image = resolveVehicleImageByPriority("934 HRR", {
+    make: "MASSEY FERGUSON",
+    model: "UNKNOWN",
+    year: 1960,
+  });
+  assert.equal(image.imageSrc, "/cars/massey-ferguson-35-1957-1964.webp");
+  assert.equal(image.imageMatch, "exact");
+  assert.equal(image.imageConfidence, "high");
+  assert.equal(image.imageFallbackUsed, false);
+});
+
+run("exact registration with valid image mapping wins over UNKNOWN API model", () => {
+  for (const registration of ["934 HRR", "WX69 ZBC"]) {
+    const mapped = findSpecialVehicleRegistration(registration);
+    assert.ok(mapped?.imageRecordId != null || mapped?.imageFilename, registration);
+
+    const image = resolveVehicleImageByPriority(registration, {
+      make: mapped!.make,
+      model: "UNKNOWN",
+      year: null,
+    });
+    assert.ok(image.imageSrc, registration);
+    assert.equal(image.imageMatch, "exact", registration);
+    assert.equal(image.imageConfidence, "high", registration);
+    assert.equal(image.imageFallbackUsed, false, registration);
+
+    // Generic matcher alone would not produce this exact-registration image.
+    const generic = resolveVehicleImage({
+      make: mapped!.make,
+      model: "UNKNOWN",
+      year: 1960,
+    });
+    assert.notEqual(generic.src, image.imageSrc, registration);
+  }
 });
 
 run("7. WX69 ZBC and WX17 YCK use exact fire-appliance mapping", () => {

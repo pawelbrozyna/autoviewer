@@ -20,9 +20,10 @@
     {
       "registration": "934HRR",
       "make": "Massey Ferguson",
-      "model": "Tractor",
-      "body": "Agricultural tractor",
-      "imageRecordId": null,
+      "model": "35",
+      "body": "Tractor",
+      "imageRecordId": 1089,
+      "imageFilename": "massey-ferguson-35-1957-1964.webp",
       "source": "Verified registration mapping"
     }
   ]

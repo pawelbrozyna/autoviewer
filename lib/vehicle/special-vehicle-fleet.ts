@@ -15,7 +15,9 @@ import { normalizeRegistration } from "@/lib/vehicle/registration";
  * make/model values for the same plate. Engine, gearbox, MOT, tax and
  * similar facts are left untouched.
  * Returns null when the plate is not mapped, or when it is identity-only
- * with no imageRecordId, so TfL, Sheffield and the generic matcher can run.
+ * with no imageRecordId/imageFilename, so TfL, Sheffield and the generic
+ * matcher can run. A valid image mapping never falls through to the generic
+ * matcher, even when DVSA/DVLA model is UNKNOWN.
  */
 
 type VehicleImageFields = ReturnType<typeof resolveImageFieldsForVehicle>;
@@ -25,8 +27,13 @@ export type SpecialVehicleRegistration = {
   make: string;
   model: string;
   body: string;
-  /** Catalogue priority. Null/omitted means identity-only (no image mapping yet). */
+  /** Catalogue priority. Null/omitted means no catalogue id mapping. */
   imageRecordId?: number | null;
+  /**
+   * Optional direct filename under /public/cars. Used when set, or as a
+   * fallback when imageRecordId is absent. Wins before any generic matcher.
+   */
+  imageFilename?: string | null;
   source: string;
 };
 
@@ -143,30 +150,55 @@ export function findSpecialVehicleRegistration(
   return byRegistration.get(normalizeRegistration(registration)) ?? null;
 }
 
+/** Resolve the representative filename for an exact-registration mapping. */
+export function resolveSpecialVehicleImageFilename(
+  vehicle: SpecialVehicleRegistration,
+): { filename: string | null; reason: string | null } {
+  const label = `${vehicle.source}: ${vehicle.make} ${vehicle.model} (${vehicle.body})`;
+  const direct = vehicle.imageFilename?.trim() || null;
+
+  if (vehicle.imageRecordId != null) {
+    const record = catalogueById.get(vehicle.imageRecordId);
+    const fromCatalogue = record?.filename?.trim() || null;
+    if (!fromCatalogue) {
+      // Direct filename can still satisfy a catalogue id that is temporarily missing.
+      if (direct) return { filename: direct, reason: null };
+      return {
+        filename: null,
+        reason: `${label}. Catalogue record ${vehicle.imageRecordId} is not available.`,
+      };
+    }
+    return { filename: fromCatalogue, reason: null };
+  }
+
+  if (direct) return { filename: direct, reason: null };
+  return { filename: null, reason: null };
+}
+
 export function resolveSpecialVehicleImageFields(
   registration: string | null | undefined,
 ): VehicleImageFields | null {
   const vehicle = findSpecialVehicleRegistration(registration);
   if (!vehicle) return null;
 
-  // Identity-only mappings leave image resolution to fleet/generic fallthrough.
-  if (vehicle.imageRecordId == null) return null;
-
   const label = `${vehicle.source}: ${vehicle.make} ${vehicle.model} (${vehicle.body})`;
-  const record = catalogueById.get(vehicle.imageRecordId);
-  const filename = record?.filename?.trim() || null;
-  if (!record || !filename) {
+  const resolved = resolveSpecialVehicleImageFilename(vehicle);
+
+  // Identity-only mappings leave image resolution to fleet/generic fallthrough.
+  if (!resolved.filename && !resolved.reason) return null;
+
+  if (!resolved.filename) {
+    return placeholderFields(resolved.reason ?? `${label}. No image mapping.`);
+  }
+
+  if (imageFileIsMissing(resolved.filename)) {
     return placeholderFields(
-      `${label}. Catalogue record ${vehicle.imageRecordId} is not available.`,
+      `${label}. The mapped image ${resolved.filename} is not available yet.`,
     );
   }
-  if (imageFileIsMissing(filename)) {
-    return placeholderFields(
-      `${label}. The mapped image ${filename} is not available yet.`,
-    );
-  }
+
   return {
-    imageSrc: `/cars/${filename}`,
+    imageSrc: `/cars/${resolved.filename}`,
     imageIsRepresentative: false,
     imageMatch: "exact",
     imageConfidence: "high",
