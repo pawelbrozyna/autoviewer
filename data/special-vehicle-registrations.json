@@ -1,0 +1,21 @@
+{
+  "count": 2,
+  "vehicles": [
+    {
+      "registration": "WX69ZBC",
+      "make": "Mercedes-Benz",
+      "model": "Atego 1327F",
+      "body": "Emergency One pumping appliance",
+      "imageRecordId": 1074,
+      "source": "London Fire Brigade"
+    },
+    {
+      "registration": "WX17YCK",
+      "make": "Mercedes-Benz",
+      "model": "Atego 1327F",
+      "body": "Emergency One pumping appliance",
+      "imageRecordId": 1074,
+      "source": "London Fire Brigade"
+    }
+  ]
+}

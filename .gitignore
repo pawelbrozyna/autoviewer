@@ -27,6 +27,7 @@
 /data/*
 !/data/tfl-bus-fleet.json
 !/data/sheffield-council-fleet.json
+!/data/special-vehicle-registrations.json
 
 # debug
 npm-debug.log*

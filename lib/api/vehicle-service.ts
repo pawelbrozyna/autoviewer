@@ -24,6 +24,7 @@ import {
 import { formatVehicleText } from "@/lib/vehicle/display-text";
 import { resolveImageFieldsForVehicle } from "@/lib/vehicle/images";
 import { modelTitleFields } from "@/lib/vehicle/model-title";
+import { resolveSpecialVehicleImageFields } from "@/lib/vehicle/special-vehicle-fleet";
 import { resolveTflBusImageFields } from "@/lib/vehicle/tfl-bus-fleet";
 import { resolveSheffieldCouncilImageFields } from "@/lib/vehicle/sheffield-council-fleet";
 import { calculateBuyerScore } from "@/lib/vehicle/score";
@@ -306,6 +307,7 @@ export async function lookupVehicle(
     });
 
     const image =
+      resolveSpecialVehicleImageFields(registration) ??
       resolveTflBusImageFields(registration) ??
       resolveSheffieldCouncilImageFields(registration) ??
       resolveImageFieldsForVehicle({
