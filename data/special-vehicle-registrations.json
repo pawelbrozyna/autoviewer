@@ -1,11 +1,11 @@
 {
-  "count": 2,
+  "count": 3,
   "vehicles": [
     {
       "registration": "WX69ZBC",
       "make": "Mercedes-Benz",
       "model": "Atego 1327F",
-      "body": "Emergency One pumping appliance",
+      "body": "Pumping Appliance",
       "imageRecordId": 1074,
       "source": "London Fire Brigade"
     },
@@ -13,9 +13,17 @@
       "registration": "WX17YCK",
       "make": "Mercedes-Benz",
       "model": "Atego 1327F",
-      "body": "Emergency One pumping appliance",
+      "body": "Pumping Appliance",
       "imageRecordId": 1074,
       "source": "London Fire Brigade"
+    },
+    {
+      "registration": "934HRR",
+      "make": "Massey Ferguson",
+      "model": "Tractor",
+      "body": "Agricultural tractor",
+      "imageRecordId": null,
+      "source": "Verified registration mapping"
     }
   ]
 }

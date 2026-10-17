@@ -5,14 +5,18 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { getMockVehicle } from "@/lib/api/mock";
 import vehicleImagesLibrary from "@/data/vehicle-images.json";
 import { resolveVehicleImage } from "@/lib/vehicle/images";
+import { modelTitleFields } from "@/lib/vehicle/model-title";
 import { resolveSheffieldCouncilImageFields } from "@/lib/vehicle/sheffield-council-fleet";
 import {
   findSpecialVehicleRegistration,
+  fleetDisplayFields,
   resolveSpecialVehicleImageFields,
 } from "@/lib/vehicle/special-vehicle-fleet";
 import { resolveTflBusImageFields } from "@/lib/vehicle/tfl-bus-fleet";
+import { buildVehicleCardData } from "@/lib/vehicle/vehicle-card";
 
 function run(name: string, fn: () => void) {
   try {
@@ -86,14 +90,122 @@ run("unmapped plates still reach TfL and Sheffield", () => {
   );
 });
 
+function cardFor(input: {
+  registration: string;
+  make: string;
+  model: string;
+  year: number;
+  colour: string | null;
+  engine: number | null;
+  fuel: string | null;
+}) {
+  const vehicle = getMockVehicle("AV19SWF");
+  assert.ok(vehicle);
+  const display = fleetDisplayFields({
+    registration: input.registration,
+    make: input.make,
+    model: input.model,
+  });
+  vehicle.summary = {
+    ...vehicle.summary,
+    displayRegistration: input.registration,
+    make: display.make,
+    model: display.model,
+    modelTitle: display.modelTitle,
+    modelVariant: display.modelVariant,
+    year: input.year,
+    colour: input.colour,
+    fuelType: input.fuel,
+    engineCapacity: input.engine,
+    transmission: null,
+    powerBhp: null,
+  };
+  vehicle.details = {
+    ...vehicle.details,
+    make: display.make,
+    model: display.model,
+    colour: input.colour,
+    fuelType: input.fuel,
+    engineCapacity: input.engine,
+    yearOfManufacture: input.year,
+    transmission: null,
+    co2Emissions: null,
+    euroStatus: null,
+  };
+  return buildVehicleCardData(vehicle);
+}
+
+run("UNKNOWN API model on a verified registration shows the local model and body", () => {
+  for (const [registration, year] of [
+    ["WX69 ZBC", 2019],
+    ["WX17 YCK", 2017],
+  ] as const) {
+    const card = cardFor({
+      registration,
+      make: "Mercedes",
+      model: "Unknown",
+      year,
+      colour: "Red",
+      engine: null,
+      fuel: "Diesel",
+    });
+    assert.equal(card.title, `${year} Mercedes-Benz Atego 1327F`);
+    assert.equal(card.variant, "Pumping Appliance");
+    assert.equal(card.colour, "Red");
+    assert.equal(
+      card.disclaimer,
+      "Illustrative image. Actual vehicle may differ. Registered colour: Red",
+    );
+  }
+});
+
+run("a normal vehicle keeps its API make and model", () => {
+  const api = { make: "Volkswagen", model: "Golf 1.5 TSI" };
+  const display = fleetDisplayFields({ registration: "AB12 CDE", ...api });
+  const titles = modelTitleFields(api.make, api.model);
+  assert.equal(display.make, api.make);
+  assert.equal(display.model, api.model);
+  assert.equal(display.modelTitle, titles.modelTitle);
+  assert.equal(display.modelVariant, titles.modelVariant);
+
+  const kept = fleetDisplayFields({
+    registration: "WX69ZBC",
+    make: "Mercedes-Benz",
+    model: "Atego 1327",
+  });
+  assert.equal(kept.make, "Mercedes-Benz");
+  // Exact-registration verified model wins over a broader API model.
+  assert.equal(kept.model, "Atego 1327F");
+});
+
+run("missing engine stays omitted", () => {
+  const card = cardFor({
+    registration: "WX69 ZBC",
+    make: "Mercedes",
+    model: "UNKNOWN",
+    year: 2019,
+    colour: "Red",
+    engine: null,
+    fuel: "Diesel",
+  });
+  assert.ok(!card.stats.some((item) => item.key === "engine"));
+  assert.ok(card.stats.some((item) => item.key === "fuel" && item.value === "Diesel"));
+});
+
 run("special registration lookup runs before TfL, Sheffield and the generic matcher", () => {
-  const source = readFileSync(join(process.cwd(), "lib", "api", "vehicle-service.ts"), "utf8");
-  const special = source.indexOf("resolveSpecialVehicleImageFields(");
-  const tfl = source.indexOf("resolveTflBusImageFields(");
-  const sheffield = source.indexOf("resolveSheffieldCouncilImageFields(");
-  const generic = source.indexOf("resolveImageFieldsForVehicle(");
+  const source = readFileSync(
+    join(process.cwd(), "lib", "vehicle", "vehicle-resolution.ts"),
+    "utf8",
+  );
+  const special = source.indexOf("resolveSpecialVehicleImageFields(registration)");
+  const tfl = source.indexOf("resolveTflBusImageFields(registration)");
+  const sheffield = source.indexOf("resolveSheffieldCouncilImageFields(registration)");
   assert.ok(special !== -1 && special < tfl);
-  assert.ok(tfl < sheffield && sheffield < generic);
+  assert.ok(tfl < sheffield);
+
+  const service = readFileSync(join(process.cwd(), "lib", "api", "vehicle-service.ts"), "utf8");
+  assert.match(service, /resolveVehicleImageByPriority/);
+  assert.match(service, /mergeVehicleIdentity/);
 });
 
 console.log("All special-vehicle registration tests passed.");

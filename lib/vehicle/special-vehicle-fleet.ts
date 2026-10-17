@@ -5,14 +5,17 @@ import path from "node:path";
 import specialVehicleRegistrations from "@/data/special-vehicle-registrations.json";
 import vehicleImagesLibrary from "@/data/vehicle-images.json";
 import type { resolveImageFieldsForVehicle } from "@/lib/vehicle/images";
+import { modelTitleFields } from "@/lib/vehicle/model-title";
 import { normalizeRegistration } from "@/lib/vehicle/registration";
 
 /**
  * Exact registration image selection for special and fleet vehicles.
- * Only chooses the representative image; never changes DVSA/DVLA facts.
- * Returns null when the plate is not mapped, so TfL, Sheffield and the
- * generic make/model matcher can run afterwards.
- * Make and model text never select a mapping.
+ * Image choice never uses make or model text. Display identity from the
+ * verified mapping wins over UNKNOWN/null/empty and over broader external
+ * make/model values for the same plate. Engine, gearbox, MOT, tax and
+ * similar facts are left untouched.
+ * Returns null when the plate is not mapped, or when it is identity-only
+ * with no imageRecordId, so TfL, Sheffield and the generic matcher can run.
  */
 
 type VehicleImageFields = ReturnType<typeof resolveImageFieldsForVehicle>;
@@ -22,7 +25,8 @@ export type SpecialVehicleRegistration = {
   make: string;
   model: string;
   body: string;
-  imageRecordId: number;
+  /** Catalogue priority. Null/omitted means identity-only (no image mapping yet). */
+  imageRecordId?: number | null;
   source: string;
 };
 
@@ -68,6 +72,70 @@ function placeholderFields(reason: string): VehicleImageFields {
   };
 }
 
+function compactIdentity(value: string): string {
+  return value.toLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
+/** Blank, UNKNOWN, and the generic "Vehicle" fallback are not a real identity. */
+export function isMissingVehicleIdentity(value: string | null | undefined): boolean {
+  const trimmed = value?.trim() ?? "";
+  return trimmed.length === 0 || /^(unknown|vehicle)$/i.test(trimmed);
+}
+
+/**
+ * The API often shortens a make ("Mercedes" for "Mercedes-Benz").
+ * A different manufacturer is left as the API sent it.
+ */
+function fleetMakeCompletesApiMake(apiMake: string, fleetMake: string): boolean {
+  const api = compactIdentity(apiMake);
+  const fleet = compactIdentity(fleetMake);
+  if (!api || !fleet || api === fleet) return false;
+  return fleet.startsWith(api) || api.startsWith(fleet);
+}
+
+export type FleetDisplayFields = {
+  make: string;
+  model: string;
+  modelTitle: string;
+  modelVariant: string | null;
+};
+
+/**
+ * Fill display identity from an exact registration mapping.
+ * Verified local make/model/body win over UNKNOWN/null/empty and over a
+ * broader external model for the same mapped plate. No technical fields
+ * (engine, MOT, tax) are inferred here.
+ */
+export function fleetDisplayFields(input: {
+  registration: string | null | undefined;
+  make: string;
+  model: string;
+}): FleetDisplayFields {
+  const fleet = findSpecialVehicleRegistration(input.registration);
+  let make = input.make;
+  let model = input.model;
+  if (fleet) {
+    // Exact-registration verified identity wins over external UNKNOWN/broader values.
+    if (fleet.make && !isMissingVehicleIdentity(fleet.make)) make = fleet.make;
+    else if (fleetMakeCompletesApiMake(make, fleet.make)) make = fleet.make;
+    if (fleet.model && !isMissingVehicleIdentity(fleet.model)) model = fleet.model;
+    return {
+      make,
+      model,
+      modelTitle: fleet.model,
+      modelVariant: fleet.body,
+    };
+  }
+
+  const titles = modelTitleFields(make, model);
+  return {
+    make,
+    model,
+    modelTitle: titles.modelTitle,
+    modelVariant: titles.modelVariant,
+  };
+}
+
 export function findSpecialVehicleRegistration(
   registration: string | null | undefined,
 ): SpecialVehicleRegistration | null {
@@ -80,6 +148,9 @@ export function resolveSpecialVehicleImageFields(
 ): VehicleImageFields | null {
   const vehicle = findSpecialVehicleRegistration(registration);
   if (!vehicle) return null;
+
+  // Identity-only mappings leave image resolution to fleet/generic fallthrough.
+  if (vehicle.imageRecordId == null) return null;
 
   const label = `${vehicle.source}: ${vehicle.make} ${vehicle.model} (${vehicle.body})`;
   const record = catalogueById.get(vehicle.imageRecordId);

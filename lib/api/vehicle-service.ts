@@ -22,11 +22,12 @@ import {
   normalizeRegistration,
 } from "@/lib/vehicle/registration";
 import { formatVehicleText } from "@/lib/vehicle/display-text";
-import { resolveImageFieldsForVehicle } from "@/lib/vehicle/images";
-import { modelTitleFields } from "@/lib/vehicle/model-title";
-import { resolveSpecialVehicleImageFields } from "@/lib/vehicle/special-vehicle-fleet";
-import { resolveTflBusImageFields } from "@/lib/vehicle/tfl-bus-fleet";
-import { resolveSheffieldCouncilImageFields } from "@/lib/vehicle/sheffield-council-fleet";
+import { isMissingVehicleIdentity } from "@/lib/vehicle/special-vehicle-fleet";
+import {
+  lookupLocalRegistrationKnowledge,
+  mergeVehicleIdentity,
+  resolveVehicleImageByPriority,
+} from "@/lib/vehicle/vehicle-resolution";
 import { calculateBuyerScore } from "@/lib/vehicle/score";
 import {
   resolveVehicleYear,
@@ -172,8 +173,9 @@ export async function lookupVehicle(
     if (isDvsaConfigured()) {
       const dvsa = await fetchDvsaVehicleByRegistration(registration);
       motTests = mapDvsaMotTests(dvsa.motTests ?? []);
-      make = dvsa.make || make;
-      model = dvsa.model || model;
+      // UNKNOWN/empty DVSA identity must not wipe a better DVLA value.
+      if (dvsa.make && !isMissingVehicleIdentity(dvsa.make)) make = dvsa.make;
+      if (dvsa.model && !isMissingVehicleIdentity(dvsa.model)) model = dvsa.model;
       colour = dvsa.primaryColour || colour;
       fuelType = dvsa.fuelType || fuelType;
       if (dvsa.engineSize) {
@@ -306,36 +308,61 @@ export async function lookupVehicle(
       recalls,
     });
 
-    const image =
-      resolveSpecialVehicleImageFields(registration) ??
-      resolveTflBusImageFields(registration) ??
-      resolveSheffieldCouncilImageFields(registration) ??
-      resolveImageFieldsForVehicle({
-        registration,
-        make,
-        model: model || detailsPart?.details.model || "Vehicle",
-        year,
-        firstRegistrationDate,
-        fuelType,
-        engineCapacity,
-        wheelplan: detailsPart?.details.wheelplan,
-      });
+    const externalModel =
+      model ||
+      (detailsPart?.details.model &&
+      !isMissingVehicleIdentity(detailsPart.details.model)
+        ? detailsPart.details.model
+        : "") ||
+      "Vehicle";
+
+    const local = lookupLocalRegistrationKnowledge(registration);
+    const identity = mergeVehicleIdentity({
+      registration,
+      make,
+      model: externalModel,
+      local,
+    });
+
+    // Image uses merged identity so local make/model can drive the generic
+    // matcher when no registration-scoped image mapping exists.
+    const image = resolveVehicleImageByPriority(registration, {
+      registration,
+      make: identity.make,
+      model: identity.model,
+      year,
+      firstRegistrationDate,
+      fuelType,
+      engineCapacity,
+      wheelplan: detailsPart?.details.wheelplan,
+      bodyType: identity.modelVariant,
+    });
     if (image.imageMatchAmbiguous) {
       console.warn("Ambiguous vehicle image match.", {
         registration,
-        make,
-        model: model || detailsPart?.details.model || "Vehicle",
+        make: identity.make,
+        model: identity.model,
         year,
         reason: image.imageMatchReason,
       });
+    }
+
+    const notes = [
+      "Vehicle information from official UK data sources where configured.",
+      "AutoViewer is independent and not affiliated with DVLA or DVSA.",
+    ];
+    if (local) {
+      notes.push(
+        `Identity fields enriched from local ${local.source} mapping where verified.`,
+      );
     }
 
     const record: VehicleRecord = {
       summary: {
         registration,
         displayRegistration: formatRegistrationDisplay(registration),
-        make,
-        model: model || detailsPart?.details.model || "Vehicle",
+        make: identity.make,
+        model: identity.model,
         year,
         fuelType,
         colour,
@@ -355,12 +382,13 @@ export async function lookupVehicle(
         imageMatchReason: image.imageMatchReason,
         imageFallbackUsed: image.imageFallbackUsed,
         imageMatchAmbiguous: image.imageMatchAmbiguous,
-        ...modelTitleFields(make, model || detailsPart?.details.model || "Vehicle"),
+        modelTitle: identity.modelTitle,
+        modelVariant: identity.modelVariant,
       },
       details: {
         registration,
-        make,
-        model: model || detailsPart?.details.model || "Vehicle",
+        make: identity.make,
+        model: identity.model,
         colour,
         fuelType,
         engineCapacity,
@@ -384,10 +412,7 @@ export async function lookupVehicle(
       buyerScore,
       dataQuality: {
         sources,
-        notes: [
-          "Vehicle information from official UK data sources where configured.",
-          "AutoViewer is independent and not affiliated with DVLA or DVSA.",
-        ],
+        notes,
       },
     };
 
