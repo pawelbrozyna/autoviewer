@@ -1,5 +1,5 @@
 {
-  "count": 3,
+  "count": 4,
   "vehicles": [
     {
       "registration": "WX69ZBC",
@@ -12,6 +12,15 @@
     },
     {
       "registration": "WX17YCK",
+      "make": "Mercedes-Benz",
+      "model": "Atego 1327F",
+      "body": "Pumping Appliance",
+      "category": "public_service",
+      "imageRecordId": 1074,
+      "source": "London Fire Brigade"
+    },
+    {
+      "registration": "WX17YCL",
       "make": "Mercedes-Benz",
       "model": "Atego 1327F",
       "body": "Pumping Appliance",

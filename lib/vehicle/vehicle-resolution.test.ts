@@ -183,8 +183,15 @@ run("exact registration with valid image mapping wins over UNKNOWN API model", (
   }
 });
 
-run("7. WX69 ZBC and WX17 YCK use exact fire-appliance mapping", () => {
-  for (const registration of ["WX69 ZBC", "WX17 YCK", "wx69zbc", "wx17yck"]) {
+run("7. WX69 ZBC, WX17 YCK and WX17 YCL use exact fire-appliance mapping", () => {
+  for (const registration of [
+    "WX69 ZBC",
+    "WX17 YCK",
+    "WX17 YCL",
+    "wx69zbc",
+    "wx17yck",
+    "wx17ycl",
+  ]) {
     const image = resolveVehicleImageByPriority(registration, {
       make: "MERCEDES",
       model: "UNKNOWN",

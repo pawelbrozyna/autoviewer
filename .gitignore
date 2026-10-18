@@ -45,3 +45,14 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Valuation candidate retained for engine imports; research stays local/external
+!/data/autoviewer-valuations-v1.json
+
+# Paused valuation research: prevent recreated artifacts being added
+/docs/VALUATION_*.md
+/scripts/build-valuations-v1.ts
+/scripts/build-valuation-calibration-v2.cjs
+/scripts/integrate-valuation-calibration.ts
+/scripts/write-valuation-calibration-report-v2.cjs
+/AutoViewer-Valuation-Research/

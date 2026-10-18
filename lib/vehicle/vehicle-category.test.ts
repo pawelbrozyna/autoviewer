@@ -21,11 +21,17 @@ function run(name: string, fn: () => void) {
 }
 
 run("known fire appliance -> paid report disabled", () => {
-  const knowledge = lookupLocalRegistrationKnowledge("WX69 ZBC");
-  assert.ok(knowledge);
-  assert.equal(knowledge.tier, "exact");
-  assert.equal(knowledge.category, "public_service");
-  assert.equal(isFullReportEligible(knowledge.category), false);
+  for (const registration of ["WX69 ZBC", "WX17 YCK", "WX17 YCL"]) {
+    const knowledge = lookupLocalRegistrationKnowledge(registration);
+    assert.ok(knowledge, registration);
+    assert.equal(knowledge.tier, "exact", registration);
+    assert.equal(knowledge.category, "public_service", registration);
+    assert.equal(knowledge.make, "Mercedes-Benz", registration);
+    assert.equal(knowledge.model, "Atego 1327F", registration);
+    assert.equal(knowledge.body, "Pumping Appliance", registration);
+    assert.equal(knowledge.imageRecordId, 1074, registration);
+    assert.equal(isFullReportEligible(knowledge.category), false, registration);
+  }
 });
 
 run("Sheffield specialist/public-service vehicle -> paid report disabled", () => {

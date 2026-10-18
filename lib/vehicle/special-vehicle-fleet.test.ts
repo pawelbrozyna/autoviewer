@@ -48,11 +48,13 @@ function assertRecord1074(registration: string) {
   assert.equal(image?.imageFallbackUsed, false);
 }
 
-run("WX69 ZBC and WX17 YCK resolve to catalogue record 1074", () => {
+run("WX69 ZBC, WX17 YCK and WX17 YCL resolve to catalogue record 1074", () => {
   assertRecord1074("WX69 ZBC");
   assertRecord1074("wx69zbc");
   assertRecord1074("WX17 YCK");
   assertRecord1074("wx17yck");
+  assertRecord1074("WX17 YCL");
+  assertRecord1074("wx17ycl");
 });
 
 run("Mercedes UNKNOWN and a generic Atego do not become a pumping appliance", () => {
@@ -139,6 +141,7 @@ run("UNKNOWN API model on a verified registration shows the local model and body
   for (const [registration, year] of [
     ["WX69 ZBC", 2019],
     ["WX17 YCK", 2017],
+    ["WX17 YCL", 2017],
   ] as const) {
     const card = cardFor({
       registration,

@@ -20,7 +20,9 @@
     "test:email-limits": "node --conditions=react-server --import tsx lib/server/free-email-limits.test.ts",
     "test:dvsa": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/dvsa-mot-test.ts",
     "test:live-lookup": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/live-lookup-test.ts",
-    "email:preview": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/report-email-preview.ts"
+    "email:preview": "node --conditions=react-server --env-file-if-exists=.env.local --import tsx scripts/report-email-preview.ts",
+    "build:valuations": "node --import tsx scripts/build-valuations-v1.ts",
+    "test:valuations": "node --conditions=react-server --import tsx --test lib/valuation/valuation.test.ts"
   },
   "dependencies": {
     "@pdf-lib/fontkit": "^1.1.1",
