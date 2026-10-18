@@ -721,6 +721,56 @@ run("Combo and Combo Cargo share one family across C, D and E", () => {
   );
 });
 
+run("audit 1100-1123: Bongo and Omega aliases, Puma Mk1, Toyota UNKNOWN", () => {
+  assert.equal(matchCatalogModel("Mazda", "BONGO"), "Bongo");
+  assert.equal(matchCatalogModel("Mazda", "BONGO FRIENDEE"), "Bongo");
+  assert.equal(matchCatalogModel("Mazda", "BONGO/FRIENDEE"), "Bongo");
+  assert.equal(
+    resolveVehicleImage({ make: "MAZDA", model: "BONGO FRIENDEE", year: 1998 }).filename,
+    "mazda-bongo-sg-1995-2005.webp",
+  );
+
+  assert.equal(matchCatalogModel("Vauxhall", "OMEGA"), "Omega");
+  assert.equal(matchCatalogModel("Vauxhall", "OMEGA V6 SPECIAL"), "Omega");
+  assert.equal(matchCatalogModel("Vauxhall", "OMEGA ELITE V6 AUTO"), "Omega");
+  assert.equal(
+    resolveVehicleImage({ make: "VAUXHALL", model: "OMEGA V6 SPECIAL", year: 2001 }).filename,
+    "vauxhall-omega-b-1994-2003.webp",
+  );
+
+  assert.equal(
+    resolveVehicleImage({ make: "FORD", model: "PUMA", year: 2000 }).filename,
+    "ford-puma-mk1-1997-2002.webp",
+  );
+  assert.notEqual(
+    resolveVehicleImage({ make: "FORD", model: "PUMA", year: 2000 }).filename,
+    "ford-puma-mk2-2019-2024.webp",
+  );
+  assert.equal(
+    resolveVehicleImage({ make: "FORD", model: "PUMA", year: 2020 }).filename,
+    "ford-puma-mk2-2019-2024.webp",
+  );
+
+  assert.equal(
+    resolveVehicleImage({ make: "TOYOTA", model: "UNKNOWN", year: 2010 }).match,
+    "placeholder",
+  );
+  assert.equal(matchCatalogModel("Toyota", "UNKNOWN"), null);
+
+  assert.equal(
+    resolveVehicleImage({ make: "JAGUAR", model: "XKR", year: 2006 }).match,
+    "placeholder",
+  );
+  assert.equal(
+    resolveVehicleImage({ make: "DAIHATSU", model: "COPEN", year: 2013 }).match,
+    "placeholder",
+  );
+  assert.equal(
+    resolveVehicleImage({ make: "NISSAN", model: "ELGRAND", year: 2010 }).match,
+    "placeholder",
+  );
+});
+
 run("short names never guess when unsafe or ambiguous", () => {
   assert.equal(matchCatalogModel("Land Rover", "RANGE"), null);
   assert.equal(matchCatalogModel("Land Rover", "RANGE ROVER"), "Range Rover");

@@ -1,8 +1,8 @@
 {
   "library": "AutoViewer vehicle image library v12",
-  "count": 1099,
+  "count": 1123,
   "format": "webp",
-  "selectionBasis": "Prioritised for UK used-vehicle and vehicle-parc relevance. Positions 1-300 cover common UK cars; 301-340 vans and light commercial vehicles; 341-370 motorcycles; 371-400 scooters; 401-450 pickups, larger/older commercial vans and van-based MPVs; 451-500 add high-priority UK used-car gaps, current EVs/hybrids and premium used models; 501-600 fill UK everyday-road gaps (2005-2020 hatchbacks, MPVs, budget family cars and small crossovers). 601-666 add current generations and facelifts of top sellers, new brands (BYD, Jaecoo, Omoda), London taxis, older common vans, used-car gaps and common UK buses. 667-678 fill real-lookup gaps and adjacent generations (Rifter, Partner Tepee, Fabia Mk1, Infiniti Q30, Smart #1, EQE saloon and SUV, Actros trucks, GB Kite Electroliner, BYD BD11 and B12). 679-689 add common London bus bodies (New Routemaster, Gemini 2 and 3, Enviro400 City, Enviro200 Mk1, MCV, StreetLite, MetroDecker EV, Enviro100EV, Enviro400EV). 690-746 add older UK cars (Jaguar X-Type, Saab 9-3, Citroen Xsara), Honda Stepwgn imports, Yadea scooters and common UK trucks (DAF, Scania, MAN, Volvo, Iveco, Renault Trucks, Mercedes-Benz Atego and Arocs). 747-873 add classic and modern-classic generations (British classics, older Ford, Vauxhall, Land Rover, VW, BMW, Mercedes-Benz and Porsche, French and Italian classics, Japanese modern classics). 874-881 add the Volkswagen Multivan T7, Porsche 911 996-992 and BMW 6 Series E63/E64, F06 Gran Coupe and 6 Series GT G32. 882-948 add luxury, supercar, JDM import and drift coverage (Rolls-Royce, Bentley, Aston Martin, Range Rover L322, Toyota, Lexus SC, Nissan, Mazda RX, Lamborghini, Ferrari, McLaren, Audi R8); 911, 916 and 917 share the images of 910, 915 and 913. 949-958 fill real-lookup gaps: Kia Sorento BL, XM, MQ4 and MQ4 facelift, Volkswagen Sharan Mk1 and Mk2, DAF XB, Volvo V50 and Suzuki Grand Vitara Mk1 and Mk2; 188 covers the whole Sorento UM 2015-2020 because the 2018 facelift looks almost the same. 959-1008 fill older and adjacent generations of common UK cars and vans found in real lookups (VW Transporter T5, Ford Transit Mk6, BMW E87/E60/E84/F15, Audi B7/C6/8R/8U/8J, Mercedes-Benz W169/W203/W211/W246/W167, Sprinter T1N, Vito W639, Discovery L319, Range Rover Sport L320, Astra G, Zafira A, Combo C, Vivaro A, Trafic II, Ducato X250, Dispatch II, Mondeo Mk3, Ka Mk1, Mustang S550, Jaguar XF X250/X260, Navara D40, L200 Series 4, Passat B5, Touran 1T3, Prius XW20, Yaris XP10, XC90 Mk1, V70 Mk3, MG ZS EV facelift, HR-V Mk3, CUPRA Leon, Santa Fe TM, Sportage KM, Tucson JM, Mazda6 GJ, MX-5 NC, 508 Mk1). 1009-1013 add street-test finds: Toyota Estima XR50, Dacia Spring facelift, Volkswagen ID. Buzz Cargo, Toyota Avensis T25 and Nissan Serena C26. pendingVehicles lists catalogued generations whose image is not generated yet; the matcher resolves them to the placeholder until each record moves into vehicles with its file. 1014-1072 add Sheffield Council visual families (minibuses, tippers, beavertails, Lutons, crew vans, plant and equipment). pendingVehicles 1073-1088 hold London Fire Brigade specialist-body families from the LFB Fleet List March 2025 audit (pumping appliances, FRU, CSU, DIM, FIU, HDU, hose layer, resilience/OSU, turntable ladders, AWD, Zepa, GP van and marked-red minibus); these are emergency-service body records and do not replace generic van/truck images. This is a practical image-bucket catalogue, not an exact sales ranking.",
+  "selectionBasis": "Prioritised for UK used-vehicle and vehicle-parc relevance. Positions 1-300 cover common UK cars; 301-340 vans and light commercial vehicles; 341-370 motorcycles; 371-400 scooters; 401-450 pickups, larger/older commercial vans and van-based MPVs; 451-500 add high-priority UK used-car gaps, current EVs/hybrids and premium used models; 501-600 fill UK everyday-road gaps (2005-2020 hatchbacks, MPVs, budget family cars and small crossovers). 601-666 add current generations and facelifts of top sellers, new brands (BYD, Jaecoo, Omoda), London taxis, older common vans, used-car gaps and common UK buses. 667-678 fill real-lookup gaps and adjacent generations (Rifter, Partner Tepee, Fabia Mk1, Infiniti Q30, Smart #1, EQE saloon and SUV, Actros trucks, GB Kite Electroliner, BYD BD11 and B12). 679-689 add common London bus bodies (New Routemaster, Gemini 2 and 3, Enviro400 City, Enviro200 Mk1, MCV, StreetLite, MetroDecker EV, Enviro100EV, Enviro400EV). 690-746 add older UK cars (Jaguar X-Type, Saab 9-3, Citroen Xsara), Honda Stepwgn imports, Yadea scooters and common UK trucks (DAF, Scania, MAN, Volvo, Iveco, Renault Trucks, Mercedes-Benz Atego and Arocs). 747-873 add classic and modern-classic generations (British classics, older Ford, Vauxhall, Land Rover, VW, BMW, Mercedes-Benz and Porsche, French and Italian classics, Japanese modern classics). 874-881 add the Volkswagen Multivan T7, Porsche 911 996-992 and BMW 6 Series E63/E64, F06 Gran Coupe and 6 Series GT G32. 882-948 add luxury, supercar, JDM import and drift coverage (Rolls-Royce, Bentley, Aston Martin, Range Rover L322, Toyota, Lexus SC, Nissan, Mazda RX, Lamborghini, Ferrari, McLaren, Audi R8); 911, 916 and 917 share the images of 910, 915 and 913. 949-958 fill real-lookup gaps: Kia Sorento BL, XM, MQ4 and MQ4 facelift, Volkswagen Sharan Mk1 and Mk2, DAF XB, Volvo V50 and Suzuki Grand Vitara Mk1 and Mk2; 188 covers the whole Sorento UM 2015-2020 because the 2018 facelift looks almost the same. 959-1008 fill older and adjacent generations of common UK cars and vans found in real lookups (VW Transporter T5, Ford Transit Mk6, BMW E87/E60/E84/F15, Audi B7/C6/8R/8U/8J, Mercedes-Benz W169/W203/W211/W246/W167, Sprinter T1N, Vito W639, Discovery L319, Range Rover Sport L320, Astra G, Zafira A, Combo C, Vivaro A, Trafic II, Ducato X250, Dispatch II, Mondeo Mk3, Ka Mk1, Mustang S550, Jaguar XF X250/X260, Navara D40, L200 Series 4, Passat B5, Touran 1T3, Prius XW20, Yaris XP10, XC90 Mk1, V70 Mk3, MG ZS EV facelift, HR-V Mk3, CUPRA Leon, Santa Fe TM, Sportage KM, Tucson JM, Mazda6 GJ, MX-5 NC, 508 Mk1). 1009-1013 add street-test finds: Toyota Estima XR50, Dacia Spring facelift, Volkswagen ID. Buzz Cargo, Toyota Avensis T25 and Nissan Serena C26. pendingVehicles lists catalogued generations whose image is not generated yet; the matcher resolves them to the placeholder until each record moves into vehicles with its file. 1014-1072 add Sheffield Council visual families (minibuses, tippers, beavertails, Lutons, crew vans, plant and equipment). pendingVehicles 1073-1088 hold London Fire Brigade specialist-body families from the LFB Fleet List March 2025 audit (pumping appliances, FRU, CSU, DIM, FIU, HDU, hose layer, resilience/OSU, turntable ladders, AWD, Zepa, GP van and marked-red minibus); these are emergency-service body records and do not replace generic van/truck images. This is a practical image-bucket catalogue, not an exact sales ranking. 1100-1123 add AutoViewer audit-set classics and modern classics for Bongo, MG TF, Z3, Puma Mk1, Omega B, XKR, Copen, FTO, Trooper, Elgrand and Toyota Crown generations.",
   "imageStandard": {
     "format": "webp",
     "size": "1000x750",
@@ -11012,6 +11012,246 @@
       "yearTo": 2026,
       "bodyType": "suv",
       "filename": "mercedes-benz-g580-eq-2024-2026.webp"
+    },
+    {
+      "priority": 1100,
+      "make": "Mazda",
+      "model": "Bongo",
+      "generation": "SG",
+      "yearFrom": 1995,
+      "yearTo": 2005,
+      "bodyType": "mpv",
+      "filename": "mazda-bongo-sg-1995-2005.webp"
+    },
+    {
+      "priority": 1101,
+      "make": "MG",
+      "model": "TF",
+      "generation": "TF",
+      "yearFrom": 2002,
+      "yearTo": 2011,
+      "bodyType": "roadster",
+      "filename": "mg-tf-2002-2011.webp"
+    },
+    {
+      "priority": 1102,
+      "make": "BMW",
+      "model": "Z3",
+      "generation": "Z3",
+      "yearFrom": 1995,
+      "yearTo": 2002,
+      "bodyType": "roadster",
+      "filename": "bmw-z3-1995-2002.webp"
+    },
+    {
+      "priority": 1103,
+      "make": "Ford",
+      "model": "Puma",
+      "generation": "Mk1",
+      "yearFrom": 1997,
+      "yearTo": 2002,
+      "bodyType": "coupe",
+      "filename": "ford-puma-mk1-1997-2002.webp"
+    },
+    {
+      "priority": 1104,
+      "make": "Vauxhall",
+      "model": "Omega",
+      "generation": "B",
+      "yearFrom": 1994,
+      "yearTo": 2003,
+      "bodyType": "saloon",
+      "filename": "vauxhall-omega-b-1994-2003.webp"
+    },
+    {
+      "priority": 1105,
+      "make": "Jaguar",
+      "model": "XKR",
+      "generation": "X100",
+      "yearFrom": 1996,
+      "yearTo": 2005,
+      "bodyType": "coupe",
+      "filename": "jaguar-xkr-x100-1996-2005.webp"
+    },
+    {
+      "priority": 1106,
+      "make": "Jaguar",
+      "model": "XKR",
+      "generation": "X150",
+      "yearFrom": 2007,
+      "yearTo": 2014,
+      "bodyType": "coupe",
+      "filename": "jaguar-xkr-x150-2007-2014.webp"
+    },
+    {
+      "priority": 1107,
+      "make": "Daihatsu",
+      "model": "Copen",
+      "generation": "L880",
+      "yearFrom": 2002,
+      "yearTo": 2012,
+      "bodyType": "roadster",
+      "filename": "daihatsu-copen-l880-2002-2012.webp"
+    },
+    {
+      "priority": 1108,
+      "make": "Daihatsu",
+      "model": "Copen",
+      "generation": "LA400",
+      "yearFrom": 2014,
+      "yearTo": 2026,
+      "bodyType": "roadster",
+      "filename": "daihatsu-copen-la400-2014-2026.webp"
+    },
+    {
+      "priority": 1109,
+      "make": "Mitsubishi",
+      "model": "FTO",
+      "generation": "FTO",
+      "yearFrom": 1994,
+      "yearTo": 2000,
+      "bodyType": "coupe",
+      "filename": "mitsubishi-fto-1994-2000.webp"
+    },
+    {
+      "priority": 1110,
+      "make": "Isuzu",
+      "model": "Trooper",
+      "generation": "Mk2",
+      "yearFrom": 1992,
+      "yearTo": 2005,
+      "bodyType": "suv",
+      "filename": "isuzu-trooper-mk2-1992-2005.webp"
+    },
+    {
+      "priority": 1111,
+      "make": "Isuzu",
+      "model": "Trooper",
+      "generation": "Mk1",
+      "yearFrom": 1987,
+      "yearTo": 1990,
+      "bodyType": "suv",
+      "filename": "isuzu-trooper-mk1-1987-1990.webp"
+    },
+    {
+      "priority": 1112,
+      "make": "Nissan",
+      "model": "Elgrand",
+      "generation": "E51",
+      "yearFrom": 2002,
+      "yearTo": 2009,
+      "bodyType": "mpv",
+      "filename": "nissan-elgrand-e51-2002-2009.webp"
+    },
+    {
+      "priority": 1113,
+      "make": "Nissan",
+      "model": "Elgrand",
+      "generation": "E52",
+      "yearFrom": 2011,
+      "yearTo": 2026,
+      "bodyType": "mpv",
+      "filename": "nissan-elgrand-e52-2011-2026.webp"
+    },
+    {
+      "priority": 1114,
+      "make": "Toyota",
+      "model": "Crown",
+      "generation": "S50",
+      "yearFrom": 1967,
+      "yearTo": 1970,
+      "bodyType": "saloon",
+      "filename": "toyota-crown-s50-1967-1970.webp"
+    },
+    {
+      "priority": 1115,
+      "make": "Toyota",
+      "model": "Crown",
+      "generation": "S60/S70",
+      "yearFrom": 1972,
+      "yearTo": 1974,
+      "bodyType": "saloon",
+      "filename": "toyota-crown-s60-s70-1972-1974.webp"
+    },
+    {
+      "priority": 1116,
+      "make": "Toyota",
+      "model": "Crown",
+      "generation": "S120",
+      "yearFrom": 1984,
+      "yearTo": 1986,
+      "bodyType": "saloon",
+      "filename": "toyota-crown-s120-1984-1986.webp"
+    },
+    {
+      "priority": 1117,
+      "make": "Toyota",
+      "model": "Crown",
+      "generation": "S150",
+      "yearFrom": 1995,
+      "yearTo": 1998,
+      "bodyType": "saloon",
+      "filename": "toyota-crown-s150-1995-1998.webp"
+    },
+    {
+      "priority": 1118,
+      "make": "Toyota",
+      "model": "Crown",
+      "generation": "S170",
+      "yearFrom": 2000,
+      "yearTo": 2002,
+      "bodyType": "saloon",
+      "filename": "toyota-crown-s170-2000-2002.webp"
+    },
+    {
+      "priority": 1119,
+      "make": "Toyota",
+      "model": "Crown",
+      "generation": "S180",
+      "yearFrom": 2004,
+      "yearTo": 2007,
+      "bodyType": "saloon",
+      "filename": "toyota-crown-s180-2004-2007.webp"
+    },
+    {
+      "priority": 1120,
+      "make": "Toyota",
+      "model": "Crown",
+      "generation": "S200",
+      "yearFrom": 2009,
+      "yearTo": 2011,
+      "bodyType": "saloon",
+      "filename": "toyota-crown-s200-2009-2011.webp"
+    },
+    {
+      "priority": 1121,
+      "make": "Toyota",
+      "model": "Crown",
+      "generation": "S210",
+      "yearFrom": 2013,
+      "yearTo": 2017,
+      "bodyType": "saloon",
+      "filename": "toyota-crown-s210-2013-2017.webp"
+    },
+    {
+      "priority": 1122,
+      "make": "Toyota",
+      "model": "Crown",
+      "generation": "S220",
+      "yearFrom": 2019,
+      "yearTo": 2021,
+      "bodyType": "saloon",
+      "filename": "toyota-crown-s220-2019-2021.webp"
+    },
+    {
+      "priority": 1123,
+      "make": "Toyota",
+      "model": "Crown",
+      "generation": "16th generation",
+      "yearFrom": 2023,
+      "yearTo": 2026,
+      "bodyType": "crossover",
+      "filename": "toyota-crown-16th-generation-2023-2026.webp"
     }
   ],
   "pendingVehicles": [],

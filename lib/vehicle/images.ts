@@ -173,6 +173,8 @@ const STRICT_MODEL_ALIASES: Record<
   vauxhall: [
     // The glazed MPV is not the Combo van; it stays on the placeholder.
     { pattern: /^combo (?:e )?life\b/, model: "Combo Life" },
+    // Trim strings such as OMEGA V6 SPECIAL map only when Omega is in the catalogue.
+    { pattern: /^omega\b/, model: "Omega" },
   ],
   audi: [
     // Only the B6/B7 A4 had a cabriolet; the image is the saloon.
@@ -187,6 +189,8 @@ const STRICT_MODEL_ALIASES: Record<
   suzuki: [{ pattern: /^sx4 s cross\b/, model: "S-Cross" }],
   kia: [{ pattern: /^pro cee ?d\b/, model: "Ceed" }],
   mazda: [
+    // BONGO, BONGO FRIENDEE, BONGO/FRIENDEE (slash already becomes a space).
+    { pattern: /^bongo(?:\s+friendee)?\b/, model: "Bongo" },
     { pattern: /^([2356])\b/, model: (match) => `Mazda${match[1]}` },
     { pattern: /^rx\s*7\b/, model: "RX-7" },
     { pattern: /^rx\s*8\b/, model: "RX-8" },
